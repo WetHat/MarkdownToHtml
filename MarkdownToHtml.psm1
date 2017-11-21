@@ -26,8 +26,12 @@ filter Expand-HtmlTemplate (
 							 [string]$Template,
 	                         [parameter(Mandatory=$true,ValueFromPipeline=$false)]
 	                         [string]$Title,
+	                         [parameter(Mandatory=$true,ValueFromPipeline=$false)]
 	                         [ValidateNotNullOrEmpty()]
-	                         [string]$Content
+	                         [string]$Content,
+	                         [parameter(Mandatory=$true,ValueFromPipeline=$false)]
+	                         [ValidateNotNullOrEmpty()]
+	                         [string]$RelativePath
                             )
 {
    if ($Template -match '^\s*<title>\[title\]</title>\s*$') {
@@ -59,7 +63,8 @@ filter Expand-HtmlTemplate (
 						}
 				     })  -Join '' # join to make HTML look nice
 	} else {
-		Write-Output $Template
+		## fixup relative pathes in the template
+		$Template -replace '(?<=(href|src)=")(?=[^/][^:"]+")',$RelativePath
 	}
 }
 
@@ -110,16 +115,24 @@ function Convert-MarkdownToHTMLDocument (
 
     $pipeline = $pipelineBuilder.Build()
 
-	## Load the template Location
+	## Load the template.
 	[string[]]$htmlTemplate = @(get-content -LiteralPath $Template.FullName -Encoding UTF8)
   }
   Process {
-	## slurp the template
+	## slurp the markdown
 	[string]$md = Get-Content -LiteralPath $Markdown.FullName -Encoding UTF8 | Out-String
 	[string]$fragment = [Markdig.Markdown]::ToHtml($md, $pipeline)
-	[string]$title = $Markdown.BaseName
+	[string]$title = $Markdown.BaseName # for now, title is just the filename.
 	[System.IO.FileInfo]$html = Join-Path $Destination.FullName "$($Markdown.RelativePath)/$($Markdown.BaseName).html"
-	$htmlTemplate | Expand-HtmlTemplate -Title $title -Content $fragment `
+
+	$relativePath = ''
+	foreach ($segment in $Markdown.RelativePath -split '[\/]') {
+		$relativePath += '../'
+	}
+
+	$htmlTemplate | Expand-HtmlTemplate -Title        $title `
+	                                    -Content      $fragment `
+	                                    -RelativePath $relativePath `
 	              | Out-File -LiteralPath $html.FullName -Encoding utf8
 	$html
   }
@@ -284,10 +297,11 @@ function Convert-MarkdownToHTML (
 	        Copy-Item -Path "$($baseDir.FullName)/*" -Recurse -Exclude '*.md','*.markdown' -Destination $Destination -Force
 
 			Write-Host -ForegroundColor Yellow "Processing $($baseDir.Name)"
-			Get-ChildItem -Path "$($baseDir.FullName)/*" -Recurse -File -Include '*.md','*.markdown' `
+			Get-ChildItem -Path $baseDir.FullName -Recurse -File -Include '*.md','*.markdown' `
 			| ForEach-Object {
 		        ## capture the relative path of the markdown file
-		        Add-Member -InputObject $_ -MemberType NoteProperty -Name 'RelativePath' -Value $_.DirectoryName.Substring($baseDir.FullName.TrimEnd("/\").Length)
+				[string]$relativePath = $_.DirectoryName.Substring($baseDir.FullName.TrimEnd("/\").Length+1)
+		        Add-Member -InputObject $_ -MemberType NoteProperty -Name 'RelativePath' -Value $relativePath
 		        $_
 	          }
 		} elseif ($_.Extension -in '.md','.markdown') {
