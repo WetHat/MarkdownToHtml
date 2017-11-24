@@ -29,9 +29,8 @@ filter Expand-HtmlTemplate (
 	                         [parameter(Mandatory=$true,ValueFromPipeline=$false)]
 	                         [ValidateNotNullOrEmpty()]
 	                         [string]$Content,
-	                         [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-	                         [ValidateNotNullOrEmpty()]
-	                         [string]$RelativePath
+	                         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+	                         [string]$RelativePath = ''
                             )
 {
    if ($Template -match '^\s*<title>\[title\]</title>\s*$') {
@@ -62,9 +61,11 @@ filter Expand-HtmlTemplate (
 						      }
 						}
 				     })  -Join '' # join to make HTML look nice
-	} else {
+	} elseif (![string]::IsNullOrWhiteSpace($RelativePath)) {
 		## fixup relative pathes in the template
 		$Template -replace '(?<=(href|src)=")(?=[^/][^:"]+")',$RelativePath
+	} else {
+		$Template
 	}
 }
 
@@ -126,8 +127,10 @@ function Convert-MarkdownToHTMLDocument (
 	[System.IO.FileInfo]$html = Join-Path $Destination.FullName "$($Markdown.RelativePath)/$($Markdown.BaseName).html"
 
 	$relativePath = ''
-	foreach ($segment in $Markdown.RelativePath -split '[\/]') {
-		$relativePath += '../'
+	foreach ($segment in $Markdown.RelativePath -split '[\/]+') {
+		if (![string]::IsNullOrWhiteSpace($segment)) {
+			$relativePath += '../'
+		}
 	}
 
 	$htmlTemplate | Expand-HtmlTemplate -Title        $title `
@@ -293,14 +296,15 @@ function Convert-MarkdownToHTML (
 	| ForEach-Object {
 		if ($_ -is [System.IO.DirectoryInfo]) {
 			$baseDir = $_
+			[string]$basePath = $baseDir.FullName.TrimEnd('/\')
             ## Copy markdown resources to the output directory
-	        Copy-Item -Path "$($baseDir.FullName)/*" -Recurse -Exclude '*.md','*.markdown' -Destination $Destination -Force
+	        Copy-Item -Path "${basePath}/*" -Recurse -Exclude '*.md','*.markdown' -Destination $Destination -Force
 
 			Write-Host -ForegroundColor Yellow "Processing $($baseDir.Name)"
-			Get-ChildItem -Path $baseDir.FullName -Recurse -File -Include '*.md','*.markdown' `
+			Get-ChildItem -Path $basePath -Recurse -File -Include '*.md','*.markdown' `
 			| ForEach-Object {
 		        ## capture the relative path of the markdown file
-				[string]$relativePath = $_.DirectoryName.Substring($baseDir.FullName.TrimEnd("/\").Length+1)
+				[string]$relativePath = $_.DirectoryName.Substring($basePath.Length).Trim('/\')
 		        Add-Member -InputObject $_ -MemberType NoteProperty -Name 'RelativePath' -Value $relativePath
 		        $_
 	          }

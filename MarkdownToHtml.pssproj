@@ -30,9 +30,12 @@ Publish-PSModuleMarkdown -moduleName 'MarkdownToHTML' -Destination $doc</PreBuil
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Documentation\" />
+    <Folder Include="ReferenceData\" />
+    <Folder Include="TestData\" />
     <Folder Include="Template\js\" />
     <Folder Include="Template\styles\" />
     <Folder Include="Template\" />
+    <Folder Include="TestData\Template\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MarkdownToHtml.psd1" />
