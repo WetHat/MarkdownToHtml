@@ -7,59 +7,28 @@
 [System.IO.DirectoryInfo]$SCRIPT:moduleDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 [System.IO.DirectoryInfo]$SCRIPT:testdata = Join-Path $SCRIPT:moduleDir -ChildPath 'TestData'
 [System.IO.DirectoryInfo]$SCRIPT:refdata  = Join-Path $SCRIPT:moduleDir -ChildPath 'ReferenceData'
-[System.IO.DirectoryInfo]$SCRIPT:failures = Join-Path $SCRIPT:moduleDir -ChildPath 'Failures'
 [System.IO.FileInfo]$SCRIPT:template      = Join-Path $SCRIPT:testdata  -ChildPath 'Template'
 
 Describe 'Convert-MarkdownToHTML' {
-	It 'Converts a single markdown file to HTML' {
-		$testPath = Join-Path $SCRIPT:testdata -ChildPath 'markdown/SubDir/Single.md'
-        $refPath  = Join-Path $SCRIPT:refdata  -ChildPath 'Flat/Single.html'
+	It 'Converts markdown file(s) from ''<Path>'' to HTML' `
+	   -TestCases @(
+		   @{Path='markdown/SubDir/Single.md';  ReferencePath='Flat/Single.html';    ResultPath='TestDrive:/Single.html'}
+		   @{Path='markdown/SubDir';            ReferencePath='Flat/Single.html';    ResultPath='TestDrive:/Single.html'}
+		   @{Path='markdown/SubDir/';           ReferencePath='Flat/Single.html';    ResultPath='TestDrive:/Single.html'}
+		   @{Path='markdown';                   ReferencePath='SubDir/Single.html';  ResultPath='TestDrive:/SubDir/Single.html'}
+	   ) `
+	   {
+		   param($Path,$ReferencePath,$ResultPath)
 
-		Convert-MarkdownToHTML -Path $testPath -Template $SCRIPT:template -Destination 'TestDrive:/' -IncludeExtension 'advanced'
+		   $testPath = Join-Path $SCRIPT:testdata -ChildPath $Path
+           $refPath  = Join-Path $SCRIPT:refdata  -ChildPath $ReferencePath
 
-		$refPath                 | Should -Exist
-		'TestDrive:/Single.html' | Should -Exist
+		   Convert-MarkdownToHTML -Path $testPath -Template $SCRIPT:template -Destination 'TestDrive:/' -IncludeExtension 'advanced'
 
-		$refFileContents = Get-Content -LiteralPath $refPath -Encoding UTF8 | Out-String
-		Get-Content -LiteralPath 'TestDrive:/Single.html' -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
-	}
+		   $refPath    | Should -Exist
+		   $ResultPath | Should -Exist
 
-	It 'Converts a directory with a single markdown file to HTML' {
-		$testPath = Join-Path $SCRIPT:testdata -ChildPath 'markdown/SubDir'
-        $refPath  = Join-Path $SCRIPT:refdata  -ChildPath 'Flat/Single.html'
-
-		Convert-MarkdownToHTML -Path $refPath -Template $SCRIPT:template -Destination 'TestDrive:/' -IncludeExtension 'advanced'
-
-		$refPath                 | Should -Exist
-		'TestDrive:/Single.html' | Should -Exist
-
-		$refFileContents = Get-Content -LiteralPath $refPath -Encoding UTF8 | Out-String
-		Get-Content -LiteralPath 'TestDrive:/Single.html' -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
-	}
-
-	It 'Converts a directory (trailing /) with a single markdown file to HTML' {
-		$testPath = Join-Path $SCRIPT:testdata -ChildPath 'markdown/SubDir/'
-        $refPath  = Join-Path $SCRIPT:refdata  -ChildPath 'Flat/Single.html'
-
-		Convert-MarkdownToHTML -Path $testPath -Template $SCRIPT:template -Destination 'TestDrive:/' -IncludeExtension 'advanced'
-
-		$refPath                 | Should -Exist
-		'TestDrive:/Single.html' | Should -Exist
-
-		$refFileContents = Get-Content -LiteralPath $refPath -Encoding UTF8 | Out-String
-		Get-Content -LiteralPath 'TestDrive:/Single.html' -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
-	}
-
-	It 'Converts a directory structure with a single markdown file to HTML' {
-		$testPath = Join-Path $SCRIPT:testdata -ChildPath 'markdown'
-        $refPath  = Join-Path $SCRIPT:refdata  -ChildPath 'SubDir/Single.html'
-
-		Convert-MarkdownToHTML -Path $testPath -Template $SCRIPT:template -Destination 'TestDrive:/' -IncludeExtension 'advanced'
-
-		$refPath                        | Should -Exist
-		'TestDrive:/SubDir/Single.html' | Should -Exist
-
-		$refFileContents = Get-Content -LiteralPath $refPath -Encoding UTF8 | Out-String
-		Get-Content -LiteralPath 'TestDrive:/SubDir/Single.html' -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
-	}
+		   $refFileContents = Get-Content -LiteralPath $refPath -Encoding UTF8 | Out-String
+		   Get-Content -LiteralPath $ResultPath -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
+	   }
 }

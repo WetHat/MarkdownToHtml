@@ -49,7 +49,7 @@ filter Expand-HtmlTemplate (
 							$encode = $false
 							$_
 						} elseif ($encode) { ## inside code block
-							[System.Web.HttpUtility]::HtmlEncode([System.Web.HttpUtility]::HtmlDecode($_))
+							[System.Net.WebUtility]::HtmlEncode([System.Net.WebUtility]::HtmlDecode($_))
 						} else { # outside code blocks - rewrite hyperlinks
 							[Regex]::Split($_,'(?<=<a [^>]*)(href="[^"]*")') `
 							| ForEach-Object {
