@@ -23,7 +23,7 @@ Author = 'WetHat'
 CompanyName = 'WetHat Lab'
 
 # Copyright statement for this module
-Copyright = '(c) 2017 WeHat Lab. All rights reserved.'
+Copyright = '(c) 2018 WeHat Lab. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @'
@@ -119,6 +119,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
+## 1.2.5
+
+* Powershell Gallery matadata added
+
 ## 1.2.4
 
 * Replaced `[System.Web.HttpUtility]` by `[System.Net.WebUtility]` to fix issue
@@ -156,7 +160,7 @@ Initial Release
 } # End of PrivateData hashtable
 
 # HelpInfo URI of this module
-# HelpInfoURI = ''
+HelpInfoURI = 'https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/MarkdownToHTML.md'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''
