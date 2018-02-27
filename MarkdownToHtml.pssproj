@@ -53,9 +53,12 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTML'
     <Compile Include="MarkdownToHtml.tests.ps1" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".gitignore" />
     <Content Include="Documentation\Convert-MarkdownToHTML.md" />
     <Content Include="Documentation\MarkdownToHTML.md" />
     <Content Include="Documentation\New-HTMLTemplate.md" />
+    <Content Include="LICENSE" />
+    <Content Include="README.md" />
     <Content Include="ReferenceData\Flat\Single.html" />
     <Content Include="ReferenceData\SubDir\Single.html" />
     <Content Include="Template\js\highlight.pack.js" />

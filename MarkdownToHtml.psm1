@@ -240,15 +240,51 @@ Convert all markdown files in `E:\MyMarkdownFiles` using
 The generated HTML files are saved to `E:\MyHTMLFiles`.
 
 .NOTES
+
 Markdown conversion uses the [Markdig](https://github.com/lunet-io/markdig)
 library. Markdig is a fast, powerful, [CommonMark](http://commonmark.org/) compliant,
 extensible Markdown processor for .NET.
+
+Code syntax highlighting is based on the [highlight.js](https://highlightjs.org/)
+JavaScript library which supports 176 languages and 79 styles as well as
+automatic language detection.
+
+The version of highlight.js provided with the default template is customized for
+following languages:
+* Bash
+* C#
+* C++
+* CSS
+* Diff
+* HTML/XML
+* HTTP
+* Java
+* JavaScript
+* Makefile
+* Markdown
+* SQL
+* Maxima
+* PowerShell
+
+To obtain syntax highlighting for other/additional languages, please visit
+the [Getting highlight.js](https://highlightjs.org/download/) page and
+get a customized version of highlight.js configured for the languages
+you need.
+
+By default the syntax highlighting style _vs.css_ is used in the default template.
+Other styles can be downloaded
+from the [Styles Directory](https://github.com/isagalaev/highlight.js/tree/master/src/styles).
+To preview the effect of the styles in the Styles Directory on different languages, visit the
+[highlight.js demo](https://highlightjs.org/static/demo/) page and try them out.
 
 .LINK
 https://github.com/lunet-io/markdig
 
 .LINK
 http://commonmark.org/
+
+.LINK
+https://highlightjs.org/
 
 .LINK
 New-HTMLTemplate
