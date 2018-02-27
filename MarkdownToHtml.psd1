@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2.5'
+ModuleVersion = '1.2.6'
 
 # ID used to uniquely identify this module
 GUID = 'ac6c6204-4097-4693-ba7e-3e0167383c24'
@@ -109,19 +109,19 @@ PrivateData = @{
                 )
 
         # A URL to the license for this module.
-        # LicenseUri = 'https://github.com/WetHat/MarkdownToHtml/blob/master/LICENSE'
+        LicenseUri = 'https://github.com/WetHat/MarkdownToHtml/blob/master/LICENSE'
 
         # A URL to the main website for this project.
-        # ProjectUri = 'https://github.com/WetHat/MarkdownToHtml'
+        ProjectUri = 'https://github.com/WetHat/MarkdownToHtml'
 
         # A URL to an icon representing this module.
-        # IconUri = 'https://upload.wikimedia.org/wikipedia/commons/2/2f/PowerShell_5.0_icon.png'
+        IconUri = 'https://upload.wikimedia.org/wikipedia/commons/2/2f/PowerShell_5.0_icon.png'
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
-## 1.2.5
+## 1.2.6
 
-* Powershell Gallery matadata added
+* Powershell Gallery matadata added.
 
 ## 1.2.4
 
