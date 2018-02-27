@@ -1,4 +1,4 @@
-﻿# MarkdownToHTML 1.2.4
+﻿# MarkdownToHTML 1.2.6
 
 <cite><b>Tags</b>: Markdown, HTML, Converter, Markdown, HTML, Converter</cite>
 
@@ -18,6 +18,10 @@ automatic language detection.
 * [New-HTMLTemplate](New-HTMLTemplate.md)
 
 # Release Notes
+
+## 1.2.6
+
+* Powershell Gallery matadata added.
 
 ## 1.2.4
 
@@ -54,4 +58,4 @@ Initial Release
 
 ---
 
-<cite>Module: MarkdownToHTML; Version: 1.2.4; (c) 2017 WeHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHTML; Version: 1.2.6; (c) 2018 WeHat Lab. All rights reserved.</cite>
