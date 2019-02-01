@@ -22,8 +22,8 @@
 )
 
 filter Expand-HtmlTemplate (
-	                         [parameter(Mandatory=$true,ValueFromPipeline=$true)]
-							 [string]$Template,
+	                         [parameter(Mandatory=$false,ValueFromPipeline=$true)]
+							 [string]$Template = "",
 	                         [parameter(Mandatory=$true,ValueFromPipeline=$false)]
 	                         [string]$Title,
 	                         [parameter(Mandatory=$true,ValueFromPipeline=$false)]
