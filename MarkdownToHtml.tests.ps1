@@ -12,18 +12,18 @@
 Describe 'Convert-MarkdownToHTML' {
 	It 'Converts markdown file(s) from ''<Path>'' to HTML' `
 	   -TestCases @(
-		   @{Path='markdown/SubDir/Single.md';  ReferencePath='Flat/Single.html';    ResultPath='TestDrive:/Single.html'}
-		   @{Path='markdown/SubDir';            ReferencePath='Flat/Single.html';    ResultPath='TestDrive:/Single.html'}
-		   @{Path='markdown/SubDir/';           ReferencePath='Flat/Single.html';    ResultPath='TestDrive:/Single.html'}
-		   @{Path='markdown';                   ReferencePath='SubDir/Single.html';  ResultPath='TestDrive:/SubDir/Single.html'}
+		   @{Path='markdown/mermaid.md'; ReferencePath='mermaid.html';       ResultPath='TestDrive:/mermaid.html' ;             Extensions = 'diagrams'}
+		   @{Path='markdown/KaTex.md';   ReferencePath='KaTex.html';         ResultPath='TestDrive:/KaTex.html' ;               Extensions = 'mathematics'}
+		   @{Path='markdown/KaMaid.md';  ReferencePath='KaMaid.html';        ResultPath='TestDrive:/KaMaid.html' ;              Extensions = 'diagrams','mathematics'}
+		   @{Path='markdown/Dir';        ReferencePath='SubDirSingle.html';  ResultPath='TestDrive:/Subdir/SubdirSingle.html' ; Extensions = 'advanced'}
 	   ) `
 	   {
-		   param($Path,$ReferencePath,$ResultPath)
+		   param($Path,$ReferencePath,$ResultPath,$Extensions)
 
 		   $testPath = Join-Path $SCRIPT:testdata -ChildPath $Path
            $refPath  = Join-Path $SCRIPT:refdata  -ChildPath $ReferencePath
 
-		   Convert-MarkdownToHTML -Path $testPath -Template $SCRIPT:template -Destination 'TestDrive:/' -IncludeExtension 'advanced'
+		   Convert-MarkdownToHTML -Path $testPath -Template $SCRIPT:template -Destination 'TestDrive:/' -IncludeExtension $Extensions
 
 		   $refPath    | Should -Exist
 		   $ResultPath | Should -Exist
