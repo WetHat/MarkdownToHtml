@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2.6'
+ModuleVersion = '1.2.7'
 
 # ID used to uniquely identify this module
 GUID = 'ac6c6204-4097-4693-ba7e-3e0167383c24'
@@ -23,7 +23,7 @@ Author = 'WetHat'
 CompanyName = 'WetHat Lab'
 
 # Copyright statement for this module
-Copyright = '(c) 2018 WeHat Lab. All rights reserved.'
+Copyright = '(c) 2019 WetHat Lab. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @'
@@ -33,9 +33,43 @@ Markdown to HTML conversion is based on [Markdig](https://github.com/lunet-io/ma
 a fast, powerful, [CommonMark](http://commonmark.org/) compliant,
 extensible Markdown processor for .NET.
 
-Code syntax highlighting is based on the [highlight.js](https://highlightjs.org/)
-JavaScript library which supports 176 languages and 79 styles as well as
-automatic language detection.
+Following additional extensions are installed with this module:
+
+* **Code syntax highlighting** based on the [highlight.js](https://highlightjs.org/)
+  JavaScript library which supports 185 languages and 89 styles as well as
+  automatic language detection. Code syntax highlighting is activated by default
+  and configured for following languages:
+  * Bash
+  * C#
+  * C++
+  * Clojure
+  * CMake
+  * CSS
+  * Diff
+  * DOS .bat
+  * F#
+  * Groovy
+  * HTML/XML
+  * HTTP
+  * Java
+  * JavaScript
+  * JSON
+  * Lisp
+  * Makefile
+  * Markdown
+  * Maxima
+  * Python
+  * PowerShell
+  * SQL
+
+  To obtain syntax highlighting for other/additional languages, please visit
+  the [Getting highlight.js](https://highlightjs.org/download/) page and
+  get a customized version of highlight.js configured for the languages
+  you need.
+* **Diagramming** based on the [mermaid](https://mermaidjs.github.io/) diagram
+  and flowchart generator. Diagramming is pre-installed and activated.
+* *LaTeX Math typesetting* based on the [KaTeX](https://katex.org/) LaTeX Math
+  typesetting library. Math typesetting is pre-installed and activated
 '@
 
 # Minimum version of the Windows PowerShell engine required by this module
@@ -119,9 +153,21 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
+## 1.2.7
+
+* Empty lines allowed im 'md-template.html` to remove an ugly but harmless
+  exception.
+* Syntax highlighting updated to version 9.14.2
+* Upgrade to markdig version 0.15.7
+* Added Resources and configuration for the [mermaid](https://mermaidjs.github.io/) diagram and
+  flowchart generator version 8.0.0 to the HTML template.
+* Added Resources and configuration for the [KaTeX](https://katex.org/) LaTeX Math
+  typesetting library version 0.10.0 to the HTML template.
+* Documentation improved.
+
 ## 1.2.6
 
-* Powershell Gallery matadata added.
+* Powershell Gallery metadata added.
 
 ## 1.2.4
 
