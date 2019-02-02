@@ -23,11 +23,12 @@ seed the customization process.
 The custom template directory has following structure:
 
     <Template Root>
-      ????js           <-- Javascript libraries
-      ????katex        <-- LaTex Math typesetting library
-      ?   ????contrib
-      ?   ????fonts
-      ????styles       <-- CSS style libraries.
+      +--- js           <-- Javascript libraries
+      |
+      +--- katex        <-- LaTex Math typesetting library
+      |    +--- contrib
+      |    '--- fonts
+      '--- styles       <-- CSS style libraries.
 
 ## Default configuration
 The factory-default template is configured in the following way
@@ -66,7 +67,7 @@ To customize styling the stylesheet `styles\md-styles.css` in the template derec
 modified or a new stylesheet can be added to the `styles` directory and included in
 `md-template.html`.
 
-## Configuring Facctory Installed Extensions in `md-template.html`
+## Configuring Factory Installed Extensions in `md-template.html`
 
 * **Code syntax highlighting** uses the [highlight.js](https://highlightjs.org/)
   JavaScript library which supports 185 languages and 89 styles as well as
@@ -171,14 +172,14 @@ modified or a new stylesheet can be added to the `styles` directory and included
 </blockquote>
 
 ## Configuring Other parsing extensions
-Unless pre-installed in the default factory template, Some parsing extensions may require
+Unless pre-installed in the default factory template, some parsing extensions may require
 additional local resources and configuration.
 
 Configuration is typically achieved by adding style sheets and javascript code to the `<head>` or `<body>`
 section of the HTML template. Local Resources can be added anywhere to the template directory, but usually
-required javascript libraries are added to the the `js` directory of the template
+javascript libraries are added to the the `js` directory of the template
 and stylesheets are added to the `styles` directory. To obtain resources and installation instructions
-for individual parsing extensions, browse to the documentation of the extensions.
+for individual parsing extensions, visit the documentation of the extensions.
 See [Convert-MarkdownToHTMLDocument](Convert-MarkdownToHTMLDocument.md) for links.
 
 </blockquote>

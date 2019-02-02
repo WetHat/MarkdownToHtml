@@ -43,7 +43,7 @@ Following additional extensions are installed with this module:
   you need.
 * **Diagramming** based on the [mermaid](https://mermaidjs.github.io/) diagram
   and flowchart generator. Diagramming is pre-installed and activated.
-* *LaTeX Math typesetting* based on the [KaTeX](https://katex.org/) LaTeX Math
+* **LaTeX Math typesetting** based on the [KaTeX](https://katex.org/) LaTeX Math
   typesetting library. Math typesetting is pre-installed and activated
 
 # Exported Functions
