@@ -57,12 +57,14 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTML'
     <Content Include="Documentation\MarkdownToHTML.md" />
     <Content Include="Documentation\New-HTMLTemplate.md" />
     <Content Include="LICENSE" />
+    <Content Include="Markdown2HTML.png" />
     <Content Include="README.md" />
     <Content Include="ReferenceData\KaMaid.html" />
     <Content Include="ReferenceData\KaTex.html" />
     <Content Include="ReferenceData\mermaid.html" />
     <Content Include="ReferenceData\SubDirSingle.html" />
     <Content Include="Template\js\highlight.pack.js" />
+    <Content Include="Template\js\mermaid.min.js" />
     <Content Include="Template\md-template.html" />
     <Content Include="Template\styles\agate.css" />
     <Content Include="Template\styles\far.css" />
