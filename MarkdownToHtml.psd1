@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2.7'
+ModuleVersion = '1.2.8'
 
 # ID used to uniquely identify this module
 GUID = 'ac6c6204-4097-4693-ba7e-3e0167383c24'
@@ -23,7 +23,7 @@ Author = 'WetHat'
 CompanyName = 'WetHat Lab'
 
 # Copyright statement for this module
-Copyright = '(c) 2019 WetHat Lab. All rights reserved.'
+Copyright = '(c) 2018-2019 WetHat Lab. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @'
@@ -153,6 +153,11 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
+## 1.2.8
+
+* `Write-Host` replaced by the more benign `Write-Verbose`
+* Minor code cleanup
+
 ## 1.2.7
 
 * Empty lines allowed im 'md-template.html` to remove an ugly but harmless

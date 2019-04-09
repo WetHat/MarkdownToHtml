@@ -1,4 +1,4 @@
-﻿# MarkdownToHTML 1.2.7
+﻿# MarkdownToHTML 1.2.8
 
 <cite><b>Tags</b>: Markdown, HTML, Converter, Markdown, HTML, Converter</cite>
 
@@ -53,6 +53,11 @@ Following additional extensions are installed with this module:
 
 # Release Notes
 
+## 1.2.8
+
+* `Write-Host` replaced by the more benign `Write-Verbose`
+* Minor code cleanup
+
 ## 1.2.7
 
 * Empty lines allowed im 'md-template.html` to remove an ugly but harmless
@@ -104,4 +109,4 @@ Initial Release
 
 ---
 
-<cite>Module: MarkdownToHTML; Version: 1.2.7; (c) 2019 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHTML; Version: 1.2.8; (c) 2018-2019 WetHat Lab. All rights reserved.</cite>

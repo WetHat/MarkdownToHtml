@@ -88,7 +88,7 @@ function Convert-MarkdownToHTMLDocument (
   Begin {
     ## Determine which parser extensions to use
 	if ($IncludeExtension -eq $null -or $IncludeExtension.Count -eq 0) {
-		$extensions = @('common')
+		$extensions = @('common') # use _common_ extensions by default
 	} elseif ('advanced' -in $IncludeExtension) {
 		if ($ExcludeExtension.Count -gt 0) {
 		   $IncludeExtension = $IncludeExtension | Where-Object { $_ -ne 'advanced'}
@@ -111,7 +111,7 @@ function Convert-MarkdownToHTMLDocument (
 
 	## configure the converter pipeline
 	[Markdig.MarkdownPipelineBuilder]$pipelineBuilder = (New-Object Markdig.MarkdownPipelineBuilder)
-	Write-Host -ForegroundColor Yellow "Using parser extensions $IncludeExtension"
+	Write-Verbose "Using parser extensions $IncludeExtension"
 	$pipelineBuilder = [Markdig.MarkDownExtensions]::Configure($pipelineBuilder,[string]::Join('+',$IncludeExtension))
 
     $pipeline = $pipelineBuilder.Build()
@@ -277,7 +277,7 @@ The generated HTML files are saved to `E:\MyHTMLFiles`.
 Convert-MarkdownToHTML -Markdown 'E:\MyMarkdownFiles' -Destination 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
 
 Convert all markdown files in `E:\MyMarkdownFiles` using
-* the 'advanced' and 'diagrans' parsing extension.
+* the 'advanced' and 'diagrams' parsing extension.
 * the default template
 
 The generated HTML files are saved to `E:\MyHTMLFiles`.
@@ -305,26 +305,28 @@ https://katex.org/
 .LINK
 New-HTMLTemplate
 #>
-function Convert-MarkdownToHTML (
-	                              [SupportsWildcards()]
-	                              [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-                                  [ValidateNotNullorEmpty()]
-	                              [string]$Path,
-	                              [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-                                  [string]$Template,
-	                              [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-                                  [string[]]$IncludeExtension = @('common'),
-	                              [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-                                  [string[]]$ExcludeExtension = @(),
-	                              [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-                                  [ValidateNotNullorEmpty()]
-	                              [string]$Destination
-                                )
-{
+function Convert-MarkdownToHTML {
+	[OutputType([System.IO.FileInfo])]
+	[CmdletBinding()]
+	param(
+	        [SupportsWildcards()]
+	        [parameter(Mandatory=$true,ValueFromPipeline=$false)]
+            [ValidateNotNullorEmpty()]
+	        [string]$Path,
+	        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+            [string]$Template,
+	        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+            [string[]]$IncludeExtension = @('common'),
+	        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+            [string[]]$ExcludeExtension = @(),
+	        [parameter(Mandatory=$true,ValueFromPipeline=$false)]
+            [ValidateNotNullorEmpty()]
+	        [string]$Destination
+        )
 	if (![string]::IsNullOrWhiteSpace($Template) -and (Test-Path $Template -PathType Container)) {
-		Write-Host -ForegroundColor Yellow "Using HTML template '$Template'."
+		Write-Verbose "Using HTML template '$Template'."
 	} else {
-		Write-Host -ForegroundColor Yellow 'Using default HTML template.'
+		Write-Verbose 'Using default HTML template.'
 		$Template = Join-Path $SCRIPT:moduleDir.FullName 'Template'
 	}
 	[string]$htmlTemplate = Join-Path $Template 'md-template.html'
@@ -352,7 +354,7 @@ function Convert-MarkdownToHTML (
             ## Copy markdown resources to the output directory
 	        Copy-Item -Path "${basePath}/*" -Recurse -Exclude '*.md','*.markdown' -Destination $Destination -Force
 
-			Write-Host -ForegroundColor Yellow "Processing $($baseDir.Name)"
+			Write-Verbose "Processing $($baseDir.Name)"
 			Get-ChildItem -Path $basePath -Recurse -File -Include '*.md','*.markdown' `
 			| ForEach-Object {
 		        ## capture the relative path of the markdown file
@@ -558,12 +560,14 @@ The new conversion template directory `[System.IO.DirectoryInfo]`
 .LINK
 Convert-MarkdownToHTML
 #>
-function New-HTMLTemplate (
-	                        [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-                            [ValidateNotNullorEmpty()]
-	                        [string]$Destination
-                          )
-{
+function New-HTMLTemplate {
+	[OutputType([System.IO.DirectoryInfo])]
+	[CmdletBinding()]
+	param(
+			[parameter(Mandatory=$true,ValueFromPipeline=$false)]
+			[ValidateNotNullorEmpty()]
+			[string]$Destination
+		 )
 	$template = Join-Path $SCRIPT:moduleDir.FullName 'Template'
 	## Copy the template to the output directory
 

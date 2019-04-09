@@ -253,4 +253,4 @@ Create a copy of the default template in `E:\MyTemplate` for customization.
 
 ---
 
-<cite>Module: MarkdownToHTML; Version: 1.2.7; (c) 2019 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHTML; Version: 1.2.8; (c) 2018-2019 WetHat Lab. All rights reserved.</cite>

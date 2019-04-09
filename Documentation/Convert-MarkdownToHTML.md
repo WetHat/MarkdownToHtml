@@ -261,7 +261,7 @@ Convert-MarkdownToHTML -Markdown 'E:\MyMarkdownFiles' -Destination 'E:\MyHTMLFil
 ```
 
 Convert all markdown files in `E:\MyMarkdownFiles` using
-* the 'advanced' and 'diagrans' parsing extension.
+* the 'advanced' and 'diagrams' parsing extension.
 * the default template
 
 The generated HTML files are saved to `E:\MyHTMLFiles`.
@@ -284,4 +284,4 @@ The generated HTML files are saved to `E:\MyHTMLFiles`.
 
 ---
 
-<cite>Module: MarkdownToHTML; Version: 1.2.7; (c) 2019 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHTML; Version: 1.2.8; (c) 2018-2019 WetHat Lab. All rights reserved.</cite>
