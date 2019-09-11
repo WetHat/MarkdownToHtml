@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2.8'
+ModuleVersion = '1.3.0'
 
 # ID used to uniquely identify this module
 GUID = 'ac6c6204-4097-4693-ba7e-3e0167383c24'
@@ -153,6 +153,11 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
+## 1.3.0
+
+* upgrade of markdig to version 0.17.2
+
+
 ## 1.2.8
 
 * `Write-Host` replaced by the more benign `Write-Verbose`
