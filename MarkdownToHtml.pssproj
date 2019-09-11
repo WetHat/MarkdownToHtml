@@ -59,6 +59,7 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTML'
     <Content Include="LICENSE" />
     <Content Include="Markdown2HTML.png" />
     <Content Include="README.md" />
+    <Content Include="ReferenceData\.gitignore" />
     <Content Include="ReferenceData\Code.html" />
     <Content Include="ReferenceData\KaMaid.html" />
     <Content Include="ReferenceData\KaTex.html" />
