@@ -1,4 +1,4 @@
-﻿# MarkdownToHTML 1.2.8
+﻿# MarkdownToHTML 1.3.0
 
 <cite><b>Tags</b>: Markdown, HTML, Converter, Markdown, HTML, Converter</cite>
 
@@ -52,6 +52,12 @@ Following additional extensions are installed with this module:
 * [New-HTMLTemplate](New-HTMLTemplate.md)
 
 # Release Notes
+
+## 1.3.0
+
+* upgrade of markdig to version 0.17.2
+* KaTex upgraded to 0.11.0
+
 
 ## 1.2.8
 
@@ -109,4 +115,4 @@ Initial Release
 
 ---
 
-<cite>Module: MarkdownToHTML; Version: 1.2.8; (c) 2018-2019 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHTML; Version: 1.3.0; (c) 2018-2019 WetHat Lab. All rights reserved.</cite>

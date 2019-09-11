@@ -156,6 +156,7 @@ PrivateData = @{
 ## 1.3.0
 
 * upgrade of markdig to version 0.17.2
+* KaTex upgraded to 0.11.0
 
 
 ## 1.2.8

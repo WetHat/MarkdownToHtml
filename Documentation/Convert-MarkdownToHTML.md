@@ -284,4 +284,4 @@ The generated HTML files are saved to `E:\MyHTMLFiles`.
 
 ---
 
-<cite>Module: MarkdownToHTML; Version: 1.2.8; (c) 2018-2019 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHTML; Version: 1.3.0; (c) 2018-2019 WetHat Lab. All rights reserved.</cite>
