@@ -15,6 +15,7 @@ Describe 'Convert-MarkdownToHTML' {
 		   @{Path='markdown/mermaid.md'; ReferencePath='mermaid.html';       ResultPath='TestDrive:/mermaid.html' ;             Extensions = 'diagrams'}
 		   @{Path='markdown/KaTex.md';   ReferencePath='KaTex.html';         ResultPath='TestDrive:/KaTex.html' ;               Extensions = 'mathematics'}
 		   @{Path='markdown/KaMaid.md';  ReferencePath='KaMaid.html';        ResultPath='TestDrive:/KaMaid.html' ;              Extensions = 'diagrams','mathematics'}
+		   @{Path='markdown/Code.md';    ReferencePath='Code.html';          ResultPath='TestDrive:Code.html' ;              Extensions = 'advanced'}
 		   @{Path='markdown/Dir';        ReferencePath='SubDirSingle.html';  ResultPath='TestDrive:/Subdir/SubdirSingle.html' ; Extensions = 'advanced'}
 	   ) `
 	   {

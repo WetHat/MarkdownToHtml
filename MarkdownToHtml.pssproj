@@ -59,6 +59,7 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTML'
     <Content Include="LICENSE" />
     <Content Include="Markdown2HTML.png" />
     <Content Include="README.md" />
+    <Content Include="ReferenceData\Code.html" />
     <Content Include="ReferenceData\KaMaid.html" />
     <Content Include="ReferenceData\KaTex.html" />
     <Content Include="ReferenceData\mermaid.html" />
@@ -71,16 +72,11 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTML'
     <Content Include="Template\styles\tomorrow-night-blue.css" />
     <Content Include="Template\styles\vs.css" />
     <Content Include="Template\styles\md-styles.css" />
-    <Content Include="TestData\KaMaid.md" />
-    <Content Include="TestData\KaTex.md" />
+    <Content Include="TestData\markdown\Code.md" />
     <Content Include="TestData\markdown\Dir\SubDir\SubDirSingle.md" />
     <Content Include="TestData\markdown\KaMaid.md" />
     <Content Include="TestData\markdown\KaTex.md" />
     <Content Include="TestData\markdown\mermaid.md" />
-    <Content Include="TestData\markdown\Single.md" />
-    <Content Include="TestData\markdown\SubDirSingle.md" />
-    <Content Include="TestData\mermaid.md" />
-    <Content Include="TestData\Single.md" />
     <Content Include="TestData\Template\md-template.html" />
     <Content Include="TestData\Template\styles\md-styles.css" />
     <Content Include="TestData\Template\styles\vs.css" />

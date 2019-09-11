@@ -323,6 +323,7 @@ function Convert-MarkdownToHTML {
             [ValidateNotNullorEmpty()]
 	        [string]$Destination
         )
+	# Determine which template to use
 	if (![string]::IsNullOrWhiteSpace($Template) -and (Test-Path $Template -PathType Container)) {
 		Write-Verbose "Using HTML template '$Template'."
 	} else {
@@ -330,6 +331,7 @@ function Convert-MarkdownToHTML {
 		$Template = Join-Path $SCRIPT:moduleDir.FullName 'Template'
 	}
 	[string]$htmlTemplate = Join-Path $Template 'md-template.html'
+
 	## Create the output directory
 	$outdir = Get-Item -LiteralPath $Destination -ErrorAction:SilentlyContinue
 
@@ -342,7 +344,6 @@ function Convert-MarkdownToHTML {
     }
 
 	## Copy the template file to the output directory
-
 	Copy-Item -Path "$Template/*" -Recurse -Exclude 'md-template.html' -Destination $Destination -Force
 
 	## Generate the html files in the destination by expanding the templates
@@ -363,7 +364,7 @@ function Convert-MarkdownToHTML {
 		        $_
 	          }
 		} elseif ($_.Extension -in '.md','.markdown') {
-			$_
+			$_ # single file
 		}
 	  } `
 	| Convert-MarkdownToHTMLDocument -Template (get-Item -LiteralPath $htmlTemplate) `
