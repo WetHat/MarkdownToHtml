@@ -21,54 +21,6 @@
     'attributes' ## .UseGenericAttributes();
 )
 
-filter Expand-HtmlTemplate (
-                             [parameter(Mandatory=$false,ValueFromPipeline=$true)]
-                             [string]$Template = "",
-                             [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-                             [string]$Title,
-                             [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-                             [ValidateNotNullOrEmpty()]
-                             [string]$Content,
-                             [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-                             [string]$RelativePath = ''
-                            )
-{
-   if ($Template -match '^\s*<title>\[title\]</title>\s*$') {
-        Write-Output "<title>$Title</title>"
-    } elseif ($Template -match '^\s*\[content\]\s*$') {
-        ([Regex]::Split($Content,'(<code[^>]*>|</code>)') `
-        | ForEach-Object `
-            -Begin   {
-                        [bool]$encode = $false
-                     } `
-            -Process {
-                        if ($_.StartsWith('<code')) {
-                            $encode = $true
-                            $_
-                        } elseif ($_.StartsWith('</code>')) {
-                            $encode = $false
-                            $_
-                        } elseif ($encode) { ## inside code block
-                            [System.Net.WebUtility]::HtmlEncode([System.Net.WebUtility]::HtmlDecode($_))
-                        } else { # outside code blocks - rewrite hyperlinks
-                            [Regex]::Split($_,'(?<=<a [^>]*)(href="[^"]*")') `
-                            | ForEach-Object {
-                                if ($_ -match '^href=".*"' -and $_ -notmatch '^href="https?://') {
-                                    $_ -replace '(.md|.Markdown)(?=["#])','.html'
-                                } else {
-                                    $_
-                                }
-                              }
-                        }
-                     })  -Join '' # join to make HTML look nice
-    } elseif (![string]::IsNullOrWhiteSpace($RelativePath)) {
-        ## fixup relative pathes in the template
-        $Template -replace '(?<=(href|src)=")(?=[^/][^:"]+")',$RelativePath
-    } else {
-        $Template
-    }
-}
-
 function Publish-StaticHtmlSite {
 	[OutputType([System.IO.FileInfo])]
     [CmdletBinding()]
@@ -478,78 +430,6 @@ function Convert-MarkdownToHTMLFragment
 
 		$htmlDescriptor # return the annotated HTML fragmemt
     }
-}
-
-function Convert-MarkdownToHTMLDocument (
-                                          [parameter(Mandatory=$true,ValueFromPipeline=$true)]
-                                          [ValidateNotNull()]
-                                          [System.IO.FileInfo]$Markdown,
-                                          [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-                                          [ValidateNotNull()]
-                                          [System.IO.FileInfo]$Template,
-                                          [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-                                          [string[]]$IncludeExtension = @('advanced'),
-                                          [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-                                          [string[]]$ExcludeExtension = @(),
-                                          [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-                                          [ValidateNotNull()]
-                                          [System.IO.DirectoryInfo]$Destination
-                                       )
-{
-  Begin {
-    ## Determine which parser extensions to use
-    if ($IncludeExtension -eq $null -or $IncludeExtension.Count -eq 0) {
-        $extensions = @('common') # use _common_ extensions by default
-    } elseif ('advanced' -in $IncludeExtension) {
-        if ($ExcludeExtension.Count -gt 0) {
-           $IncludeExtension = $IncludeExtension | Where-Object { $_ -ne 'advanced'}
-           ## add the extensions explicitely so that we can remove individual ones
-           $IncludeExtension += $SCRIPT:advancedMarkdownExtensions
-        } elseif ($IncludeExtension.Count -gt 1) {
-            $IncludeExtension = $IncludeExtension | Where-Object { $_ -ne 'advanced'}
-            ## make sure the advanced option comes last
-            $IncludeExtension += 'advanced'
-        }
-    }
-
-    ## make sure the 'attributes' extension is last
-    if ('attributes' -in $IncludeExtension) {
-        $IncludeExtension = $IncludeExtension | Where-Object { $_ -ne 'attributes' }
-        $IncludeExtension += 'attributes'
-    }
-
-    $IncludeExtension = $IncludeExtension | Where-Object { $_ -notin $ExcludeExtension}
-
-    ## configure the converter pipeline
-    [Markdig.MarkdownPipelineBuilder]$pipelineBuilder = (New-Object Markdig.MarkdownPipelineBuilder)
-    Write-Verbose "Using parser extensions $IncludeExtension"
-    $pipelineBuilder = [Markdig.MarkDownExtensions]::Configure($pipelineBuilder,[string]::Join('+',$IncludeExtension))
-
-    $pipeline = $pipelineBuilder.Build()
-
-    ## Load the template.
-    [string[]]$htmlTemplate = @(get-content -LiteralPath $Template.FullName -Encoding UTF8)
-  }
-  Process {
-    ## slurp the Markdown
-    [string]$md = Get-Content -LiteralPath $Markdown.FullName -Encoding UTF8 | Out-String
-    [string]$fragment = [Markdig.Markdown]::ToHtml($md, $pipeline)
-    [string]$title = $Markdown.BaseName # for now, title is just the filename.
-    [System.IO.FileInfo]$html = Join-Path $Destination.FullName "$($Markdown.RelativePath)/$($Markdown.BaseName).html"
-
-    $relativePath = '' # relative path to resources at the root of the output directory
-    foreach ($segment in $Markdown.RelativePath -split '[\/]+') {
-        if (![string]::IsNullOrWhiteSpace($segment)) {
-            $relativePath += '../'
-        }
-    }
-
-    $htmlTemplate | Expand-HtmlTemplate -Title        $title `
-                                        -Content      $fragment `
-                                        -RelativePath $relativePath `
-                  | Out-File -LiteralPath $html.FullName -Encoding utf8
-    $html
-  }
 }
 
 <#
