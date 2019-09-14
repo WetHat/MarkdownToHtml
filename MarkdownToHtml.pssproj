@@ -14,6 +14,11 @@ Publish-PSModuleMarkdown -moduleName 'MarkdownToHTML' -Destination $doc</PreBuil
 import-module pester -MinimumVersion '4.0.0'
 Invoke-Pester -TestName 'Convert-MarkdownToHTML'
 </PostBuildScript>
+    <PackageEntryPoint>MarkdownToHtml.tests.ps1</PackageEntryPoint>
+    <DotNetVersion>v4.7.2</DotNetVersion>
+    <PackageType>Console</PackageType>
+    <DebugArguments>
+    </DebugArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,13 +40,17 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTML'
   <ItemGroup>
     <Folder Include="Documentation\" />
     <Folder Include="ReferenceData\" />
+    <Folder Include="ReferenceData\SubDir\" />
     <Folder Include="TestData\" />
     <Folder Include="Template\js\" />
     <Folder Include="Template\styles\" />
     <Folder Include="Template\" />
     <Folder Include="TestData\markdown\" />
+    <Folder Include="TestData\markdown\Dir2\SubDir\" />
+    <Folder Include="TestData\markdown\Dir2\SubDir\SubDir\" />
     <Folder Include="TestData\markdown\Dir\" />
     <Folder Include="TestData\markdown\Dir\SubDir\" />
+    <Folder Include="TestData\markdown\Dir2\" />
     <Folder Include="TestData\Template\" />
     <Folder Include="TestData\Template\js\" />
     <Folder Include="TestData\Template\styles\" />
@@ -54,6 +63,7 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTML'
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="Documentation\Convert-MarkdownToHTML.md" />
+    <Content Include="Documentation\Convert-MarkdownToHTMLFragment.md" />
     <Content Include="Documentation\MarkdownToHTML.md" />
     <Content Include="Documentation\New-HTMLTemplate.md" />
     <Content Include="LICENSE" />
@@ -65,6 +75,7 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTML'
     <Content Include="ReferenceData\KaTex.html" />
     <Content Include="ReferenceData\mermaid.html" />
     <Content Include="ReferenceData\SubDirSingle.html" />
+    <Content Include="ReferenceData\SubDir\SubDirSingle.html" />
     <Content Include="Template\js\highlight.pack.js" />
     <Content Include="Template\js\mermaid.min.js" />
     <Content Include="Template\md-template.html" />

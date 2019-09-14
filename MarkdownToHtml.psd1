@@ -110,6 +110,9 @@ RequiredAssemblies = @('Markdig.dll')
 
 # Functions to export from this module
 FunctionsToExport = @(
+	                   'Publish-StaticHtmlSite'
+	                   'Find-MarkdownFiles'
+	                   'Convert-MarkdownToHTMLFragment'
 	                   'Convert-MarkdownToHTML'
 	                   'New-HTMLTemplate'
 	                 )
