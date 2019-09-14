@@ -15,8 +15,9 @@ Describe 'Convert-MarkdownToHTML' {
 		   @{Path='markdown/mermaid.md'; ReferencePath='mermaid.html';       ResultPath='TestDrive:/mermaid.html' ;             Extensions = 'diagrams'}
 		   @{Path='markdown/KaTex.md';   ReferencePath='KaTex.html';         ResultPath='TestDrive:/KaTex.html' ;               Extensions = 'mathematics'}
 		   @{Path='markdown/KaMaid.md';  ReferencePath='KaMaid.html';        ResultPath='TestDrive:/KaMaid.html' ;              Extensions = 'diagrams','mathematics'}
-		   @{Path='markdown/Code.md';    ReferencePath='Code.html';          ResultPath='TestDrive:Code.html' ;              Extensions = 'advanced'}
-		   @{Path='markdown/Dir';        ReferencePath='SubDirSingle.html';  ResultPath='TestDrive:/Subdir/SubdirSingle.html' ; Extensions = 'advanced'}
+		   @{Path='markdown/Code.md';    ReferencePath='Code.html';          ResultPath='TestDrive:/Code.html' ;                Extensions = 'advanced'}
+		   @{Path='markdown/Dir';        ReferencePath='SubDir/SubDirSingle.html';  ResultPath='TestDrive:/Subdir/SubdirSingle.html' ; Extensions = 'advanced'}
+		   @{Path='markdown/Dir2';       ReferencePath='SubDir2/SubDir2/SubDirSingle.html';  ResultPath='TestDrive:/Subdir2/SubDir2/SubdirSingle.html' ; Extensions = 'advanced'}
 	   ) `
 	   {
 		   param($Path,$ReferencePath,$ResultPath,$Extensions)
@@ -24,7 +25,13 @@ Describe 'Convert-MarkdownToHTML' {
 		   $testPath = Join-Path $SCRIPT:testdata -ChildPath $Path
            $refPath  = Join-Path $SCRIPT:refdata  -ChildPath $ReferencePath
 
-		   Convert-MarkdownToHTML -Path $testPath -Template $SCRIPT:template -Destination 'TestDrive:/' -IncludeExtension $Extensions
+		   $destination =  'TestDrive:/'
+		   #$destination = 'e:/temp/ttt'
+		   Convert-MarkdownToHTML -Path $testPath `
+		                          -Template $SCRIPT:template `
+		                          -Destination $destination `
+		                          -IncludeExtension $Extensions `
+		                          -Verbose
 
 		   $refPath    | Should -Exist
 		   $ResultPath | Should -Exist
