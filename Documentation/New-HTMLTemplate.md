@@ -53,12 +53,12 @@ The factory-default template is configured in the following way
 ## The HTML template `md-template.html`
 
 The HTML template file is used to turn the HTML fragments generated for each
-markdown file into standalone HTML documents which can be viewed in a web browser.
+Markdown file into standalone HTML documents which can be viewed in a web browser.
 
 ## Customizing `md-template.html`
 The HTML template contains two placeholders which get replaced with
 HTML content:
-* `[title]` - Page title generated from the markdown filename. **Note**: The title **cannot**
+* `[title]` - Page title generated from the Markdown filename. **Note**: The title **cannot**
   be customized.
 * `[content]` - HTML content. **Note**: It is possible to add additional html content to the
   `<body>` of the template, as long as this placeholder remains on its own line.

@@ -49,7 +49,10 @@ Following additional extensions are installed with this module:
 # Exported Functions
 
 * [Convert-MarkdownToHTML](Convert-MarkdownToHTML.md)
+* [Convert-MarkdownToHTMLFragment](Convert-MarkdownToHTMLFragment.md)
+* [Find-MarkdownFiles](Find-MarkdownFiles.md)
 * [New-HTMLTemplate](New-HTMLTemplate.md)
+* [Publish-StaticHtmlSite](Publish-StaticHtmlSite.md)
 
 # Release Notes
 
