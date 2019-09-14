@@ -12,7 +12,7 @@
 Publish-PSModuleMarkdown -moduleName 'MarkdownToHTML' -Destination $doc</PreBuildScript>
     <PostBuildScript>$env:PSModulePath+=[char]0x3b + 'C:\Program Files\WindowsPowerShell\Modules'
 import-module pester -MinimumVersion '4.0.0'
-Invoke-Pester -TestName 'Convert-MarkdownToHTML'
+Invoke-Pester -TestName 'Convert-MarkdownToHTMLFragment' ,'Convert-MarkdownToHTML'
 </PostBuildScript>
     <PackageEntryPoint>MarkdownToHtml.tests.ps1</PackageEntryPoint>
     <DotNetVersion>v4.7.2</DotNetVersion>
@@ -40,7 +40,10 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTML'
   <ItemGroup>
     <Folder Include="Documentation\" />
     <Folder Include="ReferenceData\" />
-    <Folder Include="ReferenceData\SubDir\" />
+    <Folder Include="ReferenceData\html\" />
+    <Folder Include="ReferenceData\html\SubDir\" />
+    <Folder Include="ReferenceData\html\SubDir2\" />
+    <Folder Include="ReferenceData\html\SubDir2\SubDir2" />
     <Folder Include="TestData\" />
     <Folder Include="Template\js\" />
     <Folder Include="Template\styles\" />
@@ -69,13 +72,13 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTML'
     <Content Include="LICENSE" />
     <Content Include="Markdown2HTML.png" />
     <Content Include="README.md" />
-    <Content Include="ReferenceData\.gitignore" />
-    <Content Include="ReferenceData\Code.html" />
-    <Content Include="ReferenceData\KaMaid.html" />
-    <Content Include="ReferenceData\KaTex.html" />
-    <Content Include="ReferenceData\mermaid.html" />
-    <Content Include="ReferenceData\SubDirSingle.html" />
-    <Content Include="ReferenceData\SubDir\SubDirSingle.html" />
+    <Content Include="ReferenceData\html\.gitignore" />
+    <Content Include="ReferenceData\html\Code.html" />
+    <Content Include="ReferenceData\html\KaMaid.html" />
+    <Content Include="ReferenceData\html\KaTex.html" />
+    <Content Include="ReferenceData\html\mermaid.html" />
+    <Content Include="ReferenceData\html\SubDir2\SubDir2\SubDirSingle.html" />
+    <Content Include="ReferenceData\html\SubDir\SubDirSingle.html" />
     <Content Include="Template\js\highlight.pack.js" />
     <Content Include="Template\js\mermaid.min.js" />
     <Content Include="Template\md-template.html" />
