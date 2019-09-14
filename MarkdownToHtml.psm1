@@ -406,7 +406,7 @@ function Convert-MarkdownToHTMLFragment
 							$_ -split '(?<=<a [^>]*)(href="[^"]*")' `
                             | ForEach-Object {
                                 if ($_ -match '^href=".*"' -and $_ -notmatch '^href="https?://') {
-                                    $_ -replace '(.md|.markdown)(?=["#])','.html'
+                                    $_ -replace '(\.md|\.markdown)(?=["#])','.html'
                                 } else {
                                     $_
                                 }
