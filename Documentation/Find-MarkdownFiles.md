@@ -74,7 +74,7 @@ specifying the relative path of the markdown file below the given directory.
 ## EXAMPLE 1
 
 ```PowerShell
-Find-MarkdownFiles -Path 'E:\Lab\WindowsPowerShell\Modules\MarkdownToHtml' | Select-Object -Property Mode,LastWriteTime,Length,Name,RelativePath | Format-Table
+Find-MarkdownFiles -Path '...\Modules\MarkdownToHtml' | Select-Object -Property Mode,LastWriteTime,Length,Name,RelativePath | Format-Table
 ```
 
 Returns following annotated Markdown file objects of type `[System.IO.FileInfo]` for this PowerShell module:
@@ -86,6 +86,18 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
     13.09.2019 13:56:21   7193  New-HTMLTemplate.md        Documentation\New-HTMLTemplate.md
     11.09.2019 17:01:13   4455  README.md                  ReferenceData\katex\README.md
     ...                   ...   ...                        ...
+
+</blockquote>
+
+# Related Links
+
+<blockquote>
+
+
+* [Convert-MarkdownToHtml](Convert-MarkdownToHtml.md) 
+* [Convert-MarkdownToHtmlFragment](Convert-MarkdownToHtmlFragment.md) 
+* [Publish-StaticHtmlSite](Publish-StaticHtmlSite.md) 
+* [New-HTMLTemplate](New-HTMLTemplate.md)
 
 </blockquote>
 

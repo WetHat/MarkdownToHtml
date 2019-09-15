@@ -247,7 +247,10 @@ Create a copy of the default template in `E:\MyTemplate` for customization.
 <blockquote>
 
 
-* [Convert-MarkdownToHTML](Convert-MarkdownToHTML.md)
+* [Convert-MarkdownToHtml](Convert-MarkdownToHtml.md) 
+* [Find-MarkdownFiles](Find-MarkdownFiles.md) 
+* [Convert-MarkdownToHtmlFragment](Convert-MarkdownToHtmlFragment.md) 
+* [Publish-StaticHtmlSite](Publish-StaticHtmlSite.md)
 
 </blockquote>
 

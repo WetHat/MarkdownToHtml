@@ -111,7 +111,7 @@ avaliable extensions are:
 
 <blockquote>
 
-A Markdown string of a Markdown file [System.IO.FileInfo]
+A Markdown string or a Markdown file `[System.IO.FileInfo]`.
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -167,7 +167,7 @@ Accept wildcard characters?| false
 
 <blockquote>
 
-Markdown text [string] or Markdown file [System.IO.FileInfo].
+Markdown text `[string]` or Markdown file `[System.IO.FileInfo]`.
 
 </blockquote>
 
@@ -177,13 +177,13 @@ Markdown text [string] or Markdown file [System.IO.FileInfo].
 
 HTML fragment object with following properties:
 * `RelativePath`: A string representing the relative path to the Markdown file with respect to
-  a base directory. This property is required when using the PowerShell function [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md)
-  to generate a static HTML site from the Markdown files.
+  a base (static site) directory. This property is mandatory when using the PowerShell function [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md)
+  to generate a static HTML site from Markdown files.
   This propery is automatically set when
   * using the PowerShell function [`Find-MarkdownFiles`](Find-MarkdownFiles.md)
-  * the `-Markdown` is of type `[System.IO.FileInfo]`.
-* `Title`: Uses the first heading in the Markdown content to infer a page title. This property may be absent if no heading was found
-* `HtmlFragment`: The HTML fragment string generated from the Markdown Text.
+  * the `-Markdown` parameter is of type `[System.IO.FileInfo]`.
+* `Title`: The first heading in the Markdown content. This property may be absent if no heading was found
+* `HtmlFragment`: The HTML fragment string generated from the Markdown text.
 
 </blockquote>
 
@@ -261,7 +261,7 @@ Returns the html fragment object:
     Name               Value
     ----               -----
     HtmlFragment       <h1 id="hello-world">Hello World</h1>...
-	Title              Hello World 
+    Title              Hello World 
 ## EXAMPLE 2
 
 ```PowerShell
@@ -275,6 +275,18 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
     Title              Convert-MarkdownToHTML
     HtmlFragment       <h1 id="convert-Markdowntohtml">Convert-MarkdownToHTML</h1>...
     RelativePath       Convert-MarkdownToHTML.md
+
+</blockquote>
+
+# Related Links
+
+<blockquote>
+
+
+* [Convert-MarkdownToHtml](Convert-MarkdownToHtml.md) 
+* [Find-MarkdownFiles](Find-MarkdownFiles.md) 
+* [Publish-StaticHtmlSite](Publish-StaticHtmlSite.md) 
+* [New-HTMLTemplate](New-HTMLTemplate.md)
 
 </blockquote>
 

@@ -33,6 +33,21 @@ Markdown to HTML conversion is based on [Markdig](https://github.com/lunet-io/ma
 a fast, powerful, [CommonMark](http://commonmark.org/) compliant,
 extensible Markdown processor for .NET.
 
+# Quickstart
+
+The typical use case is to convert a bunch of Markdown files in a directory
+to a static Html site using [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md)
+
+If the Html default conversion template is not sufficient a custom template
+can be generated with [`New-HtmlTemplate`](New-HtmlTemplate)
+
+If the converter pipeline need to be modified to meet the needs of
+a special process, the converter pipeline can be custom built using:
+* [`Find-MarkdownFiles`](Find-MarkdownFiles.md)
+* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md)
+* [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md)
+
+# Preinstalled Markdown Extensions
 Following additional extensions are installed with this module:
 
 * **Code syntax highlighting** based on the [highlight.js](https://highlightjs.org/)
@@ -160,7 +175,8 @@ PrivateData = @{
 
 * upgrade of markdig to version 0.17.2
 * KaTex upgraded to 0.11.0
-
+* Re-factored the Markdown converter pipeline and made it parts public
+  to make it useful for a broader range of Markdown conversion scenarios.
 
 ## 1.2.8
 
