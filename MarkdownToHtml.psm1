@@ -22,64 +22,65 @@
 )
 
 function Publish-StaticHtmlSite {
-	[OutputType([System.IO.FileInfo])]
+    [OutputType([System.IO.FileInfo])]
     [CmdletBinding()]
-	param(
-		[parameter(Mandatory=$true,ValueFromPipeline=$true)]
-		[ValidateScript({$_.RelativePath})]
-		$HtmlFragment,
+    param(
+        [parameter(Mandatory=$true,ValueFromPipeline=$true)]
+        [ValidateScript({$_.RelativePath})]
+        [Alias('HtmlFragment')]
+        $InputObject,
 
-		[parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
         [string]$Template = (Join-Path $SCRIPT:moduleDir.FullName 'Template'),
 
-		[parameter(Mandatory=$true,ValueFromPipeline=$false)]
-		[ValidateNotNull()]
-		[string]$SiteDirectory
-	)
-	
-	BEGIN {
-		# Load the template
-		[string[]]$htmlTemplate = Get-Content -LiteralPath (Join-Path $Template 'md-template.html')`
-		                                      -Encoding    UTF8
+        [parameter(Mandatory=$true,ValueFromPipeline=$false)]
+        [ValidateNotNull()]
+        [string]$SiteDirectory
+    )
+    
+    BEGIN {
+        # Load the template
+        [string[]]$htmlTemplate = Get-Content -LiteralPath (Join-Path $Template 'md-template.html')`
+                                              -Encoding    UTF8
 
-		## Create the site directory, if neccessary
-		$siteDir = Get-Item -LiteralPath $SiteDirectory -ErrorAction:SilentlyContinue
-		if (!$siteDir) {
-			$siteDir = New-Item -Path $SiteDirectory -ItemType Directory -ErrorAction:SilentlyContinue
-		}
+        ## Create the site directory, if neccessary
+        $siteDir = Get-Item -LiteralPath $SiteDirectory -ErrorAction:SilentlyContinue
+        if (!$siteDir) {
+            $siteDir = New-Item -Path $SiteDirectory -ItemType Directory -ErrorAction:SilentlyContinue
+        }
 
-		if (!$siteDir) {
-			throw("Unable to create site directory: $SiteDirectory")
-		}
-		Write-Verbose "Publishing to '$siteDir' using HTML template '$Template'."
+        if (!$siteDir) {
+            throw("Unable to create site directory: $SiteDirectory")
+        }
+        Write-Verbose "Publishing to '$siteDir' using HTML template '$Template'."
 
-		## Copy the template resources to the site directory
+        ## Copy the template resources to the site directory
         Copy-Item -Path "$Template/*" -Recurse -Exclude 'md-template.html' -Destination $siteDir -Force
-	}
+    }
 
-	PROCESS {
-		[System.IO.FileInfo]$htmlFile = Join-Path $siteDir.FullName ([System.IO.Path]::ChangeExtension($HtmlFragment.RelativePath,'html'))
+    PROCESS {
+        [System.IO.FileInfo]$htmlFile = Join-Path $siteDir.FullName ([System.IO.Path]::ChangeExtension($InputObject.RelativePath,'html'))
         $htmlfile.Directory.Create() # make sure we have all directories
         $relativeResourcePath = '' # relative path to resources at the root of the output directory
-        foreach ($dir in (Split-Path $HtmlFragment.RelativePath -Parent) -split '\\+') {
+        foreach ($dir in (Split-Path $InputObject.RelativePath -Parent) -split '\\+') {
             if (![string]::IsNullOrWhiteSpace($dir)) {
                 $relativeResourcePath += '../'
             }
         }
 
-		$htmlTemplate | ForEach-Object {
-			if ($HtmlFragment.Title -and $_ -match '^\s*<title>\[title\]</title>\s*$') {
-				Write-Output "<title>$($HtmlFragment.Title)</title>"
-			} elseif ($_ -match '^\s*\[content\]\s*$') {
-				Write-Output $HtmlFragment.HtmlFragment
+        $htmlTemplate | ForEach-Object {
+            if ($InputObject.Title -and $_ -match '^\s*<title>\[title\]</title>\s*$') {
+                Write-Output "<title>$($InputObject.Title)</title>"
+            } elseif ($_ -match '^\s*\[content\]\s*$') {
+                Write-Output $InputObject.HtmlFragment
             } else {
                 ## fixup resource pathes in the template header
                 Write-Output ($_ -replace '(?<=(href|src)=")(?=[^/][^:"]+")',$relativeResourcePath)
             }
-		} `
-		| Out-File -LiteralPath $htmlFile -Encoding    utf8
+        } `
+        | Out-File -LiteralPath $htmlFile -Encoding    utf8
         $htmlFile
-	}
+    }
 }
 
 <#
@@ -134,13 +135,13 @@ function Find-MarkdownFiles {
                 # capture the relative path of the Markdown file
                 [string]$relativePath = $_.FullName.Substring($basePath.Length).Trim('/\')
                 Add-Member -InputObject $_ -MemberType NoteProperty -Name 'RelativePath' -Value $relativePath
-				$_
+                $_
               }
         } else {
-			# Write-Verbose "Found: $_ - $($_.GetType())"
-			Add-Member -InputObject $_ -MemberType NoteProperty -Name 'RelativePath' -Value $_.Name
-		    $_
-		}
+            # Write-Verbose "Found: $_ - $($_.GetType())"
+            Add-Member -InputObject $_ -MemberType NoteProperty -Name 'RelativePath' -Value $_.Name
+            $_
+        }
     }
 }
 
@@ -248,13 +249,13 @@ Markdown text [string] or Markdown file [System.IO.FileInfo].
 .OUTPUTS
 HTML fragment object with following properties:
 * `RelativePath`: A string representing the relative path to the Markdown file with respect to
-  a base directory. This property is required when using the PowerShell function [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md)
-  to generate a static HTML site from the Markdown files.
+  a base directory. This property is mandatory when using the PowerShell function [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md)
+  to generate a static HTML site from Markdown files.
   This propery is automatically set when
   * using the PowerShell function [`Find-MarkdownFiles`](Find-MarkdownFiles.md)
-  * the `-Markdown` is of type `[System.IO.FileInfo]`.
-* `Title`: Uses the first heading in the Markdown content to infer a page title. This property may be absent if no heading was found
-* `HtmlFragment`: The HTML fragment string generated from the Markdown Text.
+  * the `-Markdown` parameter is of type `[System.IO.FileInfo]`.
+* `Title`: The first heading in the Markdown content. This property may be absent if no heading was found
+* `HtmlFragment`: The HTML fragment string generated from the Markdown text.
 
 .NOTES
 
@@ -318,7 +319,7 @@ Returns the html fragment object:
     Name               Value
     ----               -----
     HtmlFragment       <h1 id="hello-world">Hello World</h1>...
-	Title              Hello World
+    Title              Hello World
 
 .EXAMPLE
 Get-Item -LiteralPath "Convert-MarkdownToHTML.md" | Convert-MarkdownToHTMLFragment
@@ -346,7 +347,7 @@ function Convert-MarkdownToHTMLFragment
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
         [string[]]$ExcludeExtension = @()
     )
-	BEGIN {
+    BEGIN {
         ## Determine which parser extensions to use
         if ($IncludeExtension -eq $null -or $IncludeExtension.Count -eq 0) {
             $extensions = @('common') # use _common_ extensions by default
@@ -403,7 +404,7 @@ function Convert-MarkdownToHTMLFragment
                         } elseif ($encode) { ## inside code block
                             [System.Net.WebUtility]::HtmlEncode([System.Net.WebUtility]::HtmlDecode($_))
                         } else { # outside code blocks - rewrite hyperlinks
-							$_ -split '(?<=<a [^>]*)(href="[^"]*")' `
+                            $_ -split '(?<=<a [^>]*)(href="[^"]*")' `
                             | ForEach-Object {
                                 if ($_ -match '^href=".*"' -and $_ -notmatch '^href="https?://') {
                                     $_ -replace '(\.md|\.markdown)(?=["#])','.html'
@@ -413,22 +414,22 @@ function Convert-MarkdownToHTMLFragment
                               }
                         }
                      })  -Join '' # return just one string
-		$htmlDescriptor = @{'HtmlFragment' = $fragment}
-		# guess a title
-		$match = [regex]::Match($md,'^[#\s]*([^\r\n]+)\s*\{*')
-		if ($match.Success) {
-			$htmlDescriptor.Title = $match.Groups[1].Value
-		} elseif ($Markdown.BaseName) {
-			$htmlDescriptor.Title = $Markdown.BaseName
-		}
+        $htmlDescriptor = @{'HtmlFragment' = $fragment}
+        # guess a title
+        $match = [regex]::Match($md,'^[#\s]*([^\r\n]+)\s*\{*')
+        if ($match.Success) {
+            $htmlDescriptor.Title = $match.Groups[1].Value
+        } elseif ($Markdown.BaseName) {
+            $htmlDescriptor.Title = $Markdown.BaseName
+        }
 
-		if ($Markdown.RelativePath) {
-			$htmlDescriptor.RelativePath = $Markdown.RelativePath
-		} elseif ($Markdown.Name) {
-			$htmlDescriptor.RelativePath = $Markdown.Name
-		}
+        if ($Markdown.RelativePath) {
+            $htmlDescriptor.RelativePath = $Markdown.RelativePath
+        } elseif ($Markdown.Name) {
+            $htmlDescriptor.RelativePath = $Markdown.Name
+        }
 
-		$htmlDescriptor # return the annotated HTML fragmemt
+        $htmlDescriptor # return the annotated HTML fragmemt
     }
 }
 
@@ -616,17 +617,17 @@ function Convert-MarkdownToHTML {
 
             [parameter(Mandatory=$true,ValueFromPipeline=$false)]
             [ValidateNotNullorEmpty()]
-		    [Alias('Destination')]
+            [Alias('Destination')]
             [string]$SiteDirectory
         )
-	Write-Verbose "$Path -> $SiteDirectory"
+    Write-Verbose "$Path -> $SiteDirectory"
     Find-MarkdownFiles -Path $Path -Verbose:$Verbose `
-	| Convert-MarkdownToHTMLFragment -IncludeExtension $IncludeExtension `
-	                                 -ExcludeExtension $ExcludeExtension `
-	                                 -Verbose:$Verbose `
-	| Publish-StaticHtmlSite -SiteDirectory $SiteDirectory `
-	                         -Template $Template `
-	                         -Verbose:$Verbose
+    | Convert-MarkdownToHTMLFragment -IncludeExtension $IncludeExtension `
+                                     -ExcludeExtension $ExcludeExtension `
+                                     -Verbose:$Verbose `
+    | Publish-StaticHtmlSite -SiteDirectory $SiteDirectory `
+                             -Template $Template `
+                             -Verbose:$Verbose
 }
 
 <#
