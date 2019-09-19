@@ -7,7 +7,7 @@ Create a static HTML site from HTML fragment objects.
 <blockquote>
 
 ```PowerShell
- Publish-StaticHtmlSite [-InputObject] <Object> [-Template] <String> [-SiteDirectory] <String>  [<CommonParameters>] 
+ Publish-StaticHtmlSite [-InputObject] <Object> [-Template] <String> [-MediaDirectory] <String> [-SiteDirectory] <String>  [<CommonParameters>] 
 ```
 
 
@@ -82,6 +82,24 @@ Accept wildcard characters?| false
 </blockquote>
  
 
+## -MediaDirectory \<String\>
+
+<blockquote>
+
+An optional directory containing additional media for the Html site
+such as images, videos etc.
+
+Parameter Property         | Value
+--------------------------:|:----------
+Required?                  | false
+Position?                  | 3
+Default value              | ``
+Accept pipeline input?     | false
+Accept wildcard characters?| false
+
+</blockquote>
+ 
+
 ## -SiteDirectory \<String\>
 
 <blockquote>
@@ -95,7 +113,7 @@ by generated HTML files.
 Parameter Property         | Value
 --------------------------:|:----------
 Required?                  | true
-Position?                  | 3
+Position?                  | 4
 Default value              | ``
 Accept pipeline input?     | false
 Accept wildcard characters?| false

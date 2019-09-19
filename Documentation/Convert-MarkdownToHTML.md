@@ -7,7 +7,7 @@ Convert Markdown files into HTML files.
 <blockquote>
 
 ```PowerShell
- Convert-MarkdownToHTML [-Path] <String> [-Template] <String> [-IncludeExtension] <String[]> [-ExcludeExtension] <String[]> [-SiteDirectory] <String>  [<CommonParameters>] 
+ Convert-MarkdownToHTML [-Path] <String> [-Template] <String> [-IncludeExtension] <String[]> [-ExcludeExtension] <String[]> [-MediaDirectory] <String> [-SiteDirectory] <String>  [<CommonParameters>] 
 ```
 
 
@@ -101,6 +101,24 @@ Accept wildcard characters?| false
 </blockquote>
  
 
+## -MediaDirectory \<String\>
+
+<blockquote>
+
+An optional directory containing additional media for the Html site
+such as images, videos etc. Defaults to the directory given in `-Path`
+
+Parameter Property         | Value
+--------------------------:|:----------
+Required?                  | false
+Position?                  | 5
+Default value              | `$Path`
+Accept pipeline input?     | false
+Accept wildcard characters?| false
+
+</blockquote>
+ 
+
 ## -SiteDirectory \<String\>
 
 <blockquote>
@@ -112,7 +130,7 @@ has below the Markdown source directory.
 Parameter Property         | Value
 --------------------------:|:----------
 Required?                  | true
-Position?                  | 5
+Position?                  | 6
 Default value              | ``
 Accept pipeline input?     | false
 Accept wildcard characters?| false
@@ -127,7 +145,7 @@ Accept wildcard characters?| false
 
 <blockquote>
 
-This function does not read from the pipe
+This function does not read from the pipe.
 
 </blockquote>
 
@@ -135,7 +153,7 @@ This function does not read from the pipe
 
 <blockquote>
 
-HTML files generated `[System.IO.FileInfo]`
+File objects `[System.IO.FileInfo]` of the generated HTML files.
 
 </blockquote>
 
@@ -241,7 +259,7 @@ extensible Markdown processor for .NET.
 ## EXAMPLE 1
 
 ```PowerShell
-Convert-MarkdownToHTML -Markdown 'E:\MyMarkdownFiles' -Destination 'E:\MyHTMLFiles'
+Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles'
 ```
 
 Convert all Markdown files in `E:\MyMarkdownFiles` and save the generated HTML files
@@ -249,7 +267,7 @@ in `E:\MyHTMLFiles`
 ## EXAMPLE 2
 
 ```PowerShell
-Convert-MarkdownToHTML -Markdown 'E:\MyMarkdownFiles' -Template 'E:\MyTemplate' -Destination 'E:\MyHTMLFiles'
+Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -Template 'E:\MyTemplate' -SiteDirectory 'E:\MyHTMLFiles'
 ```
 
 Convert all Markdown files in `E:\MyMarkdownFiles` using
@@ -260,12 +278,24 @@ The generated HTML files are saved to `E:\MyHTMLFiles`.
 ## EXAMPLE 3
 
 ```PowerShell
-Convert-MarkdownToHTML -Markdown 'E:\MyMarkdownFiles' -Destination 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
+Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
 ```
 
 Convert all Markdown files in `E:\MyMarkdownFiles` using
 * the 'advanced' and 'diagrams' parsing extension.
 * the default template
+
+The generated HTML files are saved to `E:\MyHTMLFiles`. 
+## EXAMPLE 4
+
+```PowerShell
+Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -MediaDirectory 'e:\Media' -SiteDirectory 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
+```
+
+Convert all Markdown files in `E:\MyMarkdownFiles` using
+* the 'advanced' and 'diagrams' parsing extension.
+* the default template
+* Media files (images, Videos, etc.) from the directory `e:\Media`
 
 The generated HTML files are saved to `E:\MyHTMLFiles`.
 
