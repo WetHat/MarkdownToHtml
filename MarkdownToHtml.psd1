@@ -85,6 +85,12 @@ Following additional extensions are installed with this module:
   and flowchart generator. Diagramming is pre-installed and activated.
 * **LaTeX Math typesetting** based on the [KaTeX](https://katex.org/) LaTeX Math
   typesetting library. Math typesetting is pre-installed and activated
+
+# Other Open Source Markdown to HTML Converters
+* [MkDocs](https://www.mkdocs.org/) - A fast and simple static site generator
+  that is geared towards building project documentation.
+  Documentation source files are written in Markdown, and configured with a
+  single YAML configuration file.
 '@
 
 # Minimum version of the Windows PowerShell engine required by this module
