@@ -898,7 +898,7 @@ section of the HTML template. Local Resources can be added anywhere to the templ
 javascript libraries are added to the the `js` directory of the template
 and stylesheets are added to the `styles` directory. To obtain resources and installation instructions
 for individual parsing extensions, visit the documentation of the extensions.
-See [Convert-MarkdownToHTMLDocument](Convert-MarkdownToHTMLDocument.md) for links.
+See [Convert-MarkdownToHTML](Convert-MarkdownToHTML.md) for links.
 
 .PARAMETER Destination
 Location of the new conversion template directory. The template directory
