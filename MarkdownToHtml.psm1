@@ -758,7 +758,8 @@ function Convert-MarkdownToHTML {
     | Convert-MarkdownToHTMLFragment -IncludeExtension $IncludeExtension `
                                      -ExcludeExtension $ExcludeExtension `
                                      -Verbose:$Verbose `
-    | Publish-StaticHtmlSite -MediaDirectory $MediaDirectory `                             -SiteDirectory $SiteDirectory `
+    | Publish-StaticHtmlSite -MediaDirectory $MediaDirectory `
+                             -SiteDirectory $SiteDirectory `
                              -Template $Template `
                              -Verbose:$Verbose
 }
