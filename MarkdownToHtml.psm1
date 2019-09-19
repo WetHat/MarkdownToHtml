@@ -55,6 +55,10 @@ which will be used to convert the Html fragments into standalone Html documents.
 If no template directory is specified, a default factory-installed template is used.
 For infomations about creating custom templates see [`New-HTMLTemplate`](New-HTMLTemplate.md).
 
+.PARAMETER MediaDirectory
+An optional directory containing additional media for the Html site
+such as images, videos etc.
+
 .PARAMETER SiteDirectory
 Directory for the generated HTML files. The Html files will be placed
 in the same relative location below this directory as related Markdown document
@@ -106,6 +110,9 @@ function Publish-StaticHtmlSite {
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
         [string]$Template = (Join-Path $SCRIPT:moduleDir.FullName 'Template'),
 
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [string]$MediaDirectory,
+
         [parameter(Mandatory=$true,ValueFromPipeline=$false)]
         [ValidateNotNull()]
         [string]$SiteDirectory
@@ -153,6 +160,13 @@ function Publish-StaticHtmlSite {
         } `
         | Out-File -LiteralPath $htmlFile -Encoding    utf8
         $htmlFile
+    }
+
+    END {
+        if ($MediaDirectory) {
+          # copy all assets to the site directory
+          Copy-Item -Path "$MediaDirectory/*" -Recurse -Exclude '*.md','*.markdown' -Destination $SiteDirectory -Force
+        }
     }
 }
 
@@ -507,7 +521,7 @@ function Convert-MarkdownToHTMLFragment
                      })  -Join '' # return just one string
         $htmlDescriptor = @{'HtmlFragment' = $fragment}
         # guess a title
-        $match = [regex]::Match($md,'^[#\s]*([^\r\n]+)\s*\{*')
+        $match = [regex]::Match($md,'^[#\s]*([^\r\n\{]+)')
         if ($match.Success) {
             $htmlDescriptor.Title = $match.Groups[1].Value
         } elseif ($Markdown.BaseName) {
@@ -549,6 +563,10 @@ Comma separated list of Markdown parsing extensions to exclude.
 Mostly used when the the 'advanced' parsing option is included and
 certain individual options need to be removed,
 
+.PARAMETER MediaDirectory
+An optional directory containing additional media for the Html site
+such as images, videos etc. Defaults to the directory given in `-Path`
+
 .PARAMETER SiteDirectory
 Directory for the generated HTML files. The Html files will be placed
 in the same relative location below this directory as related Markdown document
@@ -561,13 +579,13 @@ This function does not read from the pipe.
 File objects `[System.IO.FileInfo]` of the generated HTML files.
 
 .EXAMPLE
-Convert-MarkdownToHTML -Markdown 'E:\MyMarkdownFiles' -Destination 'E:\MyHTMLFiles'
+Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles'
 
 Convert all Markdown files in `E:\MyMarkdownFiles` and save the generated HTML files
 in `E:\MyHTMLFiles`
 
 .EXAMPLE
-Convert-MarkdownToHTML -Markdown 'E:\MyMarkdownFiles' -Template 'E:\MyTemplate' -Destination 'E:\MyHTMLFiles'
+Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -Template 'E:\MyTemplate' -SiteDirectory 'E:\MyHTMLFiles'
 
 Convert all Markdown files in `E:\MyMarkdownFiles` using
 * the 'common' parsing configuration
@@ -576,11 +594,21 @@ Convert all Markdown files in `E:\MyMarkdownFiles` using
 The generated HTML files are saved to `E:\MyHTMLFiles`.
 
 .EXAMPLE
-Convert-MarkdownToHTML -Markdown 'E:\MyMarkdownFiles' -Destination 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
+Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
 
 Convert all Markdown files in `E:\MyMarkdownFiles` using
 * the 'advanced' and 'diagrams' parsing extension.
 * the default template
+
+The generated HTML files are saved to `E:\MyHTMLFiles`.
+
+.EXAMPLE
+Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -MediaDirectory 'e:\Media' -SiteDirectory 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
+
+Convert all Markdown files in `E:\MyMarkdownFiles` using
+* the 'advanced' and 'diagrams' parsing extension.
+* the default template
+* Media files (images, Videos, etc.) from the directory `e:\Media`
 
 The generated HTML files are saved to `E:\MyHTMLFiles`.
 
@@ -704,6 +732,7 @@ function Convert-MarkdownToHTML {
             [SupportsWildcards()]
             [parameter(Mandatory=$true,ValueFromPipeline=$false)]
             [ValidateNotNullorEmpty()]
+            [Alias('Markdown')]
             [string]$Path,
 
             [parameter(Mandatory=$false,ValueFromPipeline=$false)]
@@ -715,17 +744,21 @@ function Convert-MarkdownToHTML {
             [parameter(Mandatory=$false,ValueFromPipeline=$false)]
             [string[]]$ExcludeExtension = @(),
 
+            [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+            [string]$MediaDirectory = $Path,
+
             [parameter(Mandatory=$true,ValueFromPipeline=$false)]
             [ValidateNotNullorEmpty()]
             [Alias('Destination')]
             [string]$SiteDirectory
         )
     Write-Verbose "$Path -> $SiteDirectory"
+
     Find-MarkdownFiles -Path $Path -Verbose:$Verbose `
     | Convert-MarkdownToHTMLFragment -IncludeExtension $IncludeExtension `
                                      -ExcludeExtension $ExcludeExtension `
                                      -Verbose:$Verbose `
-    | Publish-StaticHtmlSite -SiteDirectory $SiteDirectory `
+    | Publish-StaticHtmlSite -MediaDirectory $MediaDirectory `                             -SiteDirectory $SiteDirectory `
                              -Template $Template `
                              -Verbose:$Verbose
 }
@@ -933,10 +966,10 @@ function New-HTMLTemplate {
             [string]$Destination
          )
     $template = Join-Path $SCRIPT:moduleDir.FullName 'Template'
-    ## Copy the template to the output directory
-
+    
     $outdir = Get-Item -LiteralPath $Destination -ErrorAction:SilentlyContinue
 
+    # Create the site directory
     if ($outdir -eq $null) {
         $outdir = New-Item -Path $Destination -ItemType Directory -ErrorAction:SilentlyContinue
     }
@@ -944,6 +977,8 @@ function New-HTMLTemplate {
     if ($outdir -eq $null -or $outdir -isnot [System.IO.DirectoryInfo]) {
         throw("Unable to create directory $Destination")
     }
+    ## Copy the template to the output directory
     Copy-Item -Path "${template}/*" -Recurse -Destination $outDir
+
     $outDir
 }
