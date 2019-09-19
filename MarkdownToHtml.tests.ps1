@@ -56,7 +56,7 @@ Describe 'Convert-MarkdownToHTMLFragment' {
 			$refPath  = Join-Path $SCRIPT:refdata  -ChildPath $ReferencePath
 
 			$ResultPath = Join-Path 'TestDrive:/' $ReferencePath
-			$ResultPath = Join-Path 'e:\temp\ttt' $ReferencePath
+			#$ResultPath = Join-Path 'e:\temp\ttt' $ReferencePath
 
 			$fragment = Get-Item -LiteralPath $testPath `
 			| Convert-MarkdownToHTMLFragment -IncludeExtension $Extensions
