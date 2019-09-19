@@ -47,7 +47,7 @@ Describe 'Convert-MarkdownToHTMLFragment' {
 		   @{Path='markdown/mermaid.md'; ReferencePath='mermaid.html'; Extensions = 'diagrams' ; Title = 'Mermaid Diagramming Tool'}
 		   @{Path='markdown/KaTex.md';   ReferencePath='KaTex.html';   Extensions = 'mathematics'; Title = 'KaTEx Typesetting'}
 		   @{Path='markdown/KaMaid.md';  ReferencePath='KaMaid.html';  Extensions = 'diagrams','mathematics'; Title = 'KaTEx Typesetting'}
-		   @{Path='markdown/Code.md';    ReferencePath='Code.html';    Extensions = 'advanced'; Title = 'Testing Code Symtax Highlighting'}
+		   @{Path='markdown/Code.md';    ReferencePath='Code.html';    Extensions = 'advanced'; Title = 'Testing Code Symtax Highlighting '}
 		) `
 		{
 			param($Path,$ReferencePath,$Extensions, $Title)
@@ -62,7 +62,7 @@ Describe 'Convert-MarkdownToHTMLFragment' {
 			| Convert-MarkdownToHTMLFragment -IncludeExtension $Extensions
 		
 			$fragment.RelativePath | Should -BeExactly $testPath.Name # Should be Markdown Filename
-			$fragment.Title
+			$fragment.Title | Should -BeExactly $Title
 
 			Out-File -InputObject $fragment.HtmlFragment -LiteralPath $ResultPath -Encoding utf8
 
