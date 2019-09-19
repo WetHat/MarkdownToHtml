@@ -13,6 +13,7 @@ PS> Install-Module -Name MarkdownToHTML
 ```
 
 ![Logo](Markdown2HTML.png)
+
 # See Also
 * [Install-Module](https://docs.microsoft.com/en-us/powershell/module/powershellget/Install-Module?view=powershell-5.1) -
   Download one or more modules from an online gallery, and installs them on the local computer.
