@@ -1,3 +1,6 @@
+[![GitHub release](https://img.shields.io/github/release/WetHat/MarkdownToHtml)](https://GitHub.com/WetHat/MarkdownToHtml/releases/)
+[![Github all releases](https://img.shields.io/github/downloads/WetHat/MarkdownToHTML/total.svg)](https://GitHub.com/WetHat/MarkdownToHtml/releases/)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/WetHat/MarkdownToHtml/graphs/commit-activity)
 # MarkdownToHtml
 Highly configurable markdown to HTML conversion using customizable templates.
 
