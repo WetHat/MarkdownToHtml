@@ -19,7 +19,7 @@ can be generated with [`New-HtmlTemplate`](New-HtmlTemplate).
 If the converter pipeline need to be modified to meet the needs of
 a special process, the converter pipeline can be custom built using:
 * [`Find-MarkdownFiles`](Find-MarkdownFiles.md)
-* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md)
+* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHTMLFragment.md)
 * [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md)
 
 # Preinstalled Markdown Extensions
