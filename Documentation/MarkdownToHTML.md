@@ -14,7 +14,7 @@ The typical use case is to convert a bunch of Markdown files in a directory
 to a static Html site using [`Convert-MarkdownToHtml`](Convert-MarkdownToHTML.md).
 
 If the Html default conversion template is not sufficient a custom template
-can be generated with [`New-HtmlTemplate`](New-HtmlTemplate).
+can be generated with [`New-HtmlTemplate`](New-HTMLTemplate).
 
 If the converter pipeline need to be modified to meet the needs of
 a special process, the converter pipeline can be custom built using:
