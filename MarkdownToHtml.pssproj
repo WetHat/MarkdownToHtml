@@ -8,10 +8,14 @@
     <AssemblyName>MyApplication</AssemblyName>
     <Name>MarkdownToHtml</Name>
     <ProjectHome />
-    <PreBuildScript>$doc = Join-Path $pwd.Path 'Documentation'
+    <PreBuildScript>import-module -name "$pwd/../MarkdownCodeDocs"
+import-module -name $pwd 
+
+$doc = Join-Path $pwd.Path 'Documentation'
 Publish-PSModuleMarkdown -moduleName 'MarkdownToHTML' -Destination $doc</PreBuildScript>
     <PostBuildScript>$env:PSModulePath+=[char]0x3b + 'C:\Program Files\WindowsPowerShell\Modules'
 import-module pester -MinimumVersion '4.0.0'
+import-module -name $pwd 
 Invoke-Pester -TestName 'Convert-MarkdownToHTMLFragment' ,'Convert-MarkdownToHTML'
 </PostBuildScript>
     <PackageEntryPoint>MarkdownToHtml.tests.ps1</PackageEntryPoint>
