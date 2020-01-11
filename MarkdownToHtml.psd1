@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.3.0'
+ModuleVersion = '2.0.0'
 
 # ID used to uniquely identify this module
 GUID = 'ac6c6204-4097-4693-ba7e-3e0167383c24'
@@ -23,7 +23,7 @@ Author = 'WetHat'
 CompanyName = 'WetHat Lab'
 
 # Copyright statement for this module
-Copyright = '(c) 2018-2019 WetHat Lab. All rights reserved.'
+Copyright = '(c) 2018-2020 WetHat Lab. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @'
@@ -177,6 +177,41 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
+## 2.0.0
+
+* Updated to _Markdig_ 0.18.0.
+  **Note**: This version of _Markdig_ introduces an incompatiblity in the
+  _mathematics_ extension which breaks _KaTeX_ math rendering.
+  To address this incompaibility the KaTex
+  configuration in **all** deployed html templates (`md_template.html`) needs to
+  be updated like so:
+
+> ~~~ html
+> <script>
+>       // <![CDATA[
+>       window.onload = function() {
+>           var tex = document.getElementsByClassName("math");
+>           Array.prototype.forEach.call(tex, function(el) {
+>               katex.render(el.textContent, el, {
+>                                                     displayMode: (el.nodeName == "DIV"),
+>                                                     macros: {
+>                                                                "\\(": "",
+>                                                                "\\)": "",
+>                                                                "\\[": "",
+>                                                                "\\]": ""
+>                                                             }
+>                                                })
+>           });
+>       };
+>       // ]]>
+> </script>
+> ~~~
+
+* Changed the html template (`md_template.html`) to address an incompatible
+  change in the LaTeX math output of the _mathematics_ extension of _Markdig_.
+
+* KaTeX updated to version 0.11.1
+
 ## 1.3.0
 
 * upgrade of markdig to version 0.17.2
