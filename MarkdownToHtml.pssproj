@@ -8,7 +8,9 @@
     <AssemblyName>MyApplication</AssemblyName>
     <Name>MarkdownToHtml</Name>
     <ProjectHome />
-    <PreBuildScript>$doc = Join-Path $pwd.Path 'Documentation'
+    <PreBuildScript>import-module "$pwd/../MarkdownCodeDocs"
+import-module $pwd
+$doc = Join-Path $pwd.Path 'Documentation'
 Publish-PSModuleMarkdown -moduleName 'MarkdownToHTML' -Destination $doc</PreBuildScript>
     <PostBuildScript>$env:PSModulePath+=[char]0x3b + 'C:\Program Files\WindowsPowerShell\Modules'
 import-module pester -MinimumVersion '4.0.0'
