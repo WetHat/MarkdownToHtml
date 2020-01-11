@@ -1,37 +1,605 @@
 ﻿<h1 id="testing-code-symtax-highlighting" class="title">Testing Code Symtax Highlighting</h1>
-<h2 id="lisp">Lisp</h2>
-<pre><code class="language-Lisp">(defun test (c &amp;key message)
-    (format t &quot;~A - ~S~%&quot; c message)
-)
+<h2 id="bash">Bash</h2>
+<pre><code class="language-bash">#!/bin/bash
+
+###### CONFIG
+ACCEPTED_HOSTS=&quot;/root/.hag_accepted.conf&quot;
+BE_VERBOSE=false
+
+if [ &quot;$UID&quot; -ne 0 ]
+then
+ echo &quot;Superuser rights required&quot;
+ exit 2
+fi
+
+genApacheConf(){
+ echo -e &quot;# Host ${HOME_DIR}$1/$2 :&quot;
+}
+
+echo &#39;&quot;quoted&quot;&#39; | tr -d \&quot; &gt; text.txt
 </code></pre>
-<h2 id="powershell">PowerShell</h2>
-<pre><code class="language-PowerShell">function New-HTMLTemplate {
-    [OutputType([System.IO.DirectoryInfo])]
-    [CmdletBinding()]
-    param(
-            [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-            [ValidateNotNullorEmpty()]
-            [string]$Destination
-         )
-    $template = Join-Path $SCRIPT:moduleDir.FullName &#39;Template&#39;
-    ## Copy the template to the output directory
+<h2 id="c">C#</h2>
+<pre><code class="language-C#">using System.IO.Compression;
 
-    $outdir = Get-Item -LiteralPath $Destination -ErrorAction:SilentlyContinue
+#pragma warning disable 414, 3021
 
-    if ($outdir -eq $null) {
-        $outdir = New-Item -Path $Destination -ItemType Directory -ErrorAction:SilentlyContinue
+namespace MyApplication
+{
+    [Obsolete(&quot;...&quot;)]
+    class Program : IInterface
+    {
+        public static List&lt;int&gt; JustDoIt(int count)
+        {
+            Console.WriteLine($&quot;Hello {Name}!&quot;);
+            return new List&lt;int&gt;(new int[] { 1, 2, 3 })
+        }
     }
-
-    if ($outdir -eq $null -or $outdir -isnot [System.IO.DirectoryInfo]) {
-        throw(&quot;Unable to create directory $Destination&quot;)
-    }
-    Copy-Item -Path &quot;${template}/*&quot; -Recurse -Destination $outDir
-    $outDir
 }
 </code></pre>
-<h2 id="html">HTML</h2>
-<pre><code class="language-html">&lt;body&gt;
-    &lt;p style=&quot;background:green;&quot;&gt;Hello world.&lt;/p&gt;
+<h2 id="c-1">C++</h2>
+<pre><code class="language-C++">#include &lt;iostream&gt;
+
+int main(int argc, char *argv[]) {
+
+  /* An annoying &quot;Hello World&quot; example */
+  for (auto i = 0; i &lt; 0xFFFF; i++)
+    cout &lt;&lt; &quot;Hello, World!&quot; &lt;&lt; endl;
+
+  char c = &#39;\n&#39;;
+  unordered_map &lt;string, vector&lt;string&gt; &gt; m;
+  m[&quot;key&quot;] = &quot;\\\\&quot;; // this is an error
+
+  return -2e3 + 12l;
+}
+</code></pre>
+<h2 id="clojure">Clojure</h2>
+<pre><code class="language-clojure">(def ^:dynamic chunk-size 17)
+
+(defn next-chunk [rdr]
+  (let [buf (char-array chunk-size)
+        s (.read rdr buf)]
+  (when (pos? s)
+    (java.nio.CharBuffer/wrap buf 0 s))))
+
+(defn chunk-seq [rdr]
+  (when-let [chunk (next-chunk rdr)]
+    (cons chunk (lazy-seq (chunk-seq rdr)))))
+</code></pre>
+<h2 id="cmake">CMake</h2>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 2.8.8)
+project(cmake_example)
+
+# Show message on Linux platform
+if (${CMAKE_SYSTEM_NAME} MATCHES Linux)
+    message(&quot;Good choice, bro!&quot;)
+endif()
+
+# Tell CMake to run moc when necessary:
+set(CMAKE_AUTOMOC ON)
+# As moc files are generated in the binary dir,
+# tell CMake to always look for includes there:
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+# Widgets finds its own dependencies.
+find_package(Qt5Widgets REQUIRED)
+
+add_executable(myproject main.cpp mainwindow.cpp)
+qt5_use_modules(myproject Widgets)
+</code></pre>
+<h2 id="css">CSS</h2>
+<pre><code class="language-css">@font-face {
+  font-family: Chunkfive; src: url(&#39;Chunkfive.otf&#39;);
+}
+
+body, .usertext {
+  color: #F0F0F0; background: #600;
+  font-family: Chunkfive, sans;
+  --heading-1: 30px/32px Helvetica, sans-serif;
+}
+
+@import url(print.css);
+@media print {
+  a[href^=http]::after {
+    content: attr(href)
+  }
+}
+</code></pre>
+<h2 id="diff">Diff</h2>
+<pre><code class="language-diff">Index: languages/ini.js
+===================================================================
+--- languages/ini.js    (revision 199)
++++ languages/ini.js    (revision 200)
+@@ -1,8 +1,7 @@
+ hljs.LANGUAGES.ini =
+ {
+   case_insensitive: true,
+-  defaultMode:
+-  {
++  defaultMode: {
+     contains: [&#39;comment&#39;, &#39;title&#39;, &#39;setting&#39;],
+     illegal: &#39;[^\\s]&#39;
+   },
+
+*** /path/to/original timestamp
+--- /path/to/new      timestamp
+***************
+*** 1,3 ****
+--- 1,9 ----
++ This is an important
++ notice! It should
++ therefore be located at
++ the beginning of this
++ document!
+
+! compress the size of the
+! changes.
+
+  It is important to spell
+</code></pre>
+<h2 id="dos.bat">DOS .bat</h2>
+<pre><code class="language-dos">cd \
+copy a b
+ping 192.168.0.1
+@rem ping 192.168.0.1
+net stop sharedaccess
+del %tmp% /f /s /q
+del %temp% /f /s /q
+ipconfig /flushdns
+taskkill /F /IM JAVA.EXE /T
+
+cd Photoshop/Adobe Photoshop CS3/AMT/
+if exist application.sif (
+    ren application.sif _application.sif
+) else (
+    ren _application.sif application.sif
+)
+
+taskkill /F /IM proquota.exe /T
+
+sfc /SCANNOW
+
+set path = test
+
+xcopy %1\*.* %2
+</code></pre>
+<h2 id="f">F#</h2>
+<pre><code class="language-fsharp">open System
+
+// Single line comment...
+(*
+  This is a
+  multiline comment.
+*)
+let checkList alist =
+    match alist with
+    | [] -&gt; 0
+    | [a] -&gt; 1
+    | [a; b] -&gt; 2
+    | [a; b; c] -&gt; 3
+    | _ -&gt; failwith &quot;List is too big!&quot;
+
+
+let text = &quot;Some text...&quot;
+let text2 = @&quot;A &quot;&quot;verbatim&quot;&quot; string...&quot;
+let catalog = &quot;&quot;&quot;
+Some &quot;long&quot; string...
+&quot;&quot;&quot;
+
+let rec fib x = if x &lt;= 2 then 1 else fib(x-1) + fib(x-2)
+
+let fibs =
+    Async.Parallel [ for i in 0..40 -&gt; async { return fib(i) } ]
+    |&gt; Async.RunSynchronously
+
+type Sprocket(gears) =
+  member this.Gears : int = gears
+
+[&lt;AbstractClass&gt;]
+type Animal =
+  abstract Speak : unit -&gt; unit
+
+type Widget =
+  | RedWidget
+  | GreenWidget
+
+type Point = {X: float; Y: float;}
+
+[&lt;Measure&gt;]
+type s
+let minutte = 60&lt;s&gt;
+
+type DefaultMailbox&lt;&#39;a&gt;() =
+    let mutable inbox = ConcurrentQueue&lt;&#39;a&gt;()
+    let awaitMsg = new AutoResetEvent(false)
+</code></pre>
+<h2 id="groovy">Groovy</h2>
+<pre><code class="language-groovy">#!/usr/bin/env groovy
+package model
+
+import groovy.transform.CompileStatic
+import java.util.List as MyList
+
+trait Distributable {
+    void distribute(String version) {}
+}
+
+@CompileStatic
+class Distribution implements Distributable {
+    double number = 1234.234 / 567
+    def otherNumber = 3 / 4
+    boolean archivable = condition ?: true
+    def ternary = a ? b : c
+    String name = &quot;Guillaume&quot;
+    Closure description = null
+    List&lt;DownloadPackage&gt; packages = []
+    String regex = ~/.*foo.*/
+    String multi = &#39;&#39;&#39;
+        multi line string
+    &#39;&#39;&#39; + &quot;&quot;&quot;
+        now with double quotes and ${gstring}
+    &quot;&quot;&quot; + $/
+        even with dollar slashy strings
+    /$
+
+    /**
+     * description method
+     * @param cl the closure
+     */
+    void description(Closure cl) { this.description = cl }
+
+    void version(String name, Closure versionSpec) {
+        def closure = { println &quot;hi&quot; } as Runnable
+
+        MyList ml = [1, 2, [a: 1, b:2,c :3]]
+        for (ch in &quot;name&quot;) {}
+
+        // single line comment
+        DownloadPackage pkg = new DownloadPackage(version: name)
+
+        check that: true
+
+        label:
+        def clone = versionSpec.rehydrate(pkg, pkg, pkg)
+        /*
+            now clone() in a multiline comment
+        */
+        clone()
+        packages.add(pkg)
+
+        assert 4 / 2 == 2
+    }
+}
+</code></pre>
+<h2 id="htmlxml">HTML/XML</h2>
+<pre><code class="language-HTML">&lt;!DOCTYPE html&gt;
+&lt;title&gt;Title&lt;/title&gt;
+
+&lt;style&gt;body {width: 500px;}&lt;/style&gt;
+
+&lt;script type=&quot;application/javascript&quot;&gt;
+  function $init() {return true;}
+&lt;/script&gt;
+
+&lt;body&gt;
+  &lt;p checked class=&quot;title&quot; id=&#39;title&#39;&gt;Title&lt;/p&gt;
+  &lt;!-- here goes the rest of the page --&gt;
 &lt;/body&gt;
+</code></pre>
+<h2 id="http">HTTP</h2>
+<pre><code class="language-http">POST /task?id=1 HTTP/1.1
+Host: example.org
+Content-Type: application/json; charset=utf-8
+Content-Length: 137
+
+{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;extended&quot;: true,
+  &quot;results&quot;: [
+    {&quot;value&quot;: 0, &quot;type&quot;: &quot;int64&quot;},
+    {&quot;value&quot;: 1.0e+3, &quot;type&quot;: &quot;decimal&quot;}
+  ]
+}
+</code></pre>
+<h2 id="java">Java</h2>
+<pre><code class="language-java">/**
+ * @author John Smith &lt;john.smith@example.com&gt;
+*/
+package l2f.gameserver.model;
+
+public abstract class L2Char extends L2Object {
+  public static final Short ERROR = 0x0001;
+
+  public void moveTo(int x, int y, int z) {
+    _ai = null;
+    log(&quot;Should not be called&quot;);
+    if (1 &gt; 5) { // wtf!?
+      return;
+    }
+  }
+}
+</code></pre>
+<h2 id="javascript">JavaScript</h2>
+<pre><code class="language-javascript">function $initHighlight(block, cls) {
+  try {
+    if (cls.search(/\bno\-highlight\b/) != -1)
+      return process(block, true, 0x0F) +
+             ` class=&quot;${cls}&quot;`;
+  } catch (e) {
+    /* handle exception */
+  }
+  for (var i = 0 / 2; i &lt; classes.length; i++) {
+    if (checkCondition(classes[i]) === undefined)
+      console.log(&#39;undefined&#39;);
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;web-component&gt;{block}&lt;/web-component&gt;
+    &lt;/div&gt;
+  )
+}
+
+export  $initHighlight;
+</code></pre>
+<h2 id="json">JSON</h2>
+<pre><code class="language-json">[
+  {
+    &quot;title&quot;: &quot;apples&quot;,
+    &quot;count&quot;: [12000, 20000],
+    &quot;description&quot;: {&quot;text&quot;: &quot;...&quot;, &quot;sensitive&quot;: false}
+  },
+  {
+    &quot;title&quot;: &quot;oranges&quot;,
+    &quot;count&quot;: [17500, null],
+    &quot;description&quot;: {&quot;text&quot;: &quot;...&quot;, &quot;sensitive&quot;: false}
+  }
+]
+</code></pre>
+<h2 id="lisp">Lisp</h2>
+<pre><code class="language-lisp">#!/usr/bin/env csi
+
+(defun prompt-for-cd ()
+   &quot;Prompts
+    for CD&quot;
+   (prompt-read &quot;Title&quot; 1.53 1 2/4 1.7 1.7e0 2.9E-4 +42 -7 #b001 #b001/100 #o777 #O777 #xabc55 #c(0 -5.6))
+   (prompt-read &quot;Artist&quot; &amp;rest)
+   (or (parse-integer (prompt-read &quot;Rating&quot;) :junk-allowed t) 0)
+  (if x (format t &quot;yes&quot;) (format t &quot;no&quot; nil) ;and here comment
+  )
+  ;; second line comment
+  &#39;(+ 1 2)
+  (defvar *lines*)                ; list of all lines
+  (position-if-not #&#39;sys::whitespacep line :start beg))
+  (quote (privet 1 2 3))
+  &#39;(hello world)
+  (* 5 7)
+  (1 2 34 5)
+  (:use &quot;aaaa&quot;)
+  (let ((x 10) (y 20))
+    (print (+ x y))
+  )
+</code></pre>
+<h2 id="makefile">Makefile</h2>
+<pre><code class="language-makefile"># Makefile
+
+BUILDDIR      = _build
+EXTRAS       ?= $(BUILDDIR)/extras
+
+.PHONY: main clean
+
+main:
+	@echo &quot;Building main facility...&quot;
+	build_main $(BUILDDIR)
+
+clean:
+	rm -rf $(BUILDDIR)/*
+</code></pre>
+<h2 id="markdown">Markdown</h2>
+<pre><code class="language-markdown"># hello world
+
+you can write text [with links](http://example.com) inline or [link references][1].
+
+* one _thing_ has *em*phasis
+* two __things__ are **bold**
+
+[1]: http://example.com
+
+---
+
+hello world
+===========
+
+&lt;this_is inline=&quot;xml&quot;&gt;&lt;/this_is&gt;
+
+&gt; markdown is so cool
+
+    so are code segments
+
+1. one thing (yeah!)
+2. two thing `i can write code`, and `more` wipee!
+</code></pre>
+<h2 id="maxima">Maxima</h2>
+<pre><code class="language-maxima">/* Maxima computer algebra system */
+
+/* symbolic constants */
+
+[true, false, unknown, inf, minf, ind,
+ und, %e, %i, %pi, %phi, %gamma];
+
+/* programming keywords */
+
+if a then b elseif c then d else f;
+for x:1 thru 10 step 2 do print(x);
+for z:-2 while z &lt; 0 do print(z);
+for m:0 unless m &gt; 10 do print(m);
+for x in [1, 2, 3] do print(x);
+foo and bar or not baz;
+
+/* built-in variables */
+
+[_, __, %, %%, linel, simp, dispflag,
+ stringdisp, lispdisp, %edispflag];
+
+/* built-in functions */
+
+[sin, cosh, exp, atan2, sqrt, log, struve_h,
+ sublist_indices, read_array];
+
+/* user-defined symbols */
+
+[foo, ?bar, baz%, quux_mumble_blurf];
+
+/* symbols using Unicode characters */
+
+[?, ?, ?, ?, ???, ?????];
+
+/* numbers */
+
+ibase : 18 $
+[0, 1234, 1234., 0abcdefgh];
+reset (ibase) $
+[.54321, 3.21e+0, 12.34B56];
+
+/* strings */
+
+s1 : &quot;\&quot;now\&quot; is&quot;;
+s2 : &quot;the &#39;time&#39; for all good men&quot;;
+print (s1, s2, &quot;to come to the aid&quot;,
+  &quot;of their country&quot;);
+
+/* expressions */
+
+foo (x, y, z) :=
+  if x &gt; 1 + y
+    then z - x*y
+  elseif y &lt;= 100!
+    then x/(y + z)^2
+  else z - y . x . y;
+
+</code></pre>
+<h2 id="perl">Perl</h2>
+<pre><code class="language-Perl"># loads object
+sub load
+{
+  my $flds = $c-&gt;db_load($id,@_) || do {
+    Carp::carp &quot;Can`t load (class: $c, id: $id): &#39;$!&#39;&quot;; return undef
+  };
+  my $o = $c-&gt;_perl_new();
+  $id12 = $id / 24 / 3600;
+  $o-&gt;{&#39;ID&#39;} = $id12 + 123;
+  #$o-&gt;{&#39;SHCUT&#39;} = $flds-&gt;{&#39;SHCUT&#39;};
+  my $p = $o-&gt;props;
+  my $vt;
+  $string =~ m/^sought_text$/;
+  $items = split //, &#39;abc&#39;;
+  $string //= &quot;bar&quot;;
+  for my $key (keys %$p)
+  {
+    if(${$vt.&#39;::property&#39;}) {
+      $o-&gt;{$key . &#39;_real&#39;} = $flds-&gt;{$key};
+      tie $o-&gt;{$key}, &#39;CMSBuilder::Property&#39;, $o, $key;
+    }
+  }
+  $o-&gt;save if delete $o-&gt;{&#39;_save_after_load&#39;};
+
+  # GH-117
+  my $g = glob(&quot;/usr/bin/*&quot;);
+
+  return $o;
+}
+
+__DATA__
+@@ layouts/default.html.ep
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;&lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;&lt;/head&gt;
+  &lt;body&gt;&lt;%= content %&gt;&lt;/body&gt;
+&lt;/html&gt;
+__END__
+
+=head1 NAME
+POD till the end of file
+</code></pre>
+<h2 id="python">Python</h2>
+<pre><code class="language-Python">@requires_authorization
+def somefunc(param1=&#39;&#39;, param2=0):
+    r&#39;&#39;&#39;A docstring&#39;&#39;&#39;
+    if param1 &gt; param2: # interesting
+        print &#39;Gre\&#39;ater&#39;
+    return (param2 - param1 + 1 + 0b10l) or None
+
+class SomeClass:
+    pass
+
+&gt;&gt;&gt; message = &#39;&#39;&#39;interpreter
+... prompt&#39;&#39;&#39;
+</code></pre>
+<h2 id="powershell">PowerShell</h2>
+<pre><code class="language-Powershell">$initialDate = [datetime]&#39;2013/1/8&#39;
+
+$rollingDate = $initialDate
+
+do {
+    $client = New-Object System.Net.WebClient
+    $results = $client.DownloadString(&quot;http://not.a.real.url&quot;)
+    Write-Host &quot;$rollingDate.ToShortDateString() - $results&quot;
+    $rollingDate = $rollingDate.AddDays(21)
+    $username = [System.Environment]::UserName
+} until ($rollingDate -ge [datetime]&#39;2013/12/31&#39;)
+</code></pre>
+<h2 id="sql">SQL</h2>
+<pre><code class="language-SQL">CREATE TABLE &quot;topic&quot; (
+    &quot;id&quot; serial NOT NULL PRIMARY KEY,
+    &quot;forum_id&quot; integer NOT NULL,
+    &quot;subject&quot; varchar(255) NOT NULL
+);
+ALTER TABLE &quot;topic&quot;
+ADD CONSTRAINT forum_id FOREIGN KEY (&quot;forum_id&quot;)
+REFERENCES &quot;forum&quot; (&quot;id&quot;);
+
+-- Initials
+insert into &quot;topic&quot; (&quot;forum_id&quot;, &quot;subject&quot;)
+values (2, &#39;D&#39;&#39;artagnian&#39;);
+</code></pre>
+<h2 id="yaml">YAML</h2>
+<pre><code class="language-yaml">---
+# comment
+string_1: &quot;Bar&quot;
+string_2: &#39;bar&#39;
+string_3: bar
+inline_keys_ignored: sompath/name/file.jpg
+keywords_in_yaml:
+  - true
+  - false
+  - TRUE
+  - FALSE
+  - 21
+  - 21.0
+  - !!str 123
+&quot;quoted_key&quot;: &amp;foobar
+  bar: foo
+  foo:
+  &quot;foo&quot;: bar
+
+reference: *foobar
+
+multiline_1: |
+  Multiline
+  String
+multiline_2: &gt;
+  Multiline
+  String
+multiline_3: &quot;
+  Multiline string
+  &quot;
+
+ansible_variables: &quot;foo {{variable}}&quot;
+
+array_nested:
+- a
+- b: 1
+  c: 2
+- b
+- comment
 </code></pre>
 

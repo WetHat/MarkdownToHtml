@@ -48,9 +48,11 @@ Following additional extensions are installed with this module:
   * Makefile
   * Markdown
   * Maxima
+  * Perl
   * Python
   * PowerShell
   * SQL
+  * YAML
 
   To obtain syntax highlighting for other/additional languages, please visit
   the [Getting highlight.js](https://highlightjs.org/download/) page and
@@ -66,6 +68,7 @@ Following additional extensions are installed with this module:
   that is geared towards building project documentation.
   Documentation source files are written in Markdown, and configured with a
   single YAML configuration file.
+
 
 # Exported Functions
 
@@ -109,8 +112,9 @@ Following additional extensions are installed with this module:
 
 * Changed the html template (`md_template.html`) to address an incompatible
   change in the LaTeX math output of the _mathematics_ extension of _Markdig_.
-
 * KaTeX updated to version 0.11.1
+* Code syntax highlighting updated to version 9.17.1
+* Highligting languages Perl and YAML added
 
 ## 1.3.0
 
