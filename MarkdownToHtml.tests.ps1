@@ -7,7 +7,7 @@
 [System.IO.DirectoryInfo]$SCRIPT:moduleDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 [System.IO.DirectoryInfo]$SCRIPT:testdata = Join-Path $SCRIPT:moduleDir -ChildPath 'TestData'
 [System.IO.DirectoryInfo]$SCRIPT:refdata  = Join-Path $SCRIPT:moduleDir -ChildPath 'ReferenceData'
-[System.IO.FileInfo]$SCRIPT:template      = Join-Path $SCRIPT:testdata  -ChildPath 'Template'
+[System.IO.FileInfo]$SCRIPT:template      = Join-Path $SCRIPT:moduleDir  -ChildPath 'Template'
 
 Describe 'Convert-MarkdownToHTML' {
 	It 'Converts markdown file(s) from ''<Path>'' to HTML' `
@@ -60,7 +60,7 @@ Describe 'Convert-MarkdownToHTMLFragment' {
 
 			$fragment = Get-Item -LiteralPath $testPath `
 			| Convert-MarkdownToHTMLFragment -IncludeExtension $Extensions
-		
+
 			$fragment.RelativePath | Should -BeExactly $testPath.Name # Should be Markdown Filename
 			$fragment.Title | Should -BeExactly $Title
 
