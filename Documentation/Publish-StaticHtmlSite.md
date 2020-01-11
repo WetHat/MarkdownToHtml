@@ -181,4 +181,4 @@ The generated Html file objects are returned like so:
 
 ---
 
-<cite>Module: MarkdownToHTML; Version: 1.3.0; (c) 2018-2019 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.0.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>

@@ -292,4 +292,4 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
 
 ---
 
-<cite>Module: MarkdownToHTML; Version: 1.3.0; (c) 2018-2019 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.0.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>

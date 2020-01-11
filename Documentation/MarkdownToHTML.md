@@ -1,4 +1,4 @@
-﻿# MarkdownToHTML 1.3.0
+﻿# MarkdownToHtml 2.0.0
 
 <cite><b>Tags</b>: Markdown, HTML, Converter, Markdown, HTML, Converter</cite>
 
@@ -77,6 +77,41 @@ Following additional extensions are installed with this module:
 
 # Release Notes
 
+## 2.0.0
+
+* Updated to _Markdig_ 0.18.0.
+  **Note**: This version of _Markdig_ introduces an incompatiblity in the
+  _mathematics_ extension which breaks _KaTeX_ math rendering.
+  To address this incompaibility the KaTex
+  configuration in **all** deployed html templates (`md_template.html`) needs to
+  be updated like so:
+
+> ~~~ html
+> <script>
+>       // <![CDATA[
+>       window.onload = function() {
+>           var tex = document.getElementsByClassName("math");
+>           Array.prototype.forEach.call(tex, function(el) {
+>               katex.render(el.textContent, el, {
+>                                                     displayMode: (el.nodeName == "DIV"),
+>                                                     macros: {
+>                                                                "\\(": "",
+>                                                                "\\)": "",
+>                                                                "\\[": "",
+>                                                                "\\]": ""
+>                                                             }
+>                                                })
+>           });
+>       };
+>       // ]]>
+> </script>
+> ~~~
+
+* Changed the html template (`md_template.html`) to address an incompatible
+  change in the LaTeX math output of the _mathematics_ extension of _Markdig_.
+
+* KaTeX updated to version 0.11.1
+
 ## 1.3.0
 
 * upgrade of markdig to version 0.17.2
@@ -140,4 +175,4 @@ Initial Release
 
 ---
 
-<cite>Module: MarkdownToHTML; Version: 1.3.0; (c) 2018-2019 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.0.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
