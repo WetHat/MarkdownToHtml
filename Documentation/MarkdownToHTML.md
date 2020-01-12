@@ -8,6 +8,15 @@ Markdown to HTML conversion is based on [Markdig](https://github.com/lunet-io/ma
 a fast, powerful, [CommonMark](http://commonmark.org/) compliant,
 extensible Markdown processor for .NET.
 
+### Incompatibilities
+
+This version is incompatible with existing conversion projects
+which use the _mathematics_ extensions and were created with versions of this module
+older than 2.0.0 (i.e. 1.* or 0.*).
+
+**Make sure to read the release notes for 2.0.0 below for instructions on how to upgrade your
+existing conversion projects.**
+
 # Quickstart
 
 The typical use case is to convert a bunch of Markdown files in a directory
@@ -82,39 +91,48 @@ Following additional extensions are installed with this module:
 
 ## 2.0.0
 
+#### Known Incompatibilities
+
+The updated version of _Markdig_ incuded in this release introduces
+an incompatiblity in the _mathematics_ extension which breaks _KaTeX_ math rendering.
+To address this incompaibility the KaTex configuration in **all** deployed html templates
+(`md_template.html`) needs to be updated like so:
+
+~~~ html
+<script>
+      // <![CDATA[
+      window.onload = function() {
+          var tex = document.getElementsByClassName("math");
+          Array.prototype.forEach.call(tex, function(el) {
+              katex.render(el.textContent, el, {
+                                                    displayMode: (el.nodeName == "DIV"),
+                                                    macros: {
+                                                               "\\(": "",
+                                                               "\\)": "",
+                                                               "\\[": "",
+                                                               "\\]": ""
+                                                            }
+                                               })
+          });
+      };
+      // ]]>
+</script>
+~~~
+
+#### New Features
+
+* Highligting languages _Perl_ and _YAML_ added
+
+#### Maintenance
+
 * Updated to _Markdig_ 0.18.0.
-  **Note**: This version of _Markdig_ introduces an incompatiblity in the
-  _mathematics_ extension which breaks _KaTeX_ math rendering.
-  To address this incompaibility the KaTex
-  configuration in **all** deployed html templates (`md_template.html`) needs to
-  be updated like so:
-
-> ~~~ html
-> <script>
->       // <![CDATA[
->       window.onload = function() {
->           var tex = document.getElementsByClassName("math");
->           Array.prototype.forEach.call(tex, function(el) {
->               katex.render(el.textContent, el, {
->                                                     displayMode: (el.nodeName == "DIV"),
->                                                     macros: {
->                                                                "\\(": "",
->                                                                "\\)": "",
->                                                                "\\[": "",
->                                                                "\\]": ""
->                                                             }
->                                                })
->           });
->       };
->       // ]]>
-> </script>
-> ~~~
-
-* Changed the html template (`md_template.html`) to address an incompatible
-  change in the LaTeX math output of the _mathematics_ extension of _Markdig_.
 * KaTeX updated to version 0.11.1
 * Code syntax highlighting updated to version 9.17.1
-* Highligting languages Perl and YAML added
+
+#### Bugfixes
+* Rendering of math blocks now creates centered output with the correct (bigger) font.
+* Changed the default html template (`md_template.html`) to address the incompatible
+  change in the LaTeX math output of the _mathematics_ extension of _Markdig_.
 
 ## 1.3.0
 
