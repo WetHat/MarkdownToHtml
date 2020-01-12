@@ -121,7 +121,7 @@ To address this incompaibility the KaTex configuration in **all** deployed html 
 
 #### New Features
 
-* Highligting languages _Perl_ and _YAML_ added
+* Highlighting languages _Perl_ and _YAML_ added
 
 #### Maintenance
 
