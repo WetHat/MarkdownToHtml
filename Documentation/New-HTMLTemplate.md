@@ -157,14 +157,27 @@ modified or a new stylesheet can be added to the `styles` directory and included
 <!-- KaTex LaTex Math typesetting configuration -->
 <!-- Comment this to deactivate the LaTey math extension ('mathematics'). -->
 <link rel="stylesheet" type="text/css" href="katex/katex.min.css" />
+<!-- KaTeX LaTeX Math typesetting configuration -->
+<!-- Comment this to deactivate the LaTeX math extension ('mathematics'). -->
+<link rel="stylesheet" type="text/css" href="katex/katex.min.css" />
 <script defer src="katex/katex.min.js"></script>
 <script>
-  window.onload = function() {
-      var tex = document.getElementsByClassName("math");
-      Array.prototype.forEach.call(tex, function(el) {
-          katex.render(el.textContent, el);
-      });
-  };
+    // <![CDATA[
+    window.onload = function () {
+        var tex = document.getElementsByClassName("math");
+        Array.prototype.forEach.call(tex, function (el) {
+            katex.render(el.textContent, el, {
+                displayMode: (el.nodeName == "DIV"),
+                macros: {
+                    "\\(": "",
+                    "\\)": "",
+                    "\\[": "",
+                    "\\]": ""
+                }
+            })
+        });
+    };
+        // ]]>
 </script>
 <!-- -->
 ~~~
