@@ -85,7 +85,7 @@ Describe 'CustomConverterPipeline' {
 			[System.IO.FileInfo]$testPath = Join-Path $SCRIPT:testdata -ChildPath $Path
 			$refPath  = Join-Path $SCRIPT:refdata  -ChildPath $ReferencePath
 
-		    $ResultPath = $ResultPath -replace 'TestDrive:/','e:/temp/ttt/'
+		    #$ResultPath = $ResultPath -replace 'TestDrive:/','e:/temp/ttt/'
 
 			# inject navigation code to all pages
 			$contentMap = @{'[navigation]' = @"
