@@ -85,7 +85,7 @@ Describe 'CustomConverterPipeline' {
 			[System.IO.FileInfo]$testPath = Join-Path $SCRIPT:testdata -ChildPath $Path
 			$refPath  = Join-Path $SCRIPT:refdata  -ChildPath $ReferencePath
 
-		    #$ResultPath = $ResultPath -replace 'TestDrive:/','e:/temp/ttt/'
+		    $ResultPath = $ResultPath -replace 'TestDrive:/','e:/temp/ttt/'
 
 			# inject navigation code to all pages
 			$contentMap = @{'[navigation]' = @"
@@ -96,7 +96,7 @@ Describe 'CustomConverterPipeline' {
 
 			Find-MarkdownFiles $testPath -Exclude $Exclude `
 			| Convert-MarkdownToHTMLFragment -IncludeExtension $Extensions -Verbose `
-		    | Add-SubstitutionMap -ContentMap $contentMap `
+		    | Add-ContentSubstitutionMap -ContentMap $contentMap `
 			| Publish-StaticHTMLSite -Template (Join-Path $SCRIPT:testdata 'CustomTemplate') `
 	                                 -SiteDirectory $ResultPath `
 		                             -Verbose
@@ -104,6 +104,7 @@ Describe 'CustomConverterPipeline' {
 			$refPath    | Should -Exist
 		    $ResultPath | Should -Exist
 
+			# Check that all files exist and are identical
 			Get-ChildItem $testPath -Recurse -File -Exclude $Exclude `
 			| ForEach-Object {
 				# make path to file relative so that we find it in various places
@@ -117,6 +118,15 @@ Describe 'CustomConverterPipeline' {
 
 				$refFileContents = Get-Content -LiteralPath $refFile -Encoding UTF8 | Out-String
 			    Get-Content -LiteralPath $resultFile -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
+			}
+
+			# Check that excluded files are not present
+			if ($Exclude){
+				Get-ChildItem $testPath -Recurse -File -Include $Exclude `
+				| ForEach-Object {
+					$relpath = [System.IO.Path]::ChangeExtension($_.FullName.Substring($testPath.FullName.Length),'html')
+					Join-Path $ResultPath $relpath | Should -Not -Exist
+				}
 			}
 		}
 }

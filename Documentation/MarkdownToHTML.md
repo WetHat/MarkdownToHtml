@@ -81,7 +81,7 @@ Following additional extensions are installed with this module:
 
 # Exported Functions
 
-* [Add-SubstitutionMap](Add-SubstitutionMap.md)
+* [Add-ContentSubstitutionMap](Add-ContentSubstitutionMap.md)
 * [Convert-MarkdownToHTML](Convert-MarkdownToHTML.md)
 * [Convert-MarkdownToHTMLFragment](Convert-MarkdownToHTMLFragment.md)
 * [Find-MarkdownFiles](Find-MarkdownFiles.md)
@@ -100,6 +100,8 @@ Following additional extensions are installed with this module:
 * Default template placeholder delimiters changed to `{{` and `}}`.
 
 #### Maintenance
+
+* Minimum required Powershell version now 3.0
 
 ## 2.0.0
 

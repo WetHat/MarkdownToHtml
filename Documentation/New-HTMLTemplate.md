@@ -59,10 +59,10 @@ Markdown file into standalone HTML documents which can be viewed in a web browse
 The HTML template contains two placeholders by default which get replaced with
 HTML content:
 * `{{title}}` - Page title generated from the Markdown filename. **Note**: The title can be
-   customized by adding an entry to a custome content map. See [`Add-SubstitutionMap`](Add-SubstitutionMap.md).
+   customized by adding an entry to a custome content map. See [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md).
 * `{{content}}` - HTML content fragment generated from Markdown content.
 * Additional custom placeholders can be added if a custom converter pipelines are used and a
-  placeholder substitution is defined in a custom content map. See [`Add-SubstitutionMap`](Add-SubstitutionMap.md).
+  placeholder substitution is defined in a custom content map. See [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md).
 
 To customize styling the stylesheet `styles\md-styles.css` in the template derectory can be
 modified or a new stylesheet can be added to the `styles` directory and included in

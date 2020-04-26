@@ -47,7 +47,7 @@ work provided following properties are present:
     (or passing it as a parameter).
 * `ContentMap`: A dictionary which maps placeholder tokens to HTML fragments.
    The placeholders defined in this map should match the placeholders used in `md-template.html`.
-   See [`Add-SubstitutionMap`](Add-SubstitutionMap.md)
+   See [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md)
 For example adding `$obj.ContentMap[`footer`] = 'Copyright &copy; 2020'` would replace every occurence
    of the token `[footer]` in `md-template.html` with the HTML fragment `Copyright &copy; 2020`.
    Note the tokens must include the delimiters. Custom delimiters such as `[[footer]]`
@@ -101,7 +101,7 @@ Find-MarkdownFiles
 .LINK
 Convert-MarkdownToHtmlFragment
 .LINK
-Add-SubstitutionMap
+Add-ContentSubstitutionMap
 .LINK
 New-HTMLTemplate
 #>
@@ -636,7 +636,7 @@ Convert-MarkdownToHtmlFragment
 .LINK
 Publish-StaticHtmlSite
 #>
-function Add-SubstitutionMap {
+function Add-ContentSubstitutionMap {
     [OutputType([hashtable])]
     [CmdletBinding()]
     param(
@@ -886,7 +886,7 @@ function Convert-MarkdownToHTML {
     | Convert-MarkdownToHTMLFragment -IncludeExtension $IncludeExtension `
                                      -ExcludeExtension $ExcludeExtension `
                                      -Verbose:$Verbose `
-    | Add-SubstitutionMap `
+    | Add-ContentSubstitutionMap `
     | Publish-StaticHtmlSite -MediaDirectory $MediaDirectory `
                              -SiteDirectory $SiteDirectory `
                              -Template $Template `
@@ -940,10 +940,10 @@ Markdown file into standalone HTML documents which can be viewed in a web browse
 The HTML template contains two placeholders by default which get replaced with
 HTML content:
 * `{{title}}` - Page title generated from the Markdown filename. **Note**: The title can be
-   customized by adding an entry to a custome content map. See [`Add-SubstitutionMap`](Add-SubstitutionMap.md).
+   customized by adding an entry to a custome content map. See [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md).
 * `{{content}}` - HTML content fragment generated from Markdown content.
 * Additional custom placeholders can be added if a custom converter pipelines are used and a
-  placeholder substitution is defined in a custom content map. See [`Add-SubstitutionMap`](Add-SubstitutionMap.md).
+  placeholder substitution is defined in a custom content map. See [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md).
 
 To customize styling the stylesheet `styles\md-styles.css` in the template derectory can be
 modified or a new stylesheet can be added to the `styles` directory and included in

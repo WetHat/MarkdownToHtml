@@ -49,7 +49,7 @@ work provided following properties are present:
     (or passing it as a parameter).
 * `ContentMap`: A dictionary which maps placeholder tokens to HTML fragments.
    The placeholders defined in this map should match the placeholders used in `md-template.html`.
-   See [`Add-SubstitutionMap`](Add-SubstitutionMap.md)
+   See [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md)
 For example adding `$obj.ContentMap[`footer`] = 'Copyright &copy; 2020'` would replace every occurence
    of the token `[footer]` in `md-template.html` with the HTML fragment `Copyright &copy; 2020`.
    Note the tokens must include the delimiters. Custom delimiters such as `[[footer]]`
@@ -179,7 +179,7 @@ The generated Html file objects are returned like so:
 * [Convert-MarkdownToHtml](Convert-MarkdownToHtml.md) 
 * [Find-MarkdownFiles](Find-MarkdownFiles.md) 
 * [Convert-MarkdownToHtmlFragment](Convert-MarkdownToHtmlFragment.md) 
-* [Add-SubstitutionMap](Add-SubstitutionMap.md) 
+* [Add-ContentSubstitutionMap](Add-ContentSubstitutionMap.md) 
 * [New-HTMLTemplate](New-HTMLTemplate.md)
 
 </blockquote>

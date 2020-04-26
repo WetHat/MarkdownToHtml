@@ -1,4 +1,4 @@
-﻿# Add-SubstitutionMap
+﻿# Add-ContentSubstitutionMap
 
 Add a mapping table to each input object to specify the placeholder substitution in the HTML template.
 
@@ -7,7 +7,7 @@ Add a mapping table to each input object to specify the placeholder substitution
 <blockquote>
 
 ```PowerShell
- Add-SubstitutionMap [-InputObject] <Hashtable> [-ContentMap] <Hashtable>  [<CommonParameters>] 
+ Add-ContentSubstitutionMap [-InputObject] <Hashtable> [-ContentMap] <Hashtable>  [<CommonParameters>] 
 ```
 
 
