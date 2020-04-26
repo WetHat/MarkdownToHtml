@@ -16,8 +16,6 @@ Describe 'Convert-MarkdownToHTML' {
 		   @{Path='markdown/KaTex.md';   ReferencePath='html/KaTex.html';         ResultPath='TestDrive:/KaTex.html' ;               Extensions = 'mathematics'}
 		   @{Path='markdown/KaMaid.md';  ReferencePath='html/KaMaid.html';        ResultPath='TestDrive:/KaMaid.html' ;              Extensions = 'diagrams','mathematics'}
 		   @{Path='markdown/Code.md';    ReferencePath='html/Code.html';          ResultPath='TestDrive:/Code.html' ;                Extensions = 'advanced'}
-		   @{Path='markdown/Dir';        ReferencePath='html/SubDir/SubDirSingle.html';  ResultPath='TestDrive:/Subdir/SubdirSingle.html' ; Extensions = 'advanced'}
-		   @{Path='markdown/Dir2';       ReferencePath='html/SubDir2/SubDir2/SubDirSingle.html';  ResultPath='TestDrive:/Subdir2/SubDir2/SubdirSingle.html' ; Extensions = 'advanced'}
 	   ) `
 	   {
 		   param($Path,$ReferencePath,$ResultPath,$Extensions)
@@ -26,7 +24,9 @@ Describe 'Convert-MarkdownToHTML' {
            $refPath  = Join-Path $SCRIPT:refdata  -ChildPath $ReferencePath
 
 		   $destination =  'TestDrive:/'
-		   #$destination = 'e:/temp/ttt'
+		   #$destination = 'e:/temp/ttt/'
+		   #$ResultPath = $ResultPath -replace 'TestDrive:/',$destination
+
 		   Convert-MarkdownToHTML -Path $testPath `
 		                          -Template $SCRIPT:template `
 		                          -Destination $destination `
@@ -55,8 +55,8 @@ Describe 'Convert-MarkdownToHTMLFragment' {
 			[System.IO.FileInfo]$testPath = Join-Path $SCRIPT:testdata -ChildPath $Path
 			$refPath  = Join-Path $SCRIPT:refdata  -ChildPath $ReferencePath
 
-			$ResultPath = Join-Path 'TestDrive:/' $ReferencePath
-			#$ResultPath = Join-Path 'e:\temp\ttt' $ReferencePath
+            $ResultPath = Join-Path 'TestDrive:/' $ReferencePath
+            #$ResultPath = Join-Path 'e:\temp\ttt' $ReferencePath
 
 			$fragment = Get-Item -LiteralPath $testPath `
 			| Convert-MarkdownToHTMLFragment -IncludeExtension $Extensions
@@ -72,3 +72,52 @@ Describe 'Convert-MarkdownToHTMLFragment' {
 			Get-Content -LiteralPath $ResultPath -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
 		}
 }
+
+Describe 'CustomConverterPipeline' {
+	It 'Converts markdown file(s) from ''<Path>'' to HTML with a custom converter pipeline' `
+		-TestCases @(
+		   @{Path='markdown'; ReferencePath='html_cust';  ResultPath='TestDrive:/html1' ; Extensions = 'diagrams','mathematics' ; Exclude=$null}
+		   @{Path='markdown'; ReferencePath='html_cust';  ResultPath='TestDrive:/html2' ; Extensions = 'diagrams','mathematics' ; Exclude='Code.md'}
+		) `
+		{
+			param($Path,$ReferencePath,$ResultPath, $Extensions, $Exclude, $Title)
+
+			[System.IO.FileInfo]$testPath = Join-Path $SCRIPT:testdata -ChildPath $Path
+			$refPath  = Join-Path $SCRIPT:refdata  -ChildPath $ReferencePath
+
+		    #$ResultPath = $ResultPath -replace 'TestDrive:/','e:/temp/ttt/'
+
+			# inject navigation code to all pages
+			$contentMap = @{'[navigation]' = @"
+					<button><a href="http://www.hp.com">Hewlett-Packard</a></button>
+					<button><a href="http://www.ptc.com">Parametric Technologies</a></button>
+"@
+			}
+
+			Find-MarkdownFiles $testPath -Exclude $Exclude `
+			| Convert-MarkdownToHTMLFragment -IncludeExtension $Extensions -Verbose `
+		    | Add-SubstitutionMap -ContentMap $contentMap `
+			| Publish-StaticHTMLSite -Template (Join-Path $SCRIPT:testdata 'CustomTemplate') `
+	                                 -SiteDirectory $ResultPath `
+		                             -Verbose
+
+			$refPath    | Should -Exist
+		    $ResultPath | Should -Exist
+
+			Get-ChildItem $testPath -Recurse -File -Exclude $Exclude `
+			| ForEach-Object {
+				# make path to file relative so that we find it in various places
+                $relpath = [System.IO.Path]::ChangeExtension($_.FullName.Substring($testPath.FullName.Length),'html')
+
+				$refFile = Join-Path $refPath $relpath
+				$resultFile = Join-Path $ResultPath $relpath
+
+                $refFile | Should -Exist
+                $resultFile | should -Exist
+
+				$refFileContents = Get-Content -LiteralPath $refFile -Encoding UTF8 | Out-String
+			    Get-Content -LiteralPath $resultFile -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
+			}
+		}
+}
+

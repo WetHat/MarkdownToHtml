@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8" />
     <title>Testing Code Symtax Highlighting </title>
-    <link rel="stylesheet" type="text/css" href="styles/md-styles.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/md-styles.css" />
 
     <!-- Code syntax highlighting configuration -->
     <!-- Comment this to deactivate syntax highlighting. -->
-    <link rel="stylesheet" type="text/css" href="styles/vs.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/vs.css" />
     <!-- Alternative highlighting styles -->
-    <!-- <link rel="stylesheet" type="text/css" href="styles/agate.css" /> -->
-    <!-- <link rel="stylesheet" type="text/css" href="styles/far.css" /> -->
-    <!-- <link rel="stylesheet" type="text/css" href="styles/tomorrow-night-blue.css" />
-    <!-- <link rel="stylesheet" type="text/css" href="vs2015.css" /> -->
-    <script src="js/highlight.pack.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/agate.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/far.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/tomorrow-night-blue.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../vs2015.css" /> -->
+    <script src="../js/highlight.pack.js"></script>
     <script>
         hljs.configure({ languages: [] });
         hljs.initHighlightingOnLoad();
@@ -21,13 +21,13 @@
     <!-- -->
     <!-- mermaid diagram generator configuration -->
     <!-- Comment this to deactivate the diagramming extension ('diagrams'). -->
-    <script src="js/mermaid.min.js"></script>
+    <script src="../js/mermaid.min.js"></script>
     <script>mermaid.initialize({ startOnLoad: true });</script>
     <!-- -->
     <!-- KaTeX LaTeX Math typesetting configuration -->
     <!-- Comment this to deactivate the LaTeX math extension ('mathematics'). -->
-    <link rel="stylesheet" type="text/css" href="katex/katex.min.css" />
-    <script defer src="katex/katex.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <script defer src="../katex/katex.min.js"></script>
     <script>
         // <![CDATA[
         window.onload = function () {
@@ -49,8 +49,13 @@
     <!-- -->
 </head>
 <body>
-    <h1 id="testing-code-symtax-highlighting" class="title">Testing Code Symtax Highlighting</h1>
-<h2 id="bash">Bash</h2>
+    <nav>
+        					<button><a href="http://www.hp.com">Hewlett-Packard</a></button>
+					<button><a href="http://www.ptc.com">Parametric Technologies</a></button>
+    </nav>
+    <article>
+        <h1>Testing Code Symtax Highlighting {.title}</h1>
+<h2>Bash</h2>
 <pre><code class="language-bash">#!/bin/bash
 
 ###### CONFIG
@@ -69,7 +74,7 @@ genApacheConf(){
 
 echo &#39;&quot;quoted&quot;&#39; | tr -d \&quot; &gt; text.txt
 </code></pre>
-<h2 id="c">C#</h2>
+<h2>C#</h2>
 <pre><code class="language-C#">using System.IO.Compression;
 
 #pragma warning disable 414, 3021
@@ -87,7 +92,7 @@ namespace MyApplication
     }
 }
 </code></pre>
-<h2 id="c-1">C++</h2>
+<h2>C++</h2>
 <pre><code class="language-C++">#include &lt;iostream&gt;
 
 int main(int argc, char *argv[]) {
@@ -103,7 +108,7 @@ int main(int argc, char *argv[]) {
   return -2e3 + 12l;
 }
 </code></pre>
-<h2 id="clojure">Clojure</h2>
+<h2>Clojure</h2>
 <pre><code class="language-clojure">(def ^:dynamic chunk-size 17)
 
 (defn next-chunk [rdr]
@@ -116,7 +121,7 @@ int main(int argc, char *argv[]) {
   (when-let [chunk (next-chunk rdr)]
     (cons chunk (lazy-seq (chunk-seq rdr)))))
 </code></pre>
-<h2 id="cmake">CMake</h2>
+<h2>CMake</h2>
 <pre><code class="language-cmake">cmake_minimum_required(VERSION 2.8.8)
 project(cmake_example)
 
@@ -137,7 +142,7 @@ find_package(Qt5Widgets REQUIRED)
 add_executable(myproject main.cpp mainwindow.cpp)
 qt5_use_modules(myproject Widgets)
 </code></pre>
-<h2 id="css">CSS</h2>
+<h2>CSS</h2>
 <pre><code class="language-css">@font-face {
   font-family: Chunkfive; src: url(&#39;Chunkfive.otf&#39;);
 }
@@ -155,7 +160,7 @@ body, .usertext {
   }
 }
 </code></pre>
-<h2 id="diff">Diff</h2>
+<h2>Diff</h2>
 <pre><code class="language-diff">Index: languages/ini.js
 ===================================================================
 --- languages/ini.js    (revision 199)
@@ -187,7 +192,7 @@ body, .usertext {
 
   It is important to spell
 </code></pre>
-<h2 id="dos.bat">DOS .bat</h2>
+<h2>DOS .bat</h2>
 <pre><code class="language-dos">cd \
 copy a b
 ping 192.168.0.1
@@ -213,7 +218,7 @@ set path = test
 
 xcopy %1\*.* %2
 </code></pre>
-<h2 id="f">F#</h2>
+<h2>F#</h2>
 <pre><code class="language-fsharp">open System
 
 // Single line comment...
@@ -263,7 +268,7 @@ type DefaultMailbox&lt;&#39;a&gt;() =
     let mutable inbox = ConcurrentQueue&lt;&#39;a&gt;()
     let awaitMsg = new AutoResetEvent(false)
 </code></pre>
-<h2 id="groovy">Groovy</h2>
+<h2>Groovy</h2>
 <pre><code class="language-groovy">#!/usr/bin/env groovy
 package model
 
@@ -321,7 +326,7 @@ class Distribution implements Distributable {
     }
 }
 </code></pre>
-<h2 id="htmlxml">HTML/XML</h2>
+<h2>HTML/XML</h2>
 <pre><code class="language-HTML">&lt;!DOCTYPE html&gt;
 &lt;title&gt;Title&lt;/title&gt;
 
@@ -336,7 +341,7 @@ class Distribution implements Distributable {
   &lt;!-- here goes the rest of the page --&gt;
 &lt;/body&gt;
 </code></pre>
-<h2 id="http">HTTP</h2>
+<h2>HTTP</h2>
 <pre><code class="language-http">POST /task?id=1 HTTP/1.1
 Host: example.org
 Content-Type: application/json; charset=utf-8
@@ -351,7 +356,7 @@ Content-Length: 137
   ]
 }
 </code></pre>
-<h2 id="java">Java</h2>
+<h2>Java</h2>
 <pre><code class="language-java">/**
  * @author John Smith &lt;john.smith@example.com&gt;
 */
@@ -369,7 +374,7 @@ public abstract class L2Char extends L2Object {
   }
 }
 </code></pre>
-<h2 id="javascript">JavaScript</h2>
+<h2>JavaScript</h2>
 <pre><code class="language-javascript">function $initHighlight(block, cls) {
   try {
     if (cls.search(/\bno\-highlight\b/) != -1)
@@ -392,7 +397,7 @@ public abstract class L2Char extends L2Object {
 
 export  $initHighlight;
 </code></pre>
-<h2 id="json">JSON</h2>
+<h2>JSON</h2>
 <pre><code class="language-json">[
   {
     &quot;title&quot;: &quot;apples&quot;,
@@ -406,7 +411,7 @@ export  $initHighlight;
   }
 ]
 </code></pre>
-<h2 id="lisp">Lisp</h2>
+<h2>Lisp</h2>
 <pre><code class="language-lisp">#!/usr/bin/env csi
 
 (defun prompt-for-cd ()
@@ -430,7 +435,7 @@ export  $initHighlight;
     (print (+ x y))
   )
 </code></pre>
-<h2 id="makefile">Makefile</h2>
+<h2>Makefile</h2>
 <pre><code class="language-makefile"># Makefile
 
 BUILDDIR      = _build
@@ -445,7 +450,7 @@ main:
 clean:
 	rm -rf $(BUILDDIR)/*
 </code></pre>
-<h2 id="markdown">Markdown</h2>
+<h2>Markdown</h2>
 <pre><code class="language-markdown"># hello world
 
 you can write text [with links](http://example.com) inline or [link references][1].
@@ -469,7 +474,7 @@ hello world
 1. one thing (yeah!)
 2. two thing `i can write code`, and `more` wipee!
 </code></pre>
-<h2 id="maxima">Maxima</h2>
+<h2>Maxima</h2>
 <pre><code class="language-maxima">/* Maxima computer algebra system */
 
 /* symbolic constants */
@@ -528,7 +533,7 @@ foo (x, y, z) :=
   else z - y . x . y;
 
 </code></pre>
-<h2 id="perl">Perl</h2>
+<h2>Perl</h2>
 <pre><code class="language-Perl"># loads object
 sub load
 {
@@ -571,7 +576,7 @@ __END__
 =head1 NAME
 POD till the end of file
 </code></pre>
-<h2 id="python">Python</h2>
+<h2>Python</h2>
 <pre><code class="language-Python">@requires_authorization
 def somefunc(param1=&#39;&#39;, param2=0):
     r&#39;&#39;&#39;A docstring&#39;&#39;&#39;
@@ -585,7 +590,7 @@ class SomeClass:
 &gt;&gt;&gt; message = &#39;&#39;&#39;interpreter
 ... prompt&#39;&#39;&#39;
 </code></pre>
-<h2 id="powershell">PowerShell</h2>
+<h2>PowerShell</h2>
 <pre><code class="language-Powershell">$initialDate = [datetime]&#39;2013/1/8&#39;
 
 $rollingDate = $initialDate
@@ -598,7 +603,7 @@ do {
     $username = [System.Environment]::UserName
 } until ($rollingDate -ge [datetime]&#39;2013/12/31&#39;)
 </code></pre>
-<h2 id="sql">SQL</h2>
+<h2>SQL</h2>
 <pre><code class="language-SQL">CREATE TABLE &quot;topic&quot; (
     &quot;id&quot; serial NOT NULL PRIMARY KEY,
     &quot;forum_id&quot; integer NOT NULL,
@@ -612,7 +617,7 @@ REFERENCES &quot;forum&quot; (&quot;id&quot;);
 insert into &quot;topic&quot; (&quot;forum_id&quot;, &quot;subject&quot;)
 values (2, &#39;D&#39;&#39;artagnian&#39;);
 </code></pre>
-<h2 id="yaml">YAML</h2>
+<h2>YAML</h2>
 <pre><code class="language-yaml">---
 # comment
 string_1: &quot;Bar&quot;
@@ -654,5 +659,6 @@ array_nested:
 - comment
 </code></pre>
 
+    </article>
 </body>
 </html>

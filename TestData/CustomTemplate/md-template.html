@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Mermaid Diagramming Tool</title>
+    <title>[title]</title>
     <link rel="stylesheet" type="text/css" href="styles/md-styles.css" />
 
     <!-- Code syntax highlighting configuration -->
@@ -49,69 +49,11 @@
     <!-- -->
 </head>
 <body>
-    <h1>Mermaid Diagramming Tool</h1>
-<p>Here comes chart</p>
-<div class="mermaid">graph TD;
-A-->B;
-A-->C;
-B-->D;
-C-->D;
-</div>
-<h2>Sequence Diagram</h2>
-<div class="mermaid">sequenceDiagram
-    Alice->>John: Hello John, how are you?
-    John-->>Alice: Great!
-</div>
-<h2>class Diagramm</h2>
-<div class="mermaid">classDiagram
-      Animal &lt;|-- Duck
-      Animal &lt;|-- Fish
-      Animal &lt;|-- Zebra
-      Animal : +int age
-      Animal : +String gender
-      Animal: +isMammal()
-      Animal: +mate()
-      class Duck{
-          +String beakColor
-          +swim()
-          +quack()
-      }
-      class Fish{
-          -int sizeInFeet
-          -canEat()
-      }
-      class Zebra{
-          +bool is_wild
-          +run()
-      }
-</div>
-<h2>State Diagram</h2>
-<div class="mermaid">stateDiagram
-    [*] --> Still
-    Still --> [*]
-
-    Still --> Moving
-    Moving --> Still
-    Moving --> Crash
-    Crash --> [*]
-</div>
-<h2>Gantt Chart</h2>
-<div class="mermaid">gantt
-    title A Gantt Diagram
-    dateFormat  YYYY-MM-DD
-    section Section
-    A task           :a1, 2014-01-01, 30d
-    Another task     :after a1  , 20d
-    section Another
-    Task in sec      :2014-01-12  , 12d
-    another task      : 24d
-</div>
-<h2>Pie Chart</h2>
-<div class="mermaid">pie title Pets adopted by volunteers
-    "Dogs" : 386
-    "Cats" : 85
-    "Rats" : 15 
-</div>
-
+    <nav>
+        [navigation]
+    </nav>
+    <article>
+        [content]
+    </article>
 </body>
 </html>
