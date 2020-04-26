@@ -56,12 +56,13 @@ The HTML template file is used to turn the HTML fragments generated for each
 Markdown file into standalone HTML documents which can be viewed in a web browser.
 
 ## Customizing `md-template.html`
-The HTML template contains two placeholders which get replaced with
+The HTML template contains two placeholders by default which get replaced with
 HTML content:
-* `[title]` - Page title generated from the Markdown filename. **Note**: The title **cannot**
-  be customized.
-* `[content]` - HTML content. **Note**: It is possible to add additional html content to the
-  `<body>` of the template, as long as this placeholder remains on its own line.
+* `{{title}}` - Page title generated from the Markdown filename. **Note**: The title can be
+   customized by adding an entry to a custome content map. See [`Add-SubstitutionMap`](Add-SubstitutionMap.md).
+* `{{content}}` - HTML content fragment generated from Markdown content.
+* Additional custom placeholders can be added if a custom converter pipelines are used and a
+  placeholder substitution is defined in a custom content map. See [`Add-SubstitutionMap`](Add-SubstitutionMap.md).
 
 To customize styling the stylesheet `styles\md-styles.css` in the template derectory can be
 modified or a new stylesheet can be added to the `styles` directory and included in
@@ -269,4 +270,4 @@ Create a copy of the default template in `E:\MyTemplate` for customization.
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.0.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.1.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>

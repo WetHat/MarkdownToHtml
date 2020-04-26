@@ -7,7 +7,7 @@ Convert Markdown text to html fragments.
 <blockquote>
 
 ```PowerShell
- Convert-MarkdownToHTMLFragment [-Markdown] <Object> [-IncludeExtension] <String[]> [-ExcludeExtension] <String[]>  [<CommonParameters>] 
+ Convert-MarkdownToHTMLFragment [-InputObject] <Object> [-IncludeExtension] <String[]> [-ExcludeExtension] <String[]>  [<CommonParameters>] 
 ```
 
 
@@ -107,7 +107,7 @@ avaliable extensions are:
 
 
 
-## -Markdown \<Object\>
+## -InputObject \<Object\>
 
 <blockquote>
 
@@ -176,14 +176,12 @@ Markdown text `[string]` or Markdown file `[System.IO.FileInfo]`.
 <blockquote>
 
 HTML fragment object with following properties:
-* `RelativePath`: A string representing the relative path to the Markdown file with respect to
-  a base (static site) directory. This property is mandatory when using the PowerShell function [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md)
-  to generate a static HTML site from Markdown files.
-  This propery is automatically set when
-  * using the PowerShell function [`Find-MarkdownFiles`](Find-MarkdownFiles.md)
-  * the `-Markdown` parameter is of type `[System.IO.FileInfo]`.
-* `Title`: The first heading in the Markdown content. This property may be absent if no heading was found
-* `HtmlFragment`: The HTML fragment string generated from the Markdown text.
+
+| Property       | Description                                                     |
+| :------------: | :-------------------------------------------------------------- |
+| `Title`        | Optional page title. The first heading in the Markdown content. |
+| `HtmlFragment` | The HTML fragment string generated from the Markdown text.      |
+| `RelativePath` | Passed through form the input object, provided it exists.       |
 
 </blockquote>
 
@@ -191,7 +189,7 @@ HTML fragment object with following properties:
 
 <blockquote>
 
-The conversion to HTML framgments also implies:
+The conversion to HTML fragments also includes:
 * Changing links to Markdown files to the corresponding Html files.
 
 <blockquote>
@@ -256,7 +254,7 @@ which renders as
 Convert-MarkdownToHTMLFragment -Markdown '# Hello World'
 ```
 
-Returns the html fragment object:
+Returns the HTML fragment object:
 
     Name               Value
     ----               -----
@@ -292,4 +290,4 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.0.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.1.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>

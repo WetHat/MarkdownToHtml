@@ -1,4 +1,4 @@
-﻿# MarkdownToHtml 2.0.0
+﻿# MarkdownToHtml 2.1.0
 
 <cite><b>Tags</b>: Markdown, HTML, Converter, Markdown, HTML, Converter</cite>
 
@@ -81,6 +81,7 @@ Following additional extensions are installed with this module:
 
 # Exported Functions
 
+* [Add-SubstitutionMap](Add-SubstitutionMap.md)
 * [Convert-MarkdownToHTML](Convert-MarkdownToHTML.md)
 * [Convert-MarkdownToHTMLFragment](Convert-MarkdownToHTMLFragment.md)
 * [Find-MarkdownFiles](Find-MarkdownFiles.md)
@@ -88,6 +89,17 @@ Following additional extensions are installed with this module:
 * [Publish-StaticHtmlSite](Publish-StaticHtmlSite.md)
 
 # Release Notes
+
+## 2.1.0
+
+#### Enhancements
+
+* [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) now supports definition of custom placeholders
+  for expansion of `md_template.html`.
+* Constraints for template placeholders relaxed.
+* Default template placeholder delimiters changed to `{{` and `}}`.
+
+#### Maintenance
 
 ## 2.0.0
 
@@ -197,4 +209,4 @@ Initial Release
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.0.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.1.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>

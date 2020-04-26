@@ -7,7 +7,7 @@ Find all Markdown file below a given directory.
 <blockquote>
 
 ```PowerShell
- Find-MarkdownFiles [-Path] <String>  [<CommonParameters>] 
+ Find-MarkdownFiles [-Path] <String> [-Exclude] <String[]>  [<CommonParameters>] 
 ```
 
 
@@ -43,6 +43,24 @@ Accept pipeline input?     | false
 Accept wildcard characters?| true
 
 </blockquote>
+ 
+
+## -Exclude \<String[]\>
+
+<blockquote>
+
+Omits the specified markdown files. The value of this parameter qualifies the Path parameter. Enter a path element or
+pattern, such as "D*.md". Wildcards are permitted.
+
+Parameter Property         | Value
+--------------------------:|:----------
+Required?                  | false
+Position?                  | 2
+Default value              | ``
+Accept pipeline input?     | false
+Accept wildcard characters?| false
+
+</blockquote>
 
 
 </blockquote>
@@ -60,9 +78,11 @@ None
 
 <blockquote>
 
-A `[System.IO.FileInfo]` object for each Markdown file found below the given directory. The
+A `[System.IO.FileInfo]` object for each Markdown file found below the given directory. The emitted
 `[System.IO.FileInfo]` objects are annotated with a note property `RelativePath` which is a string
-specifying the relative path of the markdown file below the given directory.
+specifying the relative path of the markdown file below the given directory. The `RelativePath` property is
+**mandatory** if [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) is used in the downstream conversion
+pipeline.
 
 </blockquote>
 
@@ -103,4 +123,4 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.0.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.1.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
