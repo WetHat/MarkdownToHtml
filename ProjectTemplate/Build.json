@@ -1,0 +1,21 @@
+{
+    "markdown_dir": "markdown",
+
+    "site_dir": "html",
+
+    "HTML_template": "Template",
+
+    "Exclude": [
+    ],
+
+    "markdown_extensions": [
+        "common",
+        "definitionlists"
+    ],
+
+    "footer": "Template project Created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.",
+
+    "site_navigation": [
+        { "Home 1 1 1": "README.md" }
+    ]
+}

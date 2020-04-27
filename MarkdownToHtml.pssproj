@@ -43,6 +43,11 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTMLFragment' ,'Convert-MarkdownToHTM
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Documentation\" />
+    <Folder Include="en\" />
+    <Folder Include="ProjectTemplate\" />
+    <Folder Include="ProjectTemplate\markdown\" />
+    <Folder Include="ProjectTemplate\Template\" />
+    <Folder Include="ProjectTemplate\Template\styles\" />
     <Folder Include="ReferenceData\" />
     <Folder Include="ReferenceData\html\" />
     <Folder Include="ReferenceData\html_cust\" />
@@ -73,18 +78,26 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTMLFragment' ,'Convert-MarkdownToHTM
     <Compile Include="MarkdownToHtml.psd1" />
     <Compile Include="MarkdownToHtml.psm1" />
     <Compile Include="MarkdownToHtml.tests.ps1" />
+    <Compile Include="ProjectTemplate\Build.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="Documentation\about_MarkdownToHTML.md" />
     <Content Include="Documentation\Add-ContentSubstitutionMap.md" />
     <Content Include="Documentation\Convert-MarkdownToHTML.md" />
     <Content Include="Documentation\Convert-MarkdownToHTMLFragment.md" />
     <Content Include="Documentation\Find-MarkdownFiles.md" />
     <Content Include="Documentation\MarkdownToHTML.md" />
     <Content Include="Documentation\New-HTMLTemplate.md" />
+    <Content Include="Documentation\New-StaticHTMLSiteProject.md" />
     <Content Include="Documentation\Publish-StaticHtmlSite.md" />
+    <Content Include="en\about_MarkdownToHTML.help.txt" />
     <Content Include="LICENSE" />
     <Content Include="Markdown2HTML.png" />
+    <Content Include="ProjectTemplate\Build.json" />
+    <Content Include="ProjectTemplate\markdown\README.md" />
+    <Content Include="ProjectTemplate\Template\md-template.html" />
+    <Content Include="ProjectTemplate\Template\styles\md-styles.css" />
     <Content Include="README.md" />
     <Content Include="ReferenceData\html\.gitignore" />
     <Content Include="ReferenceData\html\Code.html" />

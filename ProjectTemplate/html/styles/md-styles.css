@@ -1,0 +1,64 @@
+﻿h1 {
+    font-size: 14pt;
+    color: darkblue;
+}
+
+h2 {
+    font-size: 12pt;
+    color: firebrick;
+}
+
+cite {
+    font-size: 9pt;
+    color: ActiveBorder;
+}
+
+td, th {
+    border: 1px solid;
+    border-color: lightgray
+}
+
+th {
+    background-color: lightblue
+}
+
+dt {
+    font-size: 10pt;
+    color: chocolate;
+    font-weight: bold;
+}
+
+pre {
+    border: 1px solid;
+    border-color: lightgray;
+}
+
+blockquote {
+    border: none;
+    text-indent: each-line;
+}
+
+code {
+    font-family: Consolas;
+    color: darkmagenta;
+}
+
+.footer {
+    font-size: 10pt;
+    color: slategray;
+}
+
+/* Site Navigation */
+nav {
+    border-width: 1px;
+    border-radius: 25px;
+    border-style: solid;
+    float: right;
+    max-width: 20%;
+    padding: 10px;
+    background: lightskyblue;
+}
+
+.navitem {
+    width:100%
+}

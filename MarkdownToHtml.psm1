@@ -31,34 +31,38 @@ into HTML documents and saved to a static Html site directory.
 
 The Markdown to Html document conversion uses a default or custom template with
 stylesheets and JavaScript resources to render Markdown extensions for LaTeX math, code syntax
-highlighting and diagrams (see [`New-HtmlTemplate`](New-HtmlTemplate.md) for details).
+highlighting and diagrams (see `New-HtmlTemplate`) for details).
 
 .PARAMETER InputObject
 An object representing an Html fragment. Ideally this is an output object of
-['Convert-MarkdownToHtmlFragment'](Convert-MarkdownToHtmlFragment.md), but any object will
+`Convert-MarkdownToHtmlFragment`, but any object will
 work provided following properties are present:
 
-* `RelativePath`: A string representing the relative path to the Markdown file with respect to
-  a base (static site) directory.
-  This property is provided by:
-  * using the PowerShell function [`Find-MarkdownFiles`](Find-MarkdownFiles.md)
-  * piping a file object `[System.IO.FileInfo]` into
-    ['Convert-MarkdownToHtmlFragment'](Convert-MarkdownToHtmlFragment.md)
-    (or passing it as a parameter).
-* `ContentMap`: A dictionary which maps placeholder tokens to HTML fragments.
-   The placeholders defined in this map should match the placeholders used in `md-template.html`.
-   See [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md)
-For example adding `$obj.ContentMap[`footer`] = 'Copyright &copy; 2020'` would replace every occurence
-   of the token `[footer]` in `md-template.html` with the HTML fragment `Copyright &copy; 2020`.
-   Note the tokens must include the delimiters. Custom delimiters such as `[[footer]]`
-   or `{{footer}}` are supported.
+`RelativePath`
+:   A string representing the relative path to the Markdown file with respect to
+    a base (static site) directory.
+    This property is provided by:
+    * using the PowerShell function `Find-MarkdownFiles`
+    * piping a file object `[System.IO.FileInfo]` into
+      `Convert-MarkdownToHtmlFragment` (or passing it as a parameter).
+
+`ContentMap`
+:   A dictionary which maps placeholder tokens to HTML fragments.
+    The placeholders defined in this map should match the placeholders used in
+    `md-template.html`. See `Add-ContentSubstitutionMap`
+    For example adding
+    `$obj.ContentMap[`{{footer}}`] = 'Copyright &copy; 2020'` would replace
+    every occurence of the token `{{footer}}` in `md-template.html` with the
+    HTML fragment `Copyright &copy; 2020`.
+    Note! the tokens must include the delimiters. Custom delimiters such as
+    `[footer]` are supported too.
 
 .PARAMETER Template
 
 Optional directory containing the html template file `md-template.html` and its resources
 which will be used to convert the Html fragments into standalone Html documents.
 If no template directory is specified, a default factory-installed template is used.
-For infomations about creating custom templates see [`New-HTMLTemplate`](New-HTMLTemplate.md).
+For infomations about creating custom templates see `New-HTMLTemplate`.
 
 .PARAMETER MediaDirectory
 An optional directory containing additional media for the Html site
@@ -82,7 +86,7 @@ File objects [System.IO.FileInfo] of the generated HTML documents.
 Find-MarkdownFiles '...\Modules\MarkdownToHtml' | Convert-MarkdownToHtmlFragment | Publish-StaticHtmlSite -SiteDirectory 'e:\temp\site'
 
 Generates a static HTML site from the Markdown files in '...\Modules\MarkdownToHtml'. This is
-a simpler version of the functionality provided by the function [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml).
+a simpler version of the functionality provided by the function `Convert-MarkdownToHtml`.
 
 The generated Html file objects are returned like so:
 
@@ -94,6 +98,8 @@ The generated Html file objects are returned like so:
     -a----       15.09.2019     10:03           6068 MarkdownToHTML.html
     ...          ...            ...            ...
 
+.LINK
+https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Publish-StaticHtmlSite.md
 .LINK
 Convert-MarkdownToHtml
 .LINK
@@ -236,7 +242,7 @@ None
 A `[System.IO.FileInfo]` object for each Markdown file found below the given directory. The emitted
 `[System.IO.FileInfo]` objects are annotated with a note property `RelativePath` which is a string
 specifying the relative path of the markdown file below the given directory. The `RelativePath` property is
-**mandatory** if [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) is used in the downstream conversion
+**mandatory** if `Publish-StaticHtmlSite` is used in the downstream conversion
 pipeline.
 
 .EXAMPLE
@@ -252,6 +258,8 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
     11.09.2019 17:01:13   4455  README.md                  ReferenceData\katex\README.md
     ...                   ...   ...                        ...
 
+.LINK
+https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Find-MarkdownFiles.md
 .LINK
 Convert-MarkdownToHtml
 .LINK
@@ -281,7 +289,7 @@ function Find-MarkdownFiles {
             Get-ChildItem -Path $basePath -Recurse -File -Include '*.md','*.Markdown' -Exclude $Exclude `
             | ForEach-Object {
                 # capture the relative path of the Markdown file
-                [string]$relativePath = $_.FullName.Substring($basePath.Length).Trim('/\')
+                [string]$relativePath = $_.FullName.Substring($basePath.Length).Trim('/\').Replace('\\','/')
                 Add-Member -InputObject $_ -MemberType NoteProperty -Name 'RelativePath' -Value $relativePath
                 $_
               }
@@ -381,7 +389,14 @@ avaliable extensions are:
   parsing.
 
 .PARAMETER InputObject
-A Markdown string or a Markdown file `[System.IO.FileInfo]`.
+The input object can have one of the following of types:
+* An annotated `[System.IO.FileInfo]` object as emitted by [`Find-MarkdownFiles`](Find-MarkdownFiles.md).
+* A plain markdown string [`string`].
+* A markdown descriptor object which is basically a [`hashtable`] whith following contents:
+  | Key            | Value Type | Description                                              |
+  | :------------- | :--------- | :------------------------------------------------------- |
+  | `Markdown`     | [`string`] | The markdown text.                                       |
+  | `RelativePath` | [`string`] | Relative path of the html file below the site directory. |
 
 .PARAMETER IncludeExtension
 Comma separated list of Markdown parsing extensions to use.
@@ -392,7 +407,7 @@ Mostly used when the the 'advanced' parsing option is included and
 certain individual options need to be removed.
 
 .INPUTS
-Markdown text `[string]` or Markdown file `[System.IO.FileInfo]`.
+Markdown text `[string]`, Markdown file `[System.IO.FileInfo]`, or a markdown descriptor `[hashtable]`.
 
 .OUTPUTS
 HTML fragment object with following properties:
@@ -404,7 +419,6 @@ HTML fragment object with following properties:
 | `RelativePath` | Passed through form the input object, provided it exists.       |
 
 .NOTES
-
 The conversion to HTML fragments also includes:
 * Changing links to Markdown files to the corresponding Html files.
 
@@ -479,6 +493,8 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
     RelativePath       Convert-MarkdownToHTML.md
 
 .LINK
+https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Convert-MarkdownToHTMLFragment.md
+.LINK
 Convert-MarkdownToHtml
 .LINK
 Find-MarkdownFiles
@@ -493,7 +509,7 @@ function Convert-MarkdownToHTMLFragment
     [CmdletBinding()]
     param(
         [parameter(Mandatory=$true,ValueFromPipeline=$true)]
-        [ValidateScript({$_ -is [string] -or $_ -is [System.IO.FileInfo]})]
+        [ValidateScript({$_ -is [string] -or $_ -is [System.IO.FileInfo] -or $_ -is [hashtable]})]
         [Alias('Markdown')]
         $InputObject,
 
@@ -539,6 +555,8 @@ function Convert-MarkdownToHTMLFragment
     PROCESS {
         [string]$md = if ($InputObject -is [System.IO.FileInfo]) {
                           Get-Content -LiteralPath $InputObject.FullName -Encoding UTF8 | Out-String
+                      } elseif ($InputObject -is [hashtable]) {
+                          $InputObject.Markdown
                       } else {
                           $InputObject
                       }
@@ -612,7 +630,7 @@ Following default substitution mappings are added by default:
 Additional mappings are added from the content map passed into this function.
 
 .PARAMETER InputObject
-A HTML fragment typically produced by [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md).
+A HTML fragment typically produced by `Convert-MarkdownToHTMLFragment`.
 Custom hashtables are supported as well as long as they define at least the keys `HTMLFragment` and `Title`.
 
 A property named `ContentMap` will be added to the `InputObject` to define the substitution rules before it
@@ -624,13 +642,15 @@ in the HTML-template (`md-template.html`). The keys of this map should represent
 including the delimiters. E.g `{{my-placeholder}}`.
 
 .INPUTS
-A HTML fragment object typically produced by [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md)
+A HTML fragment object typically produced by `Convert-MarkdownToHTMLFragment`
 or a hashtable having at least the keys `HTMLFragment` and `Title`
 
 .OUTPUTS
 The input objects with an additional key `ContentMap` which contains a mapping table defining the
 rules for substitution of placeholders by HTM fragments.
 
+.LINK
+https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Add-ContentSubstitutionMap.md
 .LINK
 Convert-MarkdownToHtmlFragment
 .LINK
@@ -671,9 +691,10 @@ function Add-ContentSubstitutionMap {
 Convert Markdown files into HTML files.
 
 .DESCRIPTION
-This function reads all Markdown files from a source folder and converts each of them to
-standalone html documents using configurable Markdown extensions and
-a customizable HTML template.
+This function reads all Markdown files from a source folder and converts each
+of them to standalone html documents using configurable Markdown extensions and
+a customizable HTML template. See `about_MarkdownToHTML` for a list of
+supported extensions and customization options.
 
 .PARAMETER Path
 Path to Markdown files or directories containing Markdown files.
@@ -681,7 +702,7 @@ Path to Markdown files or directories containing Markdown files.
 .PARAMETER Template
 Optional directory containing the html template file `md-template.html` and its resources.
 If no template directory is specified, a default factory-installed template is used.
-For infomations about creating custom templates see [New-HTMLTemplate](New-HTMLTemplate.md).
+For infomations about creating custom templates see `New-HTMLTemplate`.
 
 .PARAMETER IncludeExtension
 Comma separated list of Markdown parsing extensions to use (see notes for available extensions).
@@ -741,11 +762,10 @@ Convert all Markdown files in `E:\MyMarkdownFiles` using
 The generated HTML files are saved to `E:\MyHTMLFiles`.
 
 .NOTES
-A parser configuration is a comma separated list of configuration option strings. Currently
-avaliable extensions are:
+Currently available Markdown parser extensions are:
 
-* 'abbreviations': [Abbreviations ](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AbbreviationSpecs.md)
-* 'advanced': advanced parser configuration. A pre-build collection of extensions including:
+* **'abbreviations'**: [Abbreviations ](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AbbreviationSpecs.md)
+* **'advanced'**: advanced parser configuration. A pre-build collection of extensions including:
   * 'abbreviations'
   * 'autoidentifiers'
   * 'citations'
@@ -764,64 +784,64 @@ avaliable extensions are:
   * 'diagrams'
   * 'autolinks'
   * 'attributes'
-* 'attributes': [Special attributes](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GenericAttributesSpecs.md).
+* **'attributes'**: [Special attributes](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GenericAttributesSpecs.md).
    Set HTML attributes (e.g `id` or class`).
-* 'autoidentifiers': [Auto-identifiers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoIdentifierSpecs.md).
+* **'autoidentifiers'**: [Auto-identifiers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoIdentifierSpecs.md).
 `  Allows to automatically creates an identifier for a heading.
-* 'autolinks': [Auto-links](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoLinks.md)
+* **'autolinks'**: [Auto-links](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoLinks.md)
    generates links if a text starts with `http://` or `https://` or `ftp://` or `mailto:` or `www.xxx.yyy`.
-* 'bootstrap': [Bootstrap](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/BootstrapSpecs.md)
+* **'bootstrap'**: [Bootstrap](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/BootstrapSpecs.md)
    to output bootstrap classes.
-* 'citations': [Citation text](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md)
+* **'citations'**: [Citation text](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md)
    by enclosing text with `''...''`
-* 'common': CommonMark parsing; no parser extensions (default)
-* 'customcontainers': [Custom containers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/CustomContainerSpecs.md)
+* **'common'**: CommonMark parsing; no parser extensions (default)
+* **'customcontainers'**: [Custom containers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/CustomContainerSpecs.md)
   similar to fenced code block `:::` for generating a proper `<div>...</div>` instead.
-* 'definitionlists': [Definition lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DefinitionListSpecs.md)
-* 'diagrams': [Diagrams](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DiagramsSpecs.md)
+* **'definitionlists'**: [Definition lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DefinitionListSpecs.md)
+* **'diagrams'**: [Diagrams](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DiagramsSpecs.md)
   whenever a fenced code block uses the 'mermaid' keyword, it will be converted to a div block with the content as-is
   (currently, supports `mermaid` and `nomnoml` diagrams). Resources for the `mermaid` diagram generator are pre-installed and configured.
   See [New-HTMLTemplate](New-HTMLTemplate.md) for customization details.
-* 'emojis': [Emoji](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmojiSpecs.md) support
-* 'emphasisextras': [Extra emphasis](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmphasisExtraSpecs.md)
+* **'emojis'**: [Emoji](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmojiSpecs.md) support
+* **'emphasisextras'**: [Extra emphasis](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmphasisExtraSpecs.md)
    * strike through `~~`,
    * Subscript `~`
    * Superscript `^`
    * Inserted `++`
    * Marked `==`
-* 'figures': [Figures](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md).
+* **'figures'**: [Figures](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md).
   A figure can be defined by using a pattern equivalent to a fenced code block but with the character `^`.
-* 'footers': [Footers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md)
-* 'footnotes': [Footnotes](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FootnotesSpecs.md)
-* 'globalization': [https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GlobalizationSpecs.md]
+* **'footers'**: [Footers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md)
+* **'footnotes'**: [Footnotes](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FootnotesSpecs.md)
+* **'globalization'**: [https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GlobalizationSpecs.md]
   Adds support for RTL (Right To Left) content by adding `dir="rtl"` and `align="right"` attributes to
   the appropriate html elements. Left to right text is not affected by this extension.
-* 'gridtables': [Grid tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GridTableSpecs.md)
+* **'gridtables'**: [Grid tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GridTableSpecs.md)
   allow to have multiple lines per cells and allows to span cells over multiple columns.
-* 'hardlinebreak': [Soft lines](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/HardlineBreakSpecs.md)
+* **'hardlinebreak'**: [Soft lines](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/HardlineBreakSpecs.md)
    as hard lines
-* 'listextras': [Extra bullet lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/ListExtraSpecs.md),
+* **'listextras'**: [Extra bullet lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/ListExtraSpecs.md),
    supporting alpha bullet a. b. and roman bullet (i, ii...etc.)
-* 'mathematics': [Mathematics](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MathSpecs.md)
+* **'mathematics'**: [Mathematics](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MathSpecs.md)
   LaTeX extension by enclosing `$$` for block and `$` for inline math. Resources for this extension are pre-installed and configured.
   See [New-HTMLTemplate](New-HTMLTemplate.md) for customization details.
-* 'medialinks': [Media support](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md)
+* **'medialinks'**: [Media support](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md)
   for media urls (youtube, vimeo, mp4...etc.)
-* 'nofollowlinks': Add `rel=nofollow` to all links rendered to HTML.
-* 'nohtml': [NoHTML](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/NoHtmlSpecs.md)
+* **'nofollowlinks'**: Add `rel=nofollow` to all links rendered to HTML.
+* **'nohtml'**: [NoHTML](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/NoHtmlSpecs.md)
    allows to disable the parsing of HTML.
-* 'nonascii-noescape': Use this extension to disable URI escape with % characters for non-US-ASCII characters in order to
+* **'nonascii-noescape'**: Use this extension to disable URI escape with % characters for non-US-ASCII characters in order to
    workaround a bug under IE/Edge with local file links containing non US-ASCII chars. DO NOT USE OTHERWISE.
-* 'pipetables': [Pipe tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md)
+* **'pipetables'**: [Pipe tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md)
   to generate tables from markup.
-* 'smartypants': [SmartyPants](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/SmartyPantsSpecs.md)
+* **'smartypants'**: [SmartyPants](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/SmartyPantsSpecs.md)
   quotes.
-* 'tasklists': [Task Lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/TaskListSpecs.md).
+* **'tasklists'**: [Task Lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/TaskListSpecs.md).
   A task list item consist of `[ ]` or `[x]` or `[X]` inside a list item (ordered or unordered)
-* 'yaml': [YAML frontmatter](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/YamlSpecs.md)
+* **'yaml'**: [YAML frontmatter](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/YamlSpecs.md)
   parsing.
 
-Some parser options require additional template configuration. See [New-HTMLTemplate](New-HTMLTemplate.md) for details.
+**Note**: Some parser options require additional template configuration. See [New-HTMLTemplate](New-HTMLTemplate.md) for details.
 
 Custom templates can be easily generated by [New-HTMLTemplate](New-HTMLTemplate.md).
 
@@ -830,22 +850,19 @@ library. Markdig is a fast, powerful, [CommonMark](http://commonmark.org/) compl
 extensible Markdown processor for .NET.
 
 .LINK
+https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Convert-MarkdownToHTML.md
+.LINK
 https://github.com/lunet-io/markdig
-
 .LINK
 http://commonmark.org/
-
 .LINK
 https://highlightjs.org/
-
 .LINK
 https://mermaidjs.github.io/
-
 .LINK
 https://katex.org/
-
 .LINK
-Find-MarkdownFiles
+`Find-MarkdownFiles`
 .LINK
 Convert-MarkdownToHtmlFragment
 .LINK
@@ -895,187 +912,26 @@ function Convert-MarkdownToHTML {
 
 <#
 .SYNOPSIS
-Create a new customizable template directory for Markdown to HTML conversion.
+Create a customizable template directory for Markdown to HTML conversion.
 
 .DESCRIPTION
-The factory-default conversion template is copied to the destination directory to
-seed the customization process.
+The factory-default conversion template is copied to the destination directory
+to seed the customization process.
 
-The custom template directory has following structure:
+See `about_MarkdownToHTML` section TEMPLATE CUSTOMIZATION for details about the
+customization options.
 
-    <Template Root>
-      +--- js           <-- Javascript libraries
-      |
-      +--- katex        <-- LaTex Math typesetting library
-      |    +--- contrib
-      |    '--- fonts
-      '--- styles       <-- CSS style libraries.
+The HTML template file returned by this function (`md-template.html`) has a
+simple structure containing two content placeholders:
 
-## Default configuration
-The factory-default template is configured in the following way
-* Code syntax highlighting is enabled for following languages:
-  * Bash
-  * C#
-  * C++
-  * CSS
-  * Diff
-  * HTML/XML
-  * HTTP
-  * Java
-  * JavaScript
-  * Makefile
-  * Markdown
-  * SQL
-  * Maxima
-  * PowerShell
-* Diagramming (`mermaid` extension) is pre-installed but deactivated.
-* Math Typesetting (`mathematics` extension) is pre-installed but deactivated.
+`{{title}}`
+:   Placeholder for a page title generated from the Markdown content or filename.
 
-## The HTML template `md-template.html`
+`{{content}}`
+:   Placeholder for the HTML content fragment generated from Markdown content.
 
-The HTML template file is used to turn the HTML fragments generated for each
-Markdown file into standalone HTML documents which can be viewed in a web browser.
-
-## Customizing `md-template.html`
-The HTML template contains two placeholders by default which get replaced with
-HTML content:
-* `{{title}}` - Page title generated from the Markdown filename. **Note**: The title can be
-   customized by adding an entry to a custome content map. See [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md).
-* `{{content}}` - HTML content fragment generated from Markdown content.
-* Additional custom placeholders can be added if a custom converter pipelines are used and a
-  placeholder substitution is defined in a custom content map. See [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md).
-
-To customize styling the stylesheet `styles\md-styles.css` in the template derectory can be
-modified or a new stylesheet can be added to the `styles` directory and included in
-`md-template.html`.
-
-## Configuring Factory Installed Extensions in `md-template.html`
-
-* **Code syntax highlighting** uses the [highlight.js](https://highlightjs.org/)
-  JavaScript library which supports 185 languages and 89 styles as well as
-  automatic language detection. Code syntax highlighting by default is activated and
-  configured for following languages:
-  * Bash
-  * C#
-  * C++
-  * Clojure
-  * CMake
-  * CSS
-  * Diff
-  * DOS .bat
-  * F#
-  * Groovy
-  * HTML/XML
-  * HTTP
-  * Java
-  * JavaScript
-  * JSON
-  * Lisp
-  * Makefile
-  * Markdown
-  * Maxima
-  * Python
-  * PowerShell
-  * SQL
-
-  To obtain syntax highlighting for other/additional languages, please visit
-  the [Getting highlight.js](https://highlightjs.org/download/) page and
-  download a customized version of `highlight.js` configured for the languages
-  you need.
-
-  Code syntax highlighting is configured in the `<head>` section
-  of `md-template.html` as shown below. By default the syntax highlighting style `vs.css`
-  is used. Alternative styles can be enabled. Only one highlighting style should be enabled
-  at a time. Additional styles can be downloaded from the
-  [highlight.js styles](https://github.com/highlightjs/highlight.js/tree/master/src/styles)
-  directory.
-  Use the [demo](https://highlightjs.org/static/demo/) page to identify the styles
-  you like best.
-
-<blockquote>
-
-~~~ html
-<!-- Code syntax highlighting configuration -->
-<!-- Comment this to deactivate syntax highlighting. -->
-<link rel="stylesheet" type="text/css" href="styles/vs.css" />
-<link rel="stylesheet" type="text/css" href="styles/vs.css" />
-<!-- Alternative highlighting styles -->
-<!-- <link rel="stylesheet" type="text/css" href="styles/agate.css" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="styles/far.css" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="styles/tomorrow-night-blue.css" /> -->
-<script src="js/highlight.pack.js"></script>
-<script>
-    hljs.configure({ languages: [] });
-    hljs.initHighlightingOnLoad();
-</script>
-<!-- -->
-~~~
-
-</blockquote>
-
-* **Diagramming** uses the [mermaid](https://mermaidjs.github.io/) diagram
-  and flowchart generator. Is activated by default and is configured in the
-  `<head>` section of `md-template.html` like so:
-
-<blockquote>
-
-~~~ html
-<!-- mermaid diagram generator configuration -->
-<!-- Comment this to deactivate the diagramming extension ('diagrams'). -->
-<script src="js/mermaid.min.js"></script>
-<script>mermaid.initialize({startOnLoad:true});</script>
-<!-- -->
-~~~
-
-</blockquote>
-
-* **LaTeX Math Typesetting** is provided by the [KaTeX](https://katex.org/) LaTeX Math
-  typesetting library. Is activated by default and is configured in the
-  `<head>` section of `md-template.html` like so:
-
-<blockquote>
-
-~~~ html
-<!-- KaTex LaTex Math typesetting configuration -->
-<!-- Comment this to deactivate the LaTey math extension ('mathematics'). -->
-<link rel="stylesheet" type="text/css" href="katex/katex.min.css" />
-<!-- KaTeX LaTeX Math typesetting configuration -->
-<!-- Comment this to deactivate the LaTeX math extension ('mathematics'). -->
-<link rel="stylesheet" type="text/css" href="katex/katex.min.css" />
-<script defer src="katex/katex.min.js"></script>
-<script>
-    // <![CDATA[
-    window.onload = function () {
-        var tex = document.getElementsByClassName("math");
-        Array.prototype.forEach.call(tex, function (el) {
-            katex.render(el.textContent, el, {
-                displayMode: (el.nodeName == "DIV"),
-                macros: {
-                    "\\(": "",
-                    "\\)": "",
-                    "\\[": "",
-                    "\\]": ""
-                }
-            })
-        });
-    };
-        // ]]>
-</script>
-<!-- -->
-~~~
-
-</blockquote>
-
-## Configuring Other parsing extensions
-Unless pre-installed in the default factory template, some parsing extensions may require
-additional local resources and configuration.
-
-Configuration is typically achieved by adding style sheets and javascript code to the `<head>` or `<body>`
-section of the HTML template. Local Resources can be added anywhere to the template directory, but usually
-javascript libraries are added to the the `js` directory of the template
-and stylesheets are added to the `styles` directory. To obtain resources and installation instructions
-for individual parsing extensions, visit the documentation of the extensions.
-See [Convert-MarkdownToHTML](Convert-MarkdownToHTML.md) for links.
+If a more sophisticated HTML template is needed which can also contain custom
+placeholders, check out `New-StaticHTMLSiteProject`.
 
 .PARAMETER Destination
 Location of the new conversion template directory. The template directory
@@ -1093,13 +949,11 @@ This function does not read from the pipe
 The new conversion template directory `[System.IO.DirectoryInfo]`
 
 .LINK
-Convert-MarkdownToHtml
+https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/New-HTMLTemplate.md
+
 .LINK
-Find-MarkdownFiles
-.LINK
-Convert-MarkdownToHtmlFragment
-.LINK
-Publish-StaticHtmlSite
+`New-StaticHTMLSiteProject`
+
 #>
 function New-HTMLTemplate {
     [OutputType([System.IO.DirectoryInfo])]
@@ -1125,4 +979,141 @@ function New-HTMLTemplate {
     Copy-Item -Path "${template}/*" -Recurse -Destination $outDir
 
     $outDir
+}
+<#
+.SYNOPSIS
+Create a customizable Markdown to HTML site conversion project.
+
+.DESCRIPTION
+The new project is fully functional and ready for building.
+
+A single markdown file (`README.md`) is provided as initial content. It explains
+project customization options. It is recommended to build the project by
+executing its build script `Build.ps1`. This creates an initial HTML site
+containing the HTML version of the README (`html/README.html`) which is more
+pleasant to read.
+
+The project directory created by this function has the following structure:
+
+~~~
+#                  <- project root
+|- html            <- build output (static site)
+|- markdown        <- authored Markdown content
+|-    '- README.md <- initial content
+|- Template        <- template resources
+|     |- js        <- javascripts (*.js)
+|     |- katex     <- LateX math renderer
+|     |- styles    <- stylesheets (*.css)
+|     '- md-template.html <- Html page template
+|- Build.json      <- project configuration
+'- Build.ps1       <- build script
+~~~
+
+`html`
+:   The build output direcoty containing the static HTML site. This directory
+    is overwritten by every build.
+
+`markdown`
+:   Directory containing the authored Markdown content for this project.
+    Initially this contains the project's `README.md` file.
+
+`Template`
+:   The directory containing the HTML template and resources for the project.
+    See `about_MarkdownToHTML` section 'TEMPLATE CUSTOMIZATION' for more
+    information. The HTML template (`md-template-html`) containe in this
+    directory contains besides the two standard placeholders `{{title}}` and
+    `{{content}}` following additional placeholders:
+
+    `{{nav}}`
+    :   Placehoder which is replaced by a HTML content fragment
+        providing a navigatation section on each page.
+
+    `{{footer}}`
+    :   Placeholder which is replaced by a HTML content fragment
+        representing the page footer.
+
+`Build.json`
+:   The project configuration file in [JavaScript Object Notation](https://en.wikipedia.org/wiki/JSON)
+    format (JSON). Configurable items in this file are:
+
+    `markdown_dir` (default: "markdown")
+    :   Relative path to the Markdown content directory.
+        Besides Markdown files, this directory also contains media file such as
+        images or videos used by Markdown files.
+
+    `site_dir` (default: "html")
+    :   Relative path to the static HTML site. This directory holds the project
+        build result. The contens of this directory will be overwritten on every project
+        build.
+
+    `HTML_template` (default: "Template")
+    :   Location of the template resources (`*.css`, `*.js`, etc) needed to build
+        the HTML site.
+
+    `Exclude` (default: empty)
+    :   A list of file name pattern to exclude from the build process.
+
+    `markdown_extensions` (default: "common","definitionlists")
+    :   A list of markdown extensions to enable for this project. For a list of
+        possible extension, refer to the documentation of the function
+       `Convert-MarkdownToHTML`.
+
+    `footer`
+    :   Page footer text which gets substituted for the placeholder `{{footer}}` in
+        the HTML template `md-template.html`.
+
+    `site_navigation`
+    :   A list of links to be shown in each page's `<nav>` section.
+        The list will be substitutes for the placeholder `{{nav}}` in
+        the HTML template `md-template.html`.
+
+`Build.ps1`
+:   The project build script.
+
+``
+.PARAMETER ProjectDirectory
+The location of the new Markdown to HTML site conversion project.
+
+.INPUTS
+None
+
+.OUTPUTS
+The new project directory object `[System.IO.DirectoryInfo]`
+
+.EXAMPLE
+New-StaticHTMLSiteProject -ProjectDirectory MyProject
+
+Create a new conversion project names 'MyProject' in the current directory. The
+project is ready for build.
+
+.LINK
+https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/New-StaticHTMLSiteProject.md
+.LINK
+`New-HTMLTemplate`
+
+#>
+function New-StaticHTMLSiteProject {
+    [OutputType([System.IO.DirectoryInfo])]
+    [CmdletBinding()]
+    param(
+            [parameter(Mandatory=$true,ValueFromPipeline=$false)]
+            [ValidateNotNull()]
+            [string]$ProjectDirectory
+         )
+    $diritem = Get-Item -Path $ProjectDirectory -ErrorAction:SilentlyContinue
+
+    if ($diritem) {
+        throw "$ProjectDirectory already exists!"
+    }
+
+    $diritem = New-Item -Path $ProjectDirectory -ItemType Directory
+
+    # Copy project template to new directory
+    Write-Host "Copying project files ..." -ForegroundColor Yellow
+    Copy-Item -Path "$moduleDir/ProjectTemplate/*" -Destination $diritem -Recurse
+    Write-Host
+    Write-Host "Project '$($diritem.Name)' ready!" -ForegroundColor Yellow
+    Write-Host "1. Run the build script '$ProjectDirectory/Build.ps1'" -ForegroundColor Yellow
+    Write-Host "2. Open '$ProjectDirectory/html/README.html' in the browser!" -ForegroundColor Yellow
+    $diritem
 }

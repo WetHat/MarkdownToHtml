@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Static Site Project Template - Readme</title>
+    <link rel="stylesheet" type="text/css" href="styles/md-styles.css" />
+
+    <!-- Code syntax highlighting configuration -->
+    <!-- Comment this to deactivate syntax highlighting. -->
+    <link rel="stylesheet" type="text/css" href="styles/vs.css" />
+    <!-- Alternative highlighting styles -->
+    <!-- <link rel="stylesheet" type="text/css" href="styles/agate.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="styles/far.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="styles/tomorrow-night-blue.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="vs2015.css" /> -->
+    <script src="js/highlight.pack.js"></script>
+    <script>
+        hljs.configure({ languages: [] });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <!-- -->
+    <!-- mermaid diagram generator configuration -->
+    <!-- Comment this to deactivate the diagramming extension ('diagrams'). -->
+    <script src="js/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true });</script>
+    <!-- -->
+    <!-- KaTeX LaTeX Math typesetting configuration -->
+    <!-- Comment this to deactivate the LaTeX math extension ('mathematics'). -->
+    <link rel="stylesheet" type="text/css" href="katex/katex.min.css" />
+    <script defer src="katex/katex.min.js"></script>
+    <script>
+        // <![CDATA[
+        window.onload = function () {
+            var tex = document.getElementsByClassName("math");
+            Array.prototype.forEach.call(tex, function (el) {
+                katex.render(el.textContent, el, {
+                    displayMode: (el.nodeName == "DIV"),
+                    macros: {
+                        "\\(": "",
+                        "\\)": "",
+                        "\\[": "",
+                        "\\]": ""
+                    }
+                })
+            });
+        };
+          // ]]>
+    </script>
+    <!-- -->
+</head>
+<body>
+    <nav><button><a href="README.html">Home 1 1 1</a></button><br/></nav>
+    <main>
+        <article>
+            <h1>Static Site Project Template - Readme</h1>
+<p><em>If you are reading this file as Markdown source (<code>README.md</code>), consider building the
+project first by running the build script <code>Build.ps1</code> and then open <code>README.html</code> in the browser.</em></p>
+<h2>Overview</h2>
+<p>Static site projects allow you to build static HTML sites from Markdown sources
+in a fast and simple way. Just add markdown content to the project and run the
+build script to update the site.</p>
+<p>The factory configuration of the project contains all site assets locally.
+This allows to view the site offline (without internet connection).</p>
+<p>The project is fully functional with the out-of-the-box configuration.</p>
+<p>To author the HTML site following simple steps are needed:</p>
+<ol>
+<li>Create Markdown files (<code>*.md</code>) in the <code>markdown</code> directory of the project.
+All resources linked to by Markdown content such as images or videos are
+also added to this directory. Make sure to use only relative links to refer
+to other markdown files or media files.</li>
+<li>Build the site. Run the build script <code>Build.ps1</code>.</li>
+<li>Open the site's home page in the browser and review the content.</li>
+</ol>
+<h2>The Project Structure</h2>
+<p>The project directory has the following structure:</p>
+<pre><code>≡                  ← project root
+├─ html            ← build output (static site)
+├─ markdown        ← authored Markdown content
+├─    └─ README.md ← initial content
+├─ Template        ← template resources
+│     ├─ js        ← javascripts (*.js)
+│     ├─ katex     ← LateX math renderer
+│     ├─ styles    ← stylesheets (*.css)
+│     └─ md-template.html ← Html page template
+├─ Build.json      ← project configuration
+└─ Build.ps1       ← build script
+</code></pre>
+<h2>Project Configuration</h2>
+<p>The project is configured in <code>Build.json</code>. The <code>json</code> file extensions stands
+for <a href="https://en.wikipedia.org/wiki/JSON">JavaScript Object Notation</a>.</p>
+<p>The configurable items in this file are explained below. Note that all file and
+directory pathes are relative to the project root directory.</p>
+<dl>
+<dt>&quot;markdown_dir&quot; (default: &quot;markdown&quot;)</dt>
+<dd>Relative path to the Markdown content directory.
+Besides Markdown files, this directory also contains media file such as
+images or videos used by Markdown files.</dd>
+<dt>&quot;site_dir&quot; (default: &quot;html&quot;)</dt>
+<dd>Relative location of the static HTML site. This directory holds the project
+build result and contains no user editable content.</dd>
+<dt>&quot;HTML_template&quot; (default: &quot;Template&quot;)</dt>
+<dd>Location of the template resources (<code>*.css</code>, <code>*.js</code>, etc) needed to build
+the HTML site.</dd>
+<dt>&quot;Exclude&quot; (default: empty)</dt>
+<dd>A list of file name pattern to exclude from the build process.</dd>
+<dt>&quot;markdown_extensions&quot; (default: &quot;common&quot;,&quot;definitionlists&quot;)</dt>
+<dd>A list of markdown extensions to enable for this project. For a list of
+possible extension, refer to the documentation of the function
+<code>Convert-MarkdownToHTML</code>.</dd>
+<dt>&quot;footer&quot;</dt>
+<dd>Page footer text which gets substituted for the placeholder <code>{{footer}}</code> in
+the HTML template <code>md-template.html</code>.</dd>
+<dt>&quot;site_navigation&quot;</dt>
+<dd>A list of links to be shown in each page's <code>&lt;nav&gt;</code> section.
+The list will be substitutes for the placeholder <code>{{nav}}</code> in
+the HTML template <code>md-template.html</code>.</dd>
+</dl>
+<h2>Project Customization</h2>
+<h2>Custom Build Processes</h2>
+
+        </article>
+        <footer>
+            <hr />
+            Template project Created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.
+        </footer>
+    </main>
+</body>
+</html>
