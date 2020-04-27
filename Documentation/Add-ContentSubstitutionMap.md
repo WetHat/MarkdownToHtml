@@ -3,22 +3,16 @@
 Add a mapping table to each input object to specify the placeholder substitution in the HTML template.
 
 # Syntax
-
-<blockquote>
-
 ```PowerShell
  Add-ContentSubstitutionMap [-InputObject] <Hashtable> [-ContentMap] <Hashtable>  [<CommonParameters>] 
 ```
 
 
-</blockquote>
-
 # Description
 
-<blockquote>
 
 The mapping table as added as property `ContentMap` and is processed by
-[`Publish-StaticHTMLSite`](Publish-StaticHTMLSite.md) to substitute the placeholders in the
+[[`Publish-StaticHTMLSite`](Publish-StaticHTMLSite.md)](Publish-StaticHTMLSite.md) to substitute the placeholders in the
 HTML-template file (`md-template.html`) with HTML fragments.
 
 The keys of the mapping table are the verbatim, case sensitive placeholders as they appear in the
@@ -36,7 +30,9 @@ Following default substitution mappings are added by default:
 
 Additional mappings are added from the content map passed into this function.
 
-</blockquote>
+
+
+
 
 # Parameters
 
@@ -71,7 +67,7 @@ Accept wildcard characters?| false
 
 Additional placeholder substitution mappings. This map should contain an entry for each custom placeholder
 in the HTML-template (`md-template.html`). The keys of this map should represent the place holders verbatim
-including the delimiters. E.g `{{my-placeholder}}`.
+including the delimiters. E.g [`{{my-placeholder}}`]({{my-placeholder}}.md).
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -88,32 +84,19 @@ Accept wildcard characters?| false
 
 
 # Inputs
-
-<blockquote>
-
-A HTML fragment object typically produced by [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md)
+A HTML fragment object typically produced by `Convert-MarkdownToHTMLFragment`
 or a hashtable having at least the keys `HTMLFragment` and `Title`
 
-</blockquote>
 
 # Outputs
-
-<blockquote>
-
 The input objects with an additional key `ContentMap` which contains a mapping table defining the
 rules for substitution of placeholders by HTM fragments.
 
-</blockquote>
-
 # Related Links
 
-<blockquote>
-
-
-* [Convert-MarkdownToHtmlFragment](Convert-MarkdownToHtmlFragment.md) 
-* [Publish-StaticHtmlSite](Publish-StaticHtmlSite.md)
-
-</blockquote>
+* [https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Add-ContentSubstitutionMap.md](https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Add-ContentSubstitutionMap.md) 
+* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) 
+* [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md)
 
 ---
 

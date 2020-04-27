@@ -3,28 +3,24 @@
 Create a static HTML site from HTML fragment objects.
 
 # Syntax
-
-<blockquote>
-
 ```PowerShell
  Publish-StaticHtmlSite [-InputObject] <Object> [-Template] <String> [-MediaDirectory] <String> [-SiteDirectory] <String>  [<CommonParameters>] 
 ```
 
 
-</blockquote>
-
 # Description
 
-<blockquote>
 
 Html fragment objects piped into this function (or passed via the `InputObject` parameter) are converted
 into HTML documents and saved to a static Html site directory.
 
 The Markdown to Html document conversion uses a default or custom template with
 stylesheets and JavaScript resources to render Markdown extensions for LaTeX math, code syntax
-highlighting and diagrams (see [`New-HtmlTemplate`](New-HtmlTemplate.md) for details).
+highlighting and diagrams (see [`New-HtmlTemplate`](New-HtmlTemplate.md)) for details).
 
-</blockquote>
+
+
+
 
 # Parameters
 
@@ -37,23 +33,27 @@ highlighting and diagrams (see [`New-HtmlTemplate`](New-HtmlTemplate.md) for det
 <blockquote>
 
 An object representing an Html fragment. Ideally this is an output object of
-['Convert-MarkdownToHtmlFragment'](Convert-MarkdownToHtmlFragment.md), but any object will
+[`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md), but any object will
 work provided following properties are present:
 
-* `RelativePath`: A string representing the relative path to the Markdown file with respect to
-  a base (static site) directory.
-  This property is provided by:
-  * using the PowerShell function [`Find-MarkdownFiles`](Find-MarkdownFiles.md)
-  * piping a file object `[System.IO.FileInfo]` into
-    ['Convert-MarkdownToHtmlFragment'](Convert-MarkdownToHtmlFragment.md)
-    (or passing it as a parameter).
-* `ContentMap`: A dictionary which maps placeholder tokens to HTML fragments.
-   The placeholders defined in this map should match the placeholders used in `md-template.html`.
-   See [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md)
-For example adding `$obj.ContentMap[`footer`] = 'Copyright &copy; 2020'` would replace every occurence
-   of the token `[footer]` in `md-template.html` with the HTML fragment `Copyright &copy; 2020`.
-   Note the tokens must include the delimiters. Custom delimiters such as `[[footer]]`
-   or `{{footer}}` are supported.
+`RelativePath`
+:   A string representing the relative path to the Markdown file with respect to
+    a base (static site) directory.
+    This property is provided by:
+    * using the PowerShell function [`Find-MarkdownFiles`](Find-MarkdownFiles.md)
+    * piping a file object `[System.IO.FileInfo]` into
+      [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) (or passing it as a parameter).
+
+`ContentMap`
+:   A dictionary which maps placeholder tokens to HTML fragments.
+    The placeholders defined in this map should match the placeholders used in
+    `md-template.html`. See [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md)
+    For example adding
+    `$obj.ContentMap[`{{footer}}`] = 'Copyright &copy; 2020'` would replace
+    every occurence of the token `{{footer}}` in `md-template.html` with the
+    HTML fragment `Copyright &copy; 2020`.
+    Note! the tokens must include the delimiters. Custom delimiters such as
+    `[footer]` are supported too.
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -129,21 +129,12 @@ Accept wildcard characters?| false
 
 
 # Inputs
-
-<blockquote>
-
 An Html Fragment objects having the properties `RelativePath`,`Title`, `HtmlFragment` , and
 optionally `ContentMap`. See the description of the `InputObject` parameter for details
 
-</blockquote>
 
 # Outputs
-
-<blockquote>
-
 File objects [System.IO.FileInfo] of the generated HTML documents.
-
-</blockquote>
 
 # Examples
 
@@ -156,8 +147,9 @@ File objects [System.IO.FileInfo] of the generated HTML documents.
 Find-MarkdownFiles '...\Modules\MarkdownToHtml' | Convert-MarkdownToHtmlFragment | Publish-StaticHtmlSite -SiteDirectory 'e:\temp\site'
 ```
 
+
 Generates a static HTML site from the Markdown files in '...\Modules\MarkdownToHtml'. This is
-a simpler version of the functionality provided by the function [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml).
+a simpler version of the functionality provided by the function [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md).
 
 The generated Html file objects are returned like so:
 
@@ -169,20 +161,28 @@ The generated Html file objects are returned like so:
     -a----       15.09.2019     10:03           6068 MarkdownToHTML.html
     ...          ...            ...            ...
 
+
+
+
+
+
+
+
+
+
+
+
+
 </blockquote>
 
 # Related Links
 
-<blockquote>
-
-
-* [Convert-MarkdownToHtml](Convert-MarkdownToHtml.md) 
-* [Find-MarkdownFiles](Find-MarkdownFiles.md) 
-* [Convert-MarkdownToHtmlFragment](Convert-MarkdownToHtmlFragment.md) 
-* [Add-ContentSubstitutionMap](Add-ContentSubstitutionMap.md) 
-* [New-HTMLTemplate](New-HTMLTemplate.md)
-
-</blockquote>
+* [https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Publish-StaticHtmlSite.md](https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Publish-StaticHtmlSite.md) 
+* [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md) 
+* [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
+* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) 
+* [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md) 
+* [`New-HTMLTemplate`](New-HTMLTemplate.md)
 
 ---
 
