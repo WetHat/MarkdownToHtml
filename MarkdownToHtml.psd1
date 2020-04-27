@@ -29,80 +29,7 @@ Copyright = '(c) 2018-2020 WetHat Lab. All rights reserved.'
 Description = @'
 Highly configurable markdown to HTML conversion using customizable templates.
 
-Markdown to HTML conversion is based on [Markdig](https://github.com/lunet-io/markdig),
-a fast, powerful, [CommonMark](http://commonmark.org/) compliant,
-extensible Markdown processor for .NET.
-
-### Incompatibilities
-
-This version is incompatible with existing conversion projects
-which use the _mathematics_ extensions and were created with versions of this module
-older than 2.0.0 (i.e. 1.* or 0.*).
-
-**Make sure to read the release notes for 2.0.0 below for instructions on how to upgrade your
-existing conversion projects.**
-
-# Quickstart
-
-The typical use case is to convert a bunch of Markdown files in a directory
-to a static Html site using [`Convert-MarkdownToHtml`](Convert-MarkdownToHTML.md).
-
-If the Html default conversion template is not sufficient a custom template
-can be generated with [`New-HtmlTemplate`](New-HTMLTemplate.md).
-
-If the converter pipeline need to be modified to meet the needs of
-a special process, the converter pipeline can be custom built using:
-* [`Find-MarkdownFiles`](Find-MarkdownFiles.md)
-* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHTMLFragment.md)
-* [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md)
-
-# Preinstalled Markdown Extensions
-Following additional extensions are installed with this module:
-
-* **Code syntax highlighting** based on the [highlight.js](https://highlightjs.org/)
-  JavaScript library which supports 185 languages and 89 styles as well as
-  automatic language detection. Code syntax highlighting is activated by default
-  and configured for following languages:
-  * Bash
-  * C#
-  * C++
-  * Clojure
-  * CMake
-  * CSS
-  * Diff
-  * DOS .bat
-  * F#
-  * Groovy
-  * HTML/XML
-  * HTTP
-  * Java
-  * JavaScript
-  * JSON
-  * Lisp
-  * Makefile
-  * Markdown
-  * Maxima
-  * Perl
-  * Python
-  * PowerShell
-  * SQL
-  * YAML
-
-  To obtain syntax highlighting for other/additional languages, please visit
-  the [Getting highlight.js](https://highlightjs.org/download/) page and
-  get a customized version of highlight.js configured for the languages
-  you need.
-* **Diagramming** based on the [mermaid](https://mermaidjs.github.io/) diagram
-  and flowchart generator. Diagramming is pre-installed and activated.
-* **LaTeX Math typesetting** based on the [KaTeX](https://katex.org/) LaTeX Math
-  typesetting library. Math typesetting is pre-installed and activated
-
-# Other Open Source Markdown to HTML Converters
-* [MkDocs](https://www.mkdocs.org/) - A fast and simple static site generator
-  that is geared towards building project documentation.
-  Documentation source files are written in Markdown, and configured with a
-  single YAML configuration file.
-
+See `about_MarkdownToHTML` for features and customization options.
 '@
 
 # Minimum version of the Windows PowerShell engine required by this module
@@ -147,6 +74,7 @@ FunctionsToExport = @(
 	                   'Convert-MarkdownToHTML'
 	                   'Convert-MarkdownToHTMLFragment'
 	                   'Find-MarkdownFiles'
+                       'New-StaticHTMLSiteProject'
 	                   'New-HTMLTemplate'
 	                   'Publish-StaticHtmlSite'
 	                 )
@@ -194,7 +122,7 @@ PrivateData = @{
 
 #### Enhancements
 
-* [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) now supports definition of custom placeholders
+* `Publish-StaticHtmlSite` now supports definition of custom placeholders
   for expansion of `md_template.html`.
 * Constraints for template placeholders relaxed.
 * Default template placeholder delimiters changed to `{{` and `}}`.
@@ -205,33 +133,11 @@ PrivateData = @{
 
 ## 2.0.0
 
-#### Known Incompatibilities
-
 The updated version of _Markdig_ incuded in this release introduces
 an incompatiblity in the _mathematics_ extension which breaks _KaTeX_ math rendering.
-To address this incompaibility the KaTex configuration in **all** deployed html templates
-(`md_template.html`) needs to be updated like so:
 
-~~~ html
-<script>
-      // <![CDATA[
-      window.onload = function() {
-          var tex = document.getElementsByClassName("math");
-          Array.prototype.forEach.call(tex, function(el) {
-              katex.render(el.textContent, el, {
-                                                    displayMode: (el.nodeName == "DIV"),
-                                                    macros: {
-                                                               "\\(": "",
-                                                               "\\)": "",
-                                                               "\\[": "",
-                                                               "\\]": ""
-                                                            }
-                                               })
-          });
-      };
-      // ]]>
-</script>
-~~~
+See `about_MarkdownToHTML` for options to upgrade existing projects.
+To address this incompaibility the KaTex configuration in **all** deployed html templates
 
 #### New Features
 
