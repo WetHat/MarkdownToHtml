@@ -106,6 +106,7 @@ configuration in the HTML template (`md-template.html`). Refer to the
 
 'advanced': advanced parser configuration. A pre-build collection of
 :   extensions as listed below:
+
     - 'abbreviations'
     - 'autoidentifiers'
     - 'citations'

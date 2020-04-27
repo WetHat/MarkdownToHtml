@@ -106,6 +106,7 @@ SUPPORTED MARKDOWN EXTENSIONS
 
     'advanced': advanced parser configuration. A pre-build collection of
     :   extensions as listed below:
+
         - 'abbreviations'
         - 'autoidentifiers'
         - 'citations'
