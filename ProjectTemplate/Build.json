@@ -10,7 +10,9 @@
 
     "markdown_extensions": [
         "common",
-        "definitionlists"
+        "definitionlists",
+        "mathematics",
+        "diagrams"
     ],
 
     "footer": "Template project Created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.",
