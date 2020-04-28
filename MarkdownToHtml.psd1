@@ -29,7 +29,45 @@ Copyright = '(c) 2018-2020 WetHat Lab. All rights reserved.'
 Description = @'
 Highly configurable markdown to HTML conversion using customizable templates.
 
-See `about_MarkdownToHTML` for features and customization options.
+### Features
+
+* Open Source and fully _hackable_.
+* Out-of-the box support for diagrams, math typesetting and code syntax
+  highlighting.
+* Based on [Markdig](https://github.com/lunet-io/markdig),
+  a fast, powerful, [CommonMark](http://commonmark.org/) compliant Markdown
+  processor for .NET with more than 20 configurable extensions.
+* High quality Open Source web components:
+  - **Code Highlighting**: [highlight.js](https://highlightjs.org/); supports
+    189 languages and 91 styles.
+  - **Math typesetting**: [KaTeX](https://katex.org/); The fastest math
+    typesetting library for the web.
+  - **Diagramming**: [Mermaid](http://mermaid-js.github.io/mermaid/); Generation
+    of diagrams and flowcharts from text in a similar manner as Markdown.
+* Highly configurable static website projects with configuration file and build
+  script. See `New-StaticHTMLSiteProject`.
+* Sites can be used offline (without connection to the internet). All site
+  assets are local.
+
+### Prerequisites
+
+To successfully create web sites from Markdown you should know:
+* Markdown: A good starting point would be
+  [GitHub Flavored Markdown](https://github.github.com/gfm/)
+* Some knowledge about HTML and CSS (Cascading Stylesheets).
+* Some PowerShell knowledge
+
+See `about_MarkdownToHTML` for more information about configuration
+and operation of this module.
+
+### Incompatibilities
+
+This version is incompatible with existing conversion projects
+which use the _mathematics_ extensions and were created with versions of this module
+older than 2.0.0 (i.e. 1.* or 0.*).
+
+**Make sure to read the release notes for 2.0.0 below for instructions on how to upgrade your
+existing conversion projects.**
 '@
 
 # Minimum version of the Windows PowerShell engine required by this module
