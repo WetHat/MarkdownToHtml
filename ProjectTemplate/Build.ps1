@@ -17,31 +17,28 @@ Remove-Item $staticSite -Recurse -Force -ErrorAction:SilentlyContinue
 # Set-up the global mapping rules
 $SCRIPT:contentMap = @{
 	'{{footer}}' =  $config.Footer
+	'{{nav}}'    = {
+		param($fragment)
+
+		# Determine the relative navigation path of this page to root
+		$up = '../' * ($fragment.RelativePath.Split('/').Length - 1)
+
+		# create page specific navigation links
+		foreach ($item in $config.site_navigation) {
+			$name = (Get-Member -InputObject $item -MemberType NoteProperty).Name
+			$link = $item.$name # navlink relative to root
+			if (!$link.StartsWith('http')) {
+				# rewrite the link so that it works from the location of the current page
+				$link = $up +  [System.IO.Path]::ChangeExtension($link,'html')
+			}
+			Write-Output "<button><a href=`"$link`">$name</a></button><br/>"
+		}
+	}
 }
 
 Find-MarkdownFiles (Join-Path $moduleDir $config.markdown_dir) -Exclude $config.Exclude `
 | Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions `
 | Add-ContentSubstitutionMap -ContentMap $contentMap `
-| ForEach-Object {
-	$map = $_.ContentMap
-	# Determine directory level below the site root
-
-	$level = $_.RelativePath.Split('/').Length - 1
-
-	# Create relative navigation links
-	$nav = ''
-	foreach ($item in $config.site_navigation) {
-		$name = (Get-Member -InputObject $item -MemberType NoteProperty).Name
-		$link = $item.$name
-		if (!$link.StartsWith('http')) {
-			$link = ('../' * $level) +  [System.IO.Path]::ChangeExtension($item.$name,'html')
-		}
-		$nav += "<button><a href=`"$link`">$name</a></button><br/>"
-	}
-	# set up a page specific mapping rule
-	$map['{{nav}}'] = $nav
-	$_
-  } `
 | Publish-StaticHTMLSite -Template (Join-Path $moduleDir $config.HTML_Template) `
 	                     -SiteDirectory $staticSite
 
