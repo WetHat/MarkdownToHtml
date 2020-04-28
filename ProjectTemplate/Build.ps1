@@ -14,9 +14,9 @@ $SCRIPT:staticSite = Join-Path $moduleDir $config.site_dir
 # Clean up the static HTML sote before build
 Remove-Item $staticSite -Recurse -Force -ErrorAction:SilentlyContinue
 
-# Set-up the global mapping rules
+# Set-up the content mapping rules
 $SCRIPT:contentMap = @{
-	'{{footer}}' =  $config.Footer # Footeer text from configuration
+	'{{footer}}' =  $config.Footer # Footer text from configuration
 	'{{nav}}'    = { # compute the navigation links
 		param($fragment)
 
@@ -38,7 +38,7 @@ $SCRIPT:contentMap = @{
 
 Find-MarkdownFiles (Join-Path $moduleDir $config.markdown_dir) -Exclude $config.Exclude `
 | Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions `
-| Add-ContentSubstitutionMap -ContentMap $contentMap `
 | Publish-StaticHTMLSite -Template (Join-Path $moduleDir $config.HTML_Template) `
+                         -ContentMap  $contentMap `
 	                     -SiteDirectory $staticSite
 

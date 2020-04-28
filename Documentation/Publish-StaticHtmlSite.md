@@ -4,19 +4,20 @@ Create a static HTML site from HTML fragment objects.
 
 # Syntax
 ```PowerShell
- Publish-StaticHtmlSite [-InputObject] <Object> [-Template] <String> [-MediaDirectory] <String> [-SiteDirectory] <String>  [<CommonParameters>] 
+ Publish-StaticHtmlSite [-InputObject] <Object> [-Template] <String> [-ContentMap] <Hashtable> [-MediaDirectory] <String> [-SiteDirectory] <String>  [<CommonParameters>] 
 ```
 
 
 # Description
 
 
-Html fragment objects piped into this function (or passed via the `InputObject` parameter) are converted
-into HTML documents and saved to a static Html site directory.
+Html fragment objects piped into this function (or passed via the `InputObject`
+parameter) are converted into HTML documents and saved to a static Html site
+directory.
 
 The Markdown to Html document conversion uses a default or custom template with
-stylesheets and JavaScript resources to render Markdown extensions for LaTeX math, code syntax
-highlighting and diagrams (see [`New-HtmlTemplate`](New-HtmlTemplate.md)) for details).
+stylesheets and JavaScript resources to render Markdown extensions for LaTeX
+math, code syntax highlighting and diagrams (see [`New-HtmlTemplate`](New-HtmlTemplate.md)) for details).
 
 
 
@@ -39,21 +40,16 @@ work provided following properties are present:
 `RelativePath`
 :   A string representing the relative path to the Markdown file with respect to
     a base (static site) directory.
-    This property is provided by:
+    This property is automatically provided by:
     * using the PowerShell function [`Find-MarkdownFiles`](Find-MarkdownFiles.md)
     * piping a file object `[System.IO.FileInfo]` into
       [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) (or passing it as a parameter).
 
-`ContentMap`
-:   A dictionary which maps placeholder tokens to HTML fragments.
-    The placeholders defined in this map should match the placeholders used in
-    `md-template.html`. See [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md)
-    For example adding
-    `$obj.ContentMap[`{{footer}}`] = 'Copyright &copy; 2020'` would replace
-    every occurence of the token `{{footer}}` in `md-template.html` with the
-    HTML fragment `Copyright &copy; 2020`.
-    Note! the tokens must include the delimiters. Custom delimiters such as
-    `[footer]` are supported too.
+`Title`
+:   The page title.
+
+`HtmlFragment`
+:   A html fragment to be used a main content of the HTML document.
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -86,6 +82,50 @@ Accept wildcard characters?| false
 </blockquote>
  
 
+## -ContentMap \<Hashtable\>
+
+<blockquote>
+
+Placeholder substitution mappings. This map should contain an entry
+for each custom placeholder in the HTML-template (`md-template.html`).
+
+Following default substitution mappings are added automatically unless they
+are explicitely defined in the given map:
+
+| Key           | Description                  | Origin                      |
+|:------------- | :--------------------------- | :-------------------------- |
+| `{{title}}`   | Auto generated page title    | `$inputObject.Title`        |
+| `[title]`     | For backwards compatibility. | `$inputObject.Title`        |
+| `{{content}}` | HTML content                 | `$inputObject.HtmlFragment` |
+| `[content]`   | For backwards compatibility. | `$inputObject.HtmlFragment` |
+
+The keys of this map represent the place holders verbatim, including the
+delimiters. E.g [`{{my-placeholder}}`]({{my-placeholder}}.md). The values in this map can be
+* one or more strings
+* a script block which takes **one** parameter to which the InputObject is bound.
+  The script block should return one or more strings which define the
+  substitution value.
+
+  Example:
+
+  ~~~ PowerShell
+  {
+      param($Input)
+      "Source = $($Input.RelativePath)"
+  }
+  ~~~
+
+Parameter Property         | Value
+--------------------------:|:----------
+Required?                  | false
+Position?                  | 3
+Default value              | ``
+Accept pipeline input?     | false
+Accept wildcard characters?| false
+
+</blockquote>
+ 
+
 ## -MediaDirectory \<String\>
 
 <blockquote>
@@ -96,7 +136,7 @@ such as images, videos etc.
 Parameter Property         | Value
 --------------------------:|:----------
 Required?                  | false
-Position?                  | 3
+Position?                  | 4
 Default value              | ``
 Accept pipeline input?     | false
 Accept wildcard characters?| false
@@ -117,7 +157,7 @@ by generated HTML files.
 Parameter Property         | Value
 --------------------------:|:----------
 Required?                  | true
-Position?                  | 4
+Position?                  | 5
 Default value              | ``
 Accept pipeline input?     | false
 Accept wildcard characters?| false
@@ -181,7 +221,6 @@ The generated Html file objects are returned like so:
 * [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md) 
 * [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
 * [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) 
-* [`Add-ContentSubstitutionMap`](Add-ContentSubstitutionMap.md) 
 * [`New-HTMLTemplate`](New-HTMLTemplate.md)
 
 ---

@@ -8,7 +8,6 @@ See [`about_MarkdownToHTML`](about_MarkdownToHTML.md) for features and customiza
 
 # Exported Functions
 
-* [Add-ContentSubstitutionMap](Add-ContentSubstitutionMap.md)
 * [Convert-MarkdownToHTML](Convert-MarkdownToHTML.md)
 * [Convert-MarkdownToHTMLFragment](Convert-MarkdownToHTMLFragment.md)
 * [Find-MarkdownFiles](Find-MarkdownFiles.md)

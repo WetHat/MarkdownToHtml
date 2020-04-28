@@ -45,13 +45,9 @@ through a multi-stage conversion pipeline. | Resolve-Links)
 2      | HTML Fragment Conversion |
        '------------.-------------'
                     |
-  .-----------------'------------------.
-3 | Content Substitution Map Generator |
-  '-----------------.------------------'
-                    |
-       .------------'-------------.
-4      | HTML Document Assembler  | <--- Template
-       '------------.-------------'
+       .------------'-------------.    .- Template
+3      | HTML Document Assembler  | <--+
+       '------------.-------------'    '- Content Map
                     |
                     v
           standalone HTML Documents
@@ -61,8 +57,7 @@ The PowerShell functions associated with the pipeline stages are: | Resolve-Lin
 
 1. `Find-MarkdownFiles` | Resolve-Links)
 2. `Convert-MarkdownToHTMLFragment` | Resolve-Links)
-3. `Add-ContentSubstitutionMap` | Resolve-Links)
-4. `Publish-StaticHtmlSite` | Resolve-Links)
+3. `Publish-StaticHtmlSite` | Resolve-Links)
 
 # Known Incompatibilities
 The updated version of Markdig included in this release introduces an | Resolve-Links)

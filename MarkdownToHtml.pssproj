@@ -74,7 +74,6 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTMLFragment' ,'Convert-MarkdownToHTM
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="Documentation\about_MarkdownToHTML.md" />
-    <Content Include="Documentation\Add-ContentSubstitutionMap.md" />
     <Content Include="Documentation\Convert-MarkdownToHTML.md" />
     <Content Include="Documentation\Convert-MarkdownToHTMLFragment.md" />
     <Content Include="Documentation\Find-MarkdownFiles.md" />

@@ -45,13 +45,9 @@ LONG DESCRIPTION
     2      | HTML Fragment Conversion |
            '------------.-------------'
                         |
-      .-----------------'------------------.
-    3 | Content Substitution Map Generator |
-      '-----------------.------------------'
-                        |
-           .------------'-------------.
-    4      | HTML Document Assembler  | <--- Template
-           '------------.-------------'
+           .------------'-------------.    .- Template
+    3      | HTML Document Assembler  | <--+
+           '------------.-------------'    '- Content Map
                         |
                         v
               standalone HTML Documents
@@ -61,8 +57,7 @@ LONG DESCRIPTION
 
     1. `Find-MarkdownFiles`
     2. `Convert-MarkdownToHTMLFragment`
-    3. `Add-ContentSubstitutionMap`
-    4. `Publish-StaticHtmlSite`
+    3. `Publish-StaticHtmlSite`
 
 KNOWN INCOMPATIBILITIES
     The updated version of Markdig included in this release introduces an

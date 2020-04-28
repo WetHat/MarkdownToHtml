@@ -70,7 +70,6 @@ RequiredAssemblies = @('Markdig.dll')
 
 # Functions to export from this module
 FunctionsToExport = @(
-                       'Add-ContentSubstitutionMap'
 	                   'Convert-MarkdownToHTML'
 	                   'Convert-MarkdownToHTMLFragment'
 	                   'Find-MarkdownFiles'

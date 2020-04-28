@@ -26,12 +26,13 @@
 Create a static HTML site from HTML fragment objects.
 
 .DESCRIPTION
-Html fragment objects piped into this function (or passed via the `InputObject` parameter) are converted
-into HTML documents and saved to a static Html site directory.
+Html fragment objects piped into this function (or passed via the `InputObject`
+parameter) are converted into HTML documents and saved to a static Html site
+directory.
 
 The Markdown to Html document conversion uses a default or custom template with
-stylesheets and JavaScript resources to render Markdown extensions for LaTeX math, code syntax
-highlighting and diagrams (see `New-HtmlTemplate`) for details).
+stylesheets and JavaScript resources to render Markdown extensions for LaTeX
+math, code syntax highlighting and diagrams (see `New-HtmlTemplate`) for details).
 
 .PARAMETER InputObject
 An object representing an Html fragment. Ideally this is an output object of
@@ -41,28 +42,52 @@ work provided following properties are present:
 `RelativePath`
 :   A string representing the relative path to the Markdown file with respect to
     a base (static site) directory.
-    This property is provided by:
+    This property is automatically provided by:
     * using the PowerShell function `Find-MarkdownFiles`
     * piping a file object `[System.IO.FileInfo]` into
       `Convert-MarkdownToHtmlFragment` (or passing it as a parameter).
 
-`ContentMap`
-:   A dictionary which maps placeholder tokens to HTML fragments.
-    The placeholders defined in this map should match the placeholders used in
-    `md-template.html`. See `Add-ContentSubstitutionMap`
-    For example adding
-    `$obj.ContentMap[`{{footer}}`] = 'Copyright &copy; 2020'` would replace
-    every occurence of the token `{{footer}}` in `md-template.html` with the
-    HTML fragment `Copyright &copy; 2020`.
-    Note! the tokens must include the delimiters. Custom delimiters such as
-    `[footer]` are supported too.
+`Title`
+:   The page title.
+
+`HtmlFragment`
+:   A html fragment to be used a main content of the HTML document.
 
 .PARAMETER Template
-
 Optional directory containing the html template file `md-template.html` and its resources
 which will be used to convert the Html fragments into standalone Html documents.
 If no template directory is specified, a default factory-installed template is used.
 For infomations about creating custom templates see `New-HTMLTemplate`.
+
+.PARAMETER ContentMap
+Placeholder substitution mappings. This map should contain an entry
+for each custom placeholder in the HTML-template (`md-template.html`).
+
+Following default substitution mappings are added automatically unless they
+are explicitely defined in the given map:
+
+| Key           | Description                  | Origin                      |
+|:------------- | :--------------------------- | :-------------------------- |
+| `{{title}}`   | Auto generated page title    | `$inputObject.Title`        |
+| `[title]`     | For backwards compatibility. | `$inputObject.Title`        |
+| `{{content}}` | HTML content                 | `$inputObject.HtmlFragment` |
+| `[content]`   | For backwards compatibility. | `$inputObject.HtmlFragment` |
+
+The keys of this map represent the place holders verbatim, including the
+delimiters. E.g `{{my-placeholder}}`. The values in this map can be
+* one or more strings
+* a script block which takes **one** parameter to which the InputObject is bound.
+  The script block should return one or more strings which define the
+  substitution value.
+
+  Example:
+
+  ~~~ PowerShell
+  {
+      param($Input)
+      "Source = $($Input.RelativePath)"
+  }
+  ~~~
 
 .PARAMETER MediaDirectory
 An optional directory containing additional media for the Html site
@@ -107,8 +132,6 @@ Find-MarkdownFiles
 .LINK
 Convert-MarkdownToHtmlFragment
 .LINK
-Add-ContentSubstitutionMap
-.LINK
 New-HTMLTemplate
 #>
 function Publish-StaticHtmlSite {
@@ -122,6 +145,9 @@ function Publish-StaticHtmlSite {
 
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
         [string]$Template = (Join-Path $SCRIPT:moduleDir.FullName 'Template'),
+
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [hashtable]$ContentMap,
 
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
         [string]$MediaDirectory,
@@ -163,22 +189,23 @@ function Publish-StaticHtmlSite {
                 }
             }
         }
-        # prepare a dictionary for content injection
-        if  ($InputObject.ContentMap) {
-            $contentMap = $InputObject.ContentMap
-        } else {
-            $contentMap = @{}
+        # prepare the map for content injection
+        # we need a pristine map every time
+        $map = @{
+            '{{title}}'   = $InputObject.Title
+            '[title]'     = $InputObject.Title
+            '{{content}}' = $InputObject.HTMLFragment
+            '[content]'   = $InputObject.HTMLFragment
+        }
 
-            # add the available standard replacements
-            if ($InputObject.Title) {
-                $contentMap['[title]'] = $InputObject.Title # backwards compatibility
-                $contentMap['{{title}}'] = $InputObject.Title
+        # transfer the properties from the given map
+        foreach ($k in $ContentMap.Keys) {
+            $value = $ContentMap[$k]
+            if ($value -is [ScriptBlock]) {
+                # Compute the substitution value
+                $value = Invoke-Command -ScriptBlock $value -ArgumentList $_ | Out-String
             }
-
-            if ($InputObject.HtmlFragment) {
-                $contentMap['[content]'] = $InputObject.HtmlFragment # backwards compatibility
-                $contentMap['{{content}}'] = $InputObject.HtmlFragment
-            }
+            $map[$k] = $value
         }
 
         # Inject page content
@@ -188,10 +215,10 @@ function Publish-StaticHtmlSite {
             ## fixup resource pathes in the template header first
             $line = $line -replace '(?<=(href|src)=")(?=[^/][^:"]+")',$relativeResourcePath
 
-            # inject content - we need to make sure that we do not scan injected content
-            # for tokens
+            # inject content - we need to make sure that we do not scan injected
+            # content for tokens
             $tokenMap = @{}
-            foreach ($token in $contentMap.keys) {
+            foreach ($token in $map.keys) {
                 [int]$ndx = $line.IndexOf($token)
                 while ($ndx -ge 0)  {
                     $tokenMap[$ndx] = $token;
@@ -203,7 +230,7 @@ function Publish-StaticHtmlSite {
             $tokenMap.keys | Sort-Object -Descending | ForEach-Object {
                 [int]$ndx = $_
                 [string]$token = $tokenMap[$ndx]
-                $line = $line.Substring(0,$ndx) + $contentMap[$token] + $line.Substring($ndx+$token.Length)
+                $line = $line.Substring(0,$ndx) + $map[$token] + $line.Substring($ndx+$token.Length)
             }
 
             Write-Output $line
@@ -605,106 +632,7 @@ function Convert-MarkdownToHTMLFragment
         $htmlDescriptor # return the annotated HTML fragmemt
     }
 }
-<#
-.SYNOPSIS
-Add a mapping table to each input object to specify the placeholder substitution in the HTML template.
 
-.DESCRIPTION
-The mapping table as added as property `ContentMap` and is processed by
-[`Publish-StaticHTMLSite`](Publish-StaticHTMLSite.md) to substitute the placeholders in the
-HTML-template file (`md-template.html`) with HTML fragments.
-
-The keys of the mapping table are the verbatim, case sensitive placeholders as they appear in the
-HTML template. Each instance of a key found in `md-template.html` is substituted by the HTML fragment
-associated with that key.
-
-Following default substitution mappings are added by default:
-
-| Key | Description                            | Origin                      |
-|:------------- | :--------------------------- | :-------------------------- |
-| `{{title}}`   | Auto generated page title    | `$inputObject.Title`        |
-| `[title]`     | For backwards compatibility. | `$inputObject.Title`        |
-| `{{content}}` | HTML content                 | `$inputObject.HtmlFragment` |
-| `[content]`   | For backwards compatibility. | `$inputObject.HtmlFragment` |
-
-Additional mappings are added from the content map passed into this function.
-
-.PARAMETER InputObject
-A HTML fragment typically produced by `Convert-MarkdownToHTMLFragment`.
-Custom hashtables are supported as well as long as they define at least the keys
-`HTMLFragment` and `Title`.
-
-A property named `ContentMap` will be added to the `InputObject` to define the
-substitution rules before it is passed through to the output pipe.
-
-.PARAMETER ContentMap
-Additional placeholder substitution mappings. This map should contain an entry
-for each custom placeholder in the HTML-template (`md-template.html`). The keys
-of this map should represent the place holders verbatim including the
-delimiters. E.g `{{my-placeholder}}`. The values in this map can be
-* a string one or more strings
-* a script block which takes **one** parameter to which the InputObject is bound.
-  The script block should return one or more strings which define the
-  substitution value.
-
-  Example:
-
-  ~~~ PowerShell
-  {
-      param($Input)
-      "Source = $($Input.RelativePath)"
-  }
-  ~~~
-
-.INPUTS
-A HTML fragment object typically produced by `Convert-MarkdownToHTMLFragment`
-or a hashtable having at least the keys `HTMLFragment` and `Title`
-
-.OUTPUTS
-The input objects with an additional key `ContentMap` which contains a mapping table defining the
-rules for substitution of placeholders by HTM fragments.
-
-.LINK
-https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Add-ContentSubstitutionMap.md
-.LINK
-Convert-MarkdownToHtmlFragment
-.LINK
-Publish-StaticHtmlSite
-#>
-function Add-ContentSubstitutionMap {
-    [OutputType([hashtable])]
-    [CmdletBinding()]
-    param(
-        [parameter(Mandatory=$true,ValueFromPipeline=$true)]
-        [ValidateScript({$_.HTMLFragment -and $_.Title})]
-        [hashtable]$InputObject,
-
-        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-        [hashtable]$ContentMap = @{}
-    )
-
-    Process {
-        # we need a pristine map every time
-        $map = @{
-            '{{title}}'   = $InputObject.Title
-            '[title]'     = $InputObject.Title
-            '{{content}}' = $InputObject.HTMLFragment
-            '[content]'   = $InputObject.HTMLFragment
-        }
-
-        # transfer the properties from the given map
-        foreach ($k in $ContentMap.Keys) {
-            $value = $ContentMap[$k]
-            if ($value -is [ScriptBlock]) {
-                $value = Invoke-Command -ScriptBlock $value -ArgumentList $_ | Out-String
-            }
-            $map[$k] = $value
-        }
-
-        $InputObject.ContentMap = $map
-        $InputObject
-    }
-}
 <#
 .SYNOPSIS
 Convert Markdown files into HTML files.
@@ -922,7 +850,6 @@ function Convert-MarkdownToHTML {
     | Convert-MarkdownToHTMLFragment -IncludeExtension $IncludeExtension `
                                      -ExcludeExtension $ExcludeExtension `
                                      -Verbose:$Verbose `
-    | Add-ContentSubstitutionMap `
     | Publish-StaticHtmlSite -MediaDirectory $MediaDirectory `
                              -SiteDirectory $SiteDirectory `
                              -Template $Template `
