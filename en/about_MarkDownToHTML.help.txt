@@ -332,9 +332,57 @@ TEMPLATE CUSTOMIZATION
         :   Placeholder for the HTML content fragment generated from Markdown
             content.
 
-        Also this file needs to load all JavaScript and stylesheet resources
+        When additional placeholders are added they need to be defined in the
+        content map in `Build.ps1`. See the next section for details.
+
+        `md-template.html` needs to load all JavaScript and stylesheet resources
         to render the final HTML page in the desired way.
 
+CONTENT MAP CUSTOMIZATION
+    When a custom placeholders was added to `md-template.html` it needs to
+    be mapped to a HTML fragment to replace the placeholder with during the
+    build process. This can be done by adding an entry to the content map
+    defined in `Build.ps1`. For example:
+
+    ~~~ Powershell
+    SCRIPT:contentMap = @{
+
+    '{{my_placeholder}}' = '<b>Hello</b>'
+	'{{footer}}' =  $config.Footer # Footer text from configuration
+
+    ...
+    }
+    ~~~
+
+    This will replace all occurenced of `{{my_placeholder}}` in
+    `md-template.html` with the HTML fragment `<b>Hello</b>`.
+
+    The replacement value for a placeholders can be dynamically computed. To
+    do this a script block can be assigned to the placeholder.
+
+    The script block takes **one** parameter to which an object is bound
+    which has these properties:
+
+    | Property       | Description                                                     |
+    | :------------: | :-------------------------------------------------------------- |
+    | `Title`        | Optional page title. The first heading in the Markdown content. |
+    | `HtmlFragment` | The HTML fragment string generated from the Markdown text.      |
+    | `RelativePath` | Passed through form the input object, provided it exists.       |
+
+    It is called once for each HTML fragment and should return one or more
+    strings which define the substitution value for each page.
+
+    Script Block example:
+
+    ~~~ PowerShell
+    {
+      param($Input)
+      "Source = $($Input.RelativePath)"
+    }
+    ~~~
+
+    This script block would subsitute the path of the HTML document relative
+    to the site root for every occurence of '{{my_placeholder}}'.
 KEYWORDS
     Markdown HTML static sites Conversion
 

@@ -16,6 +16,7 @@ Remove-Item $staticSite -Recurse -Force -ErrorAction:SilentlyContinue
 
 # Set-up the content mapping rules
 $SCRIPT:contentMap = @{
+	# Add additional mappings here...
 	'{{footer}}' =  $config.Footer # Footer text from configuration
 	'{{nav}}'    = { # compute the navigation links
 		param($fragment)
@@ -28,7 +29,7 @@ $SCRIPT:contentMap = @{
 			$name = (Get-Member -InputObject $item -MemberType NoteProperty).Name
 			$link = $item.$name # navlink relative to root
 			if (!$link.StartsWith('http')) {
-				# rewrite the link so that it works from the location of the current page
+				# rewrite the link so that it works from the current location
 				$link = $up +  [System.IO.Path]::ChangeExtension($link,'html')
 			}
 			Write-Output "<button><a href=`"$link`">$name</a></button><br/>"
