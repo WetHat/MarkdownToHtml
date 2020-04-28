@@ -1,0 +1,26 @@
+{
+    "markdown_dir": "markdown",
+
+    "site_dir": "html",
+
+    "HTML_template": "Template",
+
+    "Exclude": [
+        "Code.md"
+    ],
+
+    "markdown_extensions": [
+        "common",
+        "definitionlists",
+        "diagrams",
+        "mathematics"
+    ],
+
+    "footer": "Template project Created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.",
+
+    "site_navigation": [
+        { "Home": "https://github.com/WetHat/MarkdownToHtml" },
+        { "Top Code": "Code.md" },
+        { "Mermaid": "SiteContent2/SubFolder/mermaid.md" }
+    ]
+}

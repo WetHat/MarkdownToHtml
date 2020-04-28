@@ -7,15 +7,15 @@
 [System.IO.DirectoryInfo]$SCRIPT:moduleDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 [System.IO.DirectoryInfo]$SCRIPT:testdata = Join-Path $SCRIPT:moduleDir -ChildPath 'TestData'
 [System.IO.DirectoryInfo]$SCRIPT:refdata  = Join-Path $SCRIPT:moduleDir -ChildPath 'ReferenceData'
-[System.IO.FileInfo]$SCRIPT:template      = Join-Path $SCRIPT:moduleDir  -ChildPath 'Template'
+[System.IO.DirectoryInfo]$SCRIPT:template
 
 Describe 'Convert-MarkdownToHTML' {
 	It 'Converts markdown file(s) from ''<Path>'' to HTML' `
 	   -TestCases @(
-		   @{Path='markdown/mermaid.md'; ReferencePath='html/mermaid.html';       ResultPath='TestDrive:/mermaid.html' ;             Extensions = 'diagrams'}
-		   @{Path='markdown/KaTex.md';   ReferencePath='html/KaTex.html';         ResultPath='TestDrive:/KaTex.html' ;               Extensions = 'mathematics'}
-		   @{Path='markdown/KaMaid.md';  ReferencePath='html/KaMaid.html';        ResultPath='TestDrive:/KaMaid.html' ;              Extensions = 'diagrams','mathematics'}
-		   @{Path='markdown/Code.md';    ReferencePath='html/Code.html';          ResultPath='TestDrive:/Code.html' ;                Extensions = 'advanced'}
+		   @{Path='markdown/mermaid.md'; ReferencePath='html/mermaid.html'; ResultPath='TestDrive:/mermaid.html'; Extensions = 'diagrams'}
+		   @{Path='markdown/KaTex.md';   ReferencePath='html/KaTex.html';   ResultPath='TestDrive:/KaTex.html' ;  Extensions = 'mathematics'}
+		   @{Path='markdown/KaMaid.md';  ReferencePath='html/KaMaid.html';  ResultPath='TestDrive:/KaMaid.html' ; Extensions = 'diagrams','mathematics'}
+		   @{Path='markdown/Code.md';    ReferencePath='html/Code.html';    ResultPath='TestDrive:/Code.html' ;   Extensions = 'advanced'}
 	   ) `
 	   {
 		   param($Path,$ReferencePath,$ResultPath,$Extensions)
@@ -39,6 +39,13 @@ Describe 'Convert-MarkdownToHTML' {
 		   $refFileContents = Get-Content -LiteralPath $refPath -Encoding UTF8 | Out-String
 		   Get-Content -LiteralPath $ResultPath -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
 	   }
+	BeforeAll {
+		$template = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
+		New-HTMLTemplate -Destination  $template
+	}
+    AfterAll {
+        Remove-Item $template -Recurse
+    }
 }
 
 Describe 'Convert-MarkdownToHTMLFragment' {
@@ -73,61 +80,63 @@ Describe 'Convert-MarkdownToHTMLFragment' {
 		}
 }
 
-Describe 'CustomConverterPipeline' {
+Describe 'ConversionProjects' {
 	It 'Converts markdown file(s) from ''<Path>'' to HTML with a custom converter pipeline' `
 		-TestCases @(
-		   @{Path='markdown'; ReferencePath='html_cust';  ResultPath='TestDrive:/html1' ; Extensions = 'diagrams','mathematics' ; Exclude=$null}
-		   @{Path='markdown'; ReferencePath='html_cust';  ResultPath='TestDrive:/html2' ; Extensions = 'diagrams','mathematics' ; Exclude='Code.md'}
+		   @{Path='markdown'; Config='ProjectConfigs/Build1.json';ReferencePath='html_cust';  ResultPath='TestDrive:/P1' ; Extensions = 'diagrams','mathematics' }
+		   @{Path='markdown'; Config='ProjectConfigs/Build2.json';ReferencePath='html_cust';  ResultPath='TestDrive:/P2' ; Extensions = 'diagrams','mathematics' }
 		) `
 		{
-			param($Path,$ReferencePath,$ResultPath, $Extensions, $Exclude, $Title)
+			param($Path,$Config, $ReferencePath,$ResultPath, $Extensions, $Title)
 
-			[System.IO.FileInfo]$testPath = Join-Path $SCRIPT:testdata -ChildPath $Path
-			$refPath  = Join-Path $SCRIPT:refdata  -ChildPath $ReferencePath
+			[string]$markdown = Join-Path $testdata -ChildPath $Path
+			$configPath = (Join-Path $testdata -ChildPath $Config)
+            $config  = Get-Content $configPath -Encoding UTF8 | ConvertFrom-Json
 
 		    #$ResultPath = $ResultPath -replace 'TestDrive:/','e:/temp/ttt/'
 
-			# inject navigation code to all pages
-			$contentMap = @{'[navigation]' = @"
-					<button><a href="http://www.hp.com">Hewlett-Packard</a></button>
-					<button><a href="http://www.ptc.com">Parametric Technologies</a></button>
-"@
-			}
+            # Create a new Project
+            New-StaticHTMLSiteProject -ProjectDirectory $ResultPath
 
-			Find-MarkdownFiles $testPath -Exclude $Exclude `
-			| Convert-MarkdownToHTMLFragment -IncludeExtension $Extensions -Verbose `
-		    | Add-ContentSubstitutionMap -ContentMap $contentMap `
-			| Publish-StaticHTMLSite -Template (Join-Path $SCRIPT:testdata 'CustomTemplate') `
-	                                 -SiteDirectory $ResultPath `
-		                             -Verbose
+            # copy the build config
+            Copy-Item -Path $configPath -Destination (Join-Path $ResultPath 'Build.json')
 
-			$refPath    | Should -Exist
-		    $ResultPath | Should -Exist
+            # cleanup the readme
+            $readme = (Join-Path $ResultPath 'markdown/README.md')
+            Remove-Item -LiteralPath $readme
 
-			# Check that all files exist and are identical
-			Get-ChildItem $testPath -Recurse -File -Exclude $Exclude `
-			| ForEach-Object {
-				# make path to file relative so that we find it in various places
-                $relpath = [System.IO.Path]::ChangeExtension($_.FullName.Substring($testPath.FullName.Length),'html')
+            $readme |  Should -Not -Exist
+            $ResultPath | Should -Exist
 
-				$refFile = Join-Path $refPath $relpath
-				$resultFile = Join-Path $ResultPath $relpath
+            # populate the project with markdown content
+            Copy-Item "$markdown/*" -Destination (Join-Path $ResultPath $config.markdown_dir) -Recurse
 
-                $refFile | Should -Exist
-                $resultFile | should -Exist
+            # Build the project
+            &(Join-Path $ResultPath 'Build.ps1')
 
-				$refFileContents = Get-Content -LiteralPath $refFile -Encoding UTF8 | Out-String
-			    Get-Content -LiteralPath $resultFile -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
-			}
+            # Verify the results
+            $excluded = $config.Exclude | ForEach-Object {
+                [System.IO.Path]::ChangeExtension($_,'html')
+            }
+            $html = Join-Path $ResultPath $config.site_dir
+            if ($config.Exclude.Count -gt 0) {
+                # Check that excluded files do not exist
+                $found = (Get-ChildItem $html -Recurse -Include $excluded | Measure-Object).Count
+                $found | Should -BeExactly 0
+            }
 
-			# Check that excluded files are not present
-			if ($Exclude){
-				Get-ChildItem $testPath -Recurse -File -Include $Exclude `
-				| ForEach-Object {
-					$relpath = [System.IO.Path]::ChangeExtension($_.FullName.Substring($testPath.FullName.Length),'html')
-					Join-Path $ResultPath $relpath | Should -Not -Exist
-				}
-			}
+            # check that all files exists and are equal
+            $ref = Join-Path $refdata $ReferencePath
+
+            Get-ChildItem $ref -Include '*.html' -Exclude $excluded -Recurse | ForEach-Object {
+                $relpath = $_.Fullname.Substring($ref.Length)
+                $target = Join-Path $html $relpath
+                $target | Should -Exist
+
+                # conpare contents
+                $refFileContents = Get-Content -LiteralPath $_ -Encoding UTF8 | Out-String
+			    Get-Content -LiteralPath $target -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
+            }
 		}
 }
 
