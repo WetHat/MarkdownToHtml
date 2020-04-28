@@ -45,10 +45,11 @@ Additional mappings are added from the content map passed into this function.
 <blockquote>
 
 A HTML fragment typically produced by [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md).
-Custom hashtables are supported as well as long as they define at least the keys `HTMLFragment` and `Title`.
+Custom hashtables are supported as well as long as they define at least the keys
+`HTMLFragment` and `Title`.
 
-A property named `ContentMap` will be added to the `InputObject` to define the substitution rules before it
-is passed through to the output pipe.
+A property named `ContentMap` will be added to the `InputObject` to define the
+substitution rules before it is passed through to the output pipe.
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -65,9 +66,23 @@ Accept wildcard characters?| false
 
 <blockquote>
 
-Additional placeholder substitution mappings. This map should contain an entry for each custom placeholder
-in the HTML-template (`md-template.html`). The keys of this map should represent the place holders verbatim
-including the delimiters. E.g [`{{my-placeholder}}`]({{my-placeholder}}.md).
+Additional placeholder substitution mappings. This map should contain an entry
+for each custom placeholder in the HTML-template (`md-template.html`). The keys
+of this map should represent the place holders verbatim including the
+delimiters. E.g [`{{my-placeholder}}`]({{my-placeholder}}.md). The values in this map can be
+* a string one or more strings
+* a script block which takes **one** parameter to which the InputObject is bound.
+  The script block should return one or more strings which define the
+  substitution value.
+
+  Example:
+
+  ~~~ PowerShell
+  {
+      param($Input)
+      "Source = $($Input.RelativePath)"
+  }
+  ~~~
 
 Parameter Property         | Value
 --------------------------:|:----------

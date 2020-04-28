@@ -72,22 +72,22 @@ KNOWN INCOMPATIBILITIES
 
     ~~~ html
     <script>
-          // <![CDATA[
-          window.onload = function() {
-              var tex = document.getElementsByClassName("math");
-              Array.prototype.forEach.call(tex, function(el) {
-                  katex.render(el.textContent, el, {
-                                                        displayMode: (el.nodeName == "DIV"),
-                                                        macros: {
-                                                                   "\\(": "",
-                                                                   "\\)": "",
-                                                                   "\\[": "",
-                                                                   "\\]": ""
-                                                                }
-                                                   })
-              });
-          };
-          // ]]>
+      // <![CDATA[
+      window.onload = function() {
+          var tex = document.getElementsByClassName("math");
+          Array.prototype.forEach.call(tex, function(el) {
+              katex.render(el.textContent, el, {
+                                                    displayMode: (el.nodeName == "DIV"),
+                                                    macros: {
+                                                               "\\(": "",
+                                                               "\\)": "",
+                                                               "\\[": "",
+                                                               "\\]": ""
+                                                            }
+                                               })
+          });
+      };
+      // ]]>
     </script>
     ~~~
 
@@ -106,7 +106,6 @@ SUPPORTED MARKDOWN EXTENSIONS
 
     'advanced': advanced parser configuration. A pre-build collection of
     :   extensions as listed below:
-
         - 'abbreviations'
         - 'autoidentifiers'
         - 'citations'
