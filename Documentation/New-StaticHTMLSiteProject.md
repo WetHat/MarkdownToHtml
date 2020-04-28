@@ -91,7 +91,12 @@ The project directory created by this function has the following structure:
     `site_navigation`
     :   A list of links to be shown in each page's `<nav>` section.
         The list will be substitutes for the placeholder `{{nav}}` in
-        the HTML template `md-template.html`.
+        the HTML template `md-template.html`. The syntax for navigation
+        links is:
+        * Links to local pages: `{ "<label>": "<relative path>" }`
+        * Links to web pages: `{ "<label>": "http(s)://...." }`
+        * Separator Labels: `{ "<label>": "" }`
+        * Separator Lines: `{ "---": "" }`
 
 `Build.ps1`
 :   The project build script.
