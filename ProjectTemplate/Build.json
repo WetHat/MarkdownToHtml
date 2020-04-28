@@ -12,12 +12,14 @@
         "common",
         "definitionlists",
         "mathematics",
-        "diagrams"
+        "diagrams",
+        "pipetables"
     ],
 
     "footer": "Template project Created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.",
 
     "site_navigation": [
-        { "Home": "README.md" }
+        { "Home": "README.md" },
+        { "---": "" }
     ]
 }
