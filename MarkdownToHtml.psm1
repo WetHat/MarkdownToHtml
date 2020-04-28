@@ -631,15 +631,30 @@ Additional mappings are added from the content map passed into this function.
 
 .PARAMETER InputObject
 A HTML fragment typically produced by `Convert-MarkdownToHTMLFragment`.
-Custom hashtables are supported as well as long as they define at least the keys `HTMLFragment` and `Title`.
+Custom hashtables are supported as well as long as they define at least the keys
+`HTMLFragment` and `Title`.
 
-A property named `ContentMap` will be added to the `InputObject` to define the substitution rules before it
-is passed through to the output pipe.
+A property named `ContentMap` will be added to the `InputObject` to define the
+substitution rules before it is passed through to the output pipe.
 
 .PARAMETER ContentMap
-Additional placeholder substitution mappings. This map should contain an entry for each custom placeholder
-in the HTML-template (`md-template.html`). The keys of this map should represent the place holders verbatim
-including the delimiters. E.g `{{my-placeholder}}`.
+Additional placeholder substitution mappings. This map should contain an entry
+for each custom placeholder in the HTML-template (`md-template.html`). The keys
+of this map should represent the place holders verbatim including the
+delimiters. E.g `{{my-placeholder}}`. The values in this map can be
+* a string one or more strings
+* a script block which takes **one** parameter to which the InputObject is bound.
+  The script block should return one or more strings which define the
+  substitution value.
+
+  Example:
+
+  ~~~ PowerShell
+  {
+      param($Input)
+      "Source = $($Input.RelativePath)"
+  }
+  ~~~
 
 .INPUTS
 A HTML fragment object typically produced by `Convert-MarkdownToHTMLFragment`
@@ -679,7 +694,11 @@ function Add-ContentSubstitutionMap {
 
         # transfer the properties from the given map
         foreach ($k in $ContentMap.Keys) {
-            $map[$k] = $ContentMap[$k]
+            $value = $ContentMap[$k]
+            if ($value -is [ScriptBlock]) {
+                $value = Invoke-Command -ScriptBlock $value -ArgumentList $_ | Out-String
+            }
+            $map[$k] = $value
         }
 
         $InputObject.ContentMap = $map
