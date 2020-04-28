@@ -28,11 +28,19 @@ $SCRIPT:contentMap = @{
 		foreach ($item in $config.site_navigation) {
 			$name = (Get-Member -InputObject $item -MemberType NoteProperty).Name
 			$link = $item.$name # navlink relative to root
-			if (!$link.StartsWith('http')) {
-				# rewrite the link so that it works from the current location
-				$link = $up +  [System.IO.Path]::ChangeExtension($link,'html')
+			if ([string]::IsNullOrWhiteSpace($link)) {
+				if ($name.StartsWith('---')) {
+					Write-Output '<hr class="navitem" />'
+				} else {
+					Write-Output "<div class='navitem'>$name</div>"
+				}
+			} else {
+				if (!$link.StartsWith('http')){
+					# rewrite the link so that it works from the current location
+					$link = $up +  [System.IO.Path]::ChangeExtension($link,'html')
+				}
+				Write-Output "<button class='navitem'><a href=`"$link`">$name</a></button><br/>"
 			}
-			Write-Output "<button><a href=`"$link`">$name</a></button><br/>"
 		}
 	}
 }

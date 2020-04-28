@@ -18,7 +18,9 @@
     "footer": "Template project Created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.",
 
     "site_navigation": [
-        { "Home": "https://github.com/WetHat/MarkdownToHtml" },
+        { "MarkdownToHtml": "https://github.com/WetHat/MarkdownToHtml" },
+        { "---": "" },
+        { "Test": "" },
         { "Top Code": "Code.md" },
         { "Mermaid": "SiteContent2/SubFolder/mermaid.md" }
     ]
