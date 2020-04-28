@@ -964,7 +964,7 @@ function New-HTMLTemplate {
             [string]$Destination
          )
     $template = Join-Path $SCRIPT:moduleDir.FullName 'Template'
-
+    $assets = Join-Path $SCRIPT:moduleDir.FullName 'Template.assets'
     $outdir = Get-Item -LiteralPath $Destination -ErrorAction:SilentlyContinue
 
     # Create the site directory
@@ -977,7 +977,7 @@ function New-HTMLTemplate {
     }
     ## Copy the template to the output directory
     Copy-Item -Path "${template}/*" -Recurse -Destination $outDir
-
+    Copy-Item -Path "${assets}/*" -Recurse -Destination $outDir -ErrorAction:SilentlyContinue
     $outDir
 }
 <#
@@ -1111,6 +1111,11 @@ function New-StaticHTMLSiteProject {
     # Copy project template to new directory
     Write-Host "Copying project files ..." -ForegroundColor Yellow
     Copy-Item -Path "$moduleDir/ProjectTemplate/*" -Destination $diritem -Recurse
+        # copy the standard assets too
+    Copy-Item -Path "$moduleDir/Template.assets/*" `
+              -Destination "$diritem/Template" `
+              -Recurse -ErrorAction:SilentlyContinue
+
     Write-Host
     Write-Host "Project '$($diritem.Name)' ready!" -ForegroundColor Yellow
     Write-Host "1. Run the build script '$ProjectDirectory/Build.ps1'" -ForegroundColor Yellow
