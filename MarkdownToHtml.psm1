@@ -289,7 +289,7 @@ function Find-MarkdownFiles {
             Get-ChildItem -Path $basePath -Recurse -File -Include '*.md','*.Markdown' -Exclude $Exclude `
             | ForEach-Object {
                 # capture the relative path of the Markdown file
-                [string]$relativePath = $_.FullName.Substring($basePath.Length).Trim('/\').Replace('\\','/')
+                [string]$relativePath = $_.FullName.Substring($basePath.Length).Trim('/\').Replace('\','/')
                 Add-Member -InputObject $_ -MemberType NoteProperty -Name 'RelativePath' -Value $relativePath
                 $_
               }

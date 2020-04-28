@@ -16,8 +16,8 @@ Remove-Item $staticSite -Recurse -Force -ErrorAction:SilentlyContinue
 
 # Set-up the global mapping rules
 $SCRIPT:contentMap = @{
-	'{{footer}}' =  $config.Footer
-	'{{nav}}'    = {
+	'{{footer}}' =  $config.Footer # Footeer text from configuration
+	'{{nav}}'    = { # compute the navigation links
 		param($fragment)
 
 		# Determine the relative navigation path of this page to root
