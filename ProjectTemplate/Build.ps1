@@ -25,13 +25,17 @@ Find-MarkdownFiles (Join-Path $moduleDir $config.markdown_dir) -Exclude $config.
 | ForEach-Object {
 	$map = $_.ContentMap
 	# Determine directory level below the site root
+
 	$level = $_.RelativePath.Split('/').Length - 1
 
 	# Create relative navigation links
 	$nav = ''
 	foreach ($item in $config.site_navigation) {
 		$name = (Get-Member -InputObject $item -MemberType NoteProperty).Name
-        $link = ('../' * $level) +  [System.IO.Path]::ChangeExtension($item.$name,'html')
+		$link = $item.$name
+		if (!$link.StartsWith('http')) {
+			$link = ('../' * $level) +  [System.IO.Path]::ChangeExtension($item.$name,'html')
+		}
 		$nav += "<button><a href=`"$link`">$name</a></button><br/>"
 	}
 	# set up a page specific mapping rule
