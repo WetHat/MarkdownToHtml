@@ -13,6 +13,9 @@ RootModule = 'MarkdownToHtml.psm1'
 # Version number of this module.
 ModuleVersion = '2.1.0'
 
+# Supported PSEditions
+CompatiblePSEditions = 'Desktop'
+
 # ID used to uniquely identify this module
 GUID = 'ac6c6204-4097-4693-ba7e-3e0167383c24'
 
