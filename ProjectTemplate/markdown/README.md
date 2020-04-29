@@ -10,17 +10,18 @@ directory and run the build script to update the HTML site.
 The initial configuration of the project contains all site assets locally.
 This allows the site to be viewed offline (without internet connection). 
 
-## What Next
+## What Next?
 
 The project is fully functional with the out-of-the-box configuration.
 
-To author the HTML site following simple steps are needed:
+To author the HTML site following do this:
 1. Create Markdown files (`*.md`) in the `markdown` directory of the project.
-   All resources linked to by Markdown content such as images or videos are
-   also added to this directory. Make sure to use only relative links to refer
-   to other markdown files or media files.
+   All resources linked to by Markdown content such as images or videos should
+   also added be to this directory. Make sure to use only **relative** links to 
+   to other markdown or media files.
 2. Build the site by executing the build script `Build.ps1`.
-3. Open the site's home page in the browser and review the content. 
+3. Locate the site's home page in the `html` directory and open it in the
+   browser 
 
 For information about project structure and customization options
 check out the documentation for `New-StaticHTMLSiteProject`:
@@ -41,6 +42,8 @@ In the following sections some selected features are demonstrated.
 
 ## Mermaid Diagrams
 
+Markdown extension: `mermaid`:
+
 ``` markdown
 ~~~ mermaid
 stateDiagram
@@ -53,6 +56,7 @@ stateDiagram
 	Crash --> [*]
 ~~~
 ```
+
 rendered as:
 
 ~~~ mermaid
@@ -67,6 +71,8 @@ stateDiagram
 ~~~
 
 ## LaTeX Math
+
+Markdown extensions: `mathematics`:
 
 ~~~ markdown
 $$
@@ -85,6 +91,8 @@ $$
 $$
 
 ## Code Syntay Highlighting
+
+Markdown extension: `common`
 
 ``` markdown
 ~~~ cpp
