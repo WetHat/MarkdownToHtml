@@ -48,6 +48,7 @@ existing conversion projects.**
 
 * [Convert-MarkdownToHTML](Convert-MarkdownToHTML.md)
 * [Convert-MarkdownToHTMLFragment](Convert-MarkdownToHTMLFragment.md)
+* [ConvertTo-NavigationItem](ConvertTo-NavigationItem.md)
 * [Find-MarkdownFiles](Find-MarkdownFiles.md)
 * [New-HTMLTemplate](New-HTMLTemplate.md)
 * [New-StaticHTMLSiteProject](New-StaticHTMLSiteProject.md)

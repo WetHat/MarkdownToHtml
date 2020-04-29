@@ -18,30 +18,9 @@ Remove-Item $staticSite -Recurse -Force -ErrorAction:SilentlyContinue
 $SCRIPT:contentMap = @{
 	# Add additional mappings here...
 	'{{footer}}' =  $config.Footer # Footer text from configuration
-	'{{nav}}'    = { # compute the navigation links
+	'{{nav}}'    = {
 		param($fragment)
-
-		# Determine the relative navigation path of this page to root
-		$up = '../' * ($fragment.RelativePath.Split('/').Length - 1)
-
-		# create page specific navigation links
-		foreach ($item in $config.site_navigation) {
-			$name = (Get-Member -InputObject $item -MemberType NoteProperty).Name
-			$link = $item.$name # navlink relative to root
-			if ([string]::IsNullOrWhiteSpace($link)) {
-				if ($name.StartsWith('---')) {
-					Write-Output '<hr class="navitem" />'
-				} else {
-					Write-Output "<div class='navitem'>$name</div>"
-				}
-			} else {
-				if (!$link.StartsWith('http')){
-					# rewrite the link so that it works from the current location
-					$link = $up +  [System.IO.Path]::ChangeExtension($link,'html')
-				}
-				Write-Output "<button class='navitem'><a href=`"$link`">$name</a></button><br/>"
-			}
-		}
+		$config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath
 	}
 }
 

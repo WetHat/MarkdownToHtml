@@ -110,6 +110,7 @@ RequiredAssemblies = @('Markdig.dll')
 FunctionsToExport = @(
 	                   'Convert-MarkdownToHTML'
 	                   'Convert-MarkdownToHTMLFragment'
+                       'ConvertTo-NavigationItem'
 	                   'Find-MarkdownFiles'
                        'New-StaticHTMLSiteProject'
 	                   'New-HTMLTemplate'

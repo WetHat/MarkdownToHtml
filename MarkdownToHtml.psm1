@@ -1073,3 +1073,120 @@ function New-StaticHTMLSiteProject {
     Write-Host "2. Open '$ProjectDirectory/html/README.html' in the browser!" -ForegroundColor Yellow
     $diritem
 }
+
+<#
+.SYNOPSIS
+Convert a navigation specification to a HTML fragment of hyperlinks.
+
+.DESCRIPTION
+Creates HTML elements for a simple vertical navigation bar. Navigation
+content is specified by a flat list of link specification items each of which
+is converted into an HTML element representing:
+* a clickable link
+* a separator line
+* a label (without link)
+
+The generated HTML elements are assigned to the class `navitem` to enable
+styling in `md-styles.css`.
+
+.PARAMETER RelativePath
+A path relative to the site root for the HTML document the navigation is to used
+for. This relative path is used to adjust the relative links which may be
+present in the link specification so that they work from the location of the
+HTML page the navifation is build for. The given path should be in HTML notation
+and is expected to use forward slash '/' path separators.
+
+.PARAMETER NavSpec
+An object or hashtables with one NoteProperty or key. The property or key name
+defines the link label, the associated value defines the link target location.
+
+If the link target location of a specification item is the **empty string**, the
+item has special meaning. If the name is the '---', a horizontal separator line
+is generated. If it is just plain text (or a HTML fragment), a label without
+clickable link is generated.
+
+.INPUTS
+Objects or hashtables with one NoteProperty or key.
+
+.OUTPUTS
+HTML element representing one navigation item for use in a vertical navigation
+bar.
+
+.EXAMPLE
+ConvertTo-NavigationItem @{'Project HOME'='https://github.com/WetHat/MarkdownToHtml'} -RelativePath 'into/about.md'
+
+Generates a web navigation link to be put on the page `intro/about.md`. Note
+the `RelativePath` is not needed for that link:
+
+~~~ html
+<button class='navitem'><a href="https://github.com/WetHat/MarkdownToHtml">Project HOME</a></button><br/>
+~~~
+
+.EXAMPLE
+ConvertTo-NavigationItem @{'Index'='index.md'} -RelativePath 'intro/about.md'
+
+Generates a relative navigation link to be put on the page `into/about.md`. The
+link target is another page `index.md` on the same site, hence the link is
+adjusted accordingly.
+
+~~~ html
+<button class='navitem'><a href="../index.html">Index</a></button><br/>
+~~~
+
+.EXAMPLE
+ConvertTo-NavigationItem @{'---'=''} -RelativePath 'intro/about.md'
+
+Generates a separator line. Note that the `RelativePath` is not needed:
+
+~~~ html
+<hr class="navitem" />
+~~~
+
+.EXAMPLE
+ConvertTo-NavigationItem @{'Introduction'=''} -RelativePath 'intro/about.md'
+
+Generates a label. Note that the `RelativePath` is not needed:
+
+~~~ html
+<div class='navitem'>Introduction</div>
+~~~
+
+#>
+function ConvertTo-NavigationItem {
+    [OutputType([string])]
+    [CmdletBinding()]
+    param(
+        [parameter(Mandatory=$true,ValueFromPipeline=$true)]
+        [ValidateNotNull()]
+        [object]$NavSpec,
+        [parameter(Mandatory=$true,ValueFromPipeline=$false)]
+        [ValidateNotNull()]
+        [string]$RelativePath
+    )
+    PROCESS {
+        # Determine the relative navigation path of this page to root
+	    $up = '../' * ($RelativePath.Split('/').Length - 1)
+
+	    # create page specific navigation links by making the path relative to
+        # the current location specified by `RelativePath`
+        $name = if ($NavSpec -is [hashtable]) {
+                    $NavSpec.Keys | Select-Object -First 1
+                } else {
+                    (Get-Member -InputObject $NavSpec -MemberType NoteProperty).Name
+                }
+	    $link = $NavSpec.$name
+	    if ([string]::IsNullOrWhiteSpace($link)) {
+		    if ($name.StartsWith('---')) {
+			    Write-Output '<hr class="navitem" />' # separator
+		    } else {
+			    Write-Output "<div class='navitem'>$name</div>" # label
+		    }
+	    } else {
+		    if (!$link.StartsWith('http')){
+			    # rewrite the link so that it works from the current location
+			    $link = $up +  [System.IO.Path]::ChangeExtension($link,'html')
+		    }
+		    Write-Output "<button class='navitem'><a href=`"$link`">$name</a></button><br/>"
+	    }
+    }
+}
