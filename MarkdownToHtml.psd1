@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.1.0'
+ModuleVersion = '2.1.1'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'
@@ -159,6 +159,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
+## 2.1.1
+
+* Bugfix: Site assets not copied in build script
+
 ## 2.1.0
 
 #### Enhancements

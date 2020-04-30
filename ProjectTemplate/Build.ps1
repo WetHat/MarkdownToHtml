@@ -27,9 +27,11 @@ $SCRIPT:contentMap = @{
 	}
 }
 
-Find-MarkdownFiles (Join-Path $projectDir $config.markdown_dir) -Exclude $config.Exclude `
+$SCRIPT:markdown = Join-Path $projectDir $config.markdown_dir
+Find-MarkdownFiles $markdown -Exclude $config.Exclude `
 | Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions `
 | Publish-StaticHTMLSite -Template (Join-Path $projectDir $config.HTML_Template) `
                          -ContentMap  $contentMap `
+						 -MediaDirectory $markdown `
 	                     -SiteDirectory $staticSite
 
