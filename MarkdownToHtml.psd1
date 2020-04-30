@@ -163,14 +163,16 @@ PrivateData = @{
 
 #### Enhancements
 
-* `Publish-StaticHtmlSite` now supports definition of custom placeholders
-  for expansion of `md_template.html`.
-* Constraints for template placeholders relaxed.
+* `Publish-StaticHtmlSite` now accepts definition of custom placeholder
+  mappins for expansion of `md-template.html`.
 * Default template placeholder delimiters changed to `{{` and `}}`.
+* Static HTML site projects added: See `New-StaticHTMLSiteProject`.
+* Documentation made more `Get-Help` friendly.
+* _Mermaid_ assets updated to version 8.5.0
 
 #### Maintenance
 
-* Minimum required Powershell version now 3.0
+* Minimum required Powershell version now 5.1 (Desktop)
 
 ## 2.0.0
 
