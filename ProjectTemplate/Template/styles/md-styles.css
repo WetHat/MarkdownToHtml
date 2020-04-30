@@ -43,7 +43,7 @@ code {
     color: darkmagenta;
 }
 
-.footer {
+footer {
     font-size: 10pt;
     color: slategray;
 }
@@ -51,7 +51,7 @@ code {
 /* Site Navigation */
 nav {
     border-width: 1px;
-    border-radius: 25px;
+    border-radius: 15px;
     border-style: solid;
     float: right;
     max-width: 20%;
