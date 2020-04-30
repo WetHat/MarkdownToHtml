@@ -27,6 +27,21 @@ Make sure to read the release notes on the
 [Releases](https://github.com/WetHat/MarkdownToHtml/releases)
 page or on the [module documentation](Documentation/MarkdownToHTML.md) page.
 
+# Quickstart
+
+For the impatient:
+
+1. Open a PowerShell command shell as _Administrator_ 
+2. Install or update the PowerShell Module `MarkdownToHTML`
+3. Open a another PowerShell command shell as _normal_ user.
+4. Type this:
+   ~~~ PowerShell
+   PS> New-StaticHTMLSiteProject -ProjectDirectory 'MyProject'
+   PS> cd 'MyProject'
+   PS> ./Build.ps1
+   ~~~
+5. Open `html/README.html` in the browser and enjoy the showcase section.
+
 ![Logo](Markdown2HTML.png)
 
 # See Also
