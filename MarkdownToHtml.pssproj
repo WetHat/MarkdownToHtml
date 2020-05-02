@@ -76,8 +76,8 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTMLFragment' ,'Convert-MarkdownToHTM
     <Content Include="Documentation\about_MarkdownToHTML.md" />
     <Content Include="Documentation\Convert-MarkdownToHTML.md" />
     <Content Include="Documentation\Convert-MarkdownToHTMLFragment.md" />
-    <Content Include="Documentation\ConvertTo-HeadingNavSpecs.md" />
     <Content Include="Documentation\ConvertTo-NavigationItem.md" />
+    <Content Include="Documentation\ConvertTo-PageHeadingNavigation.md" />
     <Content Include="Documentation\Find-MarkdownFiles.md" />
     <Content Include="Documentation\MarkdownToHTML.md" />
     <Content Include="Documentation\New-HTMLTemplate.md" />
