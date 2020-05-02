@@ -1,6 +1,7 @@
 ﻿# ConvertTo-NavigationItem
 
-Convert a navigation specification to a HTML fragment of hyperlinks.
+Convert a navigation specification to a HTML element representing a navigation
+link..
 
 # Syntax
 ```PowerShell
@@ -11,14 +12,15 @@ Convert a navigation specification to a HTML fragment of hyperlinks.
 # Description
 
 
-Creates HTML elements for a simple vertical navigation bar. Navigation
-content is specified by a flat list of link specification items each of which
-is converted into an HTML element representing:
-* a clickable link
-* a separator line
-* a label (without link)
+Converts a navigation specification to an HTML an element representing a single
+navigation line in a simple vertical navigation bar.
 
-The generated HTML elements are assigned to the class `navitem` to enable
+Following kinds of navigation links are supported:
+* navigatable links
+* separator lines
+* labels (without link)
+
+The generated HTML element is assigned to the class `navitem` to enable
 styling in `md-styles.css`.
 
 
@@ -66,7 +68,7 @@ and is expected to use forward slash '/' path separators.
 
 Parameter Property         | Value
 --------------------------:|:----------
-Required?                  | true
+Required?                  | false
 Position?                  | 2
 Default value              | ``
 Accept pipeline input?     | false
@@ -86,6 +88,15 @@ Objects or hashtables with one NoteProperty or key.
 HTML element representing one navigation item for use in a vertical navigation
 bar.
 
+# Notes
+
+<blockquote>
+
+This function is typically used in the build script `Build.ps1` to define
+the contents of the navigation bar (placeholder `{{nav}}`).
+
+</blockquote>
+
 # Examples
 
 <blockquote>
@@ -99,10 +110,12 @@ ConvertTo-NavigationItem @{'Project HOME'='https://github.com/WetHat/MarkdownToH
 
 
 Generates a web navigation link to be put on the page `intro/about.md`. Note
-the `RelativePath` is not needed for that link:
+the `RelativePath` is not needed for that link. OUtput:
 
 ~~~ html
-<button class='navitem'><a href="https://github.com/WetHat/MarkdownToHtml">Project HOME</a></button><br/>
+<button class='navitem'>
+    <a href="https://github.com/WetHat/MarkdownToHtml">Project HOME</a>
+</button><br/>
 ~~~
 
 
@@ -127,8 +140,12 @@ Generates a relative navigation link to be put on the page `into/about.md`. The
 link target is another page `index.md` on the same site, hence the link is
 adjusted accordingly.
 
+Output:
+
 ~~~ html
-<button class='navitem'><a href="../index.html">Index</a></button><br/>
+<button class='navitem'>
+    <a href="../index.html">Index</a>
+</button><br/>
 ~~~
 
 
@@ -149,7 +166,9 @@ ConvertTo-NavigationItem @{'---'=''} -RelativePath 'intro/about.md'
 ```
 
 
-Generates a separator line. Note that the `RelativePath` is not needed:
+Generates a separator line. Note that the `RelativePath` is not used.
+
+Output:
 
 ~~~ html
 <hr class="navitem" />
@@ -173,7 +192,9 @@ ConvertTo-NavigationItem @{'Introduction'=''} -RelativePath 'intro/about.md'
 ```
 
 
-Generates a label. Note that the `RelativePath` is not needed:
+Generates a label. Note that the `RelativePath` is not used.
+
+Output:
 
 ~~~ html
 <div class='navitem'>Introduction</div>
@@ -195,4 +216,4 @@ Generates a label. Note that the `RelativePath` is not needed:
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.1.1; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.2.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>

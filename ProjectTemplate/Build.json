@@ -13,7 +13,8 @@
         "definitionlists",
         "mathematics",
         "diagrams",
-        "pipetables"
+        "pipetables",
+        "autoidentifiers"
     ],
 
     "footer": "Template project Created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.",

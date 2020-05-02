@@ -119,4 +119,4 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.1.1; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.2.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>

@@ -13,7 +13,8 @@
         "common",
         "definitionlists",
         "diagrams",
-        "mathematics"
+        "mathematics",
+        "autoidentifiers"
     ],
 
     "footer": "Template project Created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.",

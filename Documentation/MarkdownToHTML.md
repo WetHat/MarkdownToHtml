@@ -1,4 +1,4 @@
-﻿# MarkdownToHtml 2.1.1
+﻿# MarkdownToHtml 2.2.0
 
 **Tags**: Markdown, HTML, Converter, Markdown, HTML, Converter
 
@@ -49,12 +49,21 @@ existing conversion projects.**
 * [Convert-MarkdownToHTML](Convert-MarkdownToHTML.md)
 * [Convert-MarkdownToHTMLFragment](Convert-MarkdownToHTMLFragment.md)
 * [ConvertTo-NavigationItem](ConvertTo-NavigationItem.md)
+* [ConvertTo-PageHeadingNavigation](ConvertTo-PageHeadingNavigation.md)
 * [Find-MarkdownFiles](Find-MarkdownFiles.md)
 * [New-HTMLTemplate](New-HTMLTemplate.md)
 * [New-StaticHTMLSiteProject](New-StaticHTMLSiteProject.md)
 * [Publish-StaticHtmlSite](Publish-StaticHtmlSite.md)
 
 # Release Notes
+
+## 2.2.0
+
+* Fixed issue with [`ConvertTo-NavigationItem`](ConvertTo-NavigationItem.md) not understanding hyperlinks
+  with `#` fragments.
+* Added `autoidentifiers` to the `Build.json` in the project template so that
+  headings get `id` attributes.
+* Added navigation items for headings on the current page to the navbar.
 
 ## 2.1.1
 
@@ -161,4 +170,4 @@ Initial Release
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.1.1; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.2.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>

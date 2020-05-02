@@ -83,11 +83,12 @@ Describe 'Convert-MarkdownToHTMLFragment' {
 Describe 'ConversionProjects' {
 	It 'Converts markdown file(s) from ''<Path>'' to HTML with a custom converter pipeline' `
 		-TestCases @(
-		   @{Path='markdown'; Config='ProjectConfigs/Build1.json';ReferencePath='html_cust';  ResultPath='TestDrive:/P1' ; Extensions = 'diagrams','mathematics' }
-		   @{Path='markdown'; Config='ProjectConfigs/Build2.json';ReferencePath='html_cust';  ResultPath='TestDrive:/P2' ; Extensions = 'diagrams','mathematics' }
+		   @{Path='markdown'; Config='ProjectConfigs/Build1.json';ReferencePath='html_p1';  ResultPath='TestDrive:/P1.1'}
+		   @{Path='markdown'; Config='ProjectConfigs/Build1.json';ReferencePath='html_p1';  ResultPath='TestDrive:/P1.2'}
+		   @{Path='markdown'; Config='ProjectConfigs/Build2.json';ReferencePath='html_p2';  ResultPath='TestDrive:/P2'}
 		) `
 		{
-			param($Path,$Config, $ReferencePath,$ResultPath, $Extensions, $Title)
+			param($Path,$Config, $ReferencePath,$ResultPath)
 
 			[string]$markdown = Join-Path $testdata -ChildPath $Path
 			$configPath = (Join-Path $testdata -ChildPath $Config)
@@ -140,3 +141,34 @@ Describe 'ConversionProjects' {
 		}
 }
 
+Describe 'ConvertTo-NavigationItem' {
+	It 'Converts links relative to root ''<Link>'' to navitems relative to page' `
+		-TestCases @(
+           @{Link='test.doc'; RelativePath='intro/page.md'; Result = '<button class=''navitem''><a href="../test.doc">Test</a></button><br/>'}
+           @{Link='#test'; RelativePath='intro/page.md'; Result = '<button class=''navitem''><a href="#test">Test</a></button><br/>'}
+		   @{Link='test.md'; RelativePath='intro/page.md'; Result = '<button class=''navitem''><a href="../test.html">Test</a></button><br/>'}
+           @{Link='test.md#test'; RelativePath='intro/page.md'; Result = '<button class=''navitem''><a href="../test.html#test">Test</a></button><br/>'}
+           @{Link='http://www.hp.com/test.md'; RelativePath='intro/page.md'; Result = '<button class=''navitem''><a href="http://www.hp.com/test.md">Test</a></button><br/>'}
+		) `
+		{
+			param($Link,$RelativePath, $Result)
+
+			@{'Test' = $Link} | ConvertTo-NavigationItem -RelativePath $RelativePath `
+			| Should -BeExactly $result
+		}
+}
+
+Describe 'ConvertTo-PageHeadingNavigation' {
+	It 'Converts heading ''<html>'' to page local navitem' `
+		-TestCases @(
+          @{html='<h1 id="bob">Test</h1>'; Result = '<button class=''navitem''><a href="#bob"><span class="navitem1">Test</span></a></button><br/>'}
+		  @{html='<h1 id="bob"><b>Test</b></h1>'; Result = '<button class=''navitem''><a href="#bob"><span class="navitem1"><b>Test</b></span></a></button><br/>'}
+		  @{html='<h1 id="bob"><b>Test</b>'; Result = '<button class=''navitem''><a href="#bob"><span class="navitem1"><b>Test</b></span></a></button><br/>'}
+		  @{html='<h1 id="bob"><a href="x.md">Test</a></h1>'; Result = '<button class=''navitem''><a href="#bob"><span class="navitem1">Test</span></a></button><br/>'}
+		) `
+		{
+			param($html, $Result)
+
+			ConvertTo-PageHeadingNavigation $html  | Should -BeExactly $result
+		}
+}

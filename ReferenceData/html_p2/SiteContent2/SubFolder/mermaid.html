@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Mermaid Diagramming Tool</title>
+    <link rel="stylesheet" type="text/css" href="../../styles/md-styles.css" />
+
+    <!-- Code syntax highlighting configuration -->
+    <!-- Comment this to deactivate syntax highlighting. -->
+    <link rel="stylesheet" type="text/css" href="../../styles/vs.css" />
+    <!-- Alternative highlighting styles -->
+    <!-- <link rel="stylesheet" type="text/css" href="../../styles/agate.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../../styles/far.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../../styles/tomorrow-night-blue.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../../vs2015.css" /> -->
+    <script src="../../js/highlight.pack.js"></script>
+    <script>
+        hljs.configure({ languages: [] });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <!-- -->
+    <!-- mermaid diagram generator configuration -->
+    <!-- Comment this to deactivate the diagramming extension ('diagrams'). -->
+    <script src="../../js/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true });</script>
+    <!-- -->
+    <!-- KaTeX LaTeX Math typesetting configuration -->
+    <!-- Comment this to deactivate the LaTeX math extension ('mathematics'). -->
+    <link rel="stylesheet" type="text/css" href="../../katex/katex.min.css" />
+    <script defer src="../../katex/katex.min.js"></script>
+    <script>
+        // <![CDATA[
+        window.onload = function () {
+            var tex = document.getElementsByClassName("math");
+            Array.prototype.forEach.call(tex, function (el) {
+                katex.render(el.textContent, el, {
+                    displayMode: (el.nodeName == "DIV"),
+                    macros: {
+                        "\\(": "",
+                        "\\)": "",
+                        "\\[": "",
+                        "\\]": ""
+                    }
+                })
+            });
+        };
+          // ]]>
+    </script>
+    <!-- -->
+</head>
+<body>
+    <nav><button class='navitem'><a href="https://github.com/WetHat/MarkdownToHtml">MarkdownToHtml</a></button><br/>
+<hr class="navitem" />
+<div class='navitem'>Test</div>
+<button class='navitem'><a href="../../Code.html">Top Code</a></button><br/>
+<button class='navitem'><a href="../../SiteContent2/SubFolder/mermaid.html">Mermaid</a></button><br/>
+<button class='navitem'><a href="#mermaid-diagramming-tool"><span class="navitem1">Mermaid Diagramming Tool</span></a></button><br/>
+<button class='navitem'><a href="#sequence-diagram"><span class="navitem2">Sequence Diagram</span></a></button><br/>
+<button class='navitem'><a href="#class-diagramm"><span class="navitem2">class Diagramm</span></a></button><br/>
+<button class='navitem'><a href="#state-diagram"><span class="navitem2">State Diagram</span></a></button><br/>
+<button class='navitem'><a href="#gantt-chart"><span class="navitem2">Gantt Chart</span></a></button><br/>
+<button class='navitem'><a href="#pie-chart"><span class="navitem2">Pie Chart</span></a></button><br/>
+</nav>
+    <main>
+        <article>
+            <h1 id="mermaid-diagramming-tool">Mermaid Diagramming Tool</h1>
+<p>Here comes chart</p>
+<div class="mermaid">graph TD;
+A-->B;
+A-->C;
+B-->D;
+C-->D;
+</div>
+<h2 id="sequence-diagram">Sequence Diagram</h2>
+<div class="mermaid">sequenceDiagram
+    Alice->>John: Hello John, how are you?
+    John-->>Alice: Great!
+</div>
+<h2 id="class-diagramm">class Diagramm</h2>
+<div class="mermaid">classDiagram
+      Animal &lt;|-- Duck
+      Animal &lt;|-- Fish
+      Animal &lt;|-- Zebra
+      Animal : +int age
+      Animal : +String gender
+      Animal: +isMammal()
+      Animal: +mate()
+      class Duck{
+          +String beakColor
+          +swim()
+          +quack()
+      }
+      class Fish{
+          -int sizeInFeet
+          -canEat()
+      }
+      class Zebra{
+          +bool is_wild
+          +run()
+      }
+</div>
+<h2 id="state-diagram">State Diagram</h2>
+<div class="mermaid">stateDiagram
+    [*] --> Still
+    Still --> [*]
+
+    Still --> Moving
+    Moving --> Still
+    Moving --> Crash
+    Crash --> [*]
+</div>
+<h2 id="gantt-chart">Gantt Chart</h2>
+<div class="mermaid">gantt
+    title A Gantt Diagram
+    dateFormat  YYYY-MM-DD
+    section Section
+    A task           :a1, 2014-01-01, 30d
+    Another task     :after a1  , 20d
+    section Another
+    Task in sec      :2014-01-12  , 12d
+    another task      : 24d
+</div>
+<h2 id="pie-chart">Pie Chart</h2>
+<div class="mermaid">pie title Pets adopted by volunteers
+    "Dogs" : 386
+    "Cats" : 85
+    "Rats" : 15 
+</div>
+
+        </article>
+        <footer>
+            <hr />
+            Template project Created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.
+        </footer>
+    </main>
+</body>
+</html>

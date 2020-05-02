@@ -35,73 +35,96 @@ The project directory created by this function has the following structure:
 '- Build.ps1       <- build script
 ~~~
 
-`html`
-:   The build output direcoty containing the static HTML site. This directory
-    is overwritten by every build.
+### The `html` Directory
+This build output directory contains the static HTML site. This directory
+is overwritten by every build.
 
-`markdown`
-:   Directory containing the authored Markdown content for this project.
-    Initially this contains the project's `README.md` file.
+### The `markdown` Directory
+Contains the Markdown content for this project. Initially only the project's
+`README.md` is there.
 
-`Template`
-:   The directory containing the HTML template and resources for the project.
-    See [`about_MarkdownToHTML`](about_MarkdownToHTML.md) section 'TEMPLATE CUSTOMIZATION' for more
-    information. The HTML template ([`md-template-html`](md-template-html.md)) containe in this
-    directory contains besides the two standard placeholders `{{title}}` and
-    `{{content}}` following additional placeholders:
+### The `Template` Directory
+Containings the HTML template file and resources for the project.
+Read [`about_MarkdownToHTML`](about_MarkdownToHTML.md) section 'TEMPLATE CUSTOMIZATION' for more
+information. The HTML template (`md-template.html`) in this
+directory contains, besides the two standard placeholders `{{title}}` and
+    `{{content}}`, following additional placeholders:
 
-    `{{nav}}`
-    :   Placehoder which is replaced by a HTML content fragment
-        providing a navigatation section on each page.
+`{{nav}}`
+:   Placehoder which is replaced by a HTML content fragment
+    providing a navigatation section on each page.
 
-    `{{footer}}`
-    :   Placeholder which is replaced by a HTML content fragment
-        representing the page footer.
+`{{footer}}`
+:   Placeholder which is replaced by a HTML content fragment
+    representing the page footer.
 
-`Build.json`
-:   The project configuration file in [JavaScript Object Notation](https://en.wikipedia.org/wiki/JSON)
-    format (JSON). Configurable items in this file are:
+### The `Build.json` Project Configuration File
+This file uses [JavaScript Object Notation](https://en.wikipedia.org/wiki/JSON)
+format (JSON). Configurable items in this file are:
 
-    `markdown_dir` (default: "markdown")
-    :   Relative path to the Markdown content directory.
-        Besides Markdown files, this directory also contains media file such as
-        images or videos used by Markdown files.
+`markdown_dir` (default: "markdown")
+:   Relative path to the Markdown content directory.
+    Besides Markdown files, this directory also contains media file such as
+    images or videos used by Markdown files.
 
-    `site_dir` (default: "html")
-    :   Relative path to the static HTML site. This directory holds the project
-        build result. The contens of this directory will be overwritten on every project
-        build.
+`site_dir` (default: "html")
+:   Relative path to the static HTML site. This directory holds the project
+    build result. The contens of this directory will be overwritten on every project
+    build.
 
-    `HTML_template` (default: "Template")
-    :   Location of the template resources (`*.css`, `*.js`, etc) needed to build
-        the HTML site.
+`HTML_template` (default: "Template")
+:   Location of the template resources (`*.css`, `*.js`, etc) needed to build
+    the HTML site.
 
-    `Exclude` (default: empty)
-    :   A list of file name pattern to exclude from the build process.
+`Exclude` (default: empty)
+:   A list of file name pattern to exclude from the build process.
 
-    `markdown_extensions` (default: "common","definitionlists")
-    :   A list of markdown extensions to enable for this project. For a list of
-        possible extension, refer to the documentation of the function
-       [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md).
+`markdown_extensions` (default: "common","definitionlists")
+:   A list of markdown extensions to enable for this project. For a list of
+    possible extensions, refer to the documentation of the function
+    [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md).
 
-    `footer`
-    :   Page footer text which gets substituted for the placeholder `{{footer}}` in
-        the HTML template `md-template.html`.
+`footer`
+:   Page footer text which gets substituted for the placeholder `{{footer}}` in
+    the HTML template `md-template.html`.
 
-    `site_navigation`
-    :   A list of links to be shown in each page's `<nav>` section.
-        The list will be substitutes for the placeholder `{{nav}}` in
-        the HTML template `md-template.html`. The syntax for navigation
-        links is:
-        * Links to local pages: `{ "<label>": "<relative path>" }`
-        * Links to web pages: `{ "<label>": "http(s)://...." }`
-        * Separator Labels: `{ "<label>": "" }`
-        * Separator Lines: `{ "---": "" }`
+`site_navigation`
+:   A list of links to be shown in each page's `<nav>` section.
+    The list will be substitutes for the placeholder `{{nav}}` in
+    the HTML template `md-template.html`. The syntax for navigation
+    links is:
 
-`Build.ps1`
-:   The project build script.
+    * Links to local pages: `{ "<label>": "<relative path>" }`
+    * Links to web pages: `{ "<label>": "http(s)://...." }`
+    * Separator Labels: `{ "<label>": "" }`
+    * Separator Lines: `{ "---": "" }`
 
-``
+    **Note**: If the extension `autoidentifiers` is configured (default), a
+    navigation section with links to the headings on the current page is
+    appended automatically to the navigation items configured in this file.
+
+### The Project Build Script `Build.ps1`
+The project build script implements the Markdown to HTML conversion time.
+
+If a new placeholder is to be used in the `md-template.html` the mapping of that
+placeholder must be defined in this file. By default following mappings are
+defined in the _Set-up the content mapping rules_ section:
+
+~~~ PowerShell
+# Set-up the content mapping rules
+$SCRIPT:contentMap = @{
+	# Add additional mappings here...
+	'{{footer}}' =  $config.Footer # Footer text from configuration
+	'{{nav}}'    = {
+		param($fragment)
+		# Create the navigation items configured in 'Build.json'
+		$config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath
+		# Create navigation items to headings on the local page
+        # This required the `autoidentifiers` extension.
+		ConvertTo-PageHeadingNavigation $fragment.HTMLFragment | ConvertTo-NavigationItem
+	}
+}
+~~~
 
 
 
@@ -176,4 +199,4 @@ project is ready for build.
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.1.1; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.2.0; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>

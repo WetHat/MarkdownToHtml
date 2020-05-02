@@ -16,7 +16,7 @@ Publish-PSModuleMarkdown -moduleName 'MarkdownToHTML' -Destination $doc</PreBuil
     <PostBuildScript>$env:PSModulePath+=[char]0x3b + 'C:\Program Files\WindowsPowerShell\Modules'
 import-module pester -MinimumVersion '4.0.0'
 import-module -name "$pwd"
-Invoke-Pester -TestName 'Convert-MarkdownToHTMLFragment' ,'Convert-MarkdownToHTML','ConversionProjects'
+Invoke-Pester -TestName 'Convert-MarkdownToHTMLFragment' ,'Convert-MarkdownToHTML','ConversionProjects','ConvertTo-NavigationItem','ConvertTo-PageHeadingNavigation'
 </PostBuildScript>
     <PackageEntryPoint>MarkdownToHtml.tests.ps1</PackageEntryPoint>
     <DotNetVersion>v4.7.2</DotNetVersion>
@@ -76,6 +76,7 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTMLFragment' ,'Convert-MarkdownToHTM
     <Content Include="Documentation\about_MarkdownToHTML.md" />
     <Content Include="Documentation\Convert-MarkdownToHTML.md" />
     <Content Include="Documentation\Convert-MarkdownToHTMLFragment.md" />
+    <Content Include="Documentation\ConvertTo-HeadingNavSpecs.md" />
     <Content Include="Documentation\ConvertTo-NavigationItem.md" />
     <Content Include="Documentation\Find-MarkdownFiles.md" />
     <Content Include="Documentation\MarkdownToHTML.md" />

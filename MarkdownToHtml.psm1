@@ -955,73 +955,97 @@ The project directory created by this function has the following structure:
 '- Build.ps1       <- build script
 ~~~
 
-`html`
-:   The build output direcoty containing the static HTML site. This directory
-    is overwritten by every build.
+### The `html` Directory
+This build output directory contains the static HTML site. This directory
+is overwritten by every build.
 
-`markdown`
-:   Directory containing the authored Markdown content for this project.
-    Initially this contains the project's `README.md` file.
+### The `markdown` Directory
+Contains the Markdown content for this project. Initially only the project's
+`README.md` is there.
 
-`Template`
-:   The directory containing the HTML template and resources for the project.
-    See `about_MarkdownToHTML` section 'TEMPLATE CUSTOMIZATION' for more
-    information. The HTML template (`md-template-html`) containe in this
-    directory contains besides the two standard placeholders `{{title}}` and
-    `{{content}}` following additional placeholders:
+### The `Template` Directory
+Containings the HTML template file and resources for the project.
+Read `about_MarkdownToHTML` section 'TEMPLATE CUSTOMIZATION' for more
+information. The HTML template (`md-template.html`) in this
+directory contains, besides the two standard placeholders `{{title}}` and
+    `{{content}}`, following additional placeholders:
 
-    `{{nav}}`
-    :   Placehoder which is replaced by a HTML content fragment
-        providing a navigatation section on each page.
+`{{nav}}`
+:   Placehoder which is replaced by a HTML content fragment
+    providing a navigatation section on each page.
 
-    `{{footer}}`
-    :   Placeholder which is replaced by a HTML content fragment
-        representing the page footer.
+`{{footer}}`
+:   Placeholder which is replaced by a HTML content fragment
+    representing the page footer.
 
-`Build.json`
-:   The project configuration file in [JavaScript Object Notation](https://en.wikipedia.org/wiki/JSON)
-    format (JSON). Configurable items in this file are:
+### The `Build.json` Project Configuration File
+This file uses [JavaScript Object Notation](https://en.wikipedia.org/wiki/JSON)
+format (JSON). Configurable items in this file are:
 
-    `markdown_dir` (default: "markdown")
-    :   Relative path to the Markdown content directory.
-        Besides Markdown files, this directory also contains media file such as
-        images or videos used by Markdown files.
+`markdown_dir` (default: "markdown")
+:   Relative path to the Markdown content directory.
+    Besides Markdown files, this directory also contains media file such as
+    images or videos used by Markdown files.
 
-    `site_dir` (default: "html")
-    :   Relative path to the static HTML site. This directory holds the project
-        build result. The contens of this directory will be overwritten on every project
-        build.
+`site_dir` (default: "html")
+:   Relative path to the static HTML site. This directory holds the project
+    build result. The contens of this directory will be overwritten on every project
+    build.
 
-    `HTML_template` (default: "Template")
-    :   Location of the template resources (`*.css`, `*.js`, etc) needed to build
-        the HTML site.
+`HTML_template` (default: "Template")
+:   Location of the template resources (`*.css`, `*.js`, etc) needed to build
+    the HTML site.
 
-    `Exclude` (default: empty)
-    :   A list of file name pattern to exclude from the build process.
+`Exclude` (default: empty)
+:   A list of file name pattern to exclude from the build process.
 
-    `markdown_extensions` (default: "common","definitionlists")
-    :   A list of markdown extensions to enable for this project. For a list of
-        possible extension, refer to the documentation of the function
-       `Convert-MarkdownToHTML`.
+`markdown_extensions` (default: "common","definitionlists")
+:   A list of markdown extensions to enable for this project. For a list of
+    possible extensions, refer to the documentation of the function
+    `Convert-MarkdownToHTMLFragment`.
 
-    `footer`
-    :   Page footer text which gets substituted for the placeholder `{{footer}}` in
-        the HTML template `md-template.html`.
+`footer`
+:   Page footer text which gets substituted for the placeholder `{{footer}}` in
+    the HTML template `md-template.html`.
 
-    `site_navigation`
-    :   A list of links to be shown in each page's `<nav>` section.
-        The list will be substitutes for the placeholder `{{nav}}` in
-        the HTML template `md-template.html`. The syntax for navigation
-        links is:
-        * Links to local pages: `{ "<label>": "<relative path>" }`
-        * Links to web pages: `{ "<label>": "http(s)://...." }`
-        * Separator Labels: `{ "<label>": "" }`
-        * Separator Lines: `{ "---": "" }`
+`site_navigation`
+:   A list of links to be shown in each page's `<nav>` section.
+    The list will be substitutes for the placeholder `{{nav}}` in
+    the HTML template `md-template.html`. The syntax for navigation
+    links is:
 
-`Build.ps1`
-:   The project build script.
+    * Links to local pages: `{ "<label>": "<relative path>" }`
+    * Links to web pages: `{ "<label>": "http(s)://...." }`
+    * Separator Labels: `{ "<label>": "" }`
+    * Separator Lines: `{ "---": "" }`
 
-``
+    **Note**: If the extension `autoidentifiers` is configured (default), a
+    navigation section with links to the headings on the current page is
+    appended automatically to the navigation items configured in this file.
+
+### The Project Build Script `Build.ps1`
+The project build script implements the Markdown to HTML conversion time.
+
+If a new placeholder is to be used in the `md-template.html` the mapping of that
+placeholder must be defined in this file. By default following mappings are
+defined in the _Set-up the content mapping rules_ section:
+
+~~~ PowerShell
+# Set-up the content mapping rules
+$SCRIPT:contentMap = @{
+	# Add additional mappings here...
+	'{{footer}}' =  $config.Footer # Footer text from configuration
+	'{{nav}}'    = {
+		param($fragment)
+		# Create the navigation items configured in 'Build.json'
+		$config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath
+		# Create navigation items to headings on the local page
+        # This required the `autoidentifiers` extension.
+		ConvertTo-PageHeadingNavigation $fragment.HTMLFragment | ConvertTo-NavigationItem
+	}
+}
+~~~
+
 .PARAMETER ProjectDirectory
 The location of the new Markdown to HTML site conversion project.
 
@@ -1076,17 +1100,19 @@ function New-StaticHTMLSiteProject {
 
 <#
 .SYNOPSIS
-Convert a navigation specification to a HTML fragment of hyperlinks.
+Convert a navigation specification to a HTML element representing a navigation
+link..
 
 .DESCRIPTION
-Creates HTML elements for a simple vertical navigation bar. Navigation
-content is specified by a flat list of link specification items each of which
-is converted into an HTML element representing:
-* a clickable link
-* a separator line
-* a label (without link)
+Converts a navigation specification to an HTML an element representing a single
+navigation line in a simple vertical navigation bar.
 
-The generated HTML elements are assigned to the class `navitem` to enable
+Following kinds of navigation links are supported:
+* navigatable links
+* separator lines
+* labels (without link)
+
+The generated HTML element is assigned to the class `navitem` to enable
 styling in `md-styles.css`.
 
 .PARAMETER RelativePath
@@ -1116,10 +1142,12 @@ bar.
 ConvertTo-NavigationItem @{'Project HOME'='https://github.com/WetHat/MarkdownToHtml'} -RelativePath 'into/about.md'
 
 Generates a web navigation link to be put on the page `intro/about.md`. Note
-the `RelativePath` is not needed for that link:
+the `RelativePath` is not needed for that link. OUtput:
 
 ~~~ html
-<button class='navitem'><a href="https://github.com/WetHat/MarkdownToHtml">Project HOME</a></button><br/>
+<button class='navitem'>
+    <a href="https://github.com/WetHat/MarkdownToHtml">Project HOME</a>
+</button><br/>
 ~~~
 
 .EXAMPLE
@@ -1129,14 +1157,20 @@ Generates a relative navigation link to be put on the page `into/about.md`. The
 link target is another page `index.md` on the same site, hence the link is
 adjusted accordingly.
 
+Output:
+
 ~~~ html
-<button class='navitem'><a href="../index.html">Index</a></button><br/>
+<button class='navitem'>
+    <a href="../index.html">Index</a>
+</button><br/>
 ~~~
 
 .EXAMPLE
 ConvertTo-NavigationItem @{'---'=''} -RelativePath 'intro/about.md'
 
-Generates a separator line. Note that the `RelativePath` is not needed:
+Generates a separator line. Note that the `RelativePath` is not used.
+
+Output:
 
 ~~~ html
 <hr class="navitem" />
@@ -1145,12 +1179,17 @@ Generates a separator line. Note that the `RelativePath` is not needed:
 .EXAMPLE
 ConvertTo-NavigationItem @{'Introduction'=''} -RelativePath 'intro/about.md'
 
-Generates a label. Note that the `RelativePath` is not needed:
+Generates a label. Note that the `RelativePath` is not used.
+
+Output:
 
 ~~~ html
 <div class='navitem'>Introduction</div>
 ~~~
 
+.NOTES
+This function is typically used in the build script `Build.ps1` to define
+the contents of the navigation bar (placeholder `{{nav}}`).
 #>
 function ConvertTo-NavigationItem {
     [OutputType([string])]
@@ -1159,9 +1198,8 @@ function ConvertTo-NavigationItem {
         [parameter(Mandatory=$true,ValueFromPipeline=$true)]
         [ValidateNotNull()]
         [object]$NavSpec,
-        [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-        [ValidateNotNull()]
-        [string]$RelativePath
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [string]$RelativePath = ''
     )
     PROCESS {
         # Determine the relative navigation path of this page to root
@@ -1183,10 +1221,101 @@ function ConvertTo-NavigationItem {
 		    }
 	    } else {
 		    if (!$link.StartsWith('http')){
-			    # rewrite the link so that it works from the current location
-			    $link = $up +  [System.IO.Path]::ChangeExtension($link,'html')
+			    # handle fragment on page
+
+                $hash = $link.IndexOf('#')
+
+                switch ($hash) {
+                    {$_ -eq 0 } { # '#target'
+                        $file = ''
+                        $fragment = $link
+                        Break
+                    }
+                    {$_ -ge 0} {
+                        $file = $link.Substring(0,$hash)
+                        $fragment = $link.Substring($hash)
+                        Break
+                    }
+                    default {
+                        $file = $link
+                        $fragment = ''
+                    }
+                }
+
+                # rewrite the link so that it works from the current location
+                $file = if ($file.EndsWith('.md') -or $file.EndsWith('.markdown')) {
+	                        $up + [System.IO.Path]::ChangeExtension($file,'html')
+                        } elseif (![string]::IsNullOrWhiteSpace($file)) {
+                            $up + $file
+                        }
+
+                # re-assemble the updated link
+                $link = $file + $fragment
 		    }
 		    Write-Output "<button class='navitem'><a href=`"$link`">$name</a></button><br/>"
 	    }
     }
+}
+
+# find headings on in an HTML fragment.
+$SCRIPT:hRE = New-Object regex '<h(\d)[^<>]* id="([^"])+"[^<]*>(.+?)\s*(?=</h\d.*|$)'
+# Match a hyperlink
+$aRE = New-Object regex '</{0,1} *a[^>]*>'
+
+<#
+.SYNOPSIS
+Generate navigation specifications for all headings found in an HTML fragment.
+
+.DESCRIPTION
+Retrieves all headings (`h1`.. `h6`) from a HTML fragment and generates a link
+specification for each heading that has an `id` attribute.
+
+The link specifications have a format suitable for conversion to HTML
+navigation code by `ConvertTo-NavigationItem`
+
+.PARAMETER HTMLfragment
+HTML text to be scanned for headings.
+
+.INPUTS
+None. This function does not read from a pipe.
+
+.OUTPUTS
+HTML elements representing navigation links to headings on the input HTML
+fragment for use in a vertical navigation bar.
+
+.EXAMPLE
+ConvertTo-PageHeadingNavigation '<h1 id="bob">Hello World</h1>' | ConvertTo-NavigationItem
+
+Create an HTML element for navigation for a heading. Output:
+
+~~~ HTML
+<button class='navitem'>
+   <a href="#bob"><span class="navitem1">Hello World</span></a>
+</button><br/>
+~~~
+
+.NOTES
+This function is typically used in the build script `Build.ps1` to define
+the contents of the navigation bar (placeholder `{{nav}}`).
+#>
+function ConvertTo-PageHeadingNavigation {
+    [OutputType([hashtable])]
+    [CmdletBinding()]
+    param(
+        [parameter(Mandatory=$true,ValueFromPipeline=$false)]
+        [ValidateNotNull()]
+        [string]$HTMLfragment
+    )
+    $HTMLfragment -split "`n" | ForEach-Object {
+        $m = $hRE.Match($_)
+        if ($m.Success -and $m.Groups.Count -eq 4) {
+            # found a heading with an id attribute
+            $level = $m.Groups[1].Captures.Value
+            $id = $m.Groups[2].Captures -join ''
+            $txt = $m.Groups[3].Captures -join ''
+            # strip hyperlinks in heading text
+            $txt = $aRE.Replace($txt,'')
+            @{"<span class=`"navitem$level`">$txt</span>" = "#$id"}
+        }
+    } | ConvertTo-NavigationItem
 }

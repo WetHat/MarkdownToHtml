@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.1.1'
+ModuleVersion = '2.2.0'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'
@@ -113,6 +113,7 @@ RequiredAssemblies = @('Markdig.dll')
 FunctionsToExport = @(
 	                   'Convert-MarkdownToHTML'
 	                   'Convert-MarkdownToHTMLFragment'
+                       'ConvertTo-PageHeadingNavigation'
                        'ConvertTo-NavigationItem'
 	                   'Find-MarkdownFiles'
                        'New-StaticHTMLSiteProject'
@@ -159,6 +160,14 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
+## 2.2.0
+
+* Fixed issue with `ConvertTo-NavigationItem` not understanding hyperlinks
+  with `#` fragments.
+* Added `autoidentifiers` to the `Build.json` in the project template so that
+  headings get `id` attributes.
+* Added navigation items for headings on the current page to the navbar.
+
 ## 2.1.1
 
 * Bugfix: Site assets not copied in build script

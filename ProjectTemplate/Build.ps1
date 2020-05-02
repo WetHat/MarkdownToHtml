@@ -14,7 +14,7 @@ if (!$config) {
 # Location of the static HTML site to build
 $SCRIPT:staticSite = Join-Path $projectDir $config.site_dir
 
-# Clean up the static HTML sote before build
+# Clean up the static HTML site before build
 Remove-Item $staticSite -Recurse -Force -ErrorAction:SilentlyContinue
 
 # Set-up the content mapping rules
@@ -23,7 +23,11 @@ $SCRIPT:contentMap = @{
 	'{{footer}}' =  $config.Footer # Footer text from configuration
 	'{{nav}}'    = {
 		param($fragment)
+		# Create the navigation items configured in 'Build.json'
 		$config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath
+		# Create navigation items to headings on the local page.
+		# This required the `autoidentifiers` extension.
+		ConvertTo-PageHeadingNavigation $fragment.HTMLFragment
 	}
 }
 
