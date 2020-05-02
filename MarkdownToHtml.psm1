@@ -548,8 +548,8 @@ function Convert-MarkdownToHTMLFragment
     )
     BEGIN {
         ## Determine which parser extensions to use
-        if ($IncludeExtension -eq $null -or $IncludeExtension.Count -eq 0) {
-            $extensions = @('common') # use _common_ extensions by default
+        if ($null -eq $IncludeExtension -or $IncludeExtension.Count -eq 0) {
+            $IncludeExtension = @('common') # use _common_ extensions by default
         } elseif ('advanced' -in $IncludeExtension) {
             if ($ExcludeExtension.Count -gt 0) {
                $IncludeExtension = $IncludeExtension | Where-Object { $_ -ne 'advanced'}
@@ -914,11 +914,11 @@ function New-HTMLTemplate {
     $outdir = Get-Item -LiteralPath $Destination -ErrorAction:SilentlyContinue
 
     # Create the site directory
-    if ($outdir -eq $null) {
+    if ($null -eq $outdir ) {
         $outdir = New-Item -Path $Destination -ItemType Directory -ErrorAction:SilentlyContinue
     }
 
-    if ($outdir -eq $null -or $outdir -isnot [System.IO.DirectoryInfo]) {
+    if ($null -eq $outdir -or $outdir -isnot [System.IO.DirectoryInfo]) {
         throw("Unable to create directory $Destination")
     }
     ## Copy the template to the output directory
@@ -1319,3 +1319,34 @@ function ConvertTo-PageHeadingNavigation {
         }
     } | ConvertTo-NavigationItem
 }
+# SIG # Begin signature block
+# MIIFXgYJKoZIhvcNAQcCoIIFTzCCBUsCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
+# gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUBunmLqINIWDuI0pdN8T4wEdd
+# /kegggL+MIIC+jCCAeKgAwIBAgIQNoznb2/qJL5Gdrs1aIgDTzANBgkqhkiG9w0B
+# AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMB4XDTIwMDUwMjE5MTIyNFoXDTIx
+# MDUwMjE5MzIyNFowFTETMBEGA1UEAwwKV2V0SGF0IExhYjCCASIwDQYJKoZIhvcN
+# AQEBBQADggEPADCCAQoCggEBAMUFrZLH0DojFbcls8EZHKlJOHj4J9uWvGh8bJUS
+# TG2dcRIO+XV7iyuhvJcP5x3dNhaVfvqYSqUVCtSYM9uJ2s0vf1vYd3gMeE/NP9GV
+# MOv/erYywqdd753OZBw8fFRJPLkOg1NTZQ9tUpnZW1EigbtgoYINCkb1o+qrqgOB
+# Mi8GmEyB6duo84IMwEWSol03guRs5LgqUZR8WlcD3kTJ8O9lViGkxbVGbcG8m4Un
+# FPTB9vJngzMBvIAxG3r45mX1qneunjKEbNYhHeUomGUAST+nqrqEpSoSuXZ4xVfY
+# taa0KxwLOwTmBOA0BrIG1DSamZ94dGEK7It660CklZJWHn0CAwEAAaNGMEQwDgYD
+# VR0PAQH/BAQDAgeAMBMGA1UdJQQMMAoGCCsGAQUFBwMDMB0GA1UdDgQWBBTUiG0H
+# Vp7vS2B0+FkyplZ4nTDquzANBgkqhkiG9w0BAQUFAAOCAQEAEuAOQnDzY57UPioW
+# hXx35Ol3UX2PeDIxG01LAf5gCnFp+h5o13+AF3Ck74MJN+Dxeu/c+kx5MDF+apUu
+# KL4wjtRIwWDB22Yf0dEvsRGut7axc6LJQMDmBqRfih/taKjqEPL2m3A+ZltU4i2F
+# dBhYkgyIiEOWToqWP22Zcj34kKM3QEreBCfBuEgL2EP0p9gqgBk8BtbH6Su/hGeL
+# esyFK4qX0N6jY0A1U/1psNa2D5ejTk4bZgqKZfQAZY5bBTgkfVf87sDthri3ZGTW
+# G9Fa4OLY65sANnyFr5oS8ftqcddgN2YHRbrqf1BLBptseQuTcI2Fl5IBS6alVzuS
+# ExOWozGCAcowggHGAgEBMCkwFTETMBEGA1UEAwwKV2V0SGF0IExhYgIQNoznb2/q
+# JL5Gdrs1aIgDTzAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKA
+# ADAZBgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYK
+# KwYBBAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU9S6noIJhBXw2Puv23xx+4jTBN6cw
+# DQYJKoZIhvcNAQEBBQAEggEAIGh/jKcuEMPYRF1+H9ZkOJwLZKe7jkMyFAd0c00z
+# ssODNsGmNdFf86HNl36Suq+hdknfNXqK1qktiv0SPbH/waM9SoNdAlnrMdIVTgAI
+# B450IayK25tr9lMHOT+5758VFjhPMOzOm61aSR+JPWHGIS1+IfDWdlgHqeACO56/
+# sWKov6LBAulfHGn++CKr46jAV2eJdmgb84C1kwCopZFYJOcejrS2K/RIw0HKRMs1
+# +3zw1PrUjVcsrY8wcTh0/tpdKRPGrrYRbIHG6K6hptbHHfdl9QJXmmKiY3/En897
+# sRrKdCzN93a3EbYvADa+er5p6zqS+z/hlVsZZMFB/GaXXw==
+# SIG # End signature block
