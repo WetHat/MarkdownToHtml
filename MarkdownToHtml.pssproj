@@ -8,21 +8,25 @@
     <AssemblyName>MyApplication</AssemblyName>
     <Name>MarkdownToHtml</Name>
     <ProjectHome />
-    <PreBuildScript>import-module "$pwd/../MarkdownCodeDocs"
+    <PreBuildScript>import-module MarkdownCodeDocs
 import-module $pwd
 
 $doc = Join-Path $pwd.Path 'Documentation'
 Publish-PSModuleMarkdown -moduleName 'MarkdownToHTML' -Destination $doc</PreBuildScript>
     <PostBuildScript>$env:PSModulePath+=[char]0x3b + 'C:\Program Files\WindowsPowerShell\Modules'
-import-module pester -MinimumVersion '4.0.0'
+import-module pester
 import-module -name "$pwd"
+
 Invoke-Pester -TestName 'Convert-MarkdownToHTMLFragment' ,'Convert-MarkdownToHTML','ConversionProjects','ConvertTo-NavigationItem','ConvertTo-PageHeadingNavigation'
-</PostBuildScript>
+
+Import-Module -Name WetHatLab
+Protect-whPoshModule $pwd</PostBuildScript>
     <PackageEntryPoint>MarkdownToHtml.tests.ps1</PackageEntryPoint>
     <DotNetVersion>v4.7.2</DotNetVersion>
     <PackageType>Console</PackageType>
-    <DebugArguments>
-    </DebugArguments>
+    <DebugArguments>'ConvertTo-PageHeadingNavigation'</DebugArguments>
+    <StartupFile>
+    </StartupFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,6 +70,7 @@ Invoke-Pester -TestName 'Convert-MarkdownToHTMLFragment' ,'Convert-MarkdownToHTM
     <Folder Include="TestData\ProjectConfigs\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Debug.ps1" />
     <Compile Include="MarkdownToHtml.psd1" />
     <Compile Include="MarkdownToHtml.psm1" />
     <Compile Include="MarkdownToHtml.tests.ps1" />
