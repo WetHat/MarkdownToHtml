@@ -29,7 +29,18 @@ page or on the [module documentation](Documentation/MarkdownToHTML.md) page.
 
 # Quickstart
 
-For the impatient:
+**For the very impatient:**
+
+1. Open a PowerShell command shell as _Administrator_ 
+2. Install or update the PowerShell Module `MarkdownToHTML`
+3. Open a another PowerShell command shell as _normal_ user.
+4. Type this:
+   ~~~ PowerShell
+   PS> Convert-MarkdownToHTML -Path '<directory with markdown files>' -SiteDirectory '<html site directory>' -IncludeExtension 'advanced'
+   ~~~
+5. Browse to `<html site directory>` and open some html files in browser. 
+
+**For the impatient:**
 
 1. Open a PowerShell command shell as _Administrator_ 
 2. Install or update the PowerShell Module `MarkdownToHTML`
