@@ -67,8 +67,6 @@ page or on the [module documentation](Documentation/MarkdownToHTML.md) page.
 * [PowerShellGet](https://docs.microsoft.com/en-us/powershell/module/powershellget/?view=powershell-5.1#powershellget) -
   a package manager for Windows PowerShell.
 
-# Contributors
-
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
