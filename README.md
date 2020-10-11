@@ -1,6 +1,7 @@
 [![GitHub release](https://img.shields.io/github/release/WetHat/MarkdownToHtml)](https://GitHub.com/WetHat/MarkdownToHtml/releases/)
 [![Github all releases](https://img.shields.io/github/downloads/WetHat/MarkdownToHTML/total.svg)](https://GitHub.com/WetHat/MarkdownToHtml/releases/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/WetHat/MarkdownToHtml/graphs/commit-activity)
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 # MarkdownToHtml
 Highly configurable markdown to HTML conversion using customizable templates.
 
@@ -63,3 +64,4 @@ page or on the [module documentation](Documentation/MarkdownToHTML.md) page.
 * [PowerShellGet](https://docs.microsoft.com/en-us/powershell/module/powershellget/?view=powershell-5.1#powershellget) -
   a package manager for Windows PowerShell.
 
+# Contributors
