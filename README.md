@@ -1,9 +1,7 @@
 [![GitHub release](https://img.shields.io/github/release/WetHat/MarkdownToHtml)](https://GitHub.com/WetHat/MarkdownToHtml/releases/)
 [![Github all releases](https://img.shields.io/github/downloads/WetHat/MarkdownToHTML/total.svg)](https://GitHub.com/WetHat/MarkdownToHtml/releases/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/WetHat/MarkdownToHtml/graphs/commit-activity)
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # MarkdownToHtml
 Highly configurable markdown to HTML conversion using customizable templates.
