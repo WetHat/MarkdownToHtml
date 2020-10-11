@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "roose",
+      "name": "roose",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/277651?v=4",
+      "profile": "http://roose.kz",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "MarkdownToHtml",
+  "projectOwner": "WetHat",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
