@@ -20,9 +20,15 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
 
-    - name: Super-Linter
-      uses: github/super-linter@v2.1.0
+    - name: Lint codebase
+      uses: github/super-linter@v3
       env:
           VALIDATE_JavaScript: false
+          DEFAULT_BRANCH: master
+          FILTER_REGEX_INCLUDE: .*ps.* 
