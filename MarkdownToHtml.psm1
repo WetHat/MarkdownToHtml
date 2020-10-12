@@ -1084,17 +1084,17 @@ function New-StaticHTMLSiteProject {
     $diritem = New-Item -Path $ProjectDirectory -ItemType Directory
 
     # Copy project template to new directory
-    Write-Host "Copying project files ..." -ForegroundColor Yellow
+    Write-Information "Copying project files ..." -InformationAction Continue
     Copy-Item -Path "$moduleDir/ProjectTemplate/*" -Destination $diritem -Recurse
         # copy the standard assets too
     Copy-Item -Path "$moduleDir/Template.assets/*" `
               -Destination "$diritem/Template" `
               -Recurse -ErrorAction:SilentlyContinue
 
-    Write-Host
-    Write-Host "Project '$($diritem.Name)' ready!" -ForegroundColor Yellow
-    Write-Host "1. Run the build script '$ProjectDirectory/Build.ps1'" -ForegroundColor Yellow
-    Write-Host "2. Open '$ProjectDirectory/html/README.html' in the browser!" -ForegroundColor Yellow
+    Write-Information '' -InformationAction Continue
+    Write-Information "Project '$($diritem.Name)' ready!" -InformationAction Continue
+    Write-Information "1. Run the build script '$ProjectDirectory/Build.ps1'" -InformationAction Continue
+    Write-Information "2. Open '$ProjectDirectory/html/README.html' in the browser!" -InformationAction Continue
     $diritem
 }
 
@@ -1322,8 +1322,8 @@ function ConvertTo-PageHeadingNavigation {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUBunmLqINIWDuI0pdN8T4wEdd
-# /kegggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUdZh0kcaDgMG6vptcMObtsUDg
+# 9vCgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1342,11 +1342,11 @@ function ConvertTo-PageHeadingNavigation {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBT1LqeggmEFfDY+6/bfHH7iNME3
-# pzANBgkqhkiG9w0BAQEFAASCAQB3LqgB4szVaFIcYb3qREiBAFpfQV2ZMs3gE2TT
-# tfB6GgKqfXI21tPnBQ2OJ5pqQRmCiiOooZTqnuzvN/BbdHZUbUY71gUQrm8SyQct
-# kRjnTAOp0NyP7oxROeaLvn7N21zGBHwiyaScHa3cheThzKMxk+4arxDU/7FJkHnE
-# ochydgc44j1PH09Vy3hfZ4T/zmiydZecGQyCKFKfxJtWdjsw3AXAAqpYdH2KEG7p
-# kzIusUXKicS7C6Kokl1JCyppIJovXNNDqAXgcUrGeJqDAY8+jmeoD90YN+/wUI0B
-# 6csdkGVjeWqeSTfFVQsVG2rtwMRfpGMijFvZvwbfF/CmFZdI
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRLOcGeHtSkcLjoYGLjf204x/gC
+# rDANBgkqhkiG9w0BAQEFAASCAQApLQZdNCap+iAY/roZaeKn1rRnubAL5L1xGKIf
+# 72VJY89Z++0axBbbeWiQbIDr7TcSpy+pssOdD+VVRX6Yt4yUSTo6NrRvorLkwr71
+# 5o1kES5O3nUhSid3HQjOTGN1t2N3PIXzzygObxG/66LLxzSghFfFDQ8ciiEqAgTx
+# 7UOxvHFFPYiuTcW1lt3uEugb8/6lTJvzRHf5rcGlFpYEQFwobTc1oVP5Qb1wQ22A
+# TPPGg2FMBl/IpA1An1M1m9HFkLOqfdqXRNvk07MSYT64WB+8aWfyYCuO54rcLyBK
+# P68sv4MPS2O4g+zQ1aDmxH3tYUoGbKdbKv0Sorp7k34MHsHv
 # SIG # End signature block
