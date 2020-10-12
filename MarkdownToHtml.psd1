@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.2.1'
+ModuleVersion = '2.2.2'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'
@@ -138,6 +138,8 @@ FileList = @(
 	          'MarkdownToHtml.psm1'
 	          'Markdig.dll'
               'System.Memory.dll'
+              'System.Runtime.CompilerServices.Unsafe.dll'
+              'System.Numerics.Vectors.dll'
             )
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess
@@ -161,6 +163,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
+## 2.2.2
+
+*  added referenced .net assemblies which may not be guaranteed to be present
+
 ## 2.2.1
 
 * Katex Updated to version 0.12.0
