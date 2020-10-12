@@ -7,7 +7,7 @@
 [System.IO.DirectoryInfo]$SCRIPT:moduleDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 [System.IO.DirectoryInfo]$SCRIPT:testdata = Join-Path $SCRIPT:moduleDir -ChildPath 'TestData'
 [System.IO.DirectoryInfo]$SCRIPT:refdata  = Join-Path $SCRIPT:moduleDir -ChildPath 'ReferenceData'
-[System.IO.DirectoryInfo]$SCRIPT:template
+[System.IO.DirectoryInfo]$SCRIPT:template = $null
 
 Describe 'Convert-MarkdownToHTML' {
 	It 'Converts markdown file(s) from ''<Path>'' to HTML' `
@@ -40,11 +40,11 @@ Describe 'Convert-MarkdownToHTML' {
 		   Get-Content -LiteralPath $ResultPath -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
 	   }
 	BeforeAll {
-		$template = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
-		New-HTMLTemplate -Destination  $template
+		$SCRIPT:template = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
+		New-HTMLTemplate -Destination  $SCRIPT:template
 	}
     AfterAll {
-        Remove-Item $template -Recurse
+        Remove-Item $SCRIPT:template -Recurse
     }
 }
 
@@ -94,7 +94,8 @@ Describe 'ConversionProjects' {
 			$configPath = (Join-Path $testdata -ChildPath $Config)
             $config  = Get-Content $configPath -Encoding UTF8 | ConvertFrom-Json
 
-		    #$ResultPath = $ResultPath -replace 'TestDrive:/','e:/temp/ttt/'
+			# Debug
+		    # $ResultPath = $ResultPath -replace 'TestDrive:/','e:/temp/ttt/'
 
             # Create a new Project
             New-StaticHTMLSiteProject -ProjectDirectory $ResultPath
@@ -134,7 +135,7 @@ Describe 'ConversionProjects' {
                 $target = Join-Path $html $relpath
                 $target | Should -Exist
 
-                # conpare contents
+                # compare contents
                 $refFileContents = Get-Content -LiteralPath $_ -Encoding UTF8 | Out-String
 			    Get-Content -LiteralPath $target -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
             }
