@@ -59,6 +59,8 @@ existing conversion projects.**
 
 ## 2.2.1
 
+* Katex Updated to version 0.12.0
+* Mermaid updated to version 8.8.2
 * Markdig updated to version 0.22.0
 * Code signed With long term self signed certificate
 
