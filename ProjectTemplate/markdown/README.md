@@ -18,7 +18,7 @@ To author the HTML site following do this:
 1. Create Markdown files (`*.md`) in the `markdown` directory of the project.
    All resources linked to by Markdown content such as images or videos should
    also added be to this directory. Make sure to use only **relative** links to 
-   to other markdown or media files.
+   other markdown or media files.
 2. Build the site by executing the build script `Build.ps1`.
 3. Locate the site's home page in the `html` directory and open it in the
    browser 
