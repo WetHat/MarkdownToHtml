@@ -31,4 +31,4 @@ jobs:
       env:
           VALIDATE_JavaScript: false
           DEFAULT_BRANCH: master
-          FILTER_REGEX_INCLUDE: *.ps* 
+          FILTER_REGEX_INCLUDE: .*ps.* 
