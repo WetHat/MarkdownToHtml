@@ -9,22 +9,27 @@
     <Name>MarkdownToHtml</Name>
     <ProjectHome />
     <PreBuildScript>import-module MarkdownCodeDocs
-import-module $pwd
+import-module -name $pwd
 
 $doc = Join-Path $pwd.Path 'Documentation'
 Publish-PSModuleMarkdown -moduleName 'MarkdownToHTML' -Destination $doc</PreBuildScript>
-    <PostBuildScript>$env:PSModulePath+=[char]0x3b + 'C:\Program Files\WindowsPowerShell\Modules'
+    <PostBuildScript>$pathBak = $env:PSModulePath
+$env:PSModulePath+=[char]0x3b + 'C:\Program Files\WindowsPowerShell\Modules' 
+$env:PSModulePath = "$pwd/.." + [char]0x3b + $env:PSModulePath 
 import-module pester
-import-module -name "$pwd"
+import-module MarkDownToHTML -force
 
-Invoke-Pester -TestName 'Convert-MarkdownToHTMLFragment' ,'Convert-MarkdownToHTML','ConversionProjects','ConvertTo-NavigationItem','ConvertTo-PageHeadingNavigation'
+Invoke-Pester -Path './MarkdownToHtml.tests.ps1' -EnableExit
 
-Import-Module -Name WetHatLab
-Protect-whPoshModule $pwd</PostBuildScript>
+$env:PSModulePath = $pathBak
+
+import-module 'WetHatLab'
+Protect-whPoshModule $pwd -Store Root
+</PostBuildScript>
     <PackageEntryPoint>MarkdownToHtml.tests.ps1</PackageEntryPoint>
     <DotNetVersion>v4.7.2</DotNetVersion>
     <PackageType>Console</PackageType>
-    <DebugArguments>'ConvertTo-PageHeadingNavigation'</DebugArguments>
+    <DebugArguments>'ConversionProjects'</DebugArguments>
     <StartupFile>
     </StartupFile>
   </PropertyGroup>
