@@ -1151,6 +1151,18 @@ the `RelativePath` is not needed for that link. OUtput:
 ~~~
 
 .EXAMPLE
+ConvertTo-NavigationItem @{'Project HOME'='https://github.com/WetHat/MarkdownToHtml'} -RelativePath 'into/about.md' -TagHTML 'li' -ClassCss 'li-item' -TagBR $false
+
+Generates a web navigation link to be put on the page `intro/about.md` with specific Tag HTML and class css, 
+include o not Tag BR. Note the `RelativePath` is not needed for that link. OUtput:
+
+~~~ html
+<li class='li-item'>
+    <a href="https://github.com/WetHat/MarkdownToHtml">Project HOME</a>
+</li>
+~~~
+
+.EXAMPLE
 ConvertTo-NavigationItem @{'Index'='index.md'} -RelativePath 'intro/about.md'
 
 Generates a relative navigation link to be put on the page `into/about.md`. The
@@ -1166,6 +1178,21 @@ Output:
 ~~~
 
 .EXAMPLE
+ConvertTo-NavigationItem @{'Index'='index.md'} -RelativePath 'intro/about.md' -TagHTML 'li' -ClassCss 'li-item' -TagBR $false
+
+Generates a relative navigation link to be put on the page `into/about.md`. The
+link target is another page `index.md` on the same site, hence the link is
+adjusted accordingly.
+
+Output:
+
+~~~ html
+<li class='li-item'>
+    <a href="../index.html">Index</a>
+</li>
+~~~
+
+.EXAMPLE
 ConvertTo-NavigationItem @{'---'=''} -RelativePath 'intro/about.md'
 
 Generates a separator line. Note that the `RelativePath` is not used.
@@ -1177,6 +1204,17 @@ Output:
 ~~~
 
 .EXAMPLE
+ConvertTo-NavigationItem @{'---'=''} -RelativePath 'intro/about.md' -TagHTML 'li' -ClassCss 'li-item' -TagBR $false
+
+Generates a separator line. Note that the `RelativePath`, `TagHTML` and `TagBR` is not used.
+
+Output:
+
+~~~ html
+<hr class="li-item" />
+~~~
+
+.EXAMPLE
 ConvertTo-NavigationItem @{'Introduction'=''} -RelativePath 'intro/about.md'
 
 Generates a label. Note that the `RelativePath` is not used.
@@ -1185,6 +1223,17 @@ Output:
 
 ~~~ html
 <div class='navitem'>Introduction</div>
+~~~
+
+.EXAMPLE
+ConvertTo-NavigationItem @{'Introduction'=''} -RelativePath 'intro/about.md' -TagHTML 'li' -ClassCss 'li-item' -TagBR $false
+
+Generates a label. Note that the `RelativePath`, `TagHTML` and `TagBR` is not used.
+
+Output:
+
+~~~ html
+<div class='li-item'>Introduction</div>
 ~~~
 
 .NOTES
@@ -1199,7 +1248,13 @@ function ConvertTo-NavigationItem {
         [ValidateNotNull()]
         [object]$NavSpec,
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-        [string]$RelativePath = ''
+        [string]$RelativePath = '',
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [string]$TagHTML = 'button',
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [string]$ClassCss = 'navitem',
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [int32]$TagBR = 1
     )
     PROCESS {
         # Determine the relative navigation path of this page to root
@@ -1215,9 +1270,9 @@ function ConvertTo-NavigationItem {
 	    $link = $NavSpec.$name
 	    if ([string]::IsNullOrWhiteSpace($link)) {
 		    if ($name.StartsWith('---')) {
-			    Write-Output '<hr class="navitem" />' # separator
+			    Write-Output "<hr class='$($ClassCss)' />" # separator
 		    } else {
-			    Write-Output "<div class='navitem'>$name</div>" # label
+			    Write-Output "<div class='$($ClassCss)'>$($name)</div>" # label
 		    }
 	    } else {
 		    if (!$link.StartsWith('http')){
@@ -1252,13 +1307,28 @@ function ConvertTo-NavigationItem {
                 # re-assemble the updated link
                 $link = $file + $fragment
 		    }
-		    Write-Output "<button class='navitem'><a href=`"$link`">$name</a></button><br/>"
+		    if ($Null -eq $ClassCss -or $ClassCss -eq "") {
+                if ($TagBR) {
+                    Write-Output "<$TagHTML><a href=`"$link`">$name</a></$TagHTML><br/>"
+                }
+                else {
+                    Write-Output "<$TagHTML><a href=`"$link`">$name</a></$TagHTML>"
+                }
+            }
+            else {
+                if ($TagBR) {
+                    Write-Output "<$TagHTML class='$ClassCss'><a href=`"$link`">$name</a></$TagHTML><br/>"
+                }
+                else {
+                    Write-Output "<$TagHTML class='$ClassCss'><a href=`"$link`">$name</a></$TagHTML>"
+                }
+            }
 	    }
     }
 }
 
-# find headings on in an HTML fragment.
-$SCRIPT:hRE = New-Object regex '<h(\d)[^<>]* id="([^"])+"[^<]*>(.+?)\s*(?=</h\d.*|$)'
+# find headings h2 .. h6 on in an HTML fragment.
+$SCRIPT:hRE = New-Object regex '<h([2-6])[^<>]* id="([^"])+"[^<]*>(.+?)\s*(?=<\/h.*|$)'
 # Match a hyperlink
 $aRE = New-Object regex '</{0,1} *a[^>]*>'
 
@@ -1267,7 +1337,7 @@ $aRE = New-Object regex '</{0,1} *a[^>]*>'
 Generate navigation specifications for all headings found in an HTML fragment.
 
 .DESCRIPTION
-Retrieves all headings (`h1`.. `h6`) from a HTML fragment and generates a link
+Retrieves all headings (`h2`.. `h6`, exclude `h1`) from a HTML fragment and generates a link
 specification for each heading that has an `id` attribute.
 
 The link specifications have a format suitable for conversion to HTML
@@ -1284,7 +1354,7 @@ HTML elements representing navigation links to headings on the input HTML
 fragment for use in a vertical navigation bar.
 
 .EXAMPLE
-ConvertTo-PageHeadingNavigation '<h1 id="bob">Hello World</h1>' | ConvertTo-NavigationItem
+ConvertTo-PageHeadingNavigation '<h2 id="bob">Hello World</h2>' | ConvertTo-NavigationItem
 
 Create an HTML element for navigation for a heading. Output:
 
@@ -1292,6 +1362,18 @@ Create an HTML element for navigation for a heading. Output:
 <button class='navitem'>
    <a href="#bob"><span class="navitem1">Hello World</span></a>
 </button><br/>
+~~~
+
+.EXAMPLE
+ConvertTo-PageHeadingNavigation '<h2 id="bob">Hello World</h2>' -TagHTML 'li' -ClassCss 'li-item' -TagBR $false
+
+Create an HTML element for navigation for a heading with specific Tag HTML and class css, 
+include o not Tag BR. Output:
+
+~~~ HTML
+<li class='li-item'>
+    <a href="#bob"><span class="li-item2">Hello World</span></a>
+</li>
 ~~~
 
 .NOTES
@@ -1304,7 +1386,13 @@ function ConvertTo-PageHeadingNavigation {
     param(
         [parameter(Mandatory=$true,ValueFromPipeline=$false)]
         [ValidateNotNull()]
-        [string]$HTMLfragment
+        [string]$HTMLfragment,
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [string]$TagHTML = 'button',
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [string]$ClassCss = 'navitem',
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [int32]$TagBR = 1
     )
     $HTMLfragment -split "`n" | ForEach-Object {
         $m = $hRE.Match($_)
@@ -1315,9 +1403,9 @@ function ConvertTo-PageHeadingNavigation {
             $txt = $m.Groups[3].Captures -join ''
             # strip hyperlinks in heading text
             $txt = $aRE.Replace($txt,'')
-            @{"<span class=`"navitem$level`">$txt</span>" = "#$id"}
+            @{"<span class=`"$($ClassCss)$($level)`">$($txt)</span>" = "#$($id)"}
         }
-    } | ConvertTo-NavigationItem
+    } | ConvertTo-NavigationItem -TagHTML $TagHTML -ClassCss $ClassCss -TagBR $TagBR
 }
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
