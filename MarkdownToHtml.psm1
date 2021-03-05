@@ -1328,7 +1328,7 @@ function ConvertTo-NavigationItem {
 }
 
 # find headings h2 .. h6 on in an HTML fragment.
-$SCRIPT:hRE = New-Object regex '<h([2-6])[^<>]* id="([^"])+"[^<]*>(.+?)\s*(?=<\/h.*|$)'
+$SCRIPT:hRE = New-Object regex '<h([2-6])[^<>]* id="([^"])+"[^<]*>(.+?)\s*(?=<\/h\d.*|$)'
 # Match a hyperlink
 $aRE = New-Object regex '</{0,1} *a[^>]*>'
 
