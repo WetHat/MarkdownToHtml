@@ -101,6 +101,8 @@ existing conversion projects.**
     ...
     ~~~
 
+* `Markdig` update to version 0.24
+
 ## 2.2.2
 
 *  added referenced .net assemblies which may not be guaranteed to be present
