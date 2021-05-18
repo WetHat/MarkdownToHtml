@@ -17,17 +17,20 @@ $SCRIPT:staticSite = Join-Path $projectDir $config.site_dir
 # Clean up the static HTML site before build
 Remove-Item $staticSite -Recurse -Force -ErrorAction:SilentlyContinue
 
-# Set-up the content mapping rules
+# Set-up the content mapping rules for replacing the templace placeholders
 $SCRIPT:contentMap = @{
 	# Add additional mappings here...
 	'{{footer}}' =  $config.Footer # Footer text from configuration
 	'{{nav}}'    = {
-		param($fragment)
+		param($fragment) # the html fragment created from a markdown file
+		$navcfg = $config.navigation_bar # navigation bar configuration
 		# Create the navigation items configured in 'Build.json'
-		$config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath
+		$config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
+		                                                   -NavTemplate $navcfg.templates
 		# Create navigation items to headings on the local page.
-		# This required the `autoidentifiers` extension.
-		ConvertTo-PageHeadingNavigation $fragment.HTMLFragment
+		# This requires the `autoidentifiers` extension to be enabled.
+		ConvertTo-PageHeadingNavigation $fragment.HTMLFragment -NavTemplate $navcfg.templates `
+		                                                       -HeadingLevels $navcfg.capture_page_headings
 	}
 }
 

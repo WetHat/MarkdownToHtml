@@ -19,8 +19,18 @@
 
     "footer": "Template project Created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.",
 
+    "navigation_bar": {
+        "capture_page_headings": "123456",
+        "templates": {
+            "navitem": "<button class='navitem'><a href='{{navurl}}'>{{navtext}}</a></button>",
+            "navlabel": "<div class='navitem'>{{navtext}}</div>",
+            "navseparator": "<hr class='navitem'/>",
+            "navheading": "<span class='navitem{{level}}'>{{navtext}}</span>"
+      }
+    },
+
     "site_navigation": [
-        { "Home": "README.md" },
-        { "---": "" }
+      { "Home": "README.md" },
+      { "---": "" }
     ]
-}
+  }

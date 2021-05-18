@@ -1023,6 +1023,35 @@ format (JSON). Configurable items in this file are:
     navigation section with links to the headings on the current page is
     appended automatically to the navigation items configured in this file.
 
+`navigation_bar`
+:  HTML fragment templates and options for the page navigation bar.
+
+  * `capture_page_headings` A string of heading levels (1-6) to indicate which
+    page headings are added to the navigation bar. If no headings should
+    be added at all, use the empty string `""`.
+
+  * `templates`: a set of HTML fragments specifying the navigation structure.
+    The templates can contain placeholders which will be replaced by content
+    when the project is built.
+
+    The individual templates and the supported placeholders are:
+    * `navitem`: template to represent a navigation link in the navivation bar.
+      Supported content placeholders in this template are:
+      * `{{navurl}}` - a relative or absolute hyperlink
+      * `{{navtext}}` - the link text.
+
+    * `navlabel`: A (non-navigable) label in the navigation bar.
+      Supported content placeholders in this template are:
+      * `{{navtext}}` - the label text.
+
+    * `navseparator`: A seperator between sections of the navigation bar. This
+      template does not support any placeholders.
+
+    * `navheading`: A template for navigation links to page headings.
+      Supported content placeholders in this template are:
+      * `{{level}}` - the heading level (a number between 1 and 6).
+      * `{{navtext}}` - the heading text.
+
 ### The Project Build Script `Build.ps1`
 The project build script implements the Markdown to HTML conversion time.
 
@@ -1036,12 +1065,15 @@ $SCRIPT:contentMap = @{
 	# Add additional mappings here...
 	'{{footer}}' =  $config.Footer # Footer text from configuration
 	'{{nav}}'    = {
-		param($fragment)
+		param($fragment) # the html fragment created from a markdown file
+		$navcfg = $config.navigation_bar # navigation bar configuration
 		# Create the navigation items configured in 'Build.json'
-		$config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath
-		# Create navigation items to headings on the local page
-        # This required the `autoidentifiers` extension.
-		ConvertTo-PageHeadingNavigation $fragment.HTMLFragment | ConvertTo-NavigationItem
+		$config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
+		                                                   -NavTemplate $navcfg.template
+		# Create navigation items to headings on the local page.
+		# This requires the `autoidentifiers` extension to be enabled.
+		ConvertTo-PageHeadingNavigation $fragment.HTMLFragment -NavTemplate $navcfg.template `
+		                                                       -HeadingLevels $navcfg.capture_page_headings
 	}
 }
 ~~~
@@ -1098,6 +1130,14 @@ function New-StaticHTMLSiteProject {
     $diritem
 }
 
+# Default template specifications for page navigation
+$SCRIPT:defaultNavTemplate = @{
+     navitem      = '<button class="navitem"><a href="{{navurl}}">{{navtext}}</a></button>';
+     navlabel     = '<div class="navitem">{{navtext}}</div>';
+     navseparator = '<hr class="navitem"/>';
+     navheading   = '<span class="navitem{{level}}">{{navtext}}</span>'
+}
+
 <#
 .SYNOPSIS
 Convert a navigation specification to a HTML element representing a navigation
@@ -1131,6 +1171,33 @@ item has special meaning. If the name is the '---', a horizontal separator line
 is generated. If it is just plain text (or a HTML fragment), a label without
 clickable link is generated.
 
+.PARAMETER NavTemplate
+A table of template html fragments with placeholders for:
+
+* the hyperlink: placeholder `{{navurl}}`. The default template is:
+* the link text: placeholder `{{navtext}}`
+
+These templates can also be configured in `Build.json`. See `New-StaticHTMLSiteProject` for more
+details.
+
+The default templates are:
+
+~~~ html
+<!-- navitem - Navigation link item template -->
+<button class="navitem">
+  <a href="{{navurl}}">{{navtext}}</a>
+</button>
+
+<!-- navlabel - Navigation panel section label -->
+<div class="navitem">{{navtext}}</div>
+
+<!-- navseparator - Navigation panel section separator -->
+<hr class="navitem"/>
+
+<!-- navheading - auto-generated links to page headings -->
+<span class="navitem{{level}}">{{navtext}}</span>
+~~~
+
 .INPUTS
 Objects or hashtables with one NoteProperty or key.
 
@@ -1139,55 +1206,53 @@ HTML element representing one navigation item for use in a vertical navigation
 bar.
 
 .EXAMPLE
-ConvertTo-NavigationItem @{'Project HOME'='https://github.com/WetHat/MarkdownToHtml'} -RelativePath 'into/about.md'
+ConvertTo-NavigationItem @{'Project HOME'='https://github.com/WetHat/MarkdownToHtml'} -RelativePath 'intro/about.md'
 
-Generates a web navigation link to be put on the page `intro/about.md`. Note
-the `RelativePath` is not needed for that link. OUtput:
+Generates a web navigation link to be put on the page `intro/about.md`.
+Note:
+the parameter `RelativePath` is specified but not used because the link is
+non-local.
+
+Output:
 
 ~~~ html
 <button class='navitem'>
     <a href="https://github.com/WetHat/MarkdownToHtml">Project HOME</a>
 </button><br/>
-~~~
-
-.EXAMPLE
-ConvertTo-NavigationItem @{'Project HOME'='https://github.com/WetHat/MarkdownToHtml'} -RelativePath 'into/about.md' -TagHTML 'li' -ClassCss 'li-item' -TagBR $false
-
-Generates a web navigation link to be put on the page `intro/about.md` with specific Tag HTML and class css, 
-include o not Tag BR. Note the `RelativePath` is not needed for that link. OUtput:
-
-~~~ html
-<li class='li-item'>
-    <a href="https://github.com/WetHat/MarkdownToHtml">Project HOME</a>
-</li>
 ~~~
 
 .EXAMPLE
 ConvertTo-NavigationItem @{'Index'='index.md'} -RelativePath 'intro/about.md'
 
-Generates a relative navigation link to be put on the page `into/about.md`. The
-link target is another page `index.md` on the same site, hence the link is
+Generates a navigation link relative to `intro/about.md`. The
+link target `index.md` is a page at the root of the same site, hence the link is
 adjusted accordingly.
 
 Output:
 
 ~~~ html
-<button class='navitem'>
+<button class="navitem">
     <a href="../index.html">Index</a>
-</button><br/>
+</button>
 ~~~
 
 .EXAMPLE
-ConvertTo-NavigationItem @{'Index'='index.md'} -RelativePath 'intro/about.md' -TagHTML 'li' -ClassCss 'li-item' -TagBR $false
+ConvertTo-NavigationItem @{'Index'='index.md'} -RelativePath 'intro/about.md' -NavTemplate $custom
 
-Generates a relative navigation link to be put on the page `into/about.md`. The
-link target is another page `index.md` on the same site, hence the link is
+Generates a navigation link relative to `intro/about.md`.
+A custom template definition `$custom` is used:
+
+~~~ PowerShell
+    $custom = @{ navitem = '<li class="li-item"><a href="{{navurl}}">{{navtext}}</a></li>'}
+~~~
+
+The link target `index.md` is a page at the root of the same site, hence the link is
 adjusted accordingly.
 
 Output:
 
 ~~~ html
-<li class='li-item'>
+<li class="li-item">
     <a href="../index.html">Index</a>
 </li>
 ~~~
@@ -1195,7 +1260,7 @@ Output:
 .EXAMPLE
 ConvertTo-NavigationItem @{'---'=''} -RelativePath 'intro/about.md'
 
-Generates a separator line. Note that the `RelativePath` is not used.
+Generates a separator line in the navigation bar.
 
 Output:
 
@@ -1204,9 +1269,13 @@ Output:
 ~~~
 
 .EXAMPLE
-ConvertTo-NavigationItem @{'---'=''} -RelativePath 'intro/about.md' -TagHTML 'li' -ClassCss 'li-item' -TagBR $false
+ConvertTo-NavigationItem @{'---'=''} -NavTemplate $custom
 
-Generates a separator line. Note that the `RelativePath`, `TagHTML` and `TagBR` is not used.
+Generates a separator line in the navigation bar using a custom template `$custom`:
+
+~~~ PowerShell
+    $custom = @{ navseparator = '<hr class="li-item" />'}
+~~~
 
 Output:
 
@@ -1215,9 +1284,9 @@ Output:
 ~~~
 
 .EXAMPLE
-ConvertTo-NavigationItem @{'Introduction'=''} -RelativePath 'intro/about.md'
+ConvertTo-NavigationItem @{'Introduction'=''}
 
-Generates a label. Note that the `RelativePath` is not used.
+Generates a label in the navigation bar.
 
 Output:
 
@@ -1226,9 +1295,13 @@ Output:
 ~~~
 
 .EXAMPLE
-ConvertTo-NavigationItem @{'Introduction'=''} -RelativePath 'intro/about.md' -TagHTML 'li' -ClassCss 'li-item' -TagBR $false
+ConvertTo-NavigationItem @{'Introduction'=''} -NavTemplate $custom
 
-Generates a label. Note that the `RelativePath`, `TagHTML` and `TagBR` is not used.
+Generates a label in the navigation bar using the custom template `$custom`:
+
+~~~ PowerShell
+    $custom = @{ navlabel = '<div class='li-item'>Introduction</div>'}
+~~~
 
 Output:
 
@@ -1239,6 +1312,12 @@ Output:
 .NOTES
 This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
+
+.LINK
+`New-StaticHTMLSiteProject`
+
+.LINK
+`ConvertTo-PageHeadingNavigation`
 #>
 function ConvertTo-NavigationItem {
     [OutputType([string])]
@@ -1250,11 +1329,7 @@ function ConvertTo-NavigationItem {
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
         [string]$RelativePath = '',
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-        [string]$TagHTML = 'button',
-        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-        [string]$ClassCss = 'navitem',
-        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-        [int32]$TagBR = 1
+        [object]$NavTemplate = $defaultNavTemplate
     )
     PROCESS {
         # Determine the relative navigation path of this page to root
@@ -1270,9 +1345,17 @@ function ConvertTo-NavigationItem {
 	    $link = $NavSpec.$name
 	    if ([string]::IsNullOrWhiteSpace($link)) {
 		    if ($name.StartsWith('---')) {
-			    Write-Output "<hr class='$($ClassCss)' />" # separator
+                [string]$navseparator = $NavTemplate.navseparator
+                if (!$navseparator) {
+                    $navseparator = $SCRIPT:defaultNavTemplate.navseparator
+                }
+			    Write-Output $navseparator # separator
 		    } else {
-			    Write-Output "<div class='$($ClassCss)'>$($name)</div>" # label
+                [string]$navlabel = $NavTemplate.navlabel
+                if (!$navlabel) {
+                    $navlabel = $SCRIPT:defaultNavTemplate.navlabel
+                }
+                Write-Output $navlabel.Replace('{{navtext}}',$name) # label
 		    }
 	    } else {
 		    if (!$link.StartsWith('http')){
@@ -1307,28 +1390,19 @@ function ConvertTo-NavigationItem {
                 # re-assemble the updated link
                 $link = $file + $fragment
 		    }
-		    if ($Null -eq $ClassCss -or $ClassCss -eq "") {
-                if ($TagBR) {
-                    Write-Output "<$TagHTML><a href=`"$link`">$name</a></$TagHTML><br/>"
-                }
-                else {
-                    Write-Output "<$TagHTML><a href=`"$link`">$name</a></$TagHTML>"
-                }
+
+            [string]$navitem = $NavTemplate.navitem
+            if (!$navitem) {
+                $navitem = $SCRIPT:defaultNavTemplate.navitem
             }
-            else {
-                if ($TagBR) {
-                    Write-Output "<$TagHTML class='$ClassCss'><a href=`"$link`">$name</a></$TagHTML><br/>"
-                }
-                else {
-                    Write-Output "<$TagHTML class='$ClassCss'><a href=`"$link`">$name</a></$TagHTML>"
-                }
-            }
+            Write-Output $navitem.Replace('{{navurl}}',$link).Replace('{{navtext}}',$name)
 	    }
     }
 }
 
-# find headings h2 .. h6 on in an HTML fragment.
-$SCRIPT:hRE = New-Object regex '<h([2-6])[^<>]* id="([^"])+"[^<]*>(.+?)\s*(?=<\/h\d.*|$)'
+# find headings h1 .. h6 in an HTML fragment.
+$SCRIPT:hRE   = New-Object regex '<h(\d)[^<>]* id="([^"])+"[^<]*>(.+?)\s*(?=<\/h\d.*|$)'
+
 # Match a hyperlink
 $aRE = New-Object regex '</{0,1} *a[^>]*>'
 
@@ -1337,7 +1411,7 @@ $aRE = New-Object regex '</{0,1} *a[^>]*>'
 Generate navigation specifications for all headings found in an HTML fragment.
 
 .DESCRIPTION
-Retrieves all headings (`h2`.. `h6`, exclude `h1`) from a HTML fragment and generates a link
+Retrieves all headings (`h1`.. `h6`) from a HTML fragment and generates a link
 specification for each heading that has an `id` attribute.
 
 The link specifications have a format suitable for conversion to HTML
@@ -1345,6 +1419,27 @@ navigation code by `ConvertTo-NavigationItem`
 
 .PARAMETER HTMLfragment
 HTML text to be scanned for headings.
+
+.PARAMETER NavTemplate
+A table of template html fragments with placeholders for:
+* the heading text: placeholder `{{navtext}}`
+* the heading level: placeholder `{{level}}`
+
+The default template for page headings is:
+
+~~~ html
+<!-- navheading - auto-generated links to page headings -->
+<span class="navitem{{level}}">{{navtext}}</span>
+~~~
+
+This template can also be configured in `Build.json`. See `New-StaticHTMLSiteProject` for more
+details.
+
+.PARAMETER HeadingLevels
+A string of numbers denoting the levels of the headings to add to the navigation
+bar. By default the headings at level 1,2 and 3 are added to the Navigation bar.
+If headings should not be automatically added to the navigation bar, use the
+empty string `''` for this parameter.
 
 .INPUTS
 None. This function does not read from a pipe.
@@ -1354,31 +1449,49 @@ HTML elements representing navigation links to headings on the input HTML
 fragment for use in a vertical navigation bar.
 
 .EXAMPLE
-ConvertTo-PageHeadingNavigation '<h2 id="bob">Hello World</h2>' | ConvertTo-NavigationItem
+ConvertTo-PageHeadingNavigation '<h2 id="bob">Hello World</h2>' -HeadingLevels '123'| ConvertTo-NavigationItem
 
-Create an HTML element for navigation for a heading. Output:
+Create an HTML element for navigation to page headings `<h1>`, `<h2>`, '<h3>'.
+All other headings are ignored.
+
+Output:
 
 ~~~ HTML
-<button class='navitem'>
-   <a href="#bob"><span class="navitem1">Hello World</span></a>
-</button><br/>
+<button class="navitem">
+   <a href="#bob"><span class="navitem2">Hello World</span></a>
+</button>
 ~~~
+
+Note that the heading level has been added to the css class.
 
 .EXAMPLE
-ConvertTo-PageHeadingNavigation '<h2 id="bob">Hello World</h2>' -TagHTML 'li' -ClassCss 'li-item' -TagBR $false
+ConvertTo-PageHeadingNavigation '<h2 id="bob">Hello World</h2>' -NavTemplate $custom | ConvertTo-NavigationItem
 
-Create an HTML element for navigation for a heading with specific Tag HTML and class css, 
-include o not Tag BR. Output:
+Create an HTML element for navigation to an heading using the custom template `$custom`.
+
+~~~ PowerShell
+    $custom = @{ navheading = '<span class="li-item{{level}}">{{navtext}}</span>'}
+~~~
+
+Output:
 
 ~~~ HTML
-<li class='li-item'>
+<button class="navitem">
     <a href="#bob"><span class="li-item2">Hello World</span></a>
-</li>
+</button>
 ~~~
+
+Note that the heading level is used as a postfix for the css class.
 
 .NOTES
 This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
+
+.LINK
+`New-StaticHTMLSiteProject`
+
+.LINK
+`ConvertTo-NavigationItem`
 #>
 function ConvertTo-PageHeadingNavigation {
     [OutputType([hashtable])]
@@ -1388,53 +1501,27 @@ function ConvertTo-PageHeadingNavigation {
         [ValidateNotNull()]
         [string]$HTMLfragment,
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-        [string]$TagHTML = 'button',
-        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-        [string]$ClassCss = 'navitem',
-        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-        [int32]$TagBR = 1
+        [object]$NavTemplate = $SCRIPT:defaultNavTemplate,
+        [ValidateNotNull()]
+        [string]$HeadingLevels = "123" # capture levels 1 .. 3 by default
     )
     $HTMLfragment -split "`n" | ForEach-Object {
         $m = $hRE.Match($_)
         if ($m.Success -and $m.Groups.Count -eq 4) {
-            # found a heading with an id attribute
+            # found an heading with an id attribute
             $level = $m.Groups[1].Captures.Value
-            $id = $m.Groups[2].Captures -join ''
-            $txt = $m.Groups[3].Captures -join ''
-            # strip hyperlinks in heading text
-            $txt = $aRE.Replace($txt,'')
-            @{"<span class=`"$($ClassCss)$($level)`">$($txt)</span>" = "#$($id)"}
+            if ($headingLevels.Contains($level)) {
+                # this level is enabled
+                $id = $m.Groups[2].Captures -join ''
+                $txt = $m.Groups[3].Captures -join ''
+                # strip hyperlinks in heading text
+                $txt = $aRE.Replace($txt,'')
+                [string]$navheading = $NavTemplate.navheading
+                if (!$navheading) {
+                    $navheading = $SCRIPT:defaultNavTemplate.navheading
+                }
+                @{ $navheading.Replace('{{level}}',$level).Replace('{{navtext}}',$txt) = "#$($id)"}
+            }
         }
-    } | ConvertTo-NavigationItem -TagHTML $TagHTML -ClassCss $ClassCss -TagBR $TagBR
+    } | ConvertTo-NavigationItem -NavTemplate $NavTemplate
 }
-# SIG # Begin signature block
-# MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
-# gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUdZh0kcaDgMG6vptcMObtsUDg
-# 9vCgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
-# AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
-# NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
-# 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
-# yi34ZctnpyFUz+Cv547+MvzAr0uRuLkxn6ArBkVLeHVAB58jenSeLwDFls5gS0I+
-# pRJWO9eyyT64EcUSCMlfMLW2q1hzjfFckFR6iFnGp3TkE0s1kQANUNjAR9axC6ju
-# 4dpilIupCHW+/0s9aGz7LYuRQGcy3uIL9TURKdBtOsMOBeclUsEoFSEp/0D30E8r
-# PNk/VLu57G5H9n3HuX/DSBR2CL8LzOOv981hiS+SCds/pHqjCX9Qj+j47Kv7xZ1i
-# ha2fg4AEHDGbL/WJGnTpUKath+EmgmFRlsP7PgnZr4anvGdcdQIDAQABo0YwRDAO
-# BgNVHQ8BAf8EBAMCB4AwEwYDVR0lBAwwCgYIKwYBBQUHAwMwHQYDVR0OBBYEFKtE
-# 8xMwn4kGbe8AzXY0ineK5ToHMA0GCSqGSIb3DQEBBQUAA4IBAQAgaUJkHD9192H7
-# OUhf9W3gR0ZkApD5fnPqsIgS91JFQ2fCnonudJinwbODs01yA55uUw4GJUnAKQOx
-# 6auVAC5KVzE2dMDbOrBOseoKj12EbzbF509FkVoT5O77NDpFrGErR1zmQ8fd1DXw
-# FAFC1x1vpxW7/F6g+xewpqlFKzjkPeEvLgyoUmKMCOnT0JdXS0BfyAyyIfHwvILo
-# 2eJWVG2UMioKOJ6vsttTu8mQgVZlfcoF6r81ee3hTEK24aHNR+frHmyrL9UplZxD
-# AuoUGVzYdDyOejlLPm+d+ew1d6dTf9QfurRxoKgI6OMOVI3iIIXd6HTiIW4ACwI9
-# iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
-# ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
-# AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRLOcGeHtSkcLjoYGLjf204x/gC
-# rDANBgkqhkiG9w0BAQEFAASCAQApLQZdNCap+iAY/roZaeKn1rRnubAL5L1xGKIf
-# 72VJY89Z++0axBbbeWiQbIDr7TcSpy+pssOdD+VVRX6Yt4yUSTo6NrRvorLkwr71
-# 5o1kES5O3nUhSid3HQjOTGN1t2N3PIXzzygObxG/66LLxzSghFfFDQ8ciiEqAgTx
-# 7UOxvHFFPYiuTcW1lt3uEugb8/6lTJvzRHf5rcGlFpYEQFwobTc1oVP5Qb1wQ22A
-# TPPGg2FMBl/IpA1An1M1m9HFkLOqfdqXRNvk07MSYT64WB+8aWfyYCuO54rcLyBK
-# P68sv4MPS2O4g+zQ1aDmxH3tYUoGbKdbKv0Sorp7k34MHsHv
-# SIG # End signature block
