@@ -74,12 +74,14 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="http://roose.kz"><img src="https://avatars3.githubusercontent.com/u/277651?v=4" width="100px;" alt=""/><br /><sub><b>roose</b></sub></a><br /><a href="https://github.com/WetHat/MarkdownToHtml/commits?author=roose" title="Code">💻</a></td>
+    <td align="center"><a href="http://roose.kz"><img src="https://avatars3.githubusercontent.com/u/277651?v=4?s=100" width="100px;" alt=""/><br /><sub><b>roose</b></sub></a><br /><a href="https://github.com/WetHat/MarkdownToHtml/commits?author=roose" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.capsule.cl"><img src="https://avatars.githubusercontent.com/u/25744265?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jose Luis Ilabaca</b></sub></a><br /><a href="https://github.com/WetHat/MarkdownToHtml/commits?author=jilabaca" title="Code">💻</a></td>
   </tr>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
