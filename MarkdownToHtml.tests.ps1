@@ -4,11 +4,6 @@
 # You can download Pester from http://go.microsoft.com/fwlink/?LinkID=534084
 #
 
-[System.IO.DirectoryInfo]$moduleDir = (Get-Location).Path
-[System.IO.DirectoryInfo]$testdata = Join-Path $moduleDir -ChildPath 'TestData'
-[System.IO.DirectoryInfo]$refdata  = Join-Path $moduleDir -ChildPath 'ReferenceData'
-[System.IO.DirectoryInfo]$template = $null
-
 Describe 'Convert-MarkdownToHTML' {
 	It 'Converts markdown file ''<Markdown>'' to ''<ResultPath>''' -ForEach @(
 		   @{Markdown='markdown/mermaid.md'; ReferencePath='html/mermaid.html'; ResultPath='TestDrive:/mermaid.html'; Extensions = 'diagrams'}
@@ -36,6 +31,10 @@ Describe 'Convert-MarkdownToHTML' {
 		   Get-Content -LiteralPath $ResultPath -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
 	   }
 	BeforeAll {
+		[System.IO.DirectoryInfo]$moduleDir = (Get-Location).Path
+		[System.IO.DirectoryInfo]$testdata = Join-Path $moduleDir -ChildPath 'TestData'
+		[System.IO.DirectoryInfo]$refdata  = Join-Path $moduleDir -ChildPath 'ReferenceData'
+		[System.IO.DirectoryInfo]$template = $null
 		$template = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
 		New-HTMLTemplate -Destination  $template
 	}
@@ -70,6 +69,11 @@ Describe 'Convert-MarkdownToHTMLFragment' {
 			$refFileContents = Get-Content -LiteralPath $refPath -Encoding UTF8 | Out-String
 			Get-Content -LiteralPath $ResultPath -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
 		}
+	BeforeAll {
+		[System.IO.DirectoryInfo]$moduleDir = (Get-Location).Path
+		[System.IO.DirectoryInfo]$testdata = Join-Path $moduleDir -ChildPath 'TestData'
+		[System.IO.DirectoryInfo]$refdata  = Join-Path $moduleDir -ChildPath 'ReferenceData'
+	}
 }
 
 Describe 'ConversionProjects' {
@@ -126,7 +130,7 @@ Describe 'ConversionProjects' {
 
                 # compare contents
                 $refFileContents = Get-Content -LiteralPath $_ -Encoding UTF8 | Out-String
-				Write-host "Comparing with $_" -ForegroundColor Cyan
+				Write-Verbose "Comparing with $_" -ForegroundColor Cyan
 			    Get-Content -LiteralPath $target -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
             }
 		}
