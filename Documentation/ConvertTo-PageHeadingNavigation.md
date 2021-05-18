@@ -7,7 +7,7 @@ Generate navigation specifications for all headings found in an HTML fragment.
 <blockquote>
 
 ```PowerShell
- ConvertTo-PageHeadingNavigation [-HTMLfragment] <String> [-TagHTML] <String> [-NavTemplate] <Hashtable> [-HeadingLevels] <String>  [<CommonParameters>] 
+ ConvertTo-PageHeadingNavigation [-HTMLfragment] <String> [-NavTemplate] <Object> [-HeadingLevels] <String>  [<CommonParameters>] 
 ```
 
 
@@ -48,24 +48,7 @@ Accept wildcard characters?| false
 </blockquote>
  
 
-## -TagHTML \<String\>
-
-<blockquote>
-
-
-
-Parameter Property         | Value
---------------------------:|:----------
-Required?                  | false
-Position?                  | 2
-Default value              | `button`
-Accept pipeline input?     | false
-Accept wildcard characters?| false
-
-</blockquote>
- 
-
-## -NavTemplate \<Hashtable\>
+## -NavTemplate \<Object\>
 
 <blockquote>
 
@@ -86,7 +69,7 @@ details.
 Parameter Property         | Value
 --------------------------:|:----------
 Required?                  | false
-Position?                  | 3
+Position?                  | 2
 Default value              | `$SCRIPT:defaultNavTemplate`
 Accept pipeline input?     | false
 Accept wildcard characters?| false
@@ -106,7 +89,7 @@ empty string `''` for this parameter.
 Parameter Property         | Value
 --------------------------:|:----------
 Required?                  | false
-Position?                  | 4
+Position?                  | 3
 Default value              | `123`
 Accept pipeline input?     | false
 Accept wildcard characters?| false

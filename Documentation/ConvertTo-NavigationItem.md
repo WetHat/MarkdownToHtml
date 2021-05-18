@@ -8,7 +8,7 @@ link..
 <blockquote>
 
 ```PowerShell
- ConvertTo-NavigationItem [-NavSpec] <Object> [-RelativePath] <String> [-NavTemplate] <Hashtable>  [<CommonParameters>] 
+ ConvertTo-NavigationItem [-NavSpec] <Object> [-RelativePath] <String> [-NavTemplate] <Object>  [<CommonParameters>] 
 ```
 
 
@@ -81,7 +81,7 @@ Accept wildcard characters?| false
 </blockquote>
  
 
-## -NavTemplate \<Hashtable\>
+## -NavTemplate \<Object\>
 
 <blockquote>
 

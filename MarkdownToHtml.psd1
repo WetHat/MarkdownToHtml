@@ -164,7 +164,48 @@ PrivateData = @{
         # ReleaseNotes of this module
         ReleaseNotes = @'
 ## 2.3.0
-        TODO
+
+* Page navigation bar made customizable. To take advantage of this feature
+  in existing projects following files need to be updated:
+  * `Build.ps1`: A `-NavTemplate` parameter needs to be added to the invokation of `ConvertTo-NavigationItem`.
+    A `-NavTemplate` and a `-HeadingLevels` parameter needs to be added to
+    the invokation of`ConvertTo-PageHeadingNavigation`.
+    For example:
+
+    ~~~ PowerShell
+    # Set-up the content mapping rules for replacing the templace placeholders
+    $SCRIPT:contentMap = @{
+	    # Add additional mappings here...
+	    '{{footer}}' =  $config.Footer # Footer text from configuration
+	    '{{nav}}'    = {
+		    param($fragment) # the html fragment created from a markdown file
+		    $navcfg = $config.navigation_bar # navigation bar configuration
+		    # Create the navigation items configured in 'Build.json'
+		    $config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
+		                                                       -NavTemplate $navcfg.templates
+		    # Create navigation items to headings on the local page.
+		    # This requires the `autoidentifiers` extension to be enabled.
+		    ConvertTo-PageHeadingNavigation $fragment.HTMLFragment -NavTemplate $navcfg.templates `
+		                                                           -HeadingLevels $navcfg.capture_page_headings
+	    }
+    }
+    ~~~
+
+  * `Build.json`: a navigation bar configuration section needs to be added:
+
+    ~~~ json
+    ...
+    "navigation_bar": {
+        "capture_page_headings": "123456",
+        "templates": {
+            "navitem": "<button class='navitem'><a href='{{navurl}}'>{{navtext}}</a></button>",
+            "navlabel": "<div class='navitem'>{{navtext}}</div>",
+            "navseparator": "<hr class='navitem'/>",
+            "navheading": "<span class='navitem{{level}}'>{{navtext}}</span>"
+      }
+    },
+    ...
+    ~~~
 
 ## 2.2.2
 
