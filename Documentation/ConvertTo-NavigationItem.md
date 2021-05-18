@@ -4,13 +4,19 @@ Convert a navigation specification to a HTML element representing a navigation
 link..
 
 # Syntax
+
+<blockquote>
+
 ```PowerShell
- ConvertTo-NavigationItem [-NavSpec] <Object> [-RelativePath] <String>  [<CommonParameters>] 
+ ConvertTo-NavigationItem [-NavSpec] <Object> [-RelativePath] <String> [-NavTemplate] <Hashtable>  [<CommonParameters>] 
 ```
 
 
+</blockquote>
+
 # Description
 
+<blockquote>
 
 Converts a navigation specification to an HTML an element representing a single
 navigation line in a simple vertical navigation bar.
@@ -23,9 +29,7 @@ Following kinds of navigation links are supported:
 The generated HTML element is assigned to the class `navitem` to enable
 styling in `md-styles.css`.
 
-
-
-
+</blockquote>
 
 # Parameters
 
@@ -75,18 +79,68 @@ Accept pipeline input?     | false
 Accept wildcard characters?| false
 
 </blockquote>
+ 
+
+## -NavTemplate \<Hashtable\>
+
+<blockquote>
+
+A table of template html fragments with placeholders for:
+
+* the hyperlink: placeholder `{{navurl}}`. The default template is:
+* the link text: placeholder `{{navtext}}`
+
+These templates can also be configured in `Build.json`. See `New-StaticHTMLSiteProject` for more
+details.
+
+The default templates are:
+
+~~~ html
+<!-- navitem - Navigation link item template -->
+<button class="navitem">
+  <a href="{{navurl}}">{{navtext}}</a>
+</button>
+
+<!-- navlabel - Navigation panel section label -->
+<div class="navitem">{{navtext}}</div>
+
+<!-- navseparator - Navigation panel section separator -->
+<hr class="navitem"/>
+
+<!-- navheading - auto-generated links to page headings -->
+<span class="navitem{{level}}">{{navtext}}</span>
+~~~
+
+Parameter Property         | Value
+--------------------------:|:----------
+Required?                  | false
+Position?                  | 3
+Default value              | `$defaultNavTemplate`
+Accept pipeline input?     | false
+Accept wildcard characters?| false
+
+</blockquote>
 
 
 </blockquote>
 
 
 # Inputs
+
+<blockquote>
+
 Objects or hashtables with one NoteProperty or key.
 
+</blockquote>
 
 # Outputs
+
+<blockquote>
+
 HTML element representing one navigation item for use in a vertical navigation
 bar.
+
+</blockquote>
 
 # Notes
 
@@ -105,115 +159,134 @@ the contents of the navigation bar (placeholder `{{nav}}`).
 ## EXAMPLE 1
 
 ```PowerShell
-ConvertTo-NavigationItem @{'Project HOME'='https://github.com/WetHat/MarkdownToHtml'} -RelativePath 'into/about.md'
+ConvertTo-NavigationItem @{'Project HOME'='https://github.com/WetHat/MarkdownToHtml'} -RelativePath 'intro/about.md'
 ```
 
+Generates a web navigation link to be put on the page `intro/about.md`.
+Note:
+the parameter `RelativePath` is specified but not used because the link is
+non-local.
 
-Generates a web navigation link to be put on the page `intro/about.md`. Note
-the `RelativePath` is not needed for that link. OUtput:
+Output:
 
 ~~~ html
 <button class='navitem'>
     <a href="https://github.com/WetHat/MarkdownToHtml">Project HOME</a>
 </button><br/>
-~~~
-
-
-
-
-
-
-
-
-
-
-
- 
+~~~ 
 ## EXAMPLE 2
 
 ```PowerShell
 ConvertTo-NavigationItem @{'Index'='index.md'} -RelativePath 'intro/about.md'
 ```
 
-
-Generates a relative navigation link to be put on the page `into/about.md`. The
-link target is another page `index.md` on the same site, hence the link is
+Generates a navigation link relative to `intro/about.md`. The
+link target `index.md` is a page at the root of the same site, hence the link is
 adjusted accordingly.
 
 Output:
 
 ~~~ html
-<button class='navitem'>
+<button class="navitem">
     <a href="../index.html">Index</a>
-</button><br/>
+</button>
+~~~ 
+## EXAMPLE 3
+
+```PowerShell
+ConvertTo-NavigationItem @{'Index'='index.md'} -RelativePath 'intro/about.md' -NavTemplate $custom
+```
+
+Generates a navigation link relative to `intro/about.md`.
+A custom template definition `$custom` is used:
+
+~~~ PowerShell
+    $custom = @{ navitem = '<li class="li-item"><a href="{{navurl}}">{{navtext}}</a></li>'}
 ~~~
 
+The link target `index.md` is a page at the root of the same site, hence the link is
+adjusted accordingly.
 
+Output:
 
-
-
-
-
-
-
-
-
- 
-## EXAMPLE 3
+~~~ html
+<li class="li-item">
+    <a href="../index.html">Index</a>
+</li>
+~~~ 
+## EXAMPLE 4
 
 ```PowerShell
 ConvertTo-NavigationItem @{'---'=''} -RelativePath 'intro/about.md'
 ```
 
-
-Generates a separator line. Note that the `RelativePath` is not used.
+Generates a separator line in the navigation bar.
 
 Output:
 
 ~~~ html
 <hr class="navitem" />
-~~~
-
-
-
-
-
-
-
-
-
-
-
- 
-## EXAMPLE 4
+~~~ 
+## EXAMPLE 5
 
 ```PowerShell
-ConvertTo-NavigationItem @{'Introduction'=''} -RelativePath 'intro/about.md'
+ConvertTo-NavigationItem @{'---'=''} -NavTemplate $custom
 ```
 
+Generates a separator line in the navigation bar using a custom template `$custom`:
 
-Generates a label. Note that the `RelativePath` is not used.
+~~~ PowerShell
+    $custom = @{ navseparator = '<hr class="li-item" />'}
+~~~
+
+Output:
+
+~~~ html
+<hr class="li-item" />
+~~~ 
+## EXAMPLE 6
+
+```PowerShell
+ConvertTo-NavigationItem @{'Introduction'=''}
+```
+
+Generates a label in the navigation bar.
 
 Output:
 
 ~~~ html
 <div class='navitem'>Introduction</div>
+~~~ 
+## EXAMPLE 7
+
+```PowerShell
+ConvertTo-NavigationItem @{'Introduction'=''} -NavTemplate $custom
+```
+
+Generates a label in the navigation bar using the custom template `$custom`:
+
+~~~ PowerShell
+    $custom = @{ navlabel = '<div class='li-item'>Introduction</div>'}
 ~~~
 
+Output:
+
+~~~ html
+<div class='li-item'>Introduction</div>
+~~~
+
+</blockquote>
+
+# Related Links
+
+<blockquote>
 
 
-
-
-
-
-
-
-
-
-
+* `New-StaticHTMLSiteProject` 
+* `ConvertTo-PageHeadingNavigation`
 
 </blockquote>
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.2.2; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.3.0; (c) 2018-2021 WetHat Lab. All rights reserved.</cite>

@@ -3,13 +3,19 @@
 Create a static HTML site from HTML fragment objects.
 
 # Syntax
+
+<blockquote>
+
 ```PowerShell
  Publish-StaticHtmlSite [-InputObject] <Object> [-Template] <String> [-ContentMap] <Hashtable> [-MediaDirectory] <String> [-SiteDirectory] <String>  [<CommonParameters>] 
 ```
 
 
+</blockquote>
+
 # Description
 
+<blockquote>
 
 Html fragment objects piped into this function (or passed via the `InputObject`
 parameter) are converted into HTML documents and saved to a static Html site
@@ -17,11 +23,9 @@ directory.
 
 The Markdown to Html document conversion uses a default or custom template with
 stylesheets and JavaScript resources to render Markdown extensions for LaTeX
-math, code syntax highlighting and diagrams (see [`New-HtmlTemplate`](New-HtmlTemplate.md)) for details).
+math, code syntax highlighting and diagrams (see `New-HtmlTemplate`) for details).
 
-
-
-
+</blockquote>
 
 # Parameters
 
@@ -34,16 +38,16 @@ math, code syntax highlighting and diagrams (see [`New-HtmlTemplate`](New-HtmlTe
 <blockquote>
 
 An object representing an Html fragment. Ideally this is an output object of
-[`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md), but any object will
+`Convert-MarkdownToHtmlFragment`, but any object will
 work provided following properties are present:
 
 `RelativePath`
 :   A string representing the relative path to the Markdown file with respect to
     a base (static site) directory.
     This property is automatically provided by:
-    * using the PowerShell function [`Find-MarkdownFiles`](Find-MarkdownFiles.md)
+    * using the PowerShell function `Find-MarkdownFiles`
     * piping a file object `[System.IO.FileInfo]` into
-      [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) (or passing it as a parameter).
+      `Convert-MarkdownToHtmlFragment` (or passing it as a parameter).
 
 `Title`
 :   The page title.
@@ -69,7 +73,7 @@ Accept wildcard characters?| false
 Optional directory containing the html template file `md-template.html` and its resources
 which will be used to convert the Html fragments into standalone Html documents.
 If no template directory is specified, a default factory-installed template is used.
-For infomations about creating custom templates see [`New-HTMLTemplate`](New-HTMLTemplate.md).
+For infomations about creating custom templates see `New-HTMLTemplate`.
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -100,7 +104,7 @@ are explicitely defined in the given map:
 | `[content]`   | For backwards compatibility. | `$inputObject.HtmlFragment` |
 
 The keys of this map represent the place holders verbatim, including the
-delimiters. E.g [`{{my-placeholder}}`]({{my-placeholder}}.md). The values in this map can be
+delimiters. E.g `{{my-placeholder}}`. The values in this map can be
 * one or more strings
 * a script block which takes **one** parameter to which the InputObject is bound.
   The script block should return one or more strings which define the
@@ -169,12 +173,21 @@ Accept wildcard characters?| false
 
 
 # Inputs
+
+<blockquote>
+
 An Html Fragment objects having the properties `RelativePath`,`Title`, `HtmlFragment` , and
 optionally `ContentMap`. See the description of the `InputObject` parameter for details
 
+</blockquote>
 
 # Outputs
+
+<blockquote>
+
 File objects [System.IO.FileInfo] of the generated HTML documents.
+
+</blockquote>
 
 # Examples
 
@@ -187,9 +200,8 @@ File objects [System.IO.FileInfo] of the generated HTML documents.
 Find-MarkdownFiles '...\Modules\MarkdownToHtml' | Convert-MarkdownToHtmlFragment | Publish-StaticHtmlSite -SiteDirectory 'e:\temp\site'
 ```
 
-
 Generates a static HTML site from the Markdown files in '...\Modules\MarkdownToHtml'. This is
-a simpler version of the functionality provided by the function [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md).
+a simpler version of the functionality provided by the function `Convert-MarkdownToHtml`.
 
 The generated Html file objects are returned like so:
 
@@ -201,28 +213,21 @@ The generated Html file objects are returned like so:
     -a----       15.09.2019     10:03           6068 MarkdownToHTML.html
     ...          ...            ...            ...
 
-
-
-
-
-
-
-
-
-
-
-
-
 </blockquote>
 
 # Related Links
 
+<blockquote>
+
+
 * [https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Publish-StaticHtmlSite.md](https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Publish-StaticHtmlSite.md) 
-* [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md) 
-* [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
-* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) 
-* [`New-HTMLTemplate`](New-HTMLTemplate.md)
+* [Convert-MarkdownToHtml](Convert-MarkdownToHtml.md) 
+* [Find-MarkdownFiles](Find-MarkdownFiles.md) 
+* [Convert-MarkdownToHtmlFragment](Convert-MarkdownToHtmlFragment.md) 
+* [New-HTMLTemplate](New-HTMLTemplate.md)
+
+</blockquote>
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.2.2; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.3.0; (c) 2018-2021 WetHat Lab. All rights reserved.</cite>

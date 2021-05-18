@@ -1,6 +1,6 @@
-﻿# MarkdownToHtml 2.2.2
+﻿# MarkdownToHtml 2.3.0
 
-**Tags**: Markdown, HTML, Converter, Markdown, HTML, Converter
+<cite><b>Tags</b>: Markdown, HTML, Converter, Markdown, HTML, Converter</cite>
 
 Highly configurable markdown to HTML conversion using customizable templates.
 
@@ -20,7 +20,7 @@ Highly configurable markdown to HTML conversion using customizable templates.
   - **Diagramming**: [Mermaid](http://mermaid-js.github.io/mermaid/); Generation
     of diagrams and flowcharts from text in a similar manner as Markdown.
 * Highly configurable static website projects with configuration file and build
-  script. See [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md).
+  script. See `New-StaticHTMLSiteProject`.
 * Sites can be used offline (without connection to the internet). All site
   assets are local.
 
@@ -32,7 +32,7 @@ To successfully create web sites from Markdown you should know:
 * Some knowledge about HTML and CSS (Cascading Stylesheets).
 * Some PowerShell knowledge
 
-See [`about_MarkdownToHTML`](about_MarkdownToHTML.md) for more information about configuration
+See `about_MarkdownToHTML` for more information about configuration
 and operation of this module.
 
 ### Incompatibilities
@@ -57,6 +57,9 @@ existing conversion projects.**
 
 # Release Notes
 
+## 2.3.0
+        TODO
+
 ## 2.2.2
 
 *  added referenced .net assemblies which may not be guaranteed to be present
@@ -70,7 +73,7 @@ existing conversion projects.**
 
 ## 2.2.0
 
-* Fixed issue with [`ConvertTo-NavigationItem`](ConvertTo-NavigationItem.md) not understanding hyperlinks
+* Fixed issue with `ConvertTo-NavigationItem` not understanding hyperlinks
   with `#` fragments.
 * Added `autoidentifiers` to the `Build.json` in the project template so that
   headings get `id` attributes.
@@ -84,11 +87,11 @@ existing conversion projects.**
 
 #### Enhancements
 
-* [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) now accepts definition of custom placeholder
+* `Publish-StaticHtmlSite` now accepts definition of custom placeholder
   mappins for expansion of `md-template.html`.
 * Default template placeholder delimiters changed to `{{` and `}}`.
-* Static HTML site projects added: See [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md).
-* Documentation made more [`Get-Help`](Get-Help.md) friendly.
+* Static HTML site projects added: See `New-StaticHTMLSiteProject`.
+* Documentation made more `Get-Help` friendly.
 * _Mermaid_ assets updated to version 8.5.0
 
 #### Maintenance
@@ -100,7 +103,7 @@ existing conversion projects.**
 The updated version of _Markdig_ incuded in this release introduces
 an incompatiblity in the _mathematics_ extension which breaks _KaTeX_ math rendering.
 
-See [`about_MarkdownToHTML`](about_MarkdownToHTML.md) for options to upgrade existing projects.
+See `about_MarkdownToHTML` for options to upgrade existing projects.
 To address this incompaibility the KaTex configuration in **all** deployed html templates
 
 #### New Features
@@ -127,7 +130,7 @@ To address this incompaibility the KaTex configuration in **all** deployed html 
 
 ## 1.2.8
 
-* [`Write-Host`](Write-Host.md) replaced by the more benign [`Write-Verbose`](Write-Verbose.md)
+* `Write-Host` replaced by the more benign `Write-Verbose`
 * Minor code cleanup
 
 ## 1.2.7
@@ -181,4 +184,4 @@ Initial Release
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.2.2; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.3.0; (c) 2018-2021 WetHat Lab. All rights reserved.</cite>

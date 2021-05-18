@@ -3,18 +3,24 @@
 Create a customizable template directory for Markdown to HTML conversion.
 
 # Syntax
+
+<blockquote>
+
 ```PowerShell
  New-HTMLTemplate [-Destination] <String>  [<CommonParameters>] 
 ```
 
 
+</blockquote>
+
 # Description
 
+<blockquote>
 
 The factory-default conversion template is copied to the destination directory
 to seed the customization process.
 
-See [`about_MarkdownToHTML`](about_MarkdownToHTML.md) section TEMPLATE CUSTOMIZATION for details about the
+See `about_MarkdownToHTML` section TEMPLATE CUSTOMIZATION for details about the
 customization options.
 
 The HTML template file returned by this function (`md-template.html`) has a
@@ -27,11 +33,9 @@ simple structure containing two content placeholders:
 :   Placeholder for the HTML content fragment generated from Markdown content.
 
 If a more sophisticated HTML template is needed which can also contain custom
-placeholders, check out [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md).
+placeholders, check out `New-StaticHTMLSiteProject`.
 
-
-
-
+</blockquote>
 
 # Parameters
 
@@ -61,11 +65,20 @@ Accept wildcard characters?| false
 
 
 # Inputs
+
+<blockquote>
+
 This function does not read from the pipe
 
+</blockquote>
 
 # Outputs
+
+<blockquote>
+
 The new conversion template directory `[System.IO.DirectoryInfo]`
+
+</blockquote>
 
 # Examples
 
@@ -78,28 +91,20 @@ The new conversion template directory `[System.IO.DirectoryInfo]`
 New-HTMLTemplate -Destination 'E:\MyTemplate'
 ```
 
-
 Create a copy of the default template in `E:\MyTemplate` for customization.
-
-
-
-
-
-
-
-
-
-
-
-
 
 </blockquote>
 
 # Related Links
 
+<blockquote>
+
+
 * [https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/New-HTMLTemplate.md](https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/New-HTMLTemplate.md) 
-* [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md)
+* `New-StaticHTMLSiteProject`
+
+</blockquote>
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.2.2; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.3.0; (c) 2018-2021 WetHat Lab. All rights reserved.</cite>

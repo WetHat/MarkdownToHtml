@@ -3,13 +3,19 @@
 Create a customizable Markdown to HTML site conversion project.
 
 # Syntax
+
+<blockquote>
+
 ```PowerShell
  New-StaticHTMLSiteProject [-ProjectDirectory] <String>  [<CommonParameters>] 
 ```
 
 
+</blockquote>
+
 # Description
 
+<blockquote>
 
 The new project is fully functional and ready for building.
 
@@ -45,7 +51,7 @@ Contains the Markdown content for this project. Initially only the project's
 
 ### The `Template` Directory
 Containings the HTML template file and resources for the project.
-Read [`about_MarkdownToHTML`](about_MarkdownToHTML.md) section 'TEMPLATE CUSTOMIZATION' for more
+Read `about_MarkdownToHTML` section 'TEMPLATE CUSTOMIZATION' for more
 information. The HTML template (`md-template.html`) in this
 directory contains, besides the two standard placeholders `{{title}}` and
     `{{content}}`, following additional placeholders:
@@ -82,7 +88,7 @@ format (JSON). Configurable items in this file are:
 `markdown_extensions` (default: "common","definitionlists")
 :   A list of markdown extensions to enable for this project. For a list of
     possible extensions, refer to the documentation of the function
-    [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md).
+    `Convert-MarkdownToHTMLFragment`.
 
 `footer`
 :   Page footer text which gets substituted for the placeholder `{{footer}}` in
@@ -103,6 +109,35 @@ format (JSON). Configurable items in this file are:
     navigation section with links to the headings on the current page is
     appended automatically to the navigation items configured in this file.
 
+`navigation_bar`
+:  HTML fragment templates and options for the page navigation bar.
+
+  * `capture_page_headings` A string of heading levels (1-6) to indicate which
+    page headings are added to the navigation bar. If no headings should
+    be added at all, use the empty string `""`.
+
+  * `templates`: a set of HTML fragments specifying the navigation structure.
+    The templates can contain placeholders which will be replaced by content
+    when the project is built.
+
+    The individual templates and the supported placeholders are:
+    * `navitem`: template to represent a navigation link in the navivation bar.
+      Supported content placeholders in this template are:
+      * `{{navurl}}` - a relative or absolute hyperlink
+      * `{{navtext}}` - the link text.
+
+    * `navlabel`: A (non-navigable) label in the navigation bar.
+      Supported content placeholders in this template are:
+      * `{{navtext}}` - the label text.
+
+    * `navseparator`: A seperator between sections of the navigation bar. This
+      template does not support any placeholders.
+
+    * `navheading`: A template for navigation links to page headings.
+      Supported content placeholders in this template are:
+      * `{{level}}` - the heading level (a number between 1 and 6).
+      * `{{navtext}}` - the heading text.
+
 ### The Project Build Script `Build.ps1`
 The project build script implements the Markdown to HTML conversion time.
 
@@ -116,19 +151,20 @@ $SCRIPT:contentMap = @{
 	# Add additional mappings here...
 	'{{footer}}' =  $config.Footer # Footer text from configuration
 	'{{nav}}'    = {
-		param($fragment)
+		param($fragment) # the html fragment created from a markdown file
+		$navcfg = $config.navigation_bar # navigation bar configuration
 		# Create the navigation items configured in 'Build.json'
-		$config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath
-		# Create navigation items to headings on the local page
-        # This required the `autoidentifiers` extension.
-		ConvertTo-PageHeadingNavigation $fragment.HTMLFragment | ConvertTo-NavigationItem
+		$config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
+		                                                   -NavTemplate $navcfg.template
+		# Create navigation items to headings on the local page.
+		# This requires the `autoidentifiers` extension to be enabled.
+		ConvertTo-PageHeadingNavigation $fragment.HTMLFragment -NavTemplate $navcfg.template `
+		                                                       -HeadingLevels $navcfg.capture_page_headings
 	}
 }
 ~~~
 
-
-
-
+</blockquote>
 
 # Parameters
 
@@ -157,11 +193,20 @@ Accept wildcard characters?| false
 
 
 # Inputs
+
+<blockquote>
+
 None
 
+</blockquote>
 
 # Outputs
+
+<blockquote>
+
 The new project directory object `[System.IO.DirectoryInfo]`
+
+</blockquote>
 
 # Examples
 
@@ -174,29 +219,21 @@ The new project directory object `[System.IO.DirectoryInfo]`
 New-StaticHTMLSiteProject -ProjectDirectory MyProject
 ```
 
-
 Create a new conversion project names 'MyProject' in the current directory. The
 project is ready for build.
-
-
-
-
-
-
-
-
-
-
-
-
 
 </blockquote>
 
 # Related Links
 
+<blockquote>
+
+
 * [https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/New-StaticHTMLSiteProject.md](https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/New-StaticHTMLSiteProject.md) 
-* [`New-HTMLTemplate`](New-HTMLTemplate.md)
+* `New-HTMLTemplate`
+
+</blockquote>
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.2.2; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.3.0; (c) 2018-2021 WetHat Lab. All rights reserved.</cite>

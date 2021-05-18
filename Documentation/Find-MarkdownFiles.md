@@ -3,20 +3,24 @@
 Find all Markdown file below a given directory.
 
 # Syntax
+
+<blockquote>
+
 ```PowerShell
  Find-MarkdownFiles [-Path] <String> [-Exclude] <String[]>  [<CommonParameters>] 
 ```
 
 
+</blockquote>
+
 # Description
 
+<blockquote>
 
 Recursively scans a directory and generates annotated `[System.IO.FileInfo]` objects
 for each Markdown file.
 
-
-
-
+</blockquote>
 
 # Parameters
 
@@ -63,15 +67,24 @@ Accept wildcard characters?| false
 
 
 # Inputs
+
+<blockquote>
+
 None
 
+</blockquote>
 
 # Outputs
+
+<blockquote>
+
 A `[System.IO.FileInfo]` object for each Markdown file found below the given directory. The emitted
 `[System.IO.FileInfo]` objects are annotated with a note property `RelativePath` which is a string
 specifying the relative path of the markdown file below the given directory. The `RelativePath` property is
 **mandatory** if `Publish-StaticHtmlSite` is used in the downstream conversion
 pipeline.
+
+</blockquote>
 
 # Examples
 
@@ -84,7 +97,6 @@ pipeline.
 Find-MarkdownFiles -Path '...\Modules\MarkdownToHtml' | Select-Object -Property Mode,LastWriteTime,Length,Name,RelativePath | Format-Table
 ```
 
-
 Returns following annotated Markdown file objects of type `[System.IO.FileInfo]` for this PowerShell module:
 
     LastWriteTime        Length Name                       RelativePath
@@ -95,28 +107,21 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
     11.09.2019 17:01:13   4455  README.md                  ReferenceData\katex\README.md
     ...                   ...   ...                        ...
 
-
-
-
-
-
-
-
-
-
-
-
-
 </blockquote>
 
 # Related Links
 
+<blockquote>
+
+
 * [https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Find-MarkdownFiles.md](https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Find-MarkdownFiles.md) 
-* [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md) 
-* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) 
-* [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) 
-* [`New-HTMLTemplate`](New-HTMLTemplate.md)
+* [Convert-MarkdownToHtml](Convert-MarkdownToHtml.md) 
+* [Convert-MarkdownToHtmlFragment](Convert-MarkdownToHtmlFragment.md) 
+* [Publish-StaticHtmlSite](Publish-StaticHtmlSite.md) 
+* [New-HTMLTemplate](New-HTMLTemplate.md)
+
+</blockquote>
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.2.2; (c) 2018-2020 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.3.0; (c) 2018-2021 WetHat Lab. All rights reserved.</cite>
