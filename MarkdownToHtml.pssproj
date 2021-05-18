@@ -19,7 +19,7 @@ $env:PSModulePath = "$pwd/.." + [char]0x3b + $env:PSModulePath
 import-module pester
 import-module MarkDownToHTML -force
 
-Invoke-Pester -Path './MarkdownToHtml.tests.ps1' -EnableExit
+Invoke-Pester -Path './MarkdownToHtml.tests.ps1' 
 
 $env:PSModulePath = $pathBak
 

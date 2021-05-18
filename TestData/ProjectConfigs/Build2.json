@@ -1,29 +1,39 @@
 {
-    "markdown_dir": "markdown",
+  "markdown_dir": "markdown",
 
-    "site_dir": "html",
+  "site_dir": "html",
 
-    "HTML_template": "Template",
+  "HTML_template": "Template",
 
-    "Exclude": [
-        "Code.md"
-    ],
+  "Exclude": [
+    "Code.md"
+  ],
 
-    "markdown_extensions": [
-        "common",
-        "definitionlists",
-        "diagrams",
-        "mathematics",
-        "autoidentifiers"
-    ],
+  "markdown_extensions": [
+    "common",
+    "definitionlists",
+    "diagrams",
+    "mathematics",
+    "autoidentifiers"
+  ],
 
-    "footer": "Template project Created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.",
+  "footer": "Template project Created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.",
 
-    "site_navigation": [
-        { "MarkdownToHtml": "https://github.com/WetHat/MarkdownToHtml" },
-        { "---": "" },
-        { "Test": "" },
-        { "Top Code": "Code.md" },
-        { "Mermaid": "SiteContent2/SubFolder/mermaid.md" }
-    ]
+  "navigation_bar": {
+    "capture_page_headings": "123456",
+    "templates": {
+      "navitem": "<button class='navitem'><a href='{{navurl}}'>{{navtext}}</a></button><br/>",
+      "navlabel": "<div class='navitem'>{{navtext}}</div>",
+      "navseparator": "<hr class='navitem'/>",
+      "navheading": "<span class='navitem{{level}}'>{{navtext}}</span>"
+    }
+  },
+
+  "site_navigation": [
+    { "MarkdownToHtml": "https://github.com/WetHat/MarkdownToHtml" },
+    { "---": "" },
+    { "Test": "" },
+    { "Top Code": "Code.md" },
+    { "Mermaid": "SiteContent2/SubFolder/mermaid.md" }
+  ]
 }

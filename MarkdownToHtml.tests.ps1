@@ -4,31 +4,27 @@
 # You can download Pester from http://go.microsoft.com/fwlink/?LinkID=534084
 #
 
-[System.IO.DirectoryInfo]$SCRIPT:moduleDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-[System.IO.DirectoryInfo]$SCRIPT:testdata = Join-Path $SCRIPT:moduleDir -ChildPath 'TestData'
-[System.IO.DirectoryInfo]$SCRIPT:refdata  = Join-Path $SCRIPT:moduleDir -ChildPath 'ReferenceData'
-[System.IO.DirectoryInfo]$SCRIPT:template = $null
+[System.IO.DirectoryInfo]$moduleDir = (Get-Location).Path
+[System.IO.DirectoryInfo]$testdata = Join-Path $moduleDir -ChildPath 'TestData'
+[System.IO.DirectoryInfo]$refdata  = Join-Path $moduleDir -ChildPath 'ReferenceData'
+[System.IO.DirectoryInfo]$template = $null
 
 Describe 'Convert-MarkdownToHTML' {
-	It 'Converts markdown file(s) from ''<Path>'' to HTML' `
-	   -TestCases @(
-		   @{Path='markdown/mermaid.md'; ReferencePath='html/mermaid.html'; ResultPath='TestDrive:/mermaid.html'; Extensions = 'diagrams'}
-		   @{Path='markdown/KaTex.md';   ReferencePath='html/KaTex.html';   ResultPath='TestDrive:/KaTex.html' ;  Extensions = 'mathematics'}
-		   @{Path='markdown/KaMaid.md';  ReferencePath='html/KaMaid.html';  ResultPath='TestDrive:/KaMaid.html' ; Extensions = 'diagrams','mathematics'}
-		   @{Path='markdown/Code.md';    ReferencePath='html/Code.html';    ResultPath='TestDrive:/Code.html' ;   Extensions = 'advanced'}
-	   ) `
-	   {
-		   param($Path,$ReferencePath,$ResultPath,$Extensions)
-
-		   $testPath = Join-Path $SCRIPT:testdata -ChildPath $Path
-           $refPath  = Join-Path $SCRIPT:refdata  -ChildPath $ReferencePath
+	It 'Converts markdown file ''<Markdown>'' to ''<ResultPath>''' -ForEach @(
+		   @{Markdown='markdown/mermaid.md'; ReferencePath='html/mermaid.html'; ResultPath='TestDrive:/mermaid.html'; Extensions = 'diagrams'}
+		   @{Markdown='markdown/KaTex.md';   ReferencePath='html/KaTex.html';   ResultPath='TestDrive:/KaTex.html' ;  Extensions = 'mathematics'}
+		   @{Markdown='markdown/KaMaid.md';  ReferencePath='html/KaMaid.html';  ResultPath='TestDrive:/KaMaid.html';  Extensions = 'diagrams','mathematics'}
+		   @{Markdown='markdown/Code.md';    ReferencePath='html/Code.html';    ResultPath='TestDrive:/Code.html';    Extensions = 'advanced'}
+	   ) {
+		   $testPath = Join-Path $testdata -ChildPath $Markdown
+           $refPath  = Join-Path $refdata  -ChildPath $ReferencePath
 
 		   $destination =  'TestDrive:/'
 		   #$destination = 'e:/temp/ttt/'
 		   #$ResultPath = $ResultPath -replace 'TestDrive:/',$destination
 
 		   Convert-MarkdownToHTML -Path $testPath `
-		                          -Template $SCRIPT:template `
+		                          -Template $template `
 		                          -Destination $destination `
 		                          -IncludeExtension $Extensions `
 		                          -Verbose
@@ -40,27 +36,23 @@ Describe 'Convert-MarkdownToHTML' {
 		   Get-Content -LiteralPath $ResultPath -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
 	   }
 	BeforeAll {
-		$SCRIPT:template = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
-		New-HTMLTemplate -Destination  $SCRIPT:template
+		$template = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
+		New-HTMLTemplate -Destination  $template
 	}
     AfterAll {
-        Remove-Item $SCRIPT:template -Recurse
+        Remove-Item $template -Recurse
     }
 }
 
 Describe 'Convert-MarkdownToHTMLFragment' {
-	It 'Converts markdown file(s) from ''<Path>'' to HTMLFragments' `
-		-TestCases @(
-		   @{Path='markdown/mermaid.md'; ReferencePath='mermaid.html'; Extensions = 'diagrams' ; Title = 'Mermaid Diagramming Tool'}
-		   @{Path='markdown/KaTex.md';   ReferencePath='KaTex.html';   Extensions = 'mathematics'; Title = 'KaTEx Typesetting'}
-		   @{Path='markdown/KaMaid.md';  ReferencePath='KaMaid.html';  Extensions = 'diagrams','mathematics'; Title = 'KaTEx Typesetting'}
-		   @{Path='markdown/Code.md';    ReferencePath='Code.html';    Extensions = 'advanced'; Title = 'Testing Code Symtax Highlighting '}
-		) `
-		{
-			param($Path,$ReferencePath,$Extensions, $Title)
-
-			[System.IO.FileInfo]$testPath = Join-Path $SCRIPT:testdata -ChildPath $Path
-			$refPath  = Join-Path $SCRIPT:refdata  -ChildPath $ReferencePath
+	It 'Converts markdown file ''<MDPath>'' to HTMLFragments' -ForEach @(
+		   @{MDPath='markdown/mermaid.md'; ReferencePath='mermaid.html'; Extensions = 'diagrams' ; Title = 'Mermaid Diagramming Tool'}
+		   @{MDPath='markdown/KaTex.md';   ReferencePath='KaTex.html';   Extensions = 'mathematics'; Title = 'KaTEx Typesetting'}
+		   @{MDPath='markdown/KaMaid.md';  ReferencePath='KaMaid.html';  Extensions = 'diagrams','mathematics'; Title = 'KaTEx Typesetting'}
+		   @{MDPath='markdown/Code.md';    ReferencePath='Code.html';    Extensions = 'advanced'; Title = 'Testing Code Symtax Highlighting '}
+		) {
+			[System.IO.FileInfo]$testPath = Join-Path $testdata -ChildPath $MDPath
+			$refPath  = Join-Path $refdata  -ChildPath $ReferencePath
 
             $ResultPath = Join-Path 'TestDrive:/' $ReferencePath
             #$ResultPath = Join-Path 'e:\temp\ttt' $ReferencePath
@@ -81,16 +73,13 @@ Describe 'Convert-MarkdownToHTMLFragment' {
 }
 
 Describe 'ConversionProjects' {
-	It 'Converts markdown file(s) from ''<Path>'' to HTML with a custom converter pipeline' `
-		-TestCases @(
-		   @{Path='markdown'; Config='ProjectConfigs/Build1.json';ReferencePath='html_p1';  ResultPath='TestDrive:/P1.1'}
-		   @{Path='markdown'; Config='ProjectConfigs/Build1.json';ReferencePath='html_p1';  ResultPath='TestDrive:/P1.2'}
-		   @{Path='markdown'; Config='ProjectConfigs/Build2.json';ReferencePath='html_p2';  ResultPath='TestDrive:/P2'}
+	It 'Converts markdown file(s) from ''<MDPath>'' to ''<ResultPath>'' with a custom converter pipeline' -ForEach @(
+		   @{MDPath='markdown'; Config='ProjectConfigs/Build1.json';ReferencePath='html_p1';  ResultPath='TestDrive:/P1.1'}
+		   @{MDPath='markdown'; Config='ProjectConfigs/Build1.json';ReferencePath='html_p1';  ResultPath='TestDrive:/P1.2'}
+		   @{MDPath='markdown'; Config='ProjectConfigs/Build2.json';ReferencePath='html_p2';  ResultPath='TestDrive:/P2'}
 		) `
 		{
-			param($Path,$Config, $ReferencePath,$ResultPath)
-
-			[string]$markdown = Join-Path $testdata -ChildPath $Path
+			[string]$markdown = Join-Path $testdata -ChildPath $MDPath
 			$configPath = (Join-Path $testdata -ChildPath $Config)
             $config  = Get-Content $configPath -Encoding UTF8 | ConvertFrom-Json
 
@@ -137,22 +126,22 @@ Describe 'ConversionProjects' {
 
                 # compare contents
                 $refFileContents = Get-Content -LiteralPath $_ -Encoding UTF8 | Out-String
+				Write-host "Comparing with $_" -ForegroundColor Cyan
 			    Get-Content -LiteralPath $target -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
             }
 		}
 }
 
 Describe 'ConvertTo-NavigationItem' {
-	It 'Converts links relative to root ''<Link>'' to navitems relative to page' `
-		-TestCases @(
-           @{Link='test.doc'; RelativePath='intro/page.md'; Result = '<button class=''navitem''><a href="../test.doc">Test</a></button><br/>'}
-           @{Link='#test'; RelativePath='intro/page.md'; Result = '<button class=''navitem''><a href="#test">Test</a></button><br/>'}
-		   @{Link='test.md'; RelativePath='intro/page.md'; Result = '<button class=''navitem''><a href="../test.html">Test</a></button><br/>'}
-           @{Link='test.md#test'; RelativePath='intro/page.md'; Result = '<button class=''navitem''><a href="../test.html#test">Test</a></button><br/>'}
-           @{Link='http://www.hp.com/test.md'; RelativePath='intro/page.md'; Result = '<button class=''navitem''><a href="http://www.hp.com/test.md">Test</a></button><br/>'}
+	It 'Converts links relative to root ''<Link>'' to navitems relative to page' -ForEach @(
+           @{Link='test.doc'; RelativePath='intro/page.md'; Result = '<button class="navitem"><a href="../test.doc">Test</a></button>'}
+           @{Link='#test'; RelativePath='intro/page.md'; Result = '<button class="navitem"><a href="#test">Test</a></button>'}
+		   @{Link='test.md'; RelativePath='intro/page.md'; Result = '<button class="navitem"><a href="../test.html">Test</a></button>'}
+           @{Link='test.md#test'; RelativePath='intro/page.md'; Result = '<button class="navitem"><a href="../test.html#test">Test</a></button>'}
+           @{Link='http://www.hp.com/test.md'; RelativePath='intro/page.md'; Result = '<button class="navitem"><a href="http://www.hp.com/test.md">Test</a></button>'}
 		) `
 		{
-			param($Link,$RelativePath, $Result)
+			#param($Link,$RelativePath, $Result)
 
 			@{'Test' = $Link} | ConvertTo-NavigationItem -RelativePath $RelativePath `
 			| Should -BeExactly $result
@@ -160,15 +149,14 @@ Describe 'ConvertTo-NavigationItem' {
 }
 
 Describe 'ConvertTo-PageHeadingNavigation' {
-	It 'Converts heading ''<html>'' to page local navitem' `
-		-TestCases @(
-          @{html='<h1 id="bob">Test</h1>'; Result = '<button class=''navitem''><a href="#bob"><span class="navitem1">Test</span></a></button><br/>'}
-		  @{html='<h1 id="bob"><b>Test</b></h1>'; Result = '<button class=''navitem''><a href="#bob"><span class="navitem1"><b>Test</b></span></a></button><br/>'}
-		  @{html='<h1 id="bob"><b>Test</b>'; Result = '<button class=''navitem''><a href="#bob"><span class="navitem1"><b>Test</b></span></a></button><br/>'}
-		  @{html='<h1 id="bob"><a href="x.md">Test</a></h1>'; Result = '<button class=''navitem''><a href="#bob"><span class="navitem1">Test</span></a></button><br/>'}
+	It 'Converts heading ''<html>'' to page local navitem' -ForEach @(
+          @{html='<h1 id="bob">Test</h1>'; Result = '<button class="navitem"><a href="#bob"><span class="navitem1">Test</span></a></button>'}
+		  @{html='<h1 id="bob"><b>Test</b></h1>'; Result = '<button class="navitem"><a href="#bob"><span class="navitem1"><b>Test</b></span></a></button>'}
+		  @{html='<h1 id="bob"><b>Test</b>'; Result = '<button class="navitem"><a href="#bob"><span class="navitem1"><b>Test</b></span></a></button>'}
+		  @{html='<h1 id="bob"><a href="x.md">Test</a></h1>'; Result = '<button class="navitem"><a href="#bob"><span class="navitem1">Test</span></a></button>'}
 		) `
 		{
-			param($html, $Result)
+			#param($html, $Result)
 
 			ConvertTo-PageHeadingNavigation $html  | Should -BeExactly $result
 		}
