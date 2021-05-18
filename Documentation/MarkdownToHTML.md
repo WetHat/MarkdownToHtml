@@ -102,6 +102,7 @@ existing conversion projects.**
     ~~~
 
 * `Markdig` update to version 0.24
+* `KateX` update to version 0.13.11
 
 ## 2.2.2
 
