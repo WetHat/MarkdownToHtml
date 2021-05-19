@@ -3,26 +3,22 @@
 Convert Markdown files into HTML files.
 
 # Syntax
-
-<blockquote>
-
 ```PowerShell
  Convert-MarkdownToHTML [-Path] <String> [-Template] <String> [-IncludeExtension] <String[]> [-ExcludeExtension] <String[]> [-MediaDirectory] <String> [-SiteDirectory] <String>  [<CommonParameters>] 
 ```
 
 
-</blockquote>
-
 # Description
 
-<blockquote>
 
 This function reads all Markdown files from a source folder and converts each
 of them to standalone html documents using configurable Markdown extensions and
-a customizable HTML template. See `about_MarkdownToHTML` for a list of
+a customizable HTML template. See [`about_MarkdownToHTML`](about_MarkdownToHTML.md) for a list of
 supported extensions and customization options.
 
-</blockquote>
+
+
+
 
 # Parameters
 
@@ -53,7 +49,7 @@ Accept wildcard characters?| true
 
 Optional directory containing the html template file `md-template.html` and its resources.
 If no template directory is specified, a default factory-installed template is used.
-For infomations about creating custom templates see `New-HTMLTemplate`.
+For infomations about creating custom templates see [`New-HTMLTemplate`](New-HTMLTemplate.md).
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -143,20 +139,11 @@ Accept wildcard characters?| false
 
 
 # Inputs
-
-<blockquote>
-
 This function does not read from the pipe.
 
-</blockquote>
 
 # Outputs
-
-<blockquote>
-
 File objects `[System.IO.FileInfo]` of the generated HTML files.
-
-</blockquote>
 
 # Notes
 
@@ -262,35 +249,75 @@ extensible Markdown processor for .NET.
 Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles'
 ```
 
+
 Convert all Markdown files in `E:\MyMarkdownFiles` and save the generated HTML files
-in `E:\MyHTMLFiles` 
+in `E:\MyHTMLFiles`
+
+
+
+
+
+
+
+
+
+
+
+ 
 ## EXAMPLE 2
 
 ```PowerShell
 Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -Template 'E:\MyTemplate' -SiteDirectory 'E:\MyHTMLFiles'
 ```
 
+
 Convert all Markdown files in `E:\MyMarkdownFiles` using
 * the 'common' parsing configuration
 * the custom template in `E:\MyTemplate`
 
-The generated HTML files are saved to `E:\MyHTMLFiles`. 
+The generated HTML files are saved to `E:\MyHTMLFiles`.
+
+
+
+
+
+
+
+
+
+
+
+ 
 ## EXAMPLE 3
 
 ```PowerShell
 Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
 ```
 
+
 Convert all Markdown files in `E:\MyMarkdownFiles` using
 * the 'advanced' and 'diagrams' parsing extension.
 * the default template
 
-The generated HTML files are saved to `E:\MyHTMLFiles`. 
+The generated HTML files are saved to `E:\MyHTMLFiles`.
+
+
+
+
+
+
+
+
+
+
+
+ 
 ## EXAMPLE 4
 
 ```PowerShell
 Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -MediaDirectory 'e:\Media' -SiteDirectory 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
 ```
+
 
 Convert all Markdown files in `E:\MyMarkdownFiles` using
 * the 'advanced' and 'diagrams' parsing extension.
@@ -299,12 +326,21 @@ Convert all Markdown files in `E:\MyMarkdownFiles` using
 
 The generated HTML files are saved to `E:\MyHTMLFiles`.
 
+
+
+
+
+
+
+
+
+
+
+
+
 </blockquote>
 
 # Related Links
-
-<blockquote>
-
 
 * [https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Convert-MarkdownToHTML.md](https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Convert-MarkdownToHTML.md) 
 * [https://github.com/lunet-io/markdig](https://github.com/lunet-io/markdig) 
@@ -312,12 +348,10 @@ The generated HTML files are saved to `E:\MyHTMLFiles`.
 * [https://highlightjs.org/](https://highlightjs.org/) 
 * [https://mermaidjs.github.io/](https://mermaidjs.github.io/) 
 * [https://katex.org/](https://katex.org/) 
-* `Find-MarkdownFiles` 
-* [Convert-MarkdownToHtmlFragment](Convert-MarkdownToHtmlFragment.md) 
-* [Publish-StaticHtmlSite](Publish-StaticHtmlSite.md) 
-* [New-HTMLTemplate](New-HTMLTemplate.md)
-
-</blockquote>
+* [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
+* Convert-MarkdownToHtmlFragment 
+* Publish-StaticHtmlSite 
+* New-HTMLTemplate
 
 ---
 

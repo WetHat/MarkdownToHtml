@@ -3,19 +3,13 @@
 Convert Markdown text to html fragments.
 
 # Syntax
-
-<blockquote>
-
 ```PowerShell
  Convert-MarkdownToHTMLFragment [-InputObject] <Object> [-IncludeExtension] <String[]> [-ExcludeExtension] <String[]>  [<CommonParameters>] 
 ```
 
 
-</blockquote>
-
 # Description
 
-<blockquote>
 
 Converts Markdown text to HTML fragments using configured Markdown parser extensions.
 
@@ -99,7 +93,9 @@ avaliable extensions are:
 * 'yaml': [YAML frontmatter](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/YamlSpecs.md)
   parsing.
 
-</blockquote>
+
+
+
 
 # Parameters
 
@@ -112,7 +108,7 @@ avaliable extensions are:
 <blockquote>
 
 The input object can have one of the following of types:
-* An annotated `[System.IO.FileInfo]` object as emitted by [`Find-MarkdownFiles`](Find-MarkdownFiles.md).
+* An annotated `[System.IO.FileInfo]` object as emitted by [[`Find-MarkdownFiles`](Find-MarkdownFiles.md)](Find-MarkdownFiles.md).
 * A plain markdown string [`string`].
 * A markdown descriptor object which is basically a [`hashtable`] whith following contents:
   | Key            | Value Type | Description                                              |
@@ -171,17 +167,10 @@ Accept wildcard characters?| false
 
 
 # Inputs
-
-<blockquote>
-
 Markdown text `[string]`, Markdown file `[System.IO.FileInfo]`, or a markdown descriptor `[hashtable]`.
 
-</blockquote>
 
 # Outputs
-
-<blockquote>
-
 HTML fragment object with following properties:
 
 | Property       | Description                                                     |
@@ -189,8 +178,6 @@ HTML fragment object with following properties:
 | `Title`        | Optional page title. The first heading in the Markdown content. |
 | `HtmlFragment` | The HTML fragment string generated from the Markdown text.      |
 | `RelativePath` | Passed through form the input object, provided it exists.       |
-
-</blockquote>
 
 # Notes
 
@@ -261,17 +248,31 @@ which renders as
 Convert-MarkdownToHTMLFragment -Markdown '# Hello World'
 ```
 
+
 Returns the HTML fragment object:
 
     Name               Value
     ----               -----
     HtmlFragment       <h1 id="hello-world">Hello World</h1>...
-    Title              Hello World 
+    Title              Hello World
+
+
+
+
+
+
+
+
+
+
+
+ 
 ## EXAMPLE 2
 
 ```PowerShell
 Get-Item -LiteralPath "Convert-MarkdownToHTML.md" | Convert-MarkdownToHTMLFragment
 ```
+
 
 Reads the content of Markdown file `Example.md` and returns a Html fragment object.
 
@@ -281,20 +282,27 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
     HtmlFragment       <h1 id="convert-Markdowntohtml">Convert-MarkdownToHTML</h1>...
     RelativePath       Convert-MarkdownToHTML.md
 
+
+
+
+
+
+
+
+
+
+
+
+
 </blockquote>
 
 # Related Links
 
-<blockquote>
-
-
 * [https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Convert-MarkdownToHTMLFragment.md](https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Convert-MarkdownToHTMLFragment.md) 
-* [Convert-MarkdownToHtml](Convert-MarkdownToHtml.md) 
-* [Find-MarkdownFiles](Find-MarkdownFiles.md) 
-* [Publish-StaticHtmlSite](Publish-StaticHtmlSite.md) 
-* [New-HTMLTemplate](New-HTMLTemplate.md)
-
-</blockquote>
+* Convert-MarkdownToHtml 
+* Find-MarkdownFiles 
+* Publish-StaticHtmlSite 
+* New-HTMLTemplate
 
 ---
 

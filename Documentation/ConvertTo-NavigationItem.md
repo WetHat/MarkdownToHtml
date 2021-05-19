@@ -4,19 +4,13 @@ Convert a navigation specification to a HTML element representing a navigation
 link..
 
 # Syntax
-
-<blockquote>
-
 ```PowerShell
  ConvertTo-NavigationItem [-NavSpec] <Object> [-RelativePath] <String> [-NavTemplate] <Object>  [<CommonParameters>] 
 ```
 
 
-</blockquote>
-
 # Description
 
-<blockquote>
 
 Converts a navigation specification to an HTML an element representing a single
 navigation line in a simple vertical navigation bar.
@@ -29,7 +23,9 @@ Following kinds of navigation links are supported:
 The generated HTML element is assigned to the class `navitem` to enable
 styling in `md-styles.css`.
 
-</blockquote>
+
+
+
 
 # Parameters
 
@@ -90,7 +86,7 @@ A table of template html fragments with placeholders for:
 * the hyperlink: placeholder `{{navurl}}`. The default template is:
 * the link text: placeholder `{{navtext}}`
 
-These templates can also be configured in `Build.json`. See `New-StaticHTMLSiteProject` for more
+These templates can also be configured in `Build.json`. See [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md) for more
 details.
 
 The default templates are:
@@ -126,21 +122,12 @@ Accept wildcard characters?| false
 
 
 # Inputs
-
-<blockquote>
-
 Objects or hashtables with one NoteProperty or key.
 
-</blockquote>
 
 # Outputs
-
-<blockquote>
-
 HTML element representing one navigation item for use in a vertical navigation
 bar.
-
-</blockquote>
 
 # Notes
 
@@ -162,6 +149,7 @@ the contents of the navigation bar (placeholder `{{nav}}`).
 ConvertTo-NavigationItem @{'Project HOME'='https://github.com/WetHat/MarkdownToHtml'} -RelativePath 'intro/about.md'
 ```
 
+
 Generates a web navigation link to be put on the page `intro/about.md`.
 Note:
 the parameter `RelativePath` is specified but not used because the link is
@@ -173,12 +161,25 @@ Output:
 <button class='navitem'>
     <a href="https://github.com/WetHat/MarkdownToHtml">Project HOME</a>
 </button><br/>
-~~~ 
+~~~
+
+
+
+
+
+
+
+
+
+
+
+ 
 ## EXAMPLE 2
 
 ```PowerShell
 ConvertTo-NavigationItem @{'Index'='index.md'} -RelativePath 'intro/about.md'
 ```
+
 
 Generates a navigation link relative to `intro/about.md`. The
 link target `index.md` is a page at the root of the same site, hence the link is
@@ -190,12 +191,25 @@ Output:
 <button class="navitem">
     <a href="../index.html">Index</a>
 </button>
-~~~ 
+~~~
+
+
+
+
+
+
+
+
+
+
+
+ 
 ## EXAMPLE 3
 
 ```PowerShell
 ConvertTo-NavigationItem @{'Index'='index.md'} -RelativePath 'intro/about.md' -NavTemplate $custom
 ```
+
 
 Generates a navigation link relative to `intro/about.md`.
 A custom template definition `$custom` is used:
@@ -213,12 +227,25 @@ Output:
 <li class="li-item">
     <a href="../index.html">Index</a>
 </li>
-~~~ 
+~~~
+
+
+
+
+
+
+
+
+
+
+
+ 
 ## EXAMPLE 4
 
 ```PowerShell
 ConvertTo-NavigationItem @{'---'=''} -RelativePath 'intro/about.md'
 ```
+
 
 Generates a separator line in the navigation bar.
 
@@ -226,12 +253,25 @@ Output:
 
 ~~~ html
 <hr class="navitem" />
-~~~ 
+~~~
+
+
+
+
+
+
+
+
+
+
+
+ 
 ## EXAMPLE 5
 
 ```PowerShell
 ConvertTo-NavigationItem @{'---'=''} -NavTemplate $custom
 ```
+
 
 Generates a separator line in the navigation bar using a custom template `$custom`:
 
@@ -243,12 +283,25 @@ Output:
 
 ~~~ html
 <hr class="li-item" />
-~~~ 
+~~~
+
+
+
+
+
+
+
+
+
+
+
+ 
 ## EXAMPLE 6
 
 ```PowerShell
 ConvertTo-NavigationItem @{'Introduction'=''}
 ```
+
 
 Generates a label in the navigation bar.
 
@@ -256,12 +309,25 @@ Output:
 
 ~~~ html
 <div class='navitem'>Introduction</div>
-~~~ 
+~~~
+
+
+
+
+
+
+
+
+
+
+
+ 
 ## EXAMPLE 7
 
 ```PowerShell
 ConvertTo-NavigationItem @{'Introduction'=''} -NavTemplate $custom
 ```
+
 
 Generates a label in the navigation bar using the custom template `$custom`:
 
@@ -275,17 +341,24 @@ Output:
 <div class='li-item'>Introduction</div>
 ~~~
 
+
+
+
+
+
+
+
+
+
+
+
+
 </blockquote>
 
 # Related Links
 
-<blockquote>
-
-
-* `New-StaticHTMLSiteProject` 
-* `ConvertTo-PageHeadingNavigation`
-
-</blockquote>
+* [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md) 
+* [`ConvertTo-PageHeadingNavigation`](ConvertTo-PageHeadingNavigation.md)
 
 ---
 

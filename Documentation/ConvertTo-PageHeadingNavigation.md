@@ -3,27 +3,23 @@
 Generate navigation specifications for all headings found in an HTML fragment.
 
 # Syntax
-
-<blockquote>
-
 ```PowerShell
  ConvertTo-PageHeadingNavigation [-HTMLfragment] <String> [-NavTemplate] <Object> [-HeadingLevels] <String>  [<CommonParameters>] 
 ```
 
 
-</blockquote>
-
 # Description
 
-<blockquote>
 
 Retrieves all headings (`h1`.. `h6`) from a HTML fragment and generates a link
 specification for each heading that has an `id` attribute.
 
 The link specifications have a format suitable for conversion to HTML
-navigation code by `ConvertTo-NavigationItem`
+navigation code by [`ConvertTo-NavigationItem`](ConvertTo-NavigationItem.md)
 
-</blockquote>
+
+
+
 
 # Parameters
 
@@ -63,7 +59,7 @@ The default template for page headings is:
 <span class="navitem{{level}}">{{navtext}}</span>
 ~~~
 
-This template can also be configured in `Build.json`. See `New-StaticHTMLSiteProject` for more
+This template can also be configured in `Build.json`. See [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md) for more
 details.
 
 Parameter Property         | Value
@@ -101,21 +97,12 @@ Accept wildcard characters?| false
 
 
 # Inputs
-
-<blockquote>
-
 None. This function does not read from a pipe.
 
-</blockquote>
 
 # Outputs
-
-<blockquote>
-
 HTML elements representing navigation links to headings on the input HTML
 fragment for use in a vertical navigation bar.
-
-</blockquote>
 
 # Notes
 
@@ -137,6 +124,7 @@ the contents of the navigation bar (placeholder `{{nav}}`).
 Hello World</h2>' -HeadingLevels '123'| ConvertTo-NavigationItem
 ```
 
+
 Create an HTML element for navigation to page headings `<h1>`, `<h2>`, '<h3>'.
 All other headings are ignored.
 
@@ -148,12 +136,25 @@ Output:
 </button>
 ~~~
 
-Note that the heading level has been added to the css class. 
+Note that the heading level has been added to the css class.
+
+
+
+
+
+
+
+
+
+
+
+ 
 ## EXAMPLE 2
 
 ```PowerShell
 Hello World</h2>' -NavTemplate $custom | ConvertTo-NavigationItem
 ```
+
 
 Create an HTML element for navigation to an heading using the custom template `$custom`.
 
@@ -171,17 +172,24 @@ Output:
 
 Note that the heading level is used as a postfix for the css class.
 
+
+
+
+
+
+
+
+
+
+
+
+
 </blockquote>
 
 # Related Links
 
-<blockquote>
-
-
-* `New-StaticHTMLSiteProject` 
-* `ConvertTo-NavigationItem`
-
-</blockquote>
+* [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md) 
+* [`ConvertTo-NavigationItem`](ConvertTo-NavigationItem.md)
 
 ---
 
