@@ -126,13 +126,13 @@ The generated Html file objects are returned like so:
 .LINK
 https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Publish-StaticHtmlSite.md
 .LINK
-Convert-MarkdownToHtml
+`Convert-MarkdownToHtml`
 .LINK
-Find-MarkdownFiles
+`Find-MarkdownFiles`
 .LINK
-Convert-MarkdownToHtmlFragment
+`Convert-MarkdownToHtmlFragment`
 .LINK
-New-HTMLTemplate
+`New-HTMLTemplate`
 #>
 function Publish-StaticHtmlSite {
     [OutputType([System.IO.FileInfo])]
@@ -288,13 +288,13 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
 .LINK
 https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Find-MarkdownFiles.md
 .LINK
-Convert-MarkdownToHtml
+`Convert-MarkdownToHtml`
 .LINK
-Convert-MarkdownToHtmlFragment
+`Convert-MarkdownToHtmlFragment`
 .LINK
-Publish-StaticHtmlSite
+`Publish-StaticHtmlSite`
 .LINK
-New-HTMLTemplate
+`New-HTMLTemplate`
 #>
 function Find-MarkdownFiles {
     [OutputType([System.IO.FileInfo])]
@@ -522,13 +522,13 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
 .LINK
 https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Convert-MarkdownToHTMLFragment.md
 .LINK
-Convert-MarkdownToHtml
+`Convert-MarkdownToHtml`
 .LINK
-Find-MarkdownFiles
+`Find-MarkdownFiles`
 .LINK
-Publish-StaticHtmlSite
+`Publish-StaticHtmlSite`
 .LINK
-New-HTMLTemplate
+`New-HTMLTemplate`
 #>
 function Convert-MarkdownToHTMLFragment
 {
@@ -811,11 +811,11 @@ https://katex.org/
 .LINK
 `Find-MarkdownFiles`
 .LINK
-Convert-MarkdownToHtmlFragment
+`Convert-MarkdownToHtmlFragment`
 .LINK
-Publish-StaticHtmlSite
+`Publish-StaticHtmlSite`
 .LINK
-New-HTMLTemplate
+`New-HTMLTemplate`
 #>
 function Convert-MarkdownToHTML {
     [OutputType([System.IO.FileInfo])]
@@ -1529,8 +1529,8 @@ function ConvertTo-PageHeadingNavigation {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUfUOS0Md7QrKRbVu8dUoQhSHg
-# HtWgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUrnpZ5mMbpqjYnhPlKRLHu2fu
+# kb+gggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1549,11 +1549,11 @@ function ConvertTo-PageHeadingNavigation {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBT5NP5l27V/NjIuaSTkAOTV2Zt3
-# pDANBgkqhkiG9w0BAQEFAASCAQCmC8TFnV7cyQBJEPiW9CeEx/6EP8Y3dC1RBgYJ
-# 3qHaymKTMZFlpDGlSE4v6TFc3shv8NXQlAx6GoD2/G/HqRFHAS6fVc0BSA+CQQfw
-# MGvribL0+PYbaYgfzxLpEZ1o+Z71A+C97XMpOgY3YVNiCzdi0APSWltXlOTscIWQ
-# msdbYVLS9njpu55094rpgBHi7WkPEVPHGxH/0271PjK0B+Kp+nXHsXeo4yKqF1Ce
-# BhCXqkka0OqokL2X6EEfUWqnytSPZJgCRkvdrt8P9zyPfpxMKeuMsdeYsbKoCTmt
-# efZ9xlRqo4C6LsJ6NoLByQoxh4dAVBr+eAbCHjHEejknK/Tj
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBR08hfWZG4RZEv55f7j7b7gh0/i
+# JzANBgkqhkiG9w0BAQEFAASCAQAFiIYG2KwwurhtwLzhqsWP1BM3BHhhDVKUTGzZ
+# sdPZi+PN6Wan9IKeU2nxfvaaUc8Ck4CudeJrARfynE7tMfjfwPwp9VdCz0ZvmFFR
+# TD9y6Wc7JDLEJlZC7uVmolkOlz1F6DqCzDw+hfZDbKEIYwc0zdYJBkfaPIvbj+5i
+# J63RyZVxrUpsDlZRRSTIrgs9Z+jZA7AouyY1Z5uYcp+SHbLh0JhoI9co1/OZbLBh
+# FR2l6N84iruLGBWc8AD0qZQ241CpesKNM2oNT9HGUwYrwpF5HEd/SRQhY7z97UaI
+# 0Xn9bcHbWr64W/j48cJH0i3TUR8B2r1h5UQAUvDnOMHSuUgu
 # SIG # End signature block

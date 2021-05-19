@@ -299,10 +299,10 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
 # Related Links
 
 * [https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Convert-MarkdownToHTMLFragment.md](https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Convert-MarkdownToHTMLFragment.md) 
-* Convert-MarkdownToHtml 
-* Find-MarkdownFiles 
-* Publish-StaticHtmlSite 
-* New-HTMLTemplate
+* [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md) 
+* [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
+* [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) 
+* [`New-HTMLTemplate`](New-HTMLTemplate.md)
 
 ---
 

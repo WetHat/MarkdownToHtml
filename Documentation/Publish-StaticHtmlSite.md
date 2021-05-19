@@ -218,10 +218,10 @@ The generated Html file objects are returned like so:
 # Related Links
 
 * [https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Publish-StaticHtmlSite.md](https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Publish-StaticHtmlSite.md) 
-* Convert-MarkdownToHtml 
-* Find-MarkdownFiles 
-* Convert-MarkdownToHtmlFragment 
-* New-HTMLTemplate
+* [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md) 
+* [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
+* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) 
+* [`New-HTMLTemplate`](New-HTMLTemplate.md)
 
 ---
 

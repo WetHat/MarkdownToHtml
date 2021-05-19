@@ -349,9 +349,9 @@ The generated HTML files are saved to `E:\MyHTMLFiles`.
 * [https://mermaidjs.github.io/](https://mermaidjs.github.io/) 
 * [https://katex.org/](https://katex.org/) 
 * [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
-* Convert-MarkdownToHtmlFragment 
-* Publish-StaticHtmlSite 
-* New-HTMLTemplate
+* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) 
+* [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) 
+* [`New-HTMLTemplate`](New-HTMLTemplate.md)
 
 ---
 

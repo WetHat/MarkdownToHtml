@@ -112,10 +112,10 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
 # Related Links
 
 * [https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Find-MarkdownFiles.md](https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Find-MarkdownFiles.md) 
-* Convert-MarkdownToHtml 
-* Convert-MarkdownToHtmlFragment 
-* Publish-StaticHtmlSite 
-* New-HTMLTemplate
+* [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md) 
+* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) 
+* [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) 
+* [`New-HTMLTemplate`](New-HTMLTemplate.md)
 
 ---
 
