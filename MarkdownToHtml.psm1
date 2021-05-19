@@ -1024,33 +1024,33 @@ format (JSON). Configurable items in this file are:
     appended automatically to the navigation items configured in this file.
 
 `navigation_bar`
-:  HTML fragment templates and options for the page navigation bar.
+:   HTML fragment templates and options for the page navigation bar.
 
-  * `capture_page_headings` A string of heading levels (1-6) to indicate which
-    page headings are added to the navigation bar. If no headings should
-    be added at all, use the empty string `""`.
+   * `capture_page_headings` A string of heading levels (1-6) to indicate which
+     page headings are added to the navigation bar. If no headings should
+     be added at all, use the empty string `""`.
 
-  * `templates`: a set of HTML fragments specifying the navigation structure.
-    The templates can contain placeholders which will be replaced by content
-    when the project is built.
+   * `templates`: a set of HTML fragments specifying the navigation structure.
+     The templates can contain placeholders which will be replaced by content
+     when the project is built.
 
-    The individual templates and the supported placeholders are:
-    * `navitem`: template to represent a navigation link in the navivation bar.
-      Supported content placeholders in this template are:
-      * `{{navurl}}` - a relative or absolute hyperlink
-      * `{{navtext}}` - the link text.
+     The individual templates and the supported placeholders are:
+     * `navitem`: template to represent a navigation link in the navivation bar.
+       Supported content placeholders in this template are:
+       * `{{navurl}}` - a relative or absolute hyperlink
+       * `{{navtext}}` - the link text.
 
-    * `navlabel`: A (non-navigable) label in the navigation bar.
-      Supported content placeholders in this template are:
-      * `{{navtext}}` - the label text.
+     * `navlabel`: A (non-navigable) label in the navigation bar.
+       Supported content placeholders in this template are:
+       * `{{navtext}}` - the label text.
 
-    * `navseparator`: A seperator between sections of the navigation bar. This
-      template does not support any placeholders.
+     * `navseparator`: A seperator between sections of the navigation bar. This
+       template does not support any placeholders.
 
-    * `navheading`: A template for navigation links to page headings.
-      Supported content placeholders in this template are:
-      * `{{level}}` - the heading level (a number between 1 and 6).
-      * `{{navtext}}` - the heading text.
+     * `navheading`: A template for navigation links to page headings.
+       Supported content placeholders in this template are:
+       * `{{level}}` - the heading level (a number between 1 and 6).
+       * `{{navtext}}` - the heading text.
 
 ### The Project Build Script `Build.ps1`
 The project build script implements the Markdown to HTML conversion time.
@@ -1529,8 +1529,8 @@ function ConvertTo-PageHeadingNavigation {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUHKQnD6zyNBmeK4AeBT2N6Tx4
-# L8ygggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUfUOS0Md7QrKRbVu8dUoQhSHg
+# HtWgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1549,11 +1549,11 @@ function ConvertTo-PageHeadingNavigation {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRkW0hf7MMcjErA0FV55IUEK1wA
-# XzANBgkqhkiG9w0BAQEFAASCAQAYca55hUWOkZeHQ6wd0FcsEOgOQ12m8jS2paKX
-# rcfpaU1O/iIGwTxGQav7cImcuooo6hWRIjVlCuPM4aRpF5gqAyi6IV49lhKhH8sn
-# fN5911+iIFmKSxaEaEYsoNk8Z410ZFU47ACtj4kE3VbIXRXRR8rNU73iRbUmXHt9
-# m0f0+6MiHQkXTaTaJL9DiiCX10qMq9h+8wYdayR7TmRiq0Re0gSNQD8V87qfhP9v
-# I5IolX+H2UgY6BN59D+hBspcNZKr0ILdpC43fdAcIPFu8tZke6/O2eEZX3fyNwNO
-# dKt1i/RGanOFpeC0eAJadYHP9CttTFbirxWmZNJfnHQ+7/xL
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBT5NP5l27V/NjIuaSTkAOTV2Zt3
+# pDANBgkqhkiG9w0BAQEFAASCAQCmC8TFnV7cyQBJEPiW9CeEx/6EP8Y3dC1RBgYJ
+# 3qHaymKTMZFlpDGlSE4v6TFc3shv8NXQlAx6GoD2/G/HqRFHAS6fVc0BSA+CQQfw
+# MGvribL0+PYbaYgfzxLpEZ1o+Z71A+C97XMpOgY3YVNiCzdi0APSWltXlOTscIWQ
+# msdbYVLS9njpu55094rpgBHi7WkPEVPHGxH/0271PjK0B+Kp+nXHsXeo4yKqF1Ce
+# BhCXqkka0OqokL2X6EEfUWqnytSPZJgCRkvdrt8P9zyPfpxMKeuMsdeYsbKoCTmt
+# efZ9xlRqo4C6LsJ6NoLByQoxh4dAVBr+eAbCHjHEejknK/Tj
 # SIG # End signature block
