@@ -353,7 +353,7 @@ by adding an entry to the content map defined in `Build.ps1`. For example:
 SCRIPT:contentMap = @{
 
 '{{my_placeholder}}' = '<b>Hello</b>'
-footer}}' =  $config.Footer # Footer text from configuration
+'{{footer}}' =  $config.Footer # Footer text from configuration
 
 ...
 }
