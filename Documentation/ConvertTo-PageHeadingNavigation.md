@@ -193,4 +193,4 @@ Note that the heading level is used as a postfix for the css class.
 
 ---
 
-<cite>Module: MarkdownToHtml; Version: 2.3.0; (c) 2018-2021 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkdownToHtml; Version: 2.3.1; (c) 2018-2021 WetHat Lab. All rights reserved.</cite>
