@@ -84,7 +84,7 @@ nav {
     font-weight: bold;
 }
 
-.navitem .navitem1 {
+.navitem {
     width: 98%;
     text-align: left;
     overflow: hidden;
@@ -110,16 +110,19 @@ nav {
 
 .navitem2 {
     font-size: 10pt;
+    font-weight: normal;
     padding-left: 1em;
 }
 
 .navitem3 {
     font-size: 10pt;
+    font-weight: normal;
     font-style: italic;
     padding-left: 2em;
 }
 
 .navitem4, .navitem5, .navitem6 {
     font-size: 8pt;
+    font-weight: normal;
     padding-left: 3em;
 }
