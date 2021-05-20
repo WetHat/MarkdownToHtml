@@ -1039,6 +1039,7 @@ format (JSON). Configurable items in this file are:
        Supported content placeholders in this template are:
        * `{{navurl}}` - a relative or absolute hyperlink
        * `{{navtext}}` - the link text.
+       * `{{navplaintext}}` - the link plain-text with all HTML tags stripped.
 
      * `navlabel`: A (non-navigable) label in the navigation bar.
        Supported content placeholders in this template are:
@@ -1132,12 +1133,13 @@ function New-StaticHTMLSiteProject {
 
 # Default template specifications for page navigation
 $SCRIPT:defaultNavTemplate = @{
-     navitem      = '<button class="navitem"><a href="{{navurl}}">{{navtext}}</a></button>';
-     navlabel     = '<div class="navitem">{{navtext}}</div>';
+     navitem      = '<button class="navitem" title="{{navplaintext}}"><a href="{{navurl}}">{{navtext}}</a></button>';
+     navlabel     = '<div class="navlabel">{{navtext}}</div>';
      navseparator = '<hr class="navitem"/>';
      navheading   = '<span class="navitem{{level}}">{{navtext}}</span>'
 }
 
+$SCRIPT:htmltagRE   = New-Object regex '<[^<>]*>'
 <#
 .SYNOPSIS
 Convert a navigation specification to a HTML element representing a navigation
@@ -1174,8 +1176,9 @@ clickable link is generated.
 .PARAMETER NavTemplate
 A table of template html fragments with placeholders for:
 
-* the hyperlink: placeholder `{{navurl}}`. The default template is:
-* the link text: placeholder `{{navtext}}`
+* the hyperlink: placeholder `{{navurl}}`.
+* the link text: placeholder `{{navtext}}`.
+* the link plain text (all HTML tags stripped): placeholder `{{navplaintext}}`.
 
 These templates can also be configured in `Build.json`. See `New-StaticHTMLSiteProject` for more
 details.
@@ -1185,7 +1188,7 @@ The default templates are:
 ~~~ html
 <!-- navitem - Navigation link item template -->
 <button class="navitem">
-  <a href="{{navurl}}">{{navtext}}</a>
+  <a href="{{navurl}}" title="{{navplaintext}}">{{navtext}}</a>
 </button>
 
 <!-- navlabel - Navigation panel section label -->
@@ -1395,7 +1398,7 @@ function ConvertTo-NavigationItem {
             if (!$navitem) {
                 $navitem = $SCRIPT:defaultNavTemplate.navitem
             }
-            Write-Output $navitem.Replace('{{navurl}}',$link).Replace('{{navtext}}',$name)
+            Write-Output $navitem.Replace('{{navurl}}',$link).Replace('{{navtext}}',$name).Replace('{{navplaintext}}',$SCRIPT:htmltagRE.Replace($name,''))
 	    }
     }
 }
@@ -1529,8 +1532,8 @@ function ConvertTo-PageHeadingNavigation {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUrnpZ5mMbpqjYnhPlKRLHu2fu
-# kb+gggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUzBo84NBg/D5yQkTYtz37BVQA
+# l7agggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1549,11 +1552,11 @@ function ConvertTo-PageHeadingNavigation {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBR08hfWZG4RZEv55f7j7b7gh0/i
-# JzANBgkqhkiG9w0BAQEFAASCAQAFiIYG2KwwurhtwLzhqsWP1BM3BHhhDVKUTGzZ
-# sdPZi+PN6Wan9IKeU2nxfvaaUc8Ck4CudeJrARfynE7tMfjfwPwp9VdCz0ZvmFFR
-# TD9y6Wc7JDLEJlZC7uVmolkOlz1F6DqCzDw+hfZDbKEIYwc0zdYJBkfaPIvbj+5i
-# J63RyZVxrUpsDlZRRSTIrgs9Z+jZA7AouyY1Z5uYcp+SHbLh0JhoI9co1/OZbLBh
-# FR2l6N84iruLGBWc8AD0qZQ241CpesKNM2oNT9HGUwYrwpF5HEd/SRQhY7z97UaI
-# 0Xn9bcHbWr64W/j48cJH0i3TUR8B2r1h5UQAUvDnOMHSuUgu
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTzmFe1alRGcZVtnqYjQty3ZIaf
+# PzANBgkqhkiG9w0BAQEFAASCAQB2EHpE3QnoR0SkE5z2R4fMaUVNnNVngRDmzuaU
+# +hAaPgWtbv4BedUy8BxgEYN5N9epUSRJtbxCAOktI0HK/t+MHDjTSmDh/UB8XZI9
+# uXxHMhTxF6IhblFfI6OozMSBo6DVMdMijddH1z97q0/6+Cekks/b2pJ487bxqZ7X
+# vULpz4DtQrV1Skk3MEPlFlYLqc+GfIo8ftYCMUTMYTBCYF2IN3jeNSxWDqyOe+2D
+# uDfQs7bA74+DKgJK+sFz9a4+1plGK62yp3zykgr77J8hQoWGRD0H+bij6B9ogxmi
+# 2sA5Jluo+gQK/3mf9xyhp3WuWhLHQpYUIbx5P1z4v1+t2h4Z
 # SIG # End signature block
