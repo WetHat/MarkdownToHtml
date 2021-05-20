@@ -64,6 +64,7 @@ existing conversion projects.**
 * auto-added navigation items for page headings indented according to heading
   level.
 * navbar formatting made more consistent.
+* navbar small screen support
 
 ## 2.3.0
 
