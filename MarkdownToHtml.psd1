@@ -163,6 +163,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
+## 2.3.2
+
+* scrollbar added to long navbars.
+
 ## 2.3.1
 
 * default navigation menu changed to a static vertical sidebar.

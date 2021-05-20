@@ -57,6 +57,10 @@ existing conversion projects.**
 
 # Release Notes
 
+## 2.3.2
+
+* scrollbar added to long navbars.
+
 ## 2.3.1
 
 * default navigation menu changed to a static vertical sidebar.
