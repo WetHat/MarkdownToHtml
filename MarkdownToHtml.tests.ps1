@@ -130,9 +130,14 @@ Describe 'ConversionProjects' {
 
                 # compare contents
                 $refFileContents = Get-Content -LiteralPath $_ -Encoding UTF8 | Out-String
-				Write-Verbose "Comparing with $_" -ForegroundColor Cyan
+				Write-Verbose "Comparing with $_"
 			    Get-Content -LiteralPath $target -Encoding UTF8 | Out-String | Should -BeExactly $refFileContents
             }
+		}
+		BeforeAll {
+			[System.IO.DirectoryInfo]$moduleDir = (Get-Location).Path
+			[System.IO.DirectoryInfo]$testdata = Join-Path $moduleDir -ChildPath 'TestData'
+			[System.IO.DirectoryInfo]$refdata  = Join-Path $moduleDir -ChildPath 'ReferenceData'
 		}
 }
 
@@ -145,9 +150,8 @@ Describe 'ConvertTo-NavigationItem' {
            @{Link='http://www.hp.com/test.md'; RelativePath='intro/page.md'; Result = '<button class="navitem"><a href="http://www.hp.com/test.md">Test</a></button>'}
 		) `
 		{
-			#param($Link,$RelativePath, $Result)
-
 			@{'Test' = $Link} | ConvertTo-NavigationItem -RelativePath $RelativePath `
+			                                             -NavTemplate @{navitem='<button class="navitem"><a href="{{navurl}}">{{navtext}}</a></button>'}`
 			| Should -BeExactly $result
 		}
 }
@@ -160,8 +164,6 @@ Describe 'ConvertTo-PageHeadingNavigation' {
 		  @{html='<h1 id="bob"><a href="x.md">Test</a></h1>'; Result = '<button class="navitem"><a href="#bob"><span class="navitem1">Test</span></a></button>'}
 		) `
 		{
-			#param($html, $Result)
-
-			ConvertTo-PageHeadingNavigation $html  | Should -BeExactly $result
+			ConvertTo-PageHeadingNavigation $html -NavTemplate @{navitem='<button class="navitem"><a href="{{navurl}}">{{navtext}}</a></button>'}` | Should -BeExactly $result
 		}
 }
