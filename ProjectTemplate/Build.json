@@ -30,7 +30,8 @@
     },
 
     "site_navigation": [
-      { "Home": "README.md" },
-      { "---": "" }
+        { "README": "" },
+        { "Home": "README.md" },
+        { "---": "" }
     ]
   }
