@@ -84,13 +84,23 @@ nav {
     font-weight: bold;
 }
 
-.navitem {
-    width:98%;
+.navitem .navitem1 {
+    width: 98%;
     text-align: left;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    margin-left:1%;
+    margin-left: 1%;
+    font-weight: bold;
+}
+
+/* Show full link text when mouse hovers overs the navitem. */
+.navitem:hover {
+    width: fit-content;
+    min-width: 98%;
+    text-align: left;
+    overflow: visible;
+    white-space: nowrap;
 }
 
 .navitem1 {
@@ -100,13 +110,16 @@ nav {
 
 .navitem2 {
     font-size: 10pt;
+    padding-left: 1em;
 }
 
 .navitem3 {
     font-size: 10pt;
     font-style: italic;
+    padding-left: 2em;
 }
 
 .navitem4, .navitem5, .navitem6 {
     font-size: 8pt;
+    padding-left: 3em;
 }
