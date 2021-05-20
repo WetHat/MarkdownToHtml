@@ -83,8 +83,8 @@ Accept wildcard characters?| false
 
 A table of template html fragments with placeholders for:
 
-* the hyperlink: placeholder `{{navurl}}`. The default template is:
-* the link text: placeholder `{{navtext}}`
+* the hyperlink: placeholder `{{navurl}}`.
+* the link text: placeholder `{{navtext}}`.
 
 These templates can also be configured in `Build.json`. See [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md) for more
 details.

@@ -163,6 +163,14 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
+## 2.3.1
+
+* default navigation menu changed to a static vertical sidebar.
+* navigation items pop out dynamically on mouse hover.
+* auto-added navigation items for page headings indented according to heading
+  level.
+* navbar formatting made more consistent.
+
 ## 2.3.0
 
 * Page navigation bar made customizable. To take advantage of this feature
