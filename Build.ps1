@@ -60,3 +60,5 @@ Find-MarkdownFiles $markdown -Exclude $config.Exclude `
 						 -MediaDirectory $markdown `
 	                     -SiteDirectory $staticSite
 
+# Switch off Jekyll builds
+New-Item -Path $staticSite -Name .nojekyll -ItemType File
