@@ -40,11 +40,14 @@ See [version 2.0.0](#2.0.0) release notes for upgrade instructions.
 
 # Release Notes
 
-## 2.3.2
+## 2.3.2 {#2.3.2}
 
 * scrollbar added to long navbars.
+* `md-styles.css` overhauled for static site template to make navbar usable
+  for overflowing navitems
+* documentation overhauled and published on [GitHub Pages](https://wethat.github.io/MarkdownToHtml)
 
-## 2.3.1
+## 2.3.1 {#2.3.1}
 
 * default navigation menu changed to a static vertical sidebar.
 * navigation items pop out dynamically on mouse hover.
