@@ -1,0 +1,40 @@
+{
+    "markdown_dir": "markdown",
+
+    "site_dir": "docs",
+
+    "HTML_template": "Template",
+
+    "Exclude": [
+    ],
+
+    "markdown_extensions": [
+        "common",
+        "definitionlists",
+        "mathematics",
+        "diagrams",
+        "pipetables",
+        "autoidentifiers",
+        "attributes"
+    ],
+
+    "footer": "Site created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.",
+
+    "navigation_bar": {
+        "capture_page_headings": "123456",
+        "templates": {
+            "navitem": "<button class='navitem'><a href='{{navurl}}'>{{navtext}}</a></button>",
+            "navlabel": "<div class='navlabel'>{{navtext}}</div>",
+            "navseparator": "<hr/>",
+            "navheading": "<span class='navitem{{level}}'>{{navtext}}</span>"
+        }
+    },
+
+    "site_navigation": [
+        { "MarkdownToHtml": "" },
+        { "Home": "index.md" },
+        { "Concepts": "{{version}}/about_MarkdownToHtml.md" },
+        { "Module Documentation": "{{version}}/MarkdownToHtml.md"},
+        { "Page Content": "" }
+    ]
+  }

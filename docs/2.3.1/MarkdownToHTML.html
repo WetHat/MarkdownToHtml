@@ -1,0 +1,332 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Module MarkDownToHTML 2.3.1 </title>
+    <link rel="stylesheet" type="text/css" href="../styles/md-styles.css" />
+
+    <!-- Code syntax highlighting configuration -->
+    <!-- Comment this to deactivate syntax highlighting. -->
+    <link rel="stylesheet" type="text/css" href="../styles/vs.css" />
+    <!-- Alternative highlighting styles -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/agate.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/far.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/tomorrow-night-blue.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../vs2015.css" /> -->
+    <script src="../js/highlight.pack.js"></script>
+    <script>
+        hljs.configure({ languages: [] });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <!-- -->
+    <!-- mermaid diagram generator configuration -->
+    <!-- Comment this to deactivate the diagramming extension ('diagrams'). -->
+    <script src="../js/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true });</script>
+    <!-- -->
+    <!-- KaTeX LaTeX Math typesetting configuration -->
+    <!-- Comment this to deactivate the LaTeX math extension ('mathematics'). -->
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <script defer src="../katex/katex.min.js"></script>
+    <script>
+        // <![CDATA[
+        window.onload = function () {
+            var tex = document.getElementsByClassName("math");
+            Array.prototype.forEach.call(tex, function (el) {
+                katex.render(el.textContent, el, {
+                    displayMode: (el.nodeName == "DIV"),
+                    macros: {
+                        "\\(": "",
+                        "\\)": "",
+                        "\\[": "",
+                        "\\]": ""
+                    }
+                })
+            });
+        };
+          // ]]>
+    </script>
+    <!-- -->
+</head>
+<body>
+    <nav><div class='navlabel'>MarkdownToHtml</div>
+<button class='navitem'><a href='../index.html'>Home</a></button>
+<button class='navitem'><a href='../2.3.1/about_MarkdownToHtml.html'>Concepts</a></button>
+<button class='navitem'><a href='../2.3.1/MarkdownToHtml.html'>Module Documentation</a></button>
+<div class='navlabel'>Page Content</div>
+<button class='navitem'><a href='#module-markdowntohtml-2.3.1'><span class='navitem1'>Module MarkDownToHTML 2.3.1</span></a></button>
+<button class='navitem'><a href='#backward-compatibility'><span class='navitem1'>Backward Compatibility</span></a></button>
+<button class='navitem'><a href='#known-incompatibilities'><span class='navitem1'>Known Incompatibilities</span></a></button>
+<button class='navitem'><a href='#exported-functions'><span class='navitem1'>Exported Functions</span></a></button>
+<button class='navitem'><a href='#release-notes'><span class='navitem1'>Release Notes</span></a></button>
+<button class='navitem'><a href='#section'><span class='navitem2'>2.3.2</span></a></button>
+<button class='navitem'><a href='#section-1'><span class='navitem2'>2.3.1</span></a></button>
+<button class='navitem'><a href='#section-2'><span class='navitem2'>2.3.0</span></a></button>
+<button class='navitem'><a href='#section-3'><span class='navitem2'>2.2.2</span></a></button>
+<button class='navitem'><a href='#section-4'><span class='navitem2'>2.2.1</span></a></button>
+<button class='navitem'><a href='#section-5'><span class='navitem2'>2.2.0</span></a></button>
+<button class='navitem'><a href='#section-6'><span class='navitem2'>2.1.1</span></a></button>
+<button class='navitem'><a href='#section-7'><span class='navitem2'>2.1.0</span></a></button>
+<button class='navitem'><a href='#enhancements'><span class='navitem4'>Enhancements</span></a></button>
+<button class='navitem'><a href='#maintenance'><span class='navitem4'>Maintenance</span></a></button>
+<button class='navitem'><a href='#2.0.0'><span class='navitem2'>2.0.0</span></a></button>
+<button class='navitem'><a href='#new-features'><span class='navitem4'>New Features</span></a></button>
+<button class='navitem'><a href='#maintenance-1'><span class='navitem4'>Maintenance</span></a></button>
+<button class='navitem'><a href='#bugfixes'><span class='navitem4'>Bugfixes</span></a></button>
+<button class='navitem'><a href='#section-8'><span class='navitem2'>1.3.0</span></a></button>
+<button class='navitem'><a href='#section-9'><span class='navitem2'>1.2.8</span></a></button>
+<button class='navitem'><a href='#section-10'><span class='navitem2'>1.2.7</span></a></button>
+<button class='navitem'><a href='#section-11'><span class='navitem2'>1.2.6</span></a></button>
+<button class='navitem'><a href='#section-12'><span class='navitem2'>1.2.4</span></a></button>
+<button class='navitem'><a href='#section-13'><span class='navitem2'>1.2.3</span></a></button>
+<button class='navitem'><a href='#section-14'><span class='navitem2'>1.2.2</span></a></button>
+<button class='navitem'><a href='#section-15'><span class='navitem2'>1.2.1</span></a></button>
+<button class='navitem'><a href='#section-16'><span class='navitem2'>1.2.0</span></a></button>
+<button class='navitem'><a href='#section-17'><span class='navitem2'>1.1.0</span></a></button>
+<button class='navitem'><a href='#section-18'><span class='navitem2'>1.0.0</span></a></button>
+</nav>
+    <main>
+        <article>
+            <h1 id="module-markdowntohtml-2.3.1" class="title">Module MarkDownToHTML 2.3.1</h1>
+<p><strong>Tags</strong>: Markdown, HTML, Converter, Markdown, HTML, Converter</p>
+<p>Highly configurable Markdown to HTML conversion using customizable templates.</p>
+<p>For information about concepts and use cases
+see <a href="about_MarkdownToHtml.html">about_MarkdownToHtml</a>.</p>
+<h1 id="backward-compatibility">Backward Compatibility</h1>
+<p>If you are upgrading the currently installed version to a newer version of the
+<strong>same</strong> major revision, all conversion or site projects are still fully functional.
+Unless you are having issues with any of the pre-installed <em>JavaScript</em>
+libraries no action is required.</p>
+<p>When updating to a new major revision there may be incompatibilities which
+affect existing custom templates and static site projects.
+Make sure to read the upgrade instructions in the release notes.
+However, you still may want to upgrade existing custom templates and
+static site projects to take advantage of new functionality or bug fixes.
+See the release notes for details.</p>
+<h1 id="known-incompatibilities">Known Incompatibilities</h1>
+<p>If you have have conversion projects which use the <em>mathematics</em> extensions and
+were created with versions of this module older than 2.0.0 (i.e. 1.* or 0.*).
+See <a href="#2.0.0">version 2.0.0</a> release notes for upgrade instructions.</p>
+<h1 id="exported-functions">Exported Functions</h1>
+<ul>
+<li><a href="Convert-MarkdownToHTML.html">Convert-MarkdownToHTML</a></li>
+<li><a href="Convert-MarkdownToHTMLFragment.html">Convert-MarkdownToHTMLFragment</a></li>
+<li><a href="ConvertTo-NavigationItem.html">ConvertTo-NavigationItem</a></li>
+<li><a href="ConvertTo-PageHeadingNavigation.html">ConvertTo-PageHeadingNavigation</a></li>
+<li><a href="Find-MarkdownFiles.html">Find-MarkdownFiles</a></li>
+<li><a href="New-HTMLTemplate.html">New-HTMLTemplate</a></li>
+<li><a href="New-StaticHTMLSiteProject.html">New-StaticHTMLSiteProject</a></li>
+<li><a href="Publish-StaticHtmlSite.html">Publish-StaticHtmlSite</a></li>
+</ul>
+<h1 id="release-notes">Release Notes</h1>
+<h2 id="section">2.3.2</h2>
+<ul>
+<li>scrollbar added to long navbars.</li>
+</ul>
+<h2 id="section-1">2.3.1</h2>
+<ul>
+<li>default navigation menu changed to a static vertical sidebar.</li>
+<li>navigation items pop out dynamically on mouse hover.</li>
+<li>auto-added navigation items for page headings indented according to heading
+level.</li>
+<li>navbar formatting made more consistent.</li>
+<li>navbar small screen support</li>
+</ul>
+<h2 id="section-2">2.3.0</h2>
+<ul>
+<li><p>Page navigation bar made customizable. To take advantage of this feature
+in existing projects following files need to be updated:</p>
+<ul>
+<li><p><code>Build.ps1</code>: A <code>-NavTemplate</code> parameter needs to be added to the invokation of <a href="ConvertTo-NavigationItem.html"><code>ConvertTo-NavigationItem</code></a>.
+A <code>-NavTemplate</code> and a <code>-HeadingLevels</code> parameter needs to be added to
+the invokation of<a href="ConvertTo-PageHeadingNavigation.html"><code>ConvertTo-PageHeadingNavigation</code></a>.
+For example:</p>
+<pre><code class="language-PowerShell"># Set-up the content mapping rules for replacing the templace placeholders
+$SCRIPT:contentMap = @{
+    # Add additional mappings here...
+    &#39;{{footer}}&#39; =  $config.Footer # Footer text from configuration
+    &#39;{{nav}}&#39;    = {
+	    param($fragment) # the html fragment created from a markdown file
+	    $navcfg = $config.navigation_bar # navigation bar configuration
+	    # Create the navigation items configured in &#39;Build.json&#39;
+	    $config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
+	                                                       -NavTemplate $navcfg.templates
+	    # Create navigation items to headings on the local page.
+	    # This requires the `autoidentifiers` extension to be enabled.
+	    ConvertTo-PageHeadingNavigation $fragment.HTMLFragment -NavTemplate $navcfg.templates `
+	                                                           -HeadingLevels $navcfg.capture_page_headings
+    }
+}
+</code></pre>
+</li>
+<li><p><code>Build.json</code>: a navigation bar configuration section needs to be added:</p>
+<pre><code class="language-json">...
+&quot;navigation_bar&quot;: {
+    &quot;capture_page_headings&quot;: &quot;123456&quot;,
+    &quot;templates&quot;: {
+        &quot;navitem&quot;: &quot;&lt;button class=&#39;navitem&#39;&gt;&lt;a href=&#39;{{navurl}}&#39;&gt;{{navtext}}&lt;/a&gt;&lt;/button&gt;&quot;,
+        &quot;navlabel&quot;: &quot;&lt;div class=&#39;navitem&#39;&gt;{{navtext}}&lt;/div&gt;&quot;,
+        &quot;navseparator&quot;: &quot;&lt;hr class=&#39;navitem&#39;/&gt;&quot;,
+        &quot;navheading&quot;: &quot;&lt;span class=&#39;navitem{{level}}&#39;&gt;{{navtext}}&lt;/span&gt;&quot;
+  }
+},
+...
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p><code>Markdig</code> update to version 0.24</p>
+</li>
+<li><p><code>KateX</code> update to version 0.13.11</p>
+</li>
+<li><p><code>Mermaid</code> update to version 8.10.1</p>
+</li>
+</ul>
+<h2 id="section-3">2.2.2</h2>
+<ul>
+<li>added referenced .net assemblies which may not be guaranteed to be present</li>
+</ul>
+<h2 id="section-4">2.2.1</h2>
+<ul>
+<li>Katex Updated to version 0.12.0</li>
+<li>Mermaid updated to version 8.8.2</li>
+<li>Markdig updated to version 0.22.0</li>
+<li>Code signed With long term self signed certificate</li>
+</ul>
+<h2 id="section-5">2.2.0</h2>
+<ul>
+<li>Fixed issue with <a href="ConvertTo-NavigationItem.html"><code>ConvertTo-NavigationItem</code></a> not understanding hyperlinks
+with <code>#</code> fragments.</li>
+<li>Added <code>autoidentifiers</code> to the <code>Build.json</code> in the project template so that
+headings get <code>id</code> attributes.</li>
+<li>Added navigation items for headings on the current page to the navbar.</li>
+</ul>
+<h2 id="section-6">2.1.1</h2>
+<ul>
+<li>Bugfix: Site assets not copied in build script</li>
+</ul>
+<h2 id="section-7">2.1.0</h2>
+<h4 id="enhancements">Enhancements</h4>
+<ul>
+<li><a href="Publish-StaticHtmlSite.html"><code>Publish-StaticHtmlSite</code></a> now accepts definition of custom placeholder
+mappins for expansion of <code>md-template.html</code>.</li>
+<li>Default template placeholder delimiters changed to <code>{{</code> and <code>}}</code>.</li>
+<li>Static HTML site projects added: See <a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a>.</li>
+<li>Documentation made more <a href="Get-Help.html"><code>Get-Help</code></a> friendly.</li>
+<li><em>Mermaid</em> assets updated to version 8.5.0</li>
+</ul>
+<h4 id="maintenance">Maintenance</h4>
+<ul>
+<li>Minimum required Powershell version now 5.1 (Desktop)</li>
+</ul>
+<h2 id="2.0.0">2.0.0</h2>
+<p>The version of <em>Markdig</em> included in this release introduces an
+incompatiblity with projects which use the <em>mathematics</em> extension
+<strong>and</strong> were created with versions of this module older than 2.0.0
+(i.e. 1.* or 0.*).</p>
+<p>To address this incompaibility the <em>KaTex</em> configuration in
+<strong>all</strong> deployed html templates (<code>md_template.html</code>) need to be updated like so:</p>
+<pre><code class="language-html">&lt;script&gt;
+    // &lt;![CDATA[
+    window.onload = function() {
+        var tex = document.getElementsByClassName(&quot;math&quot;);
+        Array.prototype.forEach.call(tex, function(el) {
+            katex.render(el.textContent, el, {
+                                                displayMode: (el.nodeName == &quot;DIV&quot;),
+                                                macros: {
+                                                            &quot;\\(&quot;: &quot;&quot;,
+                                                            &quot;\\)&quot;: &quot;&quot;,
+                                                            &quot;\\[&quot;: &quot;&quot;,
+                                                            &quot;\\]&quot;: &quot;&quot;
+                                                        }
+                                            })
+        });
+    };
+    // ]]&gt;
+&lt;/script&gt;
+</code></pre>
+<h4 id="new-features">New Features</h4>
+<ul>
+<li>Highlighting languages <em>Perl</em> and <em>YAML</em> added</li>
+</ul>
+<h4 id="maintenance-1">Maintenance</h4>
+<ul>
+<li>Updated to <em>Markdig</em> 0.18.0.</li>
+<li>KaTeX updated to version 0.11.1</li>
+<li>Code syntax highlighting updated to version 9.17.1</li>
+</ul>
+<h4 id="bugfixes">Bugfixes</h4>
+<ul>
+<li>Rendering of math blocks now creates centered output with the correct (bigger) font.</li>
+<li>Changed the default html template (<code>md_template.html</code>) to address the incompatible
+change in the LaTeX math output of the <em>mathematics</em> extension of <em>Markdig</em>.</li>
+</ul>
+<h2 id="section-8">1.3.0</h2>
+<ul>
+<li>upgrade of markdig to version 0.17.2</li>
+<li>KaTex upgraded to 0.11.0</li>
+<li>Re-factored the Markdown converter pipeline and made it parts public
+to make it useful for a broader range of Markdown conversion scenarios.</li>
+</ul>
+<h2 id="section-9">1.2.8</h2>
+<ul>
+<li><a href="Write-Host.html"><code>Write-Host</code></a> replaced by the more benign <a href="Write-Verbose.html"><code>Write-Verbose</code></a></li>
+<li>Minor code cleanup</li>
+</ul>
+<h2 id="section-10">1.2.7</h2>
+<ul>
+<li>Empty lines allowed im 'md-template.html` to remove an ugly but harmless
+exception.</li>
+<li>Syntax highlighting updated to version 9.14.2</li>
+<li>Upgrade to markdig version 0.15.7</li>
+<li>Added Resources and configuration for the <a href="https://mermaidjs.github.io/">mermaid</a> diagram and
+flowchart generator version 8.0.0 to the HTML template.</li>
+<li>Added Resources and configuration for the <a href="https://katex.org/">KaTeX</a> LaTeX Math
+typesetting library version 0.10.0 to the HTML template.</li>
+<li>Documentation improved.</li>
+</ul>
+<h2 id="section-11">1.2.6</h2>
+<ul>
+<li>Powershell Gallery metadata added.</li>
+</ul>
+<h2 id="section-12">1.2.4</h2>
+<ul>
+<li>Replaced <code>[System.Web.HttpUtility]</code> by <code>[System.Net.WebUtility]</code> to fix issue
+when powershell is run with <code>-noprofile</code></li>
+</ul>
+<h2 id="section-13">1.2.3</h2>
+<ul>
+<li>Fixed regression introduced in 1.2.2</li>
+<li>Regression test setup</li>
+</ul>
+<h2 id="section-14">1.2.2</h2>
+<ul>
+<li>Support for markdown files in a directory hierarchy fixed.
+(directory scanning fixed and relative path added to resource links)</li>
+</ul>
+<h2 id="section-15">1.2.1</h2>
+<p>Handle partially HTML encoded code blocks</p>
+<h2 id="section-16">1.2.0</h2>
+<ul>
+<li>Replaced XML template processing with text based template processing,
+to relax constraints on the HTML fragment quality.</li>
+<li>HTML encode text in <code>&lt;code&gt;</code> blocks</li>
+</ul>
+<h2 id="section-17">1.1.0</h2>
+<ul>
+<li>Setting of Markdown parser options implemented</li>
+<li>Wildcard support for pathes added</li>
+</ul>
+<h2 id="section-18">1.0.0</h2>
+<p>Initial Release</p>
+<hr />
+<p><cite>Module: MarkDownToHTML; Version: 2.3.1; (c) 2018-2021 WetHat Lab. All rights reserved.</cite></p>
+
+        </article>
+        <footer>
+            <hr />
+            Site created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.
+        </footer>
+    </main>
+</body>
+</html>

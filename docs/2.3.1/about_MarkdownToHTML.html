@@ -1,0 +1,489 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Topic</title>
+    <link rel="stylesheet" type="text/css" href="../styles/md-styles.css" />
+
+    <!-- Code syntax highlighting configuration -->
+    <!-- Comment this to deactivate syntax highlighting. -->
+    <link rel="stylesheet" type="text/css" href="../styles/vs.css" />
+    <!-- Alternative highlighting styles -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/agate.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/far.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/tomorrow-night-blue.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../vs2015.css" /> -->
+    <script src="../js/highlight.pack.js"></script>
+    <script>
+        hljs.configure({ languages: [] });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <!-- -->
+    <!-- mermaid diagram generator configuration -->
+    <!-- Comment this to deactivate the diagramming extension ('diagrams'). -->
+    <script src="../js/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true });</script>
+    <!-- -->
+    <!-- KaTeX LaTeX Math typesetting configuration -->
+    <!-- Comment this to deactivate the LaTeX math extension ('mathematics'). -->
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <script defer src="../katex/katex.min.js"></script>
+    <script>
+        // <![CDATA[
+        window.onload = function () {
+            var tex = document.getElementsByClassName("math");
+            Array.prototype.forEach.call(tex, function (el) {
+                katex.render(el.textContent, el, {
+                    displayMode: (el.nodeName == "DIV"),
+                    macros: {
+                        "\\(": "",
+                        "\\)": "",
+                        "\\[": "",
+                        "\\]": ""
+                    }
+                })
+            });
+        };
+          // ]]>
+    </script>
+    <!-- -->
+</head>
+<body>
+    <nav><div class='navlabel'>MarkdownToHtml</div>
+<button class='navitem'><a href='../index.html'>Home</a></button>
+<button class='navitem'><a href='../2.3.1/about_MarkdownToHtml.html'>Concepts</a></button>
+<button class='navitem'><a href='../2.3.1/MarkdownToHtml.html'>Module Documentation</a></button>
+<div class='navlabel'>Page Content</div>
+<button class='navitem'><a href='#topic'><span class='navitem1'>Topic</span></a></button>
+<button class='navitem'><a href='#short-description'><span class='navitem1'>Short Description</span></a></button>
+<button class='navitem'><a href='#prerequisites'><span class='navitem2'>Prerequisites</span></a></button>
+<button class='navitem'><a href='#typical-use-cases'><span class='navitem1'>Typical Use Cases</span></a></button>
+<button class='navitem'><a href='#converting-markdown-files-to-html-files'><span class='navitem2'>Converting Markdown files to HTML files</span></a></button>
+<button class='navitem'><a href='#static-html-site-authoring-projects'><span class='navitem2'>Static HTML Site Authoring Projects</span></a></button>
+<button class='navitem'><a href='#markdown-extensions'><span class='navitem1'>Markdown Extensions</span></a></button>
+<button class='navitem'><a href='#default-conversion-templates'><span class='navitem1'>Default Conversion Templates</span></a></button>
+<button class='navitem'><a href='#conversion-template-customization'><span class='navitem1'>Conversion Template Customization</span></a></button>
+<button class='navitem'><a href='#customizing-static-html-site-projects'><span class='navitem1'>Customizing Static Html Site Projects</span></a></button>
+<button class='navitem'><a href='#content-map-customization'><span class='navitem2'>Content Map Customization</span></a></button>
+<button class='navitem'><a href='#keywords'><span class='navitem1'>Keywords</span></a></button>
+<button class='navitem'><a href='#other-markdown-site-generators'><span class='navitem1'>Other Markdown Site Generators</span></a></button>
+</nav>
+    <main>
+        <article>
+            <h1 id="topic">Topic</h1>
+<p>about_MarkdownToHTML</p>
+<h1 id="short-description">Short Description</h1>
+<p>Highly configurable Markdown to HTML conversion using customizable templates.</p>
+<ul>
+<li>Open Source and fully <em>hackable</em>.</li>
+<li>Out-of-the box support for diagrams, math typesetting and code syntax
+highlighting.</li>
+<li>Based on <a href="https://github.com/lunet-io/markdig">Markdig</a>,
+a fast, powerful, <a href="http://commonmark.org/">CommonMark</a> compliant Markdown
+processor for .NET with more than 20 configurable extensions.</li>
+<li>High quality Open Source web components:
+<ul>
+<li><strong>Code Highlighting</strong>: <a href="https://highlightjs.org/">highlight.js</a>; supports
+189 languages and 91 styles.</li>
+<li><strong>Math typesetting</strong>: <a href="https://katex.org/">KaTeX</a>; The fastest math
+typesetting library for the web.</li>
+<li><strong>Diagramming</strong>: <a href="http://mermaid-js.github.io/mermaid/">Mermaid</a>; Generation
+of diagrams and flowcharts from text in a similar manner as Markdown.</li>
+</ul>
+</li>
+<li>Highly configurable static website projects with configuration file and build
+script. See <a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a>.</li>
+<li>Sites can be used offline (without connection to the internet). All site
+assets are local.</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<blockquote>
+<p>To successfully create web sites from Markdown you should:</p>
+<ul>
+<li>know Markdown. A good starting point would be
+<a href="https://github.github.com/gfm/">GitHub Flavored Markdown</a></li>
+<li>have some knowledge about HTML and CSS (Cascading Stylesheets)</li>
+<li>be familiar with <a href="https://www.tutorialspoint.com/json/json_overview.htm">JSON</a>
+configuration files.</li>
+<li>have some <a href="https://www.tutorialspoint.com/powershell/index.htm"><em>PowerShell</em></a>
+knowledge in case you want to customize the build script <code>Build.ps1</code>.</li>
+</ul>
+</blockquote>
+<h1 id="typical-use-cases">Typical Use Cases</h1>
+<p>This module supports a range of workflows involving conversion of Markdown
+text to HTML. The most common uses cases are outlined below.</p>
+<h2 id="converting-markdown-files-to-html-files">Converting Markdown files to HTML files</h2>
+<blockquote>
+<p>The conversion setup in the context of this use case is typically based
+on <a href="Convert-MarkdownToHtml.html"><code>Convert-MarkdownToHtml</code></a>. This function picks up Markdown files
+and their resources (e.g images) from a source directory and outputs
+HTML files to a destination directory as shown below:</p>
+<pre><code class="language-PowerShell">PS&gt; Convert-MarkdownToHTML -Path &#39;&lt;directory with markdown files&gt;&#39; -SiteDirectory &#39;&lt;html site directory&gt;&#39; -IncludeExtension &#39;advanced&#39;
+</code></pre>
+<p>Local Links in the Markdown files are rewired to point to the corresponding
+HTML files.</p>
+</blockquote>
+<h2 id="static-html-site-authoring-projects">Static HTML Site Authoring Projects</h2>
+<blockquote>
+<p>Static HTML site projects can be easily bootstrapped with the
+<a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a> function.</p>
+<pre><code class="language-PowerShell">PS&gt; New-StaticHTMLSiteProject -ProjectDirectory &#39;MyProject&#39;
+PS&gt; cd &#39;MyProject&#39;
+PS&gt; ./Build.ps1
+</code></pre>
+<p>The code snippet above generates a fully functional static HTML site
+with a README.html file showcasing some features and further tips
+on authoring the static site,.</p>
+<p>Static site authoring projects have a project configuration
+file <code>Build.json</code>, a customizable template, and a
+customizable converter pipeline located in the build script <code>Build.ps1</code>.</p>
+<pre><code>                 Directory
+                    |
+                    v
+        .-----------&#39;------------.
+1       |  Markdown File Scanner |
+        &#39;-----------.------------&#39;
+                    |
+               Markdown files
+                    |
+       .------------&#39;-------------.
+2      | HTML Fragment Conversion |
+       &#39;------------.-------------&#39;
+                    |
+       .------------&#39;-------------.    .- Template
+3      | HTML Document Assembler  | &lt;--+
+       &#39;------------.-------------&#39;    &#39;- Content Map
+                    |
+                    v
+          standalone HTML Documents
+</code></pre>
+<p>The PowerShell functions associated with the pipeline stages are:</p>
+<ol>
+<li><a href="Find-MarkdownFiles.html"><code>Find-MarkdownFiles</code></a></li>
+<li><a href="Convert-MarkdownToHTMLFragment.html"><code>Convert-MarkdownToHTMLFragment</code></a></li>
+<li><a href="Publish-StaticHtmlSite.html"><code>Publish-StaticHtmlSite</code></a></li>
+</ol>
+<p>See the <a href="#customization">customization</a> section for more details.</p>
+</blockquote>
+<h1 id="markdown-extensions">Markdown Extensions</h1>
+<p>The <a href="https://github.com/lunet-io/markdig">Markdig</a> Markdown converter can be
+configured to parse extended Markdown syntax. Below is a list of
+supported extensions which can be used in <a href="Convert-MarkdownToHTML.html"><code>Convert-MarkdownToHTML</code></a> or
+<a href="Convert-MarkdownToHTMLFragment.html"><code>Convert-MarkdownToHTMLFragment</code></a>.</p>
+<p><strong>Note</strong>: The 'mathematics' and 'diagramming' extensions require additional
+configuration in the HTML template (<code>md-template.html</code>).
+Refer to the <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a> for customization details.</p>
+<dl>
+<dt><code>abbreviations</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AbbreviationSpecs.md">Abbreviations</a></dd>
+<dt><code>advanced</code></dt>
+<dd>
+<p>advanced parser configuration. A pre-build collection of extensions including:</p>
+<ul>
+<li>'abbreviations'</li>
+<li>'autoidentifiers'</li>
+<li>'citations'</li>
+<li>'customcontainers'</li>
+<li>'definitionlists'</li>
+<li>'emphasisextras'</li>
+<li>'figures'</li>
+<li>'footers'</li>
+<li>'footnotes'</li>
+<li>'gridtables'</li>
+<li>'mathematics'</li>
+<li>'medialinks'</li>
+<li>'pipetables'</li>
+<li>'listextras'</li>
+<li>'tasklists'</li>
+<li>'diagrams'</li>
+<li>'autolinks'</li>
+<li>'attributes'</li>
+</ul>
+</dd>
+<dt><code>attributes</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GenericAttributesSpecs.md">Special attributes</a>.
+Set HTML attributes (e.g <code>id</code> or class`).</dd>
+<dt><code>autoidentifiers</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoIdentifierSpecs.md">Auto-identifiers</a>.
+Automatically creates an identifiers attributes (id) for headings.</dd>
+<dt><code>autolinks</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoLinks.md">Auto-links</a>
+generates links if a text starts with <code>http://</code> or <code>https://</code> or <code>ftp://</code> or <code>mailto:</code> or <code>www.xxx.yyy</code>.</dd>
+<dt><code>bootstrap</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/BootstrapSpecs.md">Bootstrap</a>
+to output bootstrap classes.</dd>
+<dt><code>citations</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md">Citation text</a>
+by enclosing text with <code>&#39;&#39;...&#39;&#39;</code></dd>
+<dt><code>common</code></dt>
+<dd>CommonMark parsing; no parser extensions (default)</dd>
+<dt><code>customcontainers</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/CustomContainerSpecs.md">Custom containers</a>
+similar to fenced code block <code>:::</code> for generating a proper <code>&lt;div&gt;...&lt;/div&gt;</code> instead.</dd>
+<dt><code>definitionlists</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DefinitionListSpecs.md">Definition lists</a></dd>
+<dt><code>diagrams</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DiagramsSpecs.md">Diagrams</a>
+whenever a fenced code block uses the 'mermaid' keyword, it will be converted to a div block with the content as-is
+(currently, supports <code>mermaid</code> and <code>nomnoml</code> diagrams). Resources for the <code>mermaid</code> diagram generator are pre-installed and configured.
+See <a href="New-HTMLTemplate.html">New-HTMLTemplate</a> for customization details.</dd>
+<dt><code>emojis</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmojiSpecs.md">Emoji</a> support.</dd>
+<dt><code>emphasisextras</code></dt>
+<dd>
+<p><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmphasisExtraSpecs.md">Extra emphasis</a>
+markup.</p>
+<ul>
+<li>strike through <code>~~</code></li>
+<li>Subscript <code>~</code></li>
+<li>Superscript <code>^</code></li>
+<li>Inserted <code>++</code></li>
+<li>Marked <code>==</code></li>
+</ul>
+</dd>
+<dt><code>figures</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md">Figures</a>.
+A figure can be defined by using a pattern equivalent to a fenced code block but with the character <code>^</code>.</dd>
+<dt><code>footers</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md">Footers</a>.</dd>
+<dt><code>footnotes</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FootnotesSpecs.md">Footnotes</a></dd>
+<dt><a href="gfm-pipetables.html"><code>gfm-pipetables</code></a></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md">Pipe tables</a>
+to generate tables from markup. Gfm pipe tables using header for column count</dd>
+<dt><code>globalization</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GlobalizationSpecs.md">Globalization</a>.
+Adds support for RTL (Right To Left) content by adding <code>dir=&quot;rtl&quot;</code> and <code>align=&quot;right&quot;</code> attributes to
+the appropriate html elements. Left to right text is not affected by this extension.</dd>
+<dt><code>gridtables</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GridTableSpecs.md">Grid tables</a>
+allow to have multiple lines per cells and allows to span cells over multiple columns.</dd>
+<dt><code>hardlinebreak</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/HardlineBreakSpecs.md">Hard Linebreak</a>
+a new line in a paragraph block will result in a hardline break <code>&lt;br/&gt;</code>:</dd>
+<dt><code>listextras</code></dt>
+<dd>Extra bullet lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/ListExtraSpecs.md),
+supporting alpha bullet a. b. and roman bullet (i, ii...etc.)</dd>
+<dt><code>mathematics</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MathSpecs.md">Mathematics</a>
+LaTeX extension by enclosing <code>$$</code> for block and <code>$</code> for inline math. Resources for this extension are pre-installed and configured.
+See <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a> for customization details.</dd>
+<dt><code>medialinks</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md">Media support</a>
+for media urls (youtube, vimeo, mp4...etc.).</dd>
+<dt><code>nofollowlinks</code></dt>
+<dd>Add <code>rel=nofollow</code> to all links rendered to HTML.</dd>
+<dt><code>nohtml</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/NoHtmlSpecs.md">NoHTML</a>
+allows to disable the parsing of HTML.</dd>
+<dt><a href="nonascii-noescape.html"><code>nonascii-noescape</code></a></dt>
+<dd>Use this extension to disable URI escape with % characters for non-US-ASCII characters in order to
+workaround a bug under IE/Edge with local file links containing non US-ASCII chars. DO NOT USE OTHERWISE.</dd>
+<dt><code>noopenerlinks</code></dt>
+<dd>Add <code>rel=noopener</code> to all links rendered to HTML effectively telling
+the browser to open a link in a new tab without providing the context access to the webpage that
+opened the link.</dd>
+<dt><code>noreferrerlinks</code></dt>
+<dd>Add <code>rel=noreferrer</code> to all links rendered to HTML preventing the browser, when you navigate to
+another page, to send the referring webpage�s address.</dd>
+<dt><code>pipetables</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md">Pipe tables</a>
+to generate tables from markup.</dd>
+<dt><code>smartypants</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/SmartyPantsSpecs.md">SmartyPants</a>
+quotes.</dd>
+<dt><code>tasklists</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/TaskListSpecs.md">Task Lists</a>.
+A task list item consist of <code>[ ]</code> or <code>[x]</code> or <code>[X]</code> inside a list item (ordered or unordered)</dd>
+<dt><code>yaml</code></dt>
+<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/YamlSpecs.md">YAML frontmatter</a>
+parsing.</dd>
+</dl>
+<h1 id="default-conversion-templates">Default Conversion Templates</h1>
+<p>The module provides templates for custom conversion projects based on the
+<a href="Convert-MarkdownToHTML.html"><code>Convert-MarkdownToHTML</code></a> and for static site authoring projects generated by
+<a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a>.</p>
+<p>The template directory structure is the same in both cases
+and the factory configuration is almost identical.</p>
+<p>The common factory-default configuration of a new template is as follows.</p>
+<dl>
+<dt>Syntax Highlighting</dt>
+<dd>
+<p>Pre-installed and configured languages:</p>
+<ul>
+<li>Bash</li>
+<li>C#</li>
+<li>C++</li>
+<li>Clojure</li>
+<li>CMake</li>
+<li>CSS</li>
+<li>Diff</li>
+<li>DOS .bat</li>
+<li>F#</li>
+<li>Groovy</li>
+<li>HTML/XML</li>
+<li>HTTP</li>
+<li>Java</li>
+<li>JavaScript</li>
+<li>JSON</li>
+<li>Lisp</li>
+<li>Makefile</li>
+<li>Markdown</li>
+<li>Maxima</li>
+<li>Perl</li>
+<li>Python</li>
+<li>PowerShell</li>
+<li>SQL</li>
+<li>YAML</li>
+</ul>
+<p>To obtain syntax highlighting for other/additional languages, please visit
+the <a href="https://highlightjs.org/download/">Getting highlight.js</a> page and
+get a customized version of <code>highlight.js</code> configured for the languages
+you need.</p>
+</dd>
+<dt>Diagramming</dt>
+<dd>The 'mermaid' extension is activated and its resources are pre-installed.</dd>
+<dt>Math Typesetting</dt>
+<dd>The 'mathematics' extension is activated and its resources are pre-installed.</dd>
+</dl>
+<h1 id="conversion-template-customization">Conversion Template Customization</h1>
+<p>For many cases the module provides reasonable default templates so that
+first results can be achieved quickly and easily. However, if the
+conversion process is to be embedded in a larger process or workflow,
+structure and appearance of the generated HTML files need to be adjusted.</p>
+<p>Simple Markdown to HTML conversions and static site projects are based
+on very similar conversion templates. These templates
+reside in a directories with the following structure:</p>
+<pre><code>&lt;root&gt;                 &lt;- template root directory
+   |- js               &lt;- javascripts (*.js)
+   |- katex            &lt;- LateX math renderer
+   |- styles           &lt;- stylesheets (*.css)
+   &#39;- md-template.html &lt;- Html page template
+</code></pre>
+<dl>
+<dt><code>md-template.html</code></dt>
+<dd>
+<p>The HTML template file</p>
+<ul>
+<li>defines the overall layout of the generated HTML files</li>
+<li>has placeholders for content injection.</li>
+<li>loads all JavaScript and stylesheet resources
+to render the final HTML page in the desired way.</li>
+</ul>
+<p>The placeholders on the page are enclosed in double
+curly brackets, e.g. <code>{{foo}}</code>. The command <a href="Publish-StaticHtmlSite.html"><code>Publish-StaticHtmlSite</code></a>
+located these placeholders on the template page and replaces them
+with page content. This replacement step takes place for simple
+conversion projects based on the <a href="Convert-MarkdownToHTML.html"><code>Convert-MarkdownToHTML</code></a> command
+and also with static site projects.
+By default following placeholders are defined:</p>
+<dl>
+<dt><code>{{title}}</code></dt>
+<dd>Placeholder for a page title generated from the Markdown content
+or filename.</dd>
+<dt><code>{{content}}</code></dt>
+<dd>Placeholder for the HTML content fragment generated from Markdown
+content.</dd>
+</dl>
+<p>For static HTML site projects following additional placeholders are
+defined on <code>md-template.html</code> :</p>
+<dl>
+<dt><code>{{nav}}</code></dt>
+<dd>Placehoder which is replaced by a HTML content fragment
+defining a navigatation sidebar on each page.</dd>
+<dt><code>{{footer}}</code></dt>
+<dd>Placeholder which is replaced by a HTML content fragment
+defining the page footer.</dd>
+</dl>
+<p>For static HTML site projects additional
+<a href="#content-map-Customization">custom placeholders</a> can be added.</p>
+</dd>
+<dt>The <code>js</code> directory</dt>
+<dd>Initially contains JavaScript resources to support
+extensions such as code syntax highlighting or diagramming.
+JavaScript files can be added or removed as needed.</dd>
+<dt>The <code>katex</code> directory</dt>
+<dd>Contains the support files for LaTeX math rendering. It
+can be removed if this functionality is not needed.</dd>
+<dt>The <code>styles</code> directory</dt>
+<dd>
+<p>Contains style sheets. The file <code>md-styles.css</code> contains the default
+styles. The other style sheets support other feature such as
+code systax highlighting.</p>
+<p>Usually style customization of the HTML pages is achieved by editing
+<code>md-styles.css</code>. However, other <code>*.css</code> files can be added as needed.</p>
+</dd>
+</dl>
+<h1 id="customizing-static-html-site-projects">Customizing Static Html Site Projects</h1>
+<h2 id="content-map-customization">Content Map Customization</h2>
+<blockquote>
+<p>When a custom placeholders was added to <code>md-template.html</code> it needs to
+be replaced by a HTML fragment in the project's build process.
+This can be done by adding an entry to the content map defined
+in <code>Build.ps1</code>. For example:</p>
+<pre><code class="language-Powershell">SCRIPT:contentMap = @{
+
+&#39;{{my_placeholder}}&#39; = &#39;&lt;b&gt;Hello&lt;/b&gt;&#39;
+&#39;{{footer}}&#39; =  $config.Footer # Footer text from configuration
+
+...
+}
+</code></pre>
+<p>The code in the example above will replace all occurenced of
+<code>{{my_placeholder}}</code> in <code>md-template.html</code> with the HTML fragment
+<code>&lt;b&gt;Hello&lt;/b&gt;</code>.</p>
+<p>The replacement value for a placeholders can be dynamically computed. To
+do this a script block can be assigned.</p>
+<p>The script block must take <strong>one</strong> parameter to which an object is bound
+which has these properties:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Property</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>Title</code></td>
+<td style="text-align: left;">Optional page title. The first heading in the Markdown content.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>HtmlFragment</code></td>
+<td style="text-align: left;">The HTML fragment string generated from the Markdown text.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>RelativePath</code></td>
+<td style="text-align: left;">Passed through form the input object, provided it exists.</td>
+</tr>
+</tbody>
+</table>
+<p>It is called once for each HTML fragment and should return one or more
+strings which define the substitution value for each page.</p>
+<p>Script Block example:</p>
+<pre><code class="language-PowerShell">{
+  param($Input)
+  &quot;Source = $($Input.RelativePath)&quot;
+}
+</code></pre>
+<p>This script block would subsitute the path of the HTML document relative
+to the site root for every occurence of '{{my_placeholder}}'.</p>
+</blockquote>
+<h1 id="keywords">Keywords</h1>
+<p>Markdown HTML static sites Conversion</p>
+<h1 id="other-markdown-site-generators">Other Markdown Site Generators</h1>
+<ul>
+<li><a href="https://www.mkdocs.org/">MkDocs</a> - A fast and simple static site generator
+that is geared towards building project documentation.
+Documentation source files are written in Markdown, and configured with a
+single YAML configuration file.</li>
+</ul>
+
+        </article>
+        <footer>
+            <hr />
+            Site created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.
+        </footer>
+    </main>
+</body>
+</html>
