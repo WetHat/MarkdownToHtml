@@ -31,6 +31,7 @@
     },
 
     "site_navigation": [
+        { "<img width='90%' src='Markdown2HTML.png'>": "index.md" },
         { "MarkdownToHtml": "" },
         { "Home": "index.md" },
         { "Concepts": "{{version}}/about_MarkdownToHTML.md" },
