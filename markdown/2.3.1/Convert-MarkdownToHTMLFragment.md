@@ -53,7 +53,7 @@ Accept wildcard characters?| false
 <blockquote>
 
 Comma separated list of Markdown parsing extension names.
-See [about_MarkdownToHtml](about_MarkdownToHtml.md#markdown-extensions) for an
+See [about_MarkdownToHTML](about_MarkdownToHTML.md#markdown-extensions) for an
 annotated list of supported extensions.
 
 Parameter Property         | Value
@@ -219,7 +219,7 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
 # Related Links
 
 * [https://wethat.github.io/MarkdownToHtml/2.3.1/Convert-MarkdownToHTMLFragment.html](https://wethat.github.io/MarkdownToHtml/2.3.1/Convert-MarkdownToHTMLFragment.html) 
-* [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md) 
+* [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md) 
 * [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
 * [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) 
 * [`New-HTMLTemplate`](New-HTMLTemplate.md)

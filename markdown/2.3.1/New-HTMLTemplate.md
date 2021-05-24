@@ -16,9 +16,9 @@ to seed the customization process. The new template directory contains the
 resources necesssary to generate fully functional, standalone HTML files.
 
 Information about the template
-[factory default configuration](about_MarkdownToHtml.md#default-conversion-templates)
-and [template customization](about_MarkdownToHtml.md#conversion-templates-customization)
-can be found on the [`about_MarkdownToHtml`](about_MarkdownToHtml.md) help page.
+[factory default configuration](about_MarkdownToHTML.md#default-conversion-templates)
+and [template customization](about_MarkdownToHTML.md#conversion-templates-customization)
+can be found on the [`about_MarkdownToHTML`](about_MarkdownToHTML.md) help page.
 
 
 

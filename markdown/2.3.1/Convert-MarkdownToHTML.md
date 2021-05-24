@@ -67,7 +67,7 @@ Accept wildcard characters?| false
 <blockquote>
 
 Comma separated list of Markdown parsing extensions to use.
-See [about_MarkdownToHtml](about_MarkdownToHtml.md#markdown-extensions) for an
+See [about_MarkdownToHTML](about_MarkdownToHTML.md#markdown-extensions) for an
 annotated list of supported extensions.
 
 Parameter Property         | Value
@@ -270,7 +270,7 @@ The generated HTML files are saved to the directory `E:\MyHTMLFiles`.
 * [https://mermaidjs.github.io/](https://mermaidjs.github.io/) 
 * [https://katex.org/](https://katex.org/) 
 * [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
-* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) 
+* [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md) 
 * [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) 
 * [`New-HTMLTemplate`](New-HTMLTemplate.md)
 

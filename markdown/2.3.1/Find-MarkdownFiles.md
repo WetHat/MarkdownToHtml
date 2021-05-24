@@ -112,8 +112,8 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
 # Related Links
 
 * [https://wethat.github.io/MarkdownToHtml/2.3.1/Find-MarkdownFiles.html](https://wethat.github.io/MarkdownToHtml/2.3.1/Find-MarkdownFiles.html) 
-* [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md) 
-* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) 
+* [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md) 
+* [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md) 
 * [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) 
 * [`New-HTMLTemplate`](New-HTMLTemplate.md)
 

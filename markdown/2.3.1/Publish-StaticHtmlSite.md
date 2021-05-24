@@ -34,7 +34,7 @@ math, code syntax highlighting and diagrams (see [`New-HtmlTemplate`](New-HtmlTe
 <blockquote>
 
 An object representing an Html fragment. Ideally this is an output object of
-[`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md), but any object will
+[`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md), but any object will
 work provided following properties are present:
 
 `RelativePath`
@@ -43,7 +43,7 @@ work provided following properties are present:
     This property is automatically provided by:
     * using the PowerShell function [`Find-MarkdownFiles`](Find-MarkdownFiles.md)
     * piping a file object `[System.IO.FileInfo]` into
-      [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) (or passing it as a parameter).
+      [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md) (or passing it as a parameter).
 
 `Title`
 :   The page title.
@@ -183,12 +183,12 @@ File objects [System.IO.FileInfo] of the generated HTML documents.
 <blockquote>
 
 ```PowerShell
-Find-MarkdownFiles '...\Modules\MarkdownToHtml' | Convert-MarkdownToHtmlFragment | Publish-StaticHtmlSite -SiteDirectory 'e:\temp\site'
+Find-MarkdownFiles '...\Modules\MarkdownToHtml' | Convert-MarkdownToHTMLFragment | Publish-StaticHtmlSite -SiteDirectory 'e:\temp\site'
 ```
 
 
 Generates a static HTML site from the Markdown files in '...\Modules\MarkdownToHtml'. This is
-a simpler version of the functionality provided by the function [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md).
+a simpler version of the functionality provided by the function [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md).
 
 The generated Html file objects are returned like so:
 
@@ -218,9 +218,9 @@ The generated Html file objects are returned like so:
 # Related Links
 
 * [https://wethat.github.io/MarkdownToHtml/2.3.1/Publish-StaticHtmlSite.html](https://wethat.github.io/MarkdownToHtml/2.3.1/Publish-StaticHtmlSite.html) 
-* [`Convert-MarkdownToHtml`](Convert-MarkdownToHtml.md) 
+* [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md) 
 * [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
-* [`Convert-MarkdownToHtmlFragment`](Convert-MarkdownToHtmlFragment.md) 
+* [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md) 
 * [`New-HTMLTemplate`](New-HTMLTemplate.md)
 
 ---

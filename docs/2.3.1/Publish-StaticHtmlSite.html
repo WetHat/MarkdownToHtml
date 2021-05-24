@@ -88,7 +88,7 @@ math, code syntax highlighting and diagrams (see <a href="New-HtmlTemplate.html"
 <h2 id="inputobject-object">-InputObject &lt;Object&gt;</h2>
 <blockquote>
 <p>An object representing an Html fragment. Ideally this is an output object of
-<a href="Convert-MarkdownToHtmlFragment.html"><code>Convert-MarkdownToHtmlFragment</code></a>, but any object will
+<a href="Convert-MarkdownToHTMLFragment.html"><code>Convert-MarkdownToHTMLFragment</code></a>, but any object will
 work provided following properties are present:</p>
 <dl>
 <dt><code>RelativePath</code></dt>
@@ -99,7 +99,7 @@ This property is automatically provided by:</p>
 <ul>
 <li>using the PowerShell function <a href="Find-MarkdownFiles.html"><code>Find-MarkdownFiles</code></a></li>
 <li>piping a file object <code>[System.IO.FileInfo]</code> into
-<a href="Convert-MarkdownToHtmlFragment.html"><code>Convert-MarkdownToHtmlFragment</code></a> (or passing it as a parameter).</li>
+<a href="Convert-MarkdownToHTMLFragment.html"><code>Convert-MarkdownToHTMLFragment</code></a> (or passing it as a parameter).</li>
 </ul>
 </dd>
 <dt><code>Title</code></dt>
@@ -345,10 +345,10 @@ optionally <code>ContentMap</code>. See the description of the <code>InputObject
 <h1 id="examples">Examples</h1>
 <h2 id="example-1">EXAMPLE 1</h2>
 <blockquote>
-<pre><code class="language-PowerShell">Find-MarkdownFiles &#39;...\Modules\MarkdownToHtml&#39; | Convert-MarkdownToHtmlFragment | Publish-StaticHtmlSite -SiteDirectory &#39;e:\temp\site&#39;
+<pre><code class="language-PowerShell">Find-MarkdownFiles &#39;...\Modules\MarkdownToHtml&#39; | Convert-MarkdownToHTMLFragment | Publish-StaticHtmlSite -SiteDirectory &#39;e:\temp\site&#39;
 </code></pre>
 <p>Generates a static HTML site from the Markdown files in '...\Modules\MarkdownToHtml'. This is
-a simpler version of the functionality provided by the function <a href="Convert-MarkdownToHtml.html"><code>Convert-MarkdownToHtml</code></a>.</p>
+a simpler version of the functionality provided by the function <a href="Convert-MarkdownToHTML.html"><code>Convert-MarkdownToHTML</code></a>.</p>
 <p>The generated Html file objects are returned like so:</p>
 <pre><code>Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
@@ -362,9 +362,9 @@ a simpler version of the functionality provided by the function <a href="Convert
 <h1 id="related-links">Related Links</h1>
 <ul>
 <li><a href="https://wethat.github.io/MarkdownToHtml/2.3.1/Publish-StaticHtmlSite.html">https://wethat.github.io/MarkdownToHtml/2.3.1/Publish-StaticHtmlSite.html</a></li>
-<li><a href="Convert-MarkdownToHtml.html"><code>Convert-MarkdownToHtml</code></a></li>
+<li><a href="Convert-MarkdownToHTML.html"><code>Convert-MarkdownToHTML</code></a></li>
 <li><a href="Find-MarkdownFiles.html"><code>Find-MarkdownFiles</code></a></li>
-<li><a href="Convert-MarkdownToHtmlFragment.html"><code>Convert-MarkdownToHtmlFragment</code></a></li>
+<li><a href="Convert-MarkdownToHTMLFragment.html"><code>Convert-MarkdownToHTMLFragment</code></a></li>
 <li><a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a></li>
 </ul>
 <hr />
