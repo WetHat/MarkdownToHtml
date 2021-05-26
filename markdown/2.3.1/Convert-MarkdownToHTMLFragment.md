@@ -1,6 +1,6 @@
 ﻿# Convert-MarkdownToHTMLFragment
 
-Convert Markdown text to html fragments.
+Convert Markdown text to HTML fragments.
 
 # Syntax
 ```PowerShell
@@ -28,7 +28,7 @@ Converts Markdown text to HTML fragments using configured Markdown parser extens
 <blockquote>
 
 The input object can have one of the following of types:
-* An annotated `[System.IO.FileInfo]` object as emitted by [[`Find-MarkdownFiles`](Find-MarkdownFiles.md)](Find-MarkdownFiles.md).
+* An annotated `[System.IO.FileInfo]` object as emitted by [`Find-MarkdownFiles`](Find-MarkdownFiles.md).
 * A plain markdown string [`string`].
 * A markdown descriptor object which is basically a [`hashtable`] whith following contents:
 
@@ -53,8 +53,8 @@ Accept wildcard characters?| false
 <blockquote>
 
 Comma separated list of Markdown parsing extension names.
-See [about_MarkdownToHTML](about_MarkdownToHTML.md#markdown-extensions) for an
-annotated list of supported extensions.
+See the module manifest [MarkdownToHTML](MarkdownToHTML.md#markdown-extensions)
+for an annotated list of supported extensions.
 
 Parameter Property         | Value
 --------------------------:|:----------

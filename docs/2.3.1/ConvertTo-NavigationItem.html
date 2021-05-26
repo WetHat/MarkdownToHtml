@@ -49,11 +49,11 @@
     <!-- -->
 </head>
 <body>
-    <nav><button class='navitem'><a href='../index.html'><img width='90%' src='Markdown2HTML.png'></a></button>
+    <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
 <div class='navlabel'>MarkdownToHtml</div>
 <button class='navitem'><a href='../index.html'>Home</a></button>
-<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>Concepts</a></button>
-<button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Documentation</a></button>
+<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
+<button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Manifest</a></button>
 <div class='navlabel'>Page Content</div>
 <button class='navitem'><a href='#convertto-navigationitem'><span class='navitem1'>ConvertTo-NavigationItem</span></a></button>
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
@@ -92,8 +92,11 @@ styling in <code>md-styles.css</code>.</p>
 <blockquote>
 <h2 id="navspec-object">-NavSpec &lt;Object&gt;</h2>
 <blockquote>
-<p>An object or hashtables with one NoteProperty or key. The property or key name
-defines the link label, the associated value defines the link target location.</p>
+<p>An object or list of hashtables with one NoteProperty or key.
+The property or key name defines the link label,
+the associated value defines the link target location. The link label can
+be a HTML fragment containing for example an <code>&lt;img&gt;</code> tag. Local links should be
+relative to the project root.</p>
 <p>If the link target location of a specification item is the <strong>empty string</strong>, the
 item has special meaning. If the name is the '---', a horizontal separator line
 is generated. If it is just plain text (or a HTML fragment), a label without
@@ -132,11 +135,10 @@ clickable link is generated.</p>
  
 <h2 id="relativepath-string">-RelativePath &lt;String&gt;</h2>
 <blockquote>
-<p>A path relative to the site root for the HTML document the navigation is to used
-for. This relative path is used to adjust the relative links which may be
-present in the link specification so that they work from the location of the
-HTML page the navifation is build for. The given path should be in HTML notation
-and is expected to use forward slash '/' path separators.</p>
+<p>Path to Markdown document relative to the site root. That file's relative path
+is used to adjust the target path of in the given navigation bar item,
+so that it can be reached from the location of the HTML page currently being
+assembled   . The given path should use forward slash '/' path separators.</p>
 <table>
 <thead>
 <tr>
@@ -176,7 +178,8 @@ and is expected to use forward slash '/' path separators.</p>
 <li>the hyperlink: placeholder <code>{{navurl}}</code>.</li>
 <li>the link text: placeholder <code>{{navtext}}</code>.</li>
 </ul>
-<p>These templates can also be configured in <code>Build.json</code>. See <a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a> for more
+<p>These templates can also be configured in <code>Build.json</code>.
+See <a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a> for more
 details.</p>
 <p>The default templates are:</p>
 <pre><code class="language-html">&lt;!-- navitem - Navigation link item template --&gt;

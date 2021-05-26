@@ -2,30 +2,14 @@
 
 **Tags**: Markdown, HTML, Converter, Markdown, HTML, Converter
 
-Highly configurable Markdown to HTML conversion using customizable templates.
-
-For information about concepts and use cases
-see [about_MarkdownToHtml](about_MarkdownToHtml.md).
-
-# Backward Compatibility
-
-If you are upgrading the currently installed version to a newer version of the
-**same** major revision, all conversion or site projects are still fully functional.
-Unless you are having issues with any of the pre-installed _JavaScript_
-libraries no action is required.
-
-When updating to a new major revision there may be incompatibilities which
-affect existing custom templates and static site projects.
-Make sure to read the upgrade instructions in the release notes.
-However, you still may want to upgrade existing custom templates and
-static site projects to take advantage of new functionality or bug fixes.
-See the release notes for details.
+A collection of PowerShell commands to convert Markdown files to static
+HTML sites in various ways.
 
 # Known Incompatibilities
 
 If you have have conversion projects which use the _mathematics_ extensions and
 were created with versions of this module older than 2.0.0 (i.e. 1.* or 0.*).
-See [version 2.0.0](#2.0.0) release notes for upgrade instructions.
+See [version 2.0.0](MarkdownToHTML.md#2.0.0) release notes for upgrade instructions.
 
 # Exported Functions
 
@@ -42,25 +26,36 @@ See [version 2.0.0](#2.0.0) release notes for upgrade instructions.
 
 ## 2.3.2 {#2.3.2}
 
-* scrollbar added to long navbars.
-* `md-styles.css` overhauled for static site template to make navbar usable
-  for overflowing navitems
+* Navigation bar improvements (Static HTML site projects):
+    * scrollbar added to long navbars.
+    * `md-styles.css` overhauled for static site template to make navbar usable
+    for overflowing navitems
+    * Image links supported in navitem names. Example (Build.json):
+    ~~~Json
+    "site_navigation": [
+        { "<img width='90%' src='site_logo.png'/>": "README.md" },
+        { "Home": "README.md" },
+        { "---": "" }
+    ]
+    ~~~
+
 * documentation overhauled and published on [GitHub Pages](https://wethat.github.io/MarkdownToHtml)
 
 ## 2.3.1 {#2.3.1}
 
-* default navigation menu changed to a static vertical sidebar.
-* navigation items pop out dynamically on mouse hover.
-* auto-added navigation items for page headings indented according to heading
-  level.
-* navbar formatting made more consistent.
-* navbar small screen support
+* Navigation bar improvements (Static HTML site projects):
+    * default navigation menu changed to a static vertical sidebar.
+    * navigation items pop out dynamically on mouse hover.
+    * auto-added navigation items for page headings indented according to heading
+    level.
+    * navbar formatting made more consistent.
+    * navbar small screen support
 
 ## 2.3.0
 
 * Page navigation bar made customizable. To take advantage of this feature
-  in existing projects following files need to be updated:
-  * `Build.ps1`: A `-NavTemplate` parameter needs to be added to the invokation of [`ConvertTo-NavigationItem`](ConvertTo-NavigationItem.md).
+    in existing projects following files need to be updated:
+    * `Build.ps1`: A `-NavTemplate` parameter needs to be added to the invokation of [`ConvertTo-NavigationItem`](ConvertTo-NavigationItem.md).
     A `-NavTemplate` and a `-HeadingLevels` parameter needs to be added to
     the invokation of[`ConvertTo-PageHeadingNavigation`](ConvertTo-PageHeadingNavigation.md).
     For example:
@@ -75,16 +70,16 @@ See [version 2.0.0](#2.0.0) release notes for upgrade instructions.
 		    $navcfg = $config.navigation_bar # navigation bar configuration
 		    # Create the navigation items configured in 'Build.json'
 		    $config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
-		                                                       -NavTemplate $navcfg.templates
+		                                                        -NavTemplate $navcfg.templates
 		    # Create navigation items to headings on the local page.
 		    # This requires the `autoidentifiers` extension to be enabled.
 		    ConvertTo-PageHeadingNavigation $fragment.HTMLFragment -NavTemplate $navcfg.templates `
-		                                                           -HeadingLevels $navcfg.capture_page_headings
+		                                                            -HeadingLevels $navcfg.capture_page_headings
 	    }
     }
     ~~~
 
-  * `Build.json`: a navigation bar configuration section needs to be added:
+    * `Build.json`: a navigation bar configuration section needs to be added:
 
     ~~~ json
     ...
@@ -95,14 +90,15 @@ See [version 2.0.0](#2.0.0) release notes for upgrade instructions.
             "navlabel": "<div class='navitem'>{{navtext}}</div>",
             "navseparator": "<hr class='navitem'/>",
             "navheading": "<span class='navitem{{level}}'>{{navtext}}</span>"
-      }
+        }
     },
     ...
     ~~~
 
-* `Markdig` update to version 0.24
-* `KateX` update to version 0.13.11
-* `Mermaid` update to version 8.10.1
+* Component updates:
+    * `Markdig` update to version 0.24
+    * `KateX` update to version 0.13.11
+    * `Mermaid` update to version 8.10.1
 
 ## 2.2.2
 
@@ -118,9 +114,9 @@ See [version 2.0.0](#2.0.0) release notes for upgrade instructions.
 ## 2.2.0
 
 * Fixed issue with [`ConvertTo-NavigationItem`](ConvertTo-NavigationItem.md) not understanding hyperlinks
-  with `#` fragments.
+    with `#` fragments.
 * Added `autoidentifiers` to the `Build.json` in the project template so that
-  headings get `id` attributes.
+    headings get `id` attributes.
 * Added navigation items for headings on the current page to the navbar.
 
 ## 2.1.1
@@ -132,7 +128,7 @@ See [version 2.0.0](#2.0.0) release notes for upgrade instructions.
 #### Enhancements
 
 * [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) now accepts definition of custom placeholder
-  mappins for expansion of `md-template.html`.
+    mappins for expansion of `md-template.html`.
 * Default template placeholder delimiters changed to `{{` and `}}`.
 * Static HTML site projects added: See [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md).
 * Documentation made more [`Get-Help`](Get-Help.md) friendly.
@@ -186,14 +182,14 @@ To address this incompaibility the _KaTex_ configuration in
 #### Bugfixes
 * Rendering of math blocks now creates centered output with the correct (bigger) font.
 * Changed the default html template (`md_template.html`) to address the incompatible
-  change in the LaTeX math output of the _mathematics_ extension of _Markdig_.
+    change in the LaTeX math output of the _mathematics_ extension of _Markdig_.
 
 ## 1.3.0
 
 * upgrade of markdig to version 0.17.2
 * KaTex upgraded to 0.11.0
 * Re-factored the Markdown converter pipeline and made it parts public
-  to make it useful for a broader range of Markdown conversion scenarios.
+    to make it useful for a broader range of Markdown conversion scenarios.
 
 ## 1.2.8
 
@@ -203,13 +199,13 @@ To address this incompaibility the _KaTex_ configuration in
 ## 1.2.7
 
 * Empty lines allowed im 'md-template.html` to remove an ugly but harmless
-  exception.
+    exception.
 * Syntax highlighting updated to version 9.14.2
 * Upgrade to markdig version 0.15.7
 * Added Resources and configuration for the [mermaid](https://mermaidjs.github.io/) diagram and
-  flowchart generator version 8.0.0 to the HTML template.
+    flowchart generator version 8.0.0 to the HTML template.
 * Added Resources and configuration for the [KaTeX](https://katex.org/) LaTeX Math
-  typesetting library version 0.10.0 to the HTML template.
+    typesetting library version 0.10.0 to the HTML template.
 * Documentation improved.
 
 ## 1.2.6
@@ -219,7 +215,7 @@ To address this incompaibility the _KaTex_ configuration in
 ## 1.2.4
 
 * Replaced `[System.Web.HttpUtility]` by `[System.Net.WebUtility]` to fix issue
-  when powershell is run with `-noprofile`
+    when powershell is run with `-noprofile`
 
 ## 1.2.3
 
@@ -229,7 +225,7 @@ To address this incompaibility the _KaTex_ configuration in
 ## 1.2.2
 
 * Support for markdown files in a directory hierarchy fixed.
-  (directory scanning fixed and relative path added to resource links)
+    (directory scanning fixed and relative path added to resource links)
 ## 1.2.1
 
 Handle partially HTML encoded code blocks
@@ -237,7 +233,7 @@ Handle partially HTML encoded code blocks
 ## 1.2.0
 
 * Replaced XML template processing with text based template processing,
-  to relax constraints on the HTML fragment quality.
+    to relax constraints on the HTML fragment quality.
 * HTML encode text in `<code>` blocks
 
 ## 1.1.0

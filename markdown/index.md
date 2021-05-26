@@ -1,5 +1,6 @@
 # *MarkdownToHtml* Documentation {.title}
 
+
 # Latest Version
 
 * **2.3.1**: [Documentation](2.3.1/MarkdownToHTML.md) - [Release Notes](2.3.1/MarkdownToHTML.md#release-notes).
@@ -51,7 +52,7 @@ for information about backward compatibility.
 > 4. Open `html/README.html` a browser and enjoy the showcase section.
 
 
-# Support
+# Bugs and Enhancements
 
 If you found an issue with the module or want to suggest and enhancement, head over to
 the [Issues](https://github.com/WetHat/MarkdownToHtml/issues) page on GitHub and
@@ -60,6 +61,19 @@ to also check the
 [wiki](https://github.com/WetHat/MarkdownToHtml/wiki) for
 tips and the FAQ first.
 
+# Backward Compatibility
+
+If you are upgrading the currently installed version to a newer version of the
+**same** major revision, all conversion or site projects are still fully functional.
+Unless you are having issues with any of the pre-installed _JavaScript_
+libraries no action is required.
+
+When updating to a new major revision there may be incompatibilities which
+affect existing custom templates and static site projects.
+Make sure to read the upgrade instructions in the release notes.
+However, you still may want to upgrade existing custom templates and
+static site projects to take advantage of new functionality or bug fixes.
+See the release notes in the module's manifest for details.
 
 # Feature Showcase
 

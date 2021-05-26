@@ -49,14 +49,13 @@
     <!-- -->
 </head>
 <body>
-    <nav><button class='navitem'><a href='../index.html'><img width='90%' src='Markdown2HTML.png'></a></button>
+    <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
 <div class='navlabel'>MarkdownToHtml</div>
 <button class='navitem'><a href='../index.html'>Home</a></button>
-<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>Concepts</a></button>
-<button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Documentation</a></button>
+<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
+<button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Manifest</a></button>
 <div class='navlabel'>Page Content</div>
 <button class='navitem'><a href='#module-markdowntohtml-2.3.1'><span class='navitem1'>Module MarkDownToHTML 2.3.1</span></a></button>
-<button class='navitem'><a href='#backward-compatibility'><span class='navitem1'>Backward Compatibility</span></a></button>
 <button class='navitem'><a href='#known-incompatibilities'><span class='navitem1'>Known Incompatibilities</span></a></button>
 <button class='navitem'><a href='#exported-functions'><span class='navitem1'>Exported Functions</span></a></button>
 <button class='navitem'><a href='#release-notes'><span class='navitem1'>Release Notes</span></a></button>
@@ -90,24 +89,12 @@
         <article>
             <h1 id="module-markdowntohtml-2.3.1" class="title">Module MarkDownToHTML 2.3.1</h1>
 <p><strong>Tags</strong>: Markdown, HTML, Converter, Markdown, HTML, Converter</p>
-<p>Highly configurable Markdown to HTML conversion using customizable templates.</p>
-<p>For information about concepts and use cases
-see <a href="about_MarkdownToHtml.html">about_MarkdownToHtml</a>.</p>
-<h1 id="backward-compatibility">Backward Compatibility</h1>
-<p>If you are upgrading the currently installed version to a newer version of the
-<strong>same</strong> major revision, all conversion or site projects are still fully functional.
-Unless you are having issues with any of the pre-installed <em>JavaScript</em>
-libraries no action is required.</p>
-<p>When updating to a new major revision there may be incompatibilities which
-affect existing custom templates and static site projects.
-Make sure to read the upgrade instructions in the release notes.
-However, you still may want to upgrade existing custom templates and
-static site projects to take advantage of new functionality or bug fixes.
-See the release notes for details.</p>
+<p>A collection of PowerShell commands to convert Markdown files to static
+HTML sites in various ways.</p>
 <h1 id="known-incompatibilities">Known Incompatibilities</h1>
 <p>If you have have conversion projects which use the <em>mathematics</em> extensions and
 were created with versions of this module older than 2.0.0 (i.e. 1.* or 0.*).
-See <a href="#2.0.0">version 2.0.0</a> release notes for upgrade instructions.</p>
+See <a href="MarkdownToHTML.html#2.0.0">version 2.0.0</a> release notes for upgrade instructions.</p>
 <h1 id="exported-functions">Exported Functions</h1>
 <ul>
 <li><a href="Convert-MarkdownToHTML.html">Convert-MarkdownToHTML</a></li>
@@ -122,12 +109,27 @@ See <a href="#2.0.0">version 2.0.0</a> release notes for upgrade instructions.</
 <h1 id="release-notes">Release Notes</h1>
 <h2 id="2.3.2">2.3.2</h2>
 <ul>
+<li><p>Navigation bar improvements (Static HTML site projects):</p>
+<ul>
 <li>scrollbar added to long navbars.</li>
 <li><code>md-styles.css</code> overhauled for static site template to make navbar usable
 for overflowing navitems</li>
-<li>documentation overhauled and published on <a href="https://wethat.github.io/MarkdownToHtml">GitHub Pages</a></li>
+<li>Image links supported in navitem names. Example (Build.json):
+~~~Json
+&quot;site_navigation&quot;: [
+{ &quot;<img width='90%' src='site_logo.png'/>&quot;: &quot;README.md&quot; },
+{ &quot;Home&quot;: &quot;README.md&quot; },
+{ &quot;---&quot;: &quot;&quot; }
+]
+~~~</li>
+</ul>
+</li>
+<li><p>documentation overhauled and published on <a href="https://wethat.github.io/MarkdownToHtml">GitHub Pages</a></p>
+</li>
 </ul>
 <h2 id="2.3.1">2.3.1</h2>
+<ul>
+<li>Navigation bar improvements (Static HTML site projects):
 <ul>
 <li>default navigation menu changed to a static vertical sidebar.</li>
 <li>navigation items pop out dynamically on mouse hover.</li>
@@ -136,34 +138,38 @@ level.</li>
 <li>navbar formatting made more consistent.</li>
 <li>navbar small screen support</li>
 </ul>
+</li>
+</ul>
 <h2 id="section">2.3.0</h2>
 <ul>
 <li><p>Page navigation bar made customizable. To take advantage of this feature
 in existing projects following files need to be updated:</p>
 <ul>
-<li><p><code>Build.ps1</code>: A <code>-NavTemplate</code> parameter needs to be added to the invokation of <a href="ConvertTo-NavigationItem.html"><code>ConvertTo-NavigationItem</code></a>.
+<li><code>Build.ps1</code>: A <code>-NavTemplate</code> parameter needs to be added to the invokation of <a href="ConvertTo-NavigationItem.html"><code>ConvertTo-NavigationItem</code></a>.
 A <code>-NavTemplate</code> and a <code>-HeadingLevels</code> parameter needs to be added to
 the invokation of<a href="ConvertTo-PageHeadingNavigation.html"><code>ConvertTo-PageHeadingNavigation</code></a>.
-For example:</p>
+For example:</li>
+</ul>
 <pre><code class="language-PowerShell"># Set-up the content mapping rules for replacing the templace placeholders
 $SCRIPT:contentMap = @{
-    # Add additional mappings here...
-    &#39;{{footer}}&#39; =  $config.Footer # Footer text from configuration
-    &#39;{{nav}}&#39;    = {
-	    param($fragment) # the html fragment created from a markdown file
-	    $navcfg = $config.navigation_bar # navigation bar configuration
-	    # Create the navigation items configured in &#39;Build.json&#39;
-	    $config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
-	                                                       -NavTemplate $navcfg.templates
-	    # Create navigation items to headings on the local page.
-	    # This requires the `autoidentifiers` extension to be enabled.
-	    ConvertTo-PageHeadingNavigation $fragment.HTMLFragment -NavTemplate $navcfg.templates `
-	                                                           -HeadingLevels $navcfg.capture_page_headings
-    }
+      # Add additional mappings here...
+      &#39;{{footer}}&#39; =  $config.Footer # Footer text from configuration
+      &#39;{{nav}}&#39;    = {
+  	    param($fragment) # the html fragment created from a markdown file
+  	    $navcfg = $config.navigation_bar # navigation bar configuration
+  	    # Create the navigation items configured in &#39;Build.json&#39;
+  	    $config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
+  	                                                        -NavTemplate $navcfg.templates
+  	    # Create navigation items to headings on the local page.
+  	    # This requires the `autoidentifiers` extension to be enabled.
+  	    ConvertTo-PageHeadingNavigation $fragment.HTMLFragment -NavTemplate $navcfg.templates `
+  	                                                            -HeadingLevels $navcfg.capture_page_headings
+      }
 }
 </code></pre>
-</li>
-<li><p><code>Build.json</code>: a navigation bar configuration section needs to be added:</p>
+<ul>
+<li><code>Build.json</code>: a navigation bar configuration section needs to be added:</li>
+</ul>
 <pre><code class="language-json">...
 &quot;navigation_bar&quot;: {
     &quot;capture_page_headings&quot;: &quot;123456&quot;,
@@ -172,18 +178,17 @@ $SCRIPT:contentMap = @{
         &quot;navlabel&quot;: &quot;&lt;div class=&#39;navitem&#39;&gt;{{navtext}}&lt;/div&gt;&quot;,
         &quot;navseparator&quot;: &quot;&lt;hr class=&#39;navitem&#39;/&gt;&quot;,
         &quot;navheading&quot;: &quot;&lt;span class=&#39;navitem{{level}}&#39;&gt;{{navtext}}&lt;/span&gt;&quot;
-  }
+    }
 },
 ...
 </code></pre>
 </li>
+<li><p>Component updates:</p>
+<ul>
+<li><code>Markdig</code> update to version 0.24</li>
+<li><code>KateX</code> update to version 0.13.11</li>
+<li><code>Mermaid</code> update to version 8.10.1</li>
 </ul>
-</li>
-<li><p><code>Markdig</code> update to version 0.24</p>
-</li>
-<li><p><code>KateX</code> update to version 0.13.11</p>
-</li>
-<li><p><code>Mermaid</code> update to version 8.10.1</p>
 </li>
 </ul>
 <h2 id="section-1">2.2.2</h2>

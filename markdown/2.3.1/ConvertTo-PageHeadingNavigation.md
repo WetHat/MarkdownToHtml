@@ -48,7 +48,7 @@ Accept wildcard characters?| false
 
 <blockquote>
 
-A table of template html fragments with placeholders for:
+A dictionary of template html fragments with placeholders for:
 * the heading text: placeholder `{{navtext}}`
 * the heading level: placeholder `{{level}}`
 

@@ -49,11 +49,11 @@
     <!-- -->
 </head>
 <body>
-    <nav><button class='navitem'><a href='../index.html'><img width='90%' src='Markdown2HTML.png'></a></button>
+    <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
 <div class='navlabel'>MarkdownToHtml</div>
 <button class='navitem'><a href='../index.html'>Home</a></button>
-<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>Concepts</a></button>
-<button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Documentation</a></button>
+<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
+<button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Manifest</a></button>
 <div class='navlabel'>Page Content</div>
 <button class='navitem'><a href='#convert-markdowntohtmlfragment'><span class='navitem1'>Convert-MarkdownToHTMLFragment</span></a></button>
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
@@ -72,7 +72,7 @@
     <main>
         <article>
             <h1 id="convert-markdowntohtmlfragment">Convert-MarkdownToHTMLFragment</h1>
-<p>Convert Markdown text to html fragments.</p>
+<p>Convert Markdown text to HTML fragments.</p>
 <h1 id="syntax">Syntax</h1>
 <pre><code class="language-PowerShell"> Convert-MarkdownToHTMLFragment [-InputObject] &lt;Object&gt; [-IncludeExtension] &lt;String[]&gt; [-ExcludeExtension] &lt;String[]&gt;  [&lt;CommonParameters&gt;] 
 </code></pre>
@@ -84,7 +84,7 @@
 <blockquote>
 <p>The input object can have one of the following of types:</p>
 <ul>
-<li><p>An annotated <code>[System.IO.FileInfo]</code> object as emitted by [<a href="Find-MarkdownFiles.html"><code>Find-MarkdownFiles</code></a>](Find-MarkdownFiles.md).</p>
+<li><p>An annotated <code>[System.IO.FileInfo]</code> object as emitted by <a href="Find-MarkdownFiles.html"><code>Find-MarkdownFiles</code></a>.</p>
 </li>
 <li><p>A plain markdown string [<code>string</code>].</p>
 </li>
@@ -147,8 +147,8 @@
 <h2 id="includeextension-string">-IncludeExtension &lt;String[]&gt;</h2>
 <blockquote>
 <p>Comma separated list of Markdown parsing extension names.
-See <a href="about_MarkdownToHTML.html#markdown-extensions">about_MarkdownToHTML</a> for an
-annotated list of supported extensions.</p>
+See the module manifest <a href="MarkdownToHTML.html#markdown-extensions">MarkdownToHTML</a>
+for an annotated list of supported extensions.</p>
 <table>
 <thead>
 <tr>

@@ -49,11 +49,11 @@
     <!-- -->
 </head>
 <body>
-    <nav><button class='navitem'><a href='../index.html'><img width='90%' src='Markdown2HTML.png'></a></button>
+    <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
 <div class='navlabel'>MarkdownToHtml</div>
 <button class='navitem'><a href='../index.html'>Home</a></button>
-<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>Concepts</a></button>
-<button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Documentation</a></button>
+<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
+<button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Manifest</a></button>
 <div class='navlabel'>Page Content</div>
 <button class='navitem'><a href='#convert-markdowntohtml'><span class='navitem1'>Convert-MarkdownToHTML</span></a></button>
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
@@ -74,15 +74,18 @@
     <main>
         <article>
             <h1 id="convert-markdowntohtml">Convert-MarkdownToHTML</h1>
-<p>Convert Markdown files into HTML files.</p>
+<p>Convert Markdown files to HTML files.</p>
 <h1 id="syntax">Syntax</h1>
 <pre><code class="language-PowerShell"> Convert-MarkdownToHTML [-Path] &lt;String&gt; [-Template] &lt;String&gt; [-IncludeExtension] &lt;String[]&gt; [-ExcludeExtension] &lt;String[]&gt; [-MediaDirectory] &lt;String&gt; [-SiteDirectory] &lt;String&gt;  [&lt;CommonParameters&gt;] 
 </code></pre>
 <h1 id="description">Description</h1>
 <p>This function reads all Markdown files from a source folder and converts each
 of them to standalone html documents using configurable Markdown extensions and
-a customizable HTML template. See <a href="about_MarkdownToHTML.html"><code>about_MarkdownToHTML</code></a> for a list of
-supported extensions and customization options.</p>
+a customizable HTML template. For an annotated list of supported extensions
+see <a href="about_MarkdownToHTML.html#supported-markdown-extensions">MarkdownToHTML</a>.
+See
+<a href="about_MarkdownToHTML.html#customization">about_MarkdownToHTML</a> for customization
+options.</p>
 <h1 id="parameters">Parameters</h1>
 <blockquote>
 <h2 id="path-string">-Path &lt;String&gt;</h2>
@@ -124,7 +127,7 @@ supported extensions and customization options.</p>
 <blockquote>
 <p>Optional directory containing the html template file <code>md-template.html</code> and its resources.
 If no template directory is specified, a default factory-installed template is used.
-For infomations about creating custom templates see <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a>.</p>
+For information about creating custom templates see <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a>.</p>
 <table>
 <thead>
 <tr>
@@ -160,7 +163,7 @@ For infomations about creating custom templates see <a href="New-HTMLTemplate.ht
 <h2 id="includeextension-string">-IncludeExtension &lt;String[]&gt;</h2>
 <blockquote>
 <p>Comma separated list of Markdown parsing extensions to use.
-See <a href="about_MarkdownToHTML.html#markdown-extensions">about_MarkdownToHTML</a> for an
+See <a href="MarkdownToHTML.html#markdown-extensions">about_MarkdownToHTML</a> for an
 annotated list of supported extensions.</p>
 <table>
 <thead>

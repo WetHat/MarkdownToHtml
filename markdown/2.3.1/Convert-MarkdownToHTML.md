@@ -1,6 +1,6 @@
 ﻿# Convert-MarkdownToHTML
 
-Convert Markdown files into HTML files.
+Convert Markdown files to HTML files.
 
 # Syntax
 ```PowerShell
@@ -13,8 +13,11 @@ Convert Markdown files into HTML files.
 
 This function reads all Markdown files from a source folder and converts each
 of them to standalone html documents using configurable Markdown extensions and
-a customizable HTML template. See [`about_MarkdownToHTML`](about_MarkdownToHTML.md) for a list of
-supported extensions and customization options.
+a customizable HTML template. For an annotated list of supported extensions
+see [MarkdownToHTML](about_MarkdownToHTML.md#supported-markdown-extensions).
+See
+[about_MarkdownToHTML](about_MarkdownToHTML.md#customization) for customization
+options.
 
 
 
@@ -49,7 +52,7 @@ Accept wildcard characters?| true
 
 Optional directory containing the html template file `md-template.html` and its resources.
 If no template directory is specified, a default factory-installed template is used.
-For infomations about creating custom templates see [`New-HTMLTemplate`](New-HTMLTemplate.md).
+For information about creating custom templates see [`New-HTMLTemplate`](New-HTMLTemplate.md).
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -67,7 +70,7 @@ Accept wildcard characters?| false
 <blockquote>
 
 Comma separated list of Markdown parsing extensions to use.
-See [about_MarkdownToHTML](about_MarkdownToHTML.md#markdown-extensions) for an
+See [about_MarkdownToHTML](MarkdownToHTML.md#markdown-extensions) for an
 annotated list of supported extensions.
 
 Parameter Property         | Value

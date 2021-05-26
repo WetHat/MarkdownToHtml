@@ -37,8 +37,11 @@ styling in `md-styles.css`.
 
 <blockquote>
 
-An object or hashtables with one NoteProperty or key. The property or key name
-defines the link label, the associated value defines the link target location.
+An object or list of hashtables with one NoteProperty or key.
+The property or key name defines the link label,
+the associated value defines the link target location. The link label can
+be a HTML fragment containing for example an `<img>` tag. Local links should be
+relative to the project root.
 
 If the link target location of a specification item is the **empty string**, the
 item has special meaning. If the name is the '---', a horizontal separator line
@@ -60,11 +63,10 @@ Accept wildcard characters?| false
 
 <blockquote>
 
-A path relative to the site root for the HTML document the navigation is to used
-for. This relative path is used to adjust the relative links which may be
-present in the link specification so that they work from the location of the
-HTML page the navifation is build for. The given path should be in HTML notation
-and is expected to use forward slash '/' path separators.
+Path to Markdown document relative to the site root. That file's relative path
+is used to adjust the target path of in the given navigation bar item,
+so that it can be reached from the location of the HTML page currently being
+assembled   . The given path should use forward slash '/' path separators.
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -86,7 +88,8 @@ A table of template html fragments with placeholders for:
 * the hyperlink: placeholder `{{navurl}}`.
 * the link text: placeholder `{{navtext}}`.
 
-These templates can also be configured in `Build.json`. See [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md) for more
+These templates can also be configured in `Build.json`.
+See [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md) for more
 details.
 
 The default templates are:
