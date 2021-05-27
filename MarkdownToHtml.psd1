@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.3.1'
+ModuleVersion = '2.3.2'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'

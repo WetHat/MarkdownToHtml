@@ -125,7 +125,7 @@ The generated Html file objects are returned like so:
     ...          ...            ...            ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.1/Publish-StaticHtmlSite.html
+https://wethat.github.io/MarkdownToHtml/2.3.2/Publish-StaticHtmlSite.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -295,7 +295,7 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
     ...                   ...   ...                        ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.1/Find-MarkdownFiles.html
+https://wethat.github.io/MarkdownToHtml/2.3.2/Find-MarkdownFiles.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -447,7 +447,7 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
     RelativePath       Convert-MarkdownToHTML.md
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.1/Convert-MarkdownToHTMLFragment.html
+https://wethat.github.io/MarkdownToHtml/2.3.2/Convert-MarkdownToHTMLFragment.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -640,7 +640,7 @@ Convert all Markdown files in `E:\MyMarkdownFiles` using
 The generated HTML files are saved to the directory `E:\MyHTMLFiles`.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.1/Convert-MarkdownToHTML.html
+https://wethat.github.io/MarkdownToHtml/2.3.2/Convert-MarkdownToHTML.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -715,7 +715,7 @@ This function does not read from the pipe.
 The new conversion template directory `[System.IO.DirectoryInfo]`.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.1/New-HTMLTemplate.html
+https://wethat.github.io/MarkdownToHtml/2.3.2/New-HTMLTemplate.html
 .LINK
 `New-StaticHTMLSiteProject`
 
@@ -779,7 +779,7 @@ Create a new conversion project names 'MyProject' in the current directory. The
 project is ready for build.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.1/New-StaticHTMLSiteProject.html
+https://wethat.github.io/MarkdownToHtml/2.3.2/New-StaticHTMLSiteProject.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -1020,7 +1020,7 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.1/ConvertTo-NavigationItem.html
+https://wethat.github.io/MarkdownToHtml/2.3.2/ConvertTo-NavigationItem.html
 .LINK
 `New-StaticHTMLSiteProject`
 .LINK
@@ -1218,7 +1218,7 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.1/ConvertTo-PageHeadingNavigation.html
+https://wethat.github.io/MarkdownToHtml/2.3.2/ConvertTo-PageHeadingNavigation.html
 .LINK
 `New-StaticHTMLSiteProject`
 .LINK
@@ -1260,8 +1260,8 @@ function ConvertTo-PageHeadingNavigation {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUig6XqX5T6yb3K0omT5jhHNNB
-# zAOgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUXKfx0/XGzGANsBRp3FI0MZQs
+# AG6gggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1280,11 +1280,11 @@ function ConvertTo-PageHeadingNavigation {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTV9pCxK7dCSMaSthyI162HhE3v
-# eTANBgkqhkiG9w0BAQEFAASCAQB2NlDi9SZvuWAUFp9F1tmcuvXeUvA2Rtmjex8A
-# WnLWQsFOWHtZQwYwHvqzHkkKMQwoQSO9DViwEuyw936hWs7fgJ8P2ePWojrrarVb
-# gzgSsMWsdawXk+pTHTs3eP7Bxx0T46aUe/QKvNkQAr622d3PmEX8YX6KOSq5coDz
-# eH+ME36CWJSA+LBk1slIaZn/Ux3ZzOqLldeVMaaBHmwsyhTznIxjS9CwuRIhGlRM
-# LcD/eyjLxcxA/TKP3igodnYlwsLqoRaAAKm7hzqloVcaFzYmMtPlZ4bcLqsvmICp
-# BqnUI0KDPro7VWem3pDKcqmVViXFKdATe2rn4j67AuFdZsPV
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRcAsaWblmQxA+vlhZCHYIBp8ho
+# SDANBgkqhkiG9w0BAQEFAASCAQBwmz4mzJkfOe3yxPJ2dSMeQqTmhecxK3t6sc3p
+# 43Rzf91u6a+gJiJ4h0c71nmdJvWXELnbJ24k0i+eSda19vlHfftKWz+NVah5M0Sm
+# 964I0xnk2S5nTtlQnCPZAnRFefNI4gcf9rxoe2i0BQ/N7kc/sx44gXNHpwlavBR2
+# HJ62gPqWn5Q/PUDsV6Utswh11R5BgLURYRUpZtQ9Ldt7H1PPVAir35eexObn0B+n
+# mxlKOqEom3gc9xP6WPL1sWPcpGlHMNS4PYcqo6Rkj2XJVLAmKKyHbaFC6sNyAqjH
+# 7cTuLMJXYgibwb1MFBe9tgFoiMTW6afaAP4gZ8gs6Oh9nrL/
 # SIG # End signature block
