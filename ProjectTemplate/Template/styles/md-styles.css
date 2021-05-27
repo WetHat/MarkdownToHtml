@@ -3,6 +3,11 @@
     color: darkblue;
 }
 
+h1.title {
+    color: black;
+    text-align:center;
+}
+
 h2 {
     font-size: 12pt;
     color: firebrick;
@@ -36,6 +41,9 @@ pre {
 blockquote {
     border: none;
     text-indent: each-line;
+    border-left: 2px solid gray;
+    margin-left: 1em;
+    padding-left: 1em;
 }
 
 code {
@@ -63,21 +71,27 @@ nav {
     height: 100%;
     padding-top: 5px;
     background: lightskyblue;
-    overflow: auto;
+    overflow-x:auto;
 }
 
 @media screen and (max-width: 600px) {
- nav {
-    width: 100%;
-    height:auto;
-    position:unset;
-    margin-left:0;
-    overflow:inherit;
-  }
-  main {
-    width: 100%;
-    margin-left:0
-  }
+    nav {
+        width: 100%;
+        height:auto;
+        position:unset;
+        margin-left:0;
+        overflow:inherit;
+    }
+    main {
+        width: 100%;
+        margin-left:0
+    }
+    .navitem {
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em
+    }
 }
 
 .navlabel {
@@ -95,13 +109,13 @@ nav {
     font-weight: bold;
 }
 
-/* Show full link text when mouse hovers overs the navitem. */
+/* Highlight navitems when mouse is over them and show full text. */
 .navitem:hover {
-    width: fit-content;
-    min-width: 98%;
+    background: PaleGoldenRod;
     text-align: left;
+    white-space: normal;
+    display:block;
     overflow: visible;
-    white-space: nowrap;
 }
 
 .navitem1 {
@@ -126,4 +140,20 @@ nav {
     font-size: 8pt;
     font-weight: normal;
     padding-left: 3em;
+}
+
+/* display full link text on hover*/
+.navitem:hover .navitem1 {
+    font-weight: bold;
+    display: block;
+}
+
+.navitem:hover .navitem2,
+.navitem:hover .navitem3,
+.navitem:hover .navitem4,
+.navitem:hover .navitem5,
+.navitem:hover .navitem6 {
+    font-weight: bold;
+    display: block;
+    padding-left: 1em;
 }
