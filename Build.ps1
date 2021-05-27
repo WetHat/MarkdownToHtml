@@ -37,24 +37,20 @@ $SCRIPT:contentMap = @{
 		# determine the module version this fragment is for by inspecting
 		# its relative path
 		$parts = $fragment.RelativePath -split '/'
-		$version = if ($parts.length -gt 1) {
+		$docversion = if ($parts.length -gt 1) {
 		               $parts[0] # first dir is version
 		           } else {
-		              $null # no version
+		               $version # default to latest version
 		           }
 
 		$navcfg = $config.navigation_bar # navigation bar configuration
 
 		# Create the navigation items configured in 'Build.json'
 		$config.site_navigation | ForEach-Object {
-		    if ($version) {
-		        $props = Get-Member -InputObject $_ -MemberType NoteProperty
-                $name = $props.Name
-                # build navspec for the correct version
-                @{ $name = $_.$name -Replace '{{version}}',$version}
-		    } else {
-		        $_
-		    }
+		    $props = Get-Member -InputObject $_ -MemberType NoteProperty
+            $name = $props.Name
+            # build navspec for the correct version
+            @{ $name = $_.$name -Replace '{{version}}',$docversion}
 		  } `
 		| ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
 		                           -NavTemplate $navcfg.templates
