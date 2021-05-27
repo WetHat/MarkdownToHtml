@@ -1,5 +1,5 @@
 <#
-.SYNOSIS
+.SYNOPSIS
 Build a static HTML site from Markdown files.
 #>
 [string]$SCRIPT:projectDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -11,7 +11,7 @@ import-module -Name '../MarkdownCodeDocs' -Force
 $version = (Get-Module MarkDownToHTML).Version.ToString()
 Write-Output "Version: $version"
 
-$markdown = "markdown/$version" 
+$markdown = "markdown/$version"
 # Clear previously generated Markdown
 Remove-Item $markdown -Recurse -Force -ErrorAction:SilentlyContinue
 Publish-PSModuleMarkdown -moduleName 'MarkdownToHTML' -Destination $markdown
@@ -20,13 +20,6 @@ Publish-PSModuleMarkdown -moduleName 'MarkdownToHTML' -Destination $markdown
 $SCRIPT:config = Get-Content (Join-Path $projectDir 'Build.json') | ConvertFrom-Json
 if (!$config) {
     throw 'No build configuration found!'
-}
-
-# Update version dependent navigation links
-$SCRIPT:config.site_navigation  = $SCRIPT:config.site_navigation | ForEach-Object {
-    $props = Get-Member -InputObject $_ -MemberType NoteProperty
-    $name = $props.Name
-    @{ $name = $_.$name -Replace '{{version}}',$version}
 }
 
 # Location of the static HTML site to build
@@ -41,10 +34,30 @@ $SCRIPT:contentMap = @{
 	'{{footer}}' =  $config.Footer # Footer text from configuration
 	'{{nav}}'    = {
 		param($fragment) # the html fragment created from a markdown file
+		# determine the module version this fragment is for by inspecting
+		# its relative path
+		$parts = $fragment.RelativePath -split '/'
+		$version = if ($parts.length -gt 1) {
+		               $parts[0] # first dir is version
+		           } else {
+		              $null # no version
+		           }
+
 		$navcfg = $config.navigation_bar # navigation bar configuration
+
 		# Create the navigation items configured in 'Build.json'
-		$config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
-		                                                   -NavTemplate $navcfg.templates
+		$config.site_navigation | ForEach-Object {
+		    if ($version) {
+		        $props = Get-Member -InputObject $_ -MemberType NoteProperty
+                $name = $props.Name
+                # build navspec for the correct version
+                @{ $name = $_.$name -Replace '{{version}}',$version}
+		    } else {
+		        $_
+		    }
+		  } `
+		| ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
+		                           -NavTemplate $navcfg.templates
 		# Create navigation items to headings on the local page.
 		# This requires the `autoidentifiers` extension to be enabled.
 		ConvertTo-PageHeadingNavigation $fragment.HTMLFragment -NavTemplate $navcfg.templates `
