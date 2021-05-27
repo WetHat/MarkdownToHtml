@@ -30,47 +30,14 @@ Copyright = '(c) 2018-2021 WetHat Lab. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @'
-Highly configurable markdown to HTML conversion using customizable templates.
+A collection of PowerShell commands to convert Markdown files to static
+HTML sites in various ways.
 
-### Features
+# Known Incompatibilities
 
-* Open Source and fully _hackable_.
-* Out-of-the box support for diagrams, math typesetting and code syntax
-  highlighting.
-* Based on [Markdig](https://github.com/lunet-io/markdig),
-  a fast, powerful, [CommonMark](http://commonmark.org/) compliant Markdown
-  processor for .NET with more than 20 configurable extensions.
-* High quality Open Source web components:
-  - **Code Highlighting**: [highlight.js](https://highlightjs.org/); supports
-    189 languages and 91 styles.
-  - **Math typesetting**: [KaTeX](https://katex.org/); The fastest math
-    typesetting library for the web.
-  - **Diagramming**: [Mermaid](http://mermaid-js.github.io/mermaid/); Generation
-    of diagrams and flowcharts from text in a similar manner as Markdown.
-* Highly configurable static website projects with configuration file and build
-  script. See `New-StaticHTMLSiteProject`.
-* Sites can be used offline (without connection to the internet). All site
-  assets are local.
-
-### Prerequisites
-
-To successfully create web sites from Markdown you should know:
-* Markdown: A good starting point would be
-  [GitHub Flavored Markdown](https://github.github.com/gfm/)
-* Some knowledge about HTML and CSS (Cascading Stylesheets).
-* Some PowerShell knowledge
-
-See `about_MarkdownToHTML` for more information about configuration
-and operation of this module.
-
-### Incompatibilities
-
-This version is incompatible with existing conversion projects
-which use the _mathematics_ extensions and were created with versions of this module
-older than 2.0.0 (i.e. 1.* or 0.*).
-
-**Make sure to read the release notes for 2.0.0 below for instructions on how to upgrade your
-existing conversion projects.**
+If you have have conversion projects which use the _mathematics_ extensions and
+were created with versions of this module older than 2.0.0 (i.e. 1.* or 0.*).
+See [version 2.0.0](MarkdownToHTML.md#2.0.0) release notes for upgrade instructions.
 '@
 
 # Minimum version of the Windows PowerShell engine required by this module
@@ -111,14 +78,14 @@ RequiredAssemblies = @('Markdig.dll')
 
 # Functions to export from this module
 FunctionsToExport = @(
-	                   'Convert-MarkdownToHTML'
-	                   'Convert-MarkdownToHTMLFragment'
-                       'ConvertTo-PageHeadingNavigation'
-                       'ConvertTo-NavigationItem'
-	                   'Find-MarkdownFiles'
-                       'New-StaticHTMLSiteProject'
-	                   'New-HTMLTemplate'
-	                   'Publish-StaticHtmlSite'
+                        'Convert-MarkdownToHTML'
+                        'Convert-MarkdownToHTMLFragment'
+                        'ConvertTo-PageHeadingNavigation'
+                        'ConvertTo-NavigationItem'
+                        'Find-MarkdownFiles'
+                        'New-StaticHTMLSiteProject'
+                        'New-HTMLTemplate'
+                        'Publish-StaticHtmlSite'
 	                 )
 
 # Cmdlets to export from this module
@@ -135,11 +102,11 @@ ModuleList = @()
 
 # List of all files packaged with this module
 FileList = @(
-	          'MarkdownToHtml.psm1'
-	          'Markdig.dll'
-              'System.Memory.dll'
-              'System.Runtime.CompilerServices.Unsafe.dll'
-              'System.Numerics.Vectors.dll'
+	            'MarkdownToHtml.psm1'
+	            'Markdig.dll'
+                'System.Memory.dll'
+                'System.Runtime.CompilerServices.Unsafe.dll'
+                'System.Numerics.Vectors.dll'
             )
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess
@@ -147,9 +114,9 @@ PrivateData = @{
     PSData = @{
         # Tags applied to this module. These help with module discovery in online galleries.
         Tags = @(
-                  'Markdown'
-                  'HTML'
-			      'Converter'
+                    'Markdown'
+                    'HTML'
+			        'Converter'
                 )
 
         # A URL to the license for this module.
@@ -163,24 +130,42 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
-## 2.3.2
+## 2.3.2 {#2.3.2}
+
+Navigation bar improvements (Static HTML site projects):
 
 * scrollbar added to long navbars.
+* `md-styles.css` overhauled for static site template to make navbar usable
+  for overflowing navitems
+* Image links supported in navitem names. Example (Build.json):
+  ~~~Json
+  "site_navigation": [
+      { "<img width='90%' src='site_logo.png'/>": "README.md" },
+      { "Home": "README.md" },
+      { "---": "" }
+  ]
+  ~~~
 
-## 2.3.1
+* Module Documentation
+  * Code and conceptial documentation improved
+  * Documentation generated with this module andp ublished to
+   [GitHub Pages](https://wethat.github.io/MarkdownToHtml)
 
-* default navigation menu changed to a static vertical sidebar.
-* navigation items pop out dynamically on mouse hover.
-* auto-added navigation items for page headings indented according to heading
-  level.
-* navbar formatting made more consistent.
-* navbar small screen support
+## 2.3.1 {#2.3.1}
+
+* Navigation bar improvements (Static HTML site projects):
+    * default navigation menu changed to a static vertical sidebar.
+    * navigation items pop out dynamically on mouse hover.
+    * auto-added navigation items for page headings indented according to heading
+    level.
+    * navbar formatting made more consistent.
+    * navbar small screen support
 
 ## 2.3.0
 
 * Page navigation bar made customizable. To take advantage of this feature
-  in existing projects following files need to be updated:
-  * `Build.ps1`: A `-NavTemplate` parameter needs to be added to the invokation of `ConvertTo-NavigationItem`.
+    in existing projects following files need to be updated:
+    * `Build.ps1`: A `-NavTemplate` parameter needs to be added to the invokation of `ConvertTo-NavigationItem`.
     A `-NavTemplate` and a `-HeadingLevels` parameter needs to be added to
     the invokation of`ConvertTo-PageHeadingNavigation`.
     For example:
@@ -195,16 +180,16 @@ PrivateData = @{
 		    $navcfg = $config.navigation_bar # navigation bar configuration
 		    # Create the navigation items configured in 'Build.json'
 		    $config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
-		                                                       -NavTemplate $navcfg.templates
+		                                                        -NavTemplate $navcfg.templates
 		    # Create navigation items to headings on the local page.
 		    # This requires the `autoidentifiers` extension to be enabled.
 		    ConvertTo-PageHeadingNavigation $fragment.HTMLFragment -NavTemplate $navcfg.templates `
-		                                                           -HeadingLevels $navcfg.capture_page_headings
+		                                                            -HeadingLevels $navcfg.capture_page_headings
 	    }
     }
     ~~~
 
-  * `Build.json`: a navigation bar configuration section needs to be added:
+    * `Build.json`: a navigation bar configuration section needs to be added:
 
     ~~~ json
     ...
@@ -215,14 +200,15 @@ PrivateData = @{
             "navlabel": "<div class='navitem'>{{navtext}}</div>",
             "navseparator": "<hr class='navitem'/>",
             "navheading": "<span class='navitem{{level}}'>{{navtext}}</span>"
-      }
+        }
     },
     ...
     ~~~
 
-* `Markdig` update to version 0.24
-* `KateX` update to version 0.13.11
-* `Mermaid` update to version 8.10.1
+* Component updates:
+    * `Markdig` update to version 0.24
+    * `KateX` update to version 0.13.11
+    * `Mermaid` update to version 8.10.1
 
 ## 2.2.2
 
@@ -238,9 +224,9 @@ PrivateData = @{
 ## 2.2.0
 
 * Fixed issue with `ConvertTo-NavigationItem` not understanding hyperlinks
-  with `#` fragments.
+    with `#` fragments.
 * Added `autoidentifiers` to the `Build.json` in the project template so that
-  headings get `id` attributes.
+    headings get `id` attributes.
 * Added navigation items for headings on the current page to the navbar.
 
 ## 2.1.1
@@ -252,7 +238,7 @@ PrivateData = @{
 #### Enhancements
 
 * `Publish-StaticHtmlSite` now accepts definition of custom placeholder
-  mappins for expansion of `md-template.html`.
+    mappins for expansion of `md-template.html`.
 * Default template placeholder delimiters changed to `{{` and `}}`.
 * Static HTML site projects added: See `New-StaticHTMLSiteProject`.
 * Documentation made more `Get-Help` friendly.
@@ -262,13 +248,36 @@ PrivateData = @{
 
 * Minimum required Powershell version now 5.1 (Desktop)
 
-## 2.0.0
+## 2.0.0 {#2.0.0}
 
-The updated version of _Markdig_ incuded in this release introduces
-an incompatiblity in the _mathematics_ extension which breaks _KaTeX_ math rendering.
+The version of _Markdig_ included in this release introduces an
+incompatiblity with projects which use the _mathematics_ extension
+**and** were created with versions of this module older than 2.0.0
+(i.e. 1.* or 0.*).
 
-See `about_MarkdownToHTML` for options to upgrade existing projects.
-To address this incompaibility the KaTex configuration in **all** deployed html templates
+To address this incompaibility the _KaTex_ configuration in
+**all** deployed html templates (`md_template.html`) need to be updated like so:
+
+~~~ html
+<script>
+    // <![CDATA[
+    window.onload = function() {
+        var tex = document.getElementsByClassName("math");
+        Array.prototype.forEach.call(tex, function(el) {
+            katex.render(el.textContent, el, {
+                                                displayMode: (el.nodeName == "DIV"),
+                                                macros: {
+                                                            "\\(": "",
+                                                            "\\)": "",
+                                                            "\\[": "",
+                                                            "\\]": ""
+                                                        }
+                                            })
+        });
+    };
+    // ]]>
+</script>
+~~~
 
 #### New Features
 
@@ -327,6 +336,7 @@ To address this incompaibility the KaTex configuration in **all** deployed html 
 
 * Support for markdown files in a directory hierarchy fixed.
   (directory scanning fixed and relative path added to resource links)
+
 ## 1.2.1
 
 Handle partially HTML encoded code blocks

@@ -1,23 +1,24 @@
 <#
-.SYNOSIS
+.SYNOPSIS
 Build a static HTML site from Markdown files.
 #>
 [string]$SCRIPT:projectDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Import-Module -Name MarkDownToHTML
 
-# JSON configuration
+# Load JSON configuration
 $SCRIPT:config = Get-Content (Join-Path $projectDir 'Build.json') | ConvertFrom-Json
 if (!$config) {
     throw 'No build configuration found!'
 }
 
-# Location of the static HTML site to build
+# Determine the location of the static HTML site to build.
 $SCRIPT:staticSite = Join-Path $projectDir $config.site_dir
 
-# Clean up the static HTML site before build
+# Clean up the static HTML site before build.
 Remove-Item $staticSite -Recurse -Force -ErrorAction:SilentlyContinue
 
 # Set-up the content mapping rules for replacing the templace placeholders
+# of the form {{name}}.
 $SCRIPT:contentMap = @{
 	# Add additional mappings here...
 	'{{footer}}' =  $config.Footer # Footer text from configuration
@@ -34,6 +35,7 @@ $SCRIPT:contentMap = @{
 	}
 }
 
+# Conversion pipeline
 $SCRIPT:markdown = Join-Path $projectDir $config.markdown_dir
 Find-MarkdownFiles $markdown -Exclude $config.Exclude `
 | Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions `

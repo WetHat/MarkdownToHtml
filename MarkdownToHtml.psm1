@@ -27,16 +27,20 @@ Create a static HTML site from HTML fragment objects.
 
 .DESCRIPTION
 Html fragment objects piped into this function (or passed via the `InputObject`
-parameter) are converted into HTML documents and saved to a static Html site
+parameter) are converted into standalone HTML documents and saved to a Html site
 directory.
 
-The Markdown to Html document conversion uses a default or custom template with
-stylesheets and JavaScript resources to render Markdown extensions for LaTeX
-math, code syntax highlighting and diagrams (see `New-HtmlTemplate`) for details).
+The Markdown to HTML document conversion uses default or custom templates with
+stylesheets and JavaScript resources to render Markdown extensions for:
+* LaTeX math
+* code syntax highlighting
+* diagrams
+
+See `New-HtmlTemplate` for details.
 
 .PARAMETER InputObject
-An object representing an Html fragment. Ideally this is an output object of
-`Convert-MarkdownToHtmlFragment`, but any object will
+An object representing an Html fragment. Ideally this is an output object
+returned by `Convert-MarkdownToHTMLFragment`, but any object will
 work provided following properties are present:
 
 `RelativePath`
@@ -45,52 +49,49 @@ work provided following properties are present:
     This property is automatically provided by:
     * using the PowerShell function `Find-MarkdownFiles`
     * piping a file object `[System.IO.FileInfo]` into
-      `Convert-MarkdownToHtmlFragment` (or passing it as a parameter).
+      `Convert-MarkdownToHTMLFragment` (or passing it as a parameter).
 
 `Title`
 :   The page title.
 
 `HtmlFragment`
-:   A html fragment to be used a main content of the HTML document.
+:   A html fragment to be used as main content of the HTML document.
 
 .PARAMETER Template
-Optional directory containing the html template file `md-template.html` and its resources
-which will be used to convert the Html fragments into standalone Html documents.
-If no template directory is specified, a default factory-installed template is used.
-For infomations about creating custom templates see `New-HTMLTemplate`.
+Optional directory containing the html template file `md-template.html` and its
+resources which will be used to convert the Html fragments into standalone Html
+documents. If no template directory is specified, a default factory-installed
+template is used. For infomations about creating custom templates see
+`New-HTMLTemplate`. See
+[Template Customization](about_MarkdownToHTML.md#conversion-template-customization)
+for customization options.
 
 .PARAMETER ContentMap
-Placeholder substitution mappings. This map should contain an entry
-for each custom placeholder in the HTML-template (`md-template.html`).
+Placeholder substitution mapping as described in
+[Template Customization](about_MarkdownToHTML.md#conversion-template-customization).
 
-Following default substitution mappings are added automatically unless they
-are explicitely defined in the given map:
+Following substitution mappings are used by default unless explicitely defined.
 
-| Key           | Description                  | Origin                      |
+| Placeholder   | Description                  | Origin                      |
 |:------------- | :--------------------------- | :-------------------------- |
 | `{{title}}`   | Auto generated page title    | `$inputObject.Title`        |
 | `[title]`     | For backwards compatibility. | `$inputObject.Title`        |
 | `{{content}}` | HTML content                 | `$inputObject.HtmlFragment` |
 | `[content]`   | For backwards compatibility. | `$inputObject.HtmlFragment` |
 
-The keys of this map represent the place holders verbatim, including the
-delimiters. E.g `{{my-placeholder}}`. The values in this map can be
-* one or more strings
-* a script block which takes **one** parameter to which the InputObject is bound.
-  The script block should return one or more strings which define the
-  substitution value.
+For static HTML site projects additional mappings are defined:
 
-  Example:
+| Placeholder   | Description                  | Origin       |
+|:------------- | :--------------------------- | :----------- |
+| `{{nav}}`     | Navigation bar content       | `Build.json` |
+| `{{footer}}`  | Page footer content          | `Build.json` |
 
-  ~~~ PowerShell
-  {
-      param($Input)
-      "Source = $($Input.RelativePath)"
-  }
-  ~~~
+For static HTML site projects additional placeholders can be added to the map.
+See
+[Defining Content Mapping Rules](about_MarkdownToHTML.md#defining-content-mapping-rules)
 
 .PARAMETER MediaDirectory
-An optional directory containing additional media for the Html site
+An optional directory containing additional media for the HTML site
 such as images, videos etc.
 
 .PARAMETER SiteDirectory
@@ -108,10 +109,10 @@ optionally `ContentMap`. See the description of the `InputObject` parameter for 
 File objects [System.IO.FileInfo] of the generated HTML documents.
 
 .EXAMPLE
-Find-MarkdownFiles '...\Modules\MarkdownToHtml' | Convert-MarkdownToHtmlFragment | Publish-StaticHtmlSite -SiteDirectory 'e:\temp\site'
+Find-MarkdownFiles '...\Modules\MarkdownToHtml' | Convert-MarkdownToHTMLFragment | Publish-StaticHtmlSite -SiteDirectory 'e:\temp\site'
 
 Generates a static HTML site from the Markdown files in '...\Modules\MarkdownToHtml'. This is
-a simpler version of the functionality provided by the function `Convert-MarkdownToHtml`.
+a simpler version of the functionality provided by the function `Convert-MarkdownToHTML`.
 
 The generated Html file objects are returned like so:
 
@@ -124,15 +125,18 @@ The generated Html file objects are returned like so:
     ...          ...            ...            ...
 
 .LINK
-https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Publish-StaticHtmlSite.md
+https://wethat.github.io/MarkdownToHtml/2.3.1/Publish-StaticHtmlSite.html
 .LINK
-`Convert-MarkdownToHtml`
+`Convert-MarkdownToHTML`
 .LINK
 `Find-MarkdownFiles`
 .LINK
-`Convert-MarkdownToHtmlFragment`
+`Convert-MarkdownToHTMLFragment`
 .LINK
 `New-HTMLTemplate`
+.LINK
+[Defining Content Mapping Rules](about_MarkdownToHTML.md#defining-content-mapping-rules)
+.LINK
 #>
 function Publish-StaticHtmlSite {
     [OutputType([System.IO.FileInfo])]
@@ -252,23 +256,28 @@ function Publish-StaticHtmlSite {
 Find all Markdown file below a given directory.
 
 .DESCRIPTION
-Recursively scans a directory and generates annotated `[System.IO.FileInfo]` objects
-for each Markdown file.
+Recursively scans a directory and generates annotated `[System.IO.FileInfo]`
+objects for each Markdown file.
+
+The annotation is a `NoteProperty` named `RelativePath`. It contains the
+relative path of the Markdown file below the given directory.
 
 .PARAMETER Path
-Path to a directory containing markdown files.
+Path to a directory containing Markdown files.
 
 .PARAMETER Exclude
-Omits the specified markdown files. The value of this parameter qualifies the Path parameter. Enter a path element or
-pattern, such as "D*.md". Wildcards are permitted.
+Omit the specified files. Enter comma separated list of path elements or
+patterns, such as "D*.md". Wildcards are permitted.
 
 .INPUTS
 None
 
 .OUTPUTS
-A `[System.IO.FileInfo]` object for each Markdown file found below the given directory. The emitted
-`[System.IO.FileInfo]` objects are annotated with a note property `RelativePath` which is a string
-specifying the relative path of the markdown file below the given directory. The `RelativePath` property is
+An `[System.IO.FileInfo]` object for each Markdown file found below
+the given directory. The emitted
+`[System.IO.FileInfo]` objects are annotated with a `NoteProperty` named
+`RelativePath` which specifies the relative path of the Markdown file below the
+given directory. The `RelativePath` property is
 **mandatory** if `Publish-StaticHtmlSite` is used in the downstream conversion
 pipeline.
 
@@ -286,11 +295,11 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
     ...                   ...   ...                        ...
 
 .LINK
-https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Find-MarkdownFiles.md
+https://wethat.github.io/MarkdownToHtml/2.3.1/Find-MarkdownFiles.html
 .LINK
-`Convert-MarkdownToHtml`
+`Convert-MarkdownToHTML`
 .LINK
-`Convert-MarkdownToHtmlFragment`
+`Convert-MarkdownToHTMLFragment`
 .LINK
 `Publish-StaticHtmlSite`
 .LINK
@@ -330,103 +339,27 @@ function Find-MarkdownFiles {
 
 <#
 .SYNOPSIS
-Convert Markdown text to html fragments.
+Convert Markdown text to HTML fragments.
 
 .DESCRIPTION
-Converts Markdown text to HTML fragments using configured Markdown parser extensions.
-
-A parser configuration is a comma separated list of configuration option strings. Currently
-avaliable extensions are:
-
-* 'abbreviations': [Abbreviations ](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AbbreviationSpecs.md)
-* 'advanced': advanced parser configuration. A pre-build collection of extensions including:
-  * 'abbreviations'
-  * 'autoidentifiers'
-  * 'citations'
-  * 'customcontainers'
-  * 'definitionlists'
-  * 'emphasisextras'
-  * 'figures'
-  * 'footers'
-  * 'footnotes'
-  * 'gridtables'
-  * 'mathematics'
-  * 'medialinks'
-  * 'pipetables'
-  * 'listextras'
-  * 'tasklists'
-  * 'diagrams'
-  * 'autolinks'
-  * 'attributes'
-* 'attributes': [Special attributes](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GenericAttributesSpecs.md).
-   Set HTML attributes (e.g `id` or class`).
-* 'autoidentifiers': [Auto-identifiers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoIdentifierSpecs.md).
-`  Allows to automatically creates an identifier for a heading.
-* 'autolinks': [Auto-links](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoLinks.md)
-   generates links if a text starts with `http://` or `https://` or `ftp://` or `mailto:` or `www.xxx.yyy`.
-* 'bootstrap': [Bootstrap](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/BootstrapSpecs.md)
-   to output bootstrap classes.
-* 'citations': [Citation text](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md)
-   by enclosing text with `''...''`
-* 'common': CommonMark parsing; no parser extensions (default)
-* 'customcontainers': [Custom containers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/CustomContainerSpecs.md)
-  similar to fenced code block `:::` for generating a proper `<div>...</div>` instead.
-* 'definitionlists': [Definition lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DefinitionListSpecs.md)
-* 'diagrams': [Diagrams](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DiagramsSpecs.md)
-  whenever a fenced code block uses the 'mermaid' keyword, it will be converted to a div block with the content as-is
-  (currently, supports `mermaid` and `nomnoml` diagrams). Resources for the `mermaid` diagram generator are pre-installed and configured.
-  See [New-HTMLTemplate](New-HTMLTemplate.md) for customization details.
-* 'emojis': [Emoji](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmojiSpecs.md) support
-* 'emphasisextras': [Extra emphasis](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmphasisExtraSpecs.md)
-   * strike through `~~`,
-   * Subscript `~`
-   * Superscript `^`
-   * Inserted `++`
-   * Marked `==`
-* 'figures': [Figures](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md).
-  A figure can be defined by using a pattern equivalent to a fenced code block but with the character `^`.
-* 'footers': [Footers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md)
-* 'footnotes': [Footnotes](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FootnotesSpecs.md)
-* 'globalization': [https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GlobalizationSpecs.md]
-  Adds support for RTL (Right To Left) content by adding `dir="rtl"` and `align="right"` attributes to
-  the appropriate html elements. Left to right text is not affected by this extension.
-* 'gridtables': [Grid tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GridTableSpecs.md)
-  allow to have multiple lines per cells and allows to span cells over multiple columns.
-* 'hardlinebreak': [Soft lines](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/HardlineBreakSpecs.md)
-   as hard lines
-* 'listextras': [Extra bullet lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/ListExtraSpecs.md),
-   supporting alpha bullet a. b. and roman bullet (i, ii...etc.)
-* 'mathematics': [Mathematics](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MathSpecs.md)
-  LaTeX extension by enclosing `$$` for block and `$` for inline math. Resources for this extension are pre-installed and configured.
-  See [New-HTMLTemplate](New-HTMLTemplate.md) for customization details.
-* 'medialinks': [Media support](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md)
-  for media urls (youtube, vimeo, mp4...etc.)
-* 'nofollowlinks': Add `rel=nofollow` to all links rendered to HTML.
-* 'nohtml': [NoHTML](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/NoHtmlSpecs.md)
-   allows to disable the parsing of HTML.
-* 'nonascii-noescape': Use this extension to disable URI escape with % characters for non-US-ASCII characters in order to
-   workaround a bug under IE/Edge with local file links containing non US-ASCII chars. DO NOT USE OTHERWISE.
-* 'pipetables': [Pipe tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md)
-  to generate tables from markup.
-* 'smartypants': [SmartyPants](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/SmartyPantsSpecs.md)
-  quotes.
-* 'tasklists': [Task Lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/TaskListSpecs.md).
-  A task list item consist of `[ ]` or `[x]` or `[X]` inside a list item (ordered or unordered)
-* 'yaml': [YAML frontmatter](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/YamlSpecs.md)
-  parsing.
+Converts Markdown text to HTML fragments using configured
+[Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions).
 
 .PARAMETER InputObject
 The input object can have one of the following of types:
-* An annotated `[System.IO.FileInfo]` object as emitted by [`Find-MarkdownFiles`](Find-MarkdownFiles.md).
+* An annotated `[System.IO.FileInfo]` object as emitted by `Find-MarkdownFiles`.
 * A plain markdown string [`string`].
 * A markdown descriptor object which is basically a [`hashtable`] whith following contents:
+
   | Key            | Value Type | Description                                              |
   | :------------- | :--------- | :------------------------------------------------------- |
   | `Markdown`     | [`string`] | The markdown text.                                       |
   | `RelativePath` | [`string`] | Relative path of the html file below the site directory. |
 
 .PARAMETER IncludeExtension
-Comma separated list of Markdown parsing extensions to use.
+Comma separated list of Markdown parsing extension names.
+See [Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions)
+for an annotated list of supported extensions.
 
 .PARAMETER ExcludeExtension
 Comma separated list of Markdown parsing extensions to exclude.
@@ -434,7 +367,8 @@ Mostly used when the the 'advanced' parsing option is included and
 certain individual options need to be removed.
 
 .INPUTS
-Markdown text `[string]`, Markdown file `[System.IO.FileInfo]`, or a markdown descriptor `[hashtable]`.
+Markdown text `[string]`, Markdown file `[System.IO.FileInfo]`,
+or a markdown descriptor `[hashtable]`.
 
 .OUTPUTS
 HTML fragment object with following properties:
@@ -447,56 +381,49 @@ HTML fragment object with following properties:
 
 .NOTES
 The conversion to HTML fragments also includes:
+
 * Changing links to Markdown files to the corresponding Html files.
 
-<blockquote>
+  ~~~ Markdown
+  [Hello World](Hello.md)
+  ~~~
 
-~~~ Markdown
-[Hello World](Hello.md)
-~~~
+  becomes:
 
-becomes:
-
-~~~ html
-<a href="Hello.html">
-~~~
-
-</blockquote>
+  ~~~ html
+  <a href="Hello.html">
+  ~~~
 
 * HTML encoding code blocks:
 
-<blockquote>
+  ~~~ Markdown
 
-~~~ Markdown
+  ```xml
+  <root>
+      <thing/>
+  </root>
 
-```xml
-<root>
-    <thing/>
-</root>
+  ```
+  ~~~
 
-```
-~~~
+  becomes
 
-becomes
+  ~~~ HTML
+  <pre><code class="language-xml">&lt;root&gt;
+      &lt;thing/&gt;
+  &lt;/root&gt;
 
-~~~ HTML
-<pre><code class="language-xml">&lt;root&gt;
-    &lt;thing/&gt;
-&lt;/root&gt;
+  </code></pre>
+  ~~~
 
-</code></pre>
-~~~
+  which renders as
 
-</blockquote>
+  ```xml
+  <root>
+      <thing/>
+  </root>
 
-which renders as
-
-```xml
-<root>
-    <thing/>
-</root>
-
-```
+  ```
 
 .EXAMPLE
 Convert-MarkdownToHTMLFragment -Markdown '# Hello World'
@@ -520,15 +447,17 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
     RelativePath       Convert-MarkdownToHTML.md
 
 .LINK
-https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Convert-MarkdownToHTMLFragment.md
+https://wethat.github.io/MarkdownToHtml/2.3.1/Convert-MarkdownToHTMLFragment.html
 .LINK
-`Convert-MarkdownToHtml`
+`Convert-MarkdownToHTML`
 .LINK
 `Find-MarkdownFiles`
 .LINK
 `Publish-StaticHtmlSite`
 .LINK
 `New-HTMLTemplate`
+.LINK
+[Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions)
 #>
 function Convert-MarkdownToHTMLFragment
 {
@@ -635,24 +564,28 @@ function Convert-MarkdownToHTMLFragment
 
 <#
 .SYNOPSIS
-Convert Markdown files into HTML files.
+Convert Markdown files to static HTML files.
 
 .DESCRIPTION
 This function reads all Markdown files from a source folder and converts each
-of them to standalone html documents using configurable Markdown extensions and
-a customizable HTML template. See `about_MarkdownToHTML` for a list of
-supported extensions and customization options.
+of them to a standalone html document using:
+
+* configurable [Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions)
+* a customizable or default HTML template. See `New-HTMLTemplate` about
+  the creation of custom templates.
 
 .PARAMETER Path
 Path to Markdown files or directories containing Markdown files.
 
 .PARAMETER Template
 Optional directory containing the html template file `md-template.html` and its resources.
-If no template directory is specified, a default factory-installed template is used.
-For infomations about creating custom templates see `New-HTMLTemplate`.
+If no template directory is specified, the factory-installed default template is used.
+For information about creating custom templates see `New-HTMLTemplate`.
 
 .PARAMETER IncludeExtension
-Comma separated list of Markdown parsing extensions to use (see notes for available extensions).
+Comma separated list of Markdown parsing extensions to use.
+See [about_MarkdownToHTML](MarkdownToHTML.md#markdown-extensions) for an
+annotated list of supported extensions.
 
 .PARAMETER ExcludeExtension
 Comma separated list of Markdown parsing extensions to exclude.
@@ -677,24 +610,22 @@ File objects `[System.IO.FileInfo]` of the generated HTML files.
 .EXAMPLE
 Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles'
 
-Convert all Markdown files in `E:\MyMarkdownFiles` and save the generated HTML files
-in `E:\MyHTMLFiles`
+Convert all Markdown files in `E:\MyMarkdownFiles` and save the generated HTML
+files to `E:\MyHTMLFiles`.
 
 .EXAMPLE
 Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -Template 'E:\MyTemplate' -SiteDirectory 'E:\MyHTMLFiles'
 
-Convert all Markdown files in `E:\MyMarkdownFiles` using
-* the 'common' parsing configuration
-* the custom template in `E:\MyTemplate`
+Convert all Markdown files in `E:\MyMarkdownFiles` using the 'common' parsing
+configuration and the custom template in `E:\MyTemplate`.
 
 The generated HTML files are saved to `E:\MyHTMLFiles`.
 
 .EXAMPLE
 Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
 
-Convert all Markdown files in `E:\MyMarkdownFiles` using
-* the 'advanced' and 'diagrams' parsing extension.
-* the default template
+Convert all Markdown files in `E:\MyMarkdownFiles` using the 'advanced' and
+'diagrams' parsing extension and the default template.
 
 The generated HTML files are saved to `E:\MyHTMLFiles`.
 
@@ -706,116 +637,14 @@ Convert all Markdown files in `E:\MyMarkdownFiles` using
 * the default template
 * Media files (images, Videos, etc.) from the directory `e:\Media`
 
-The generated HTML files are saved to `E:\MyHTMLFiles`.
-
-.NOTES
-Currently available Markdown parser extensions are:
-
-* **'abbreviations'**: [Abbreviations ](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AbbreviationSpecs.md)
-* **'advanced'**: advanced parser configuration. A pre-build collection of extensions including:
-  * 'abbreviations'
-  * 'autoidentifiers'
-  * 'citations'
-  * 'customcontainers'
-  * 'definitionlists'
-  * 'emphasisextras'
-  * 'figures'
-  * 'footers'
-  * 'footnotes'
-  * 'gridtables'
-  * 'mathematics'
-  * 'medialinks'
-  * 'pipetables'
-  * 'listextras'
-  * 'tasklists'
-  * 'diagrams'
-  * 'autolinks'
-  * 'attributes'
-* **'attributes'**: [Special attributes](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GenericAttributesSpecs.md).
-   Set HTML attributes (e.g `id` or class`).
-* **'autoidentifiers'**: [Auto-identifiers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoIdentifierSpecs.md).
-`  Allows to automatically creates an identifier for a heading.
-* **'autolinks'**: [Auto-links](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoLinks.md)
-   generates links if a text starts with `http://` or `https://` or `ftp://` or `mailto:` or `www.xxx.yyy`.
-* **'bootstrap'**: [Bootstrap](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/BootstrapSpecs.md)
-   to output bootstrap classes.
-* **'citations'**: [Citation text](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md)
-   by enclosing text with `''...''`
-* **'common'**: CommonMark parsing; no parser extensions (default)
-* **'customcontainers'**: [Custom containers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/CustomContainerSpecs.md)
-  similar to fenced code block `:::` for generating a proper `<div>...</div>` instead.
-* **'definitionlists'**: [Definition lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DefinitionListSpecs.md)
-* **'diagrams'**: [Diagrams](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DiagramsSpecs.md)
-  whenever a fenced code block uses the 'mermaid' keyword, it will be converted to a div block with the content as-is
-  (currently, supports `mermaid` and `nomnoml` diagrams). Resources for the `mermaid` diagram generator are pre-installed and configured.
-  See [New-HTMLTemplate](New-HTMLTemplate.md) for customization details.
-* **'emojis'**: [Emoji](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmojiSpecs.md) support
-* **'emphasisextras'**: [Extra emphasis](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmphasisExtraSpecs.md)
-   * strike through `~~`,
-   * Subscript `~`
-   * Superscript `^`
-   * Inserted `++`
-   * Marked `==`
-* **'figures'**: [Figures](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md).
-  A figure can be defined by using a pattern equivalent to a fenced code block but with the character `^`.
-* **'footers'**: [Footers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md)
-* **'footnotes'**: [Footnotes](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FootnotesSpecs.md)
-* **'globalization'**: [https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GlobalizationSpecs.md]
-  Adds support for RTL (Right To Left) content by adding `dir="rtl"` and `align="right"` attributes to
-  the appropriate html elements. Left to right text is not affected by this extension.
-* **'gridtables'**: [Grid tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GridTableSpecs.md)
-  allow to have multiple lines per cells and allows to span cells over multiple columns.
-* **'hardlinebreak'**: [Soft lines](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/HardlineBreakSpecs.md)
-   as hard lines
-* **'listextras'**: [Extra bullet lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/ListExtraSpecs.md),
-   supporting alpha bullet a. b. and roman bullet (i, ii...etc.)
-* **'mathematics'**: [Mathematics](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MathSpecs.md)
-  LaTeX extension by enclosing `$$` for block and `$` for inline math. Resources for this extension are pre-installed and configured.
-  See [New-HTMLTemplate](New-HTMLTemplate.md) for customization details.
-* **'medialinks'**: [Media support](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md)
-  for media urls (youtube, vimeo, mp4...etc.)
-* **'nofollowlinks'**: Add `rel=nofollow` to all links rendered to HTML.
-* **'nohtml'**: [NoHTML](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/NoHtmlSpecs.md)
-   allows to disable the parsing of HTML.
-* **'nonascii-noescape'**: Use this extension to disable URI escape with % characters for non-US-ASCII characters in order to
-   workaround a bug under IE/Edge with local file links containing non US-ASCII chars. DO NOT USE OTHERWISE.
-* **'pipetables'**: [Pipe tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md)
-  to generate tables from markup.
-* **'smartypants'**: [SmartyPants](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/SmartyPantsSpecs.md)
-  quotes.
-* **'tasklists'**: [Task Lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/TaskListSpecs.md).
-  A task list item consist of `[ ]` or `[x]` or `[X]` inside a list item (ordered or unordered)
-* **'yaml'**: [YAML frontmatter](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/YamlSpecs.md)
-  parsing.
-
-**Note**: Some parser options require additional template configuration. See [New-HTMLTemplate](New-HTMLTemplate.md) for details.
-
-Custom templates can be easily generated by [New-HTMLTemplate](New-HTMLTemplate.md).
-
-Markdown conversion uses the [Markdig](https://github.com/lunet-io/markdig)
-library. Markdig is a fast, powerful, [CommonMark](http://commonmark.org/) compliant,
-extensible Markdown processor for .NET.
+The generated HTML files are saved to the directory `E:\MyHTMLFiles`.
 
 .LINK
-https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/Convert-MarkdownToHTML.md
-.LINK
-https://github.com/lunet-io/markdig
-.LINK
-http://commonmark.org/
-.LINK
-https://highlightjs.org/
-.LINK
-https://mermaidjs.github.io/
-.LINK
-https://katex.org/
-.LINK
-`Find-MarkdownFiles`
-.LINK
-`Convert-MarkdownToHtmlFragment`
-.LINK
-`Publish-StaticHtmlSite`
+https://wethat.github.io/MarkdownToHtml/2.3.1/Convert-MarkdownToHTML.html
 .LINK
 `New-HTMLTemplate`
+.LINK
+[Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions)
 #>
 function Convert-MarkdownToHTML {
     [OutputType([System.IO.FileInfo])]
@@ -858,26 +687,17 @@ function Convert-MarkdownToHTML {
 
 <#
 .SYNOPSIS
-Create a customizable template directory for Markdown to HTML conversion.
+Create a customizable template directory for building HTML files from
+Markdown files.
 
 .DESCRIPTION
 The factory-default conversion template is copied to the destination directory
-to seed the customization process.
+to seed the customization process. The new template directory contains the
+resources necesssary to generate fully functional, standalone HTML files.
 
-See `about_MarkdownToHTML` section TEMPLATE CUSTOMIZATION for details about the
-customization options.
-
-The HTML template file returned by this function (`md-template.html`) has a
-simple structure containing two content placeholders:
-
-`{{title}}`
-:   Placeholder for a page title generated from the Markdown content or filename.
-
-`{{content}}`
-:   Placeholder for the HTML content fragment generated from Markdown content.
-
-If a more sophisticated HTML template is needed which can also contain custom
-placeholders, check out `New-StaticHTMLSiteProject`.
+See
+[Conversion Template Customization](about_MarkdownToHTML.md#conversion-template-customization)
+for ways to customize the template.
 
 .PARAMETER Destination
 Location of the new conversion template directory. The template directory
@@ -886,17 +706,16 @@ should be empty or non-existent.
 .EXAMPLE
 New-HTMLTemplate -Destination 'E:\MyTemplate'
 
-Create a copy of the default template in `E:\MyTemplate` for customization.
+Create a copy of the factory template in `E:\MyTemplate` for customization.
 
 .INPUTS
-This function does not read from the pipe
+This function does not read from the pipe.
 
 .OUTPUTS
-The new conversion template directory `[System.IO.DirectoryInfo]`
+The new conversion template directory `[System.IO.DirectoryInfo]`.
 
 .LINK
-https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/New-HTMLTemplate.md
-
+https://wethat.github.io/MarkdownToHtml/2.3.1/New-HTMLTemplate.html
 .LINK
 `New-StaticHTMLSiteProject`
 
@@ -931,152 +750,18 @@ function New-HTMLTemplate {
 Create a customizable Markdown to HTML site conversion project.
 
 .DESCRIPTION
-The new project is fully functional and ready for building.
+Create a new static HTML site project directoy with some default content
+ready for building.
 
 A single markdown file (`README.md`) is provided as initial content. It explains
-project customization options. It is recommended to build the project by
-executing its build script `Build.ps1`. This creates an initial HTML site
-containing the HTML version of the README (`html/README.html`) which is more
-pleasant to read.
+some customization options and the typical site authoring process.
+It is recommended to build the project by executing its build script
+`Build.ps1`. This creates the initial static HTML site with the HTML version of
+the README (`html/README.html`) which is more pleasant to read also showcases
+some features.
 
-The project directory created by this function has the following structure:
-
-~~~
-#                  <- project root
-|- html            <- build output (static site)
-|- markdown        <- authored Markdown content
-|-    '- README.md <- initial content
-|- Template        <- template resources
-|     |- js        <- javascripts (*.js)
-|     |- katex     <- LateX math renderer
-|     |- styles    <- stylesheets (*.css)
-|     '- md-template.html <- Html page template
-|- Build.json      <- project configuration
-'- Build.ps1       <- build script
-~~~
-
-### The `html` Directory
-This build output directory contains the static HTML site. This directory
-is overwritten by every build.
-
-### The `markdown` Directory
-Contains the Markdown content for this project. Initially only the project's
-`README.md` is there.
-
-### The `Template` Directory
-Containings the HTML template file and resources for the project.
-Read `about_MarkdownToHTML` section 'TEMPLATE CUSTOMIZATION' for more
-information. The HTML template (`md-template.html`) in this
-directory contains, besides the two standard placeholders `{{title}}` and
-    `{{content}}`, following additional placeholders:
-
-`{{nav}}`
-:   Placehoder which is replaced by a HTML content fragment
-    providing a navigatation section on each page.
-
-`{{footer}}`
-:   Placeholder which is replaced by a HTML content fragment
-    representing the page footer.
-
-### The `Build.json` Project Configuration File
-This file uses [JavaScript Object Notation](https://en.wikipedia.org/wiki/JSON)
-format (JSON). Configurable items in this file are:
-
-`markdown_dir` (default: "markdown")
-:   Relative path to the Markdown content directory.
-    Besides Markdown files, this directory also contains media file such as
-    images or videos used by Markdown files.
-
-`site_dir` (default: "html")
-:   Relative path to the static HTML site. This directory holds the project
-    build result. The contens of this directory will be overwritten on every project
-    build.
-
-`HTML_template` (default: "Template")
-:   Location of the template resources (`*.css`, `*.js`, etc) needed to build
-    the HTML site.
-
-`Exclude` (default: empty)
-:   A list of file name pattern to exclude from the build process.
-
-`markdown_extensions` (default: "common","definitionlists")
-:   A list of markdown extensions to enable for this project. For a list of
-    possible extensions, refer to the documentation of the function
-    `Convert-MarkdownToHTMLFragment`.
-
-`footer`
-:   Page footer text which gets substituted for the placeholder `{{footer}}` in
-    the HTML template `md-template.html`.
-
-`site_navigation`
-:   A list of links to be shown in each page's `<nav>` section.
-    The list will be substitutes for the placeholder `{{nav}}` in
-    the HTML template `md-template.html`. The syntax for navigation
-    links is:
-
-    * Links to local pages: `{ "<label>": "<relative path>" }`
-    * Links to web pages: `{ "<label>": "http(s)://...." }`
-    * Separator Labels: `{ "<label>": "" }`
-    * Separator Lines: `{ "---": "" }`
-
-    **Note**: If the extension `autoidentifiers` is configured (default), a
-    navigation section with links to the headings on the current page is
-    appended automatically to the navigation items configured in this file.
-
-`navigation_bar`
-:   HTML fragment templates and options for the page navigation bar.
-
-   * `capture_page_headings` A string of heading levels (1-6) to indicate which
-     page headings are added to the navigation bar. If no headings should
-     be added at all, use the empty string `""`.
-
-   * `templates`: a set of HTML fragments specifying the navigation structure.
-     The templates can contain placeholders which will be replaced by content
-     when the project is built.
-
-     The individual templates and the supported placeholders are:
-     * `navitem`: template to represent a navigation link in the navivation bar.
-       Supported content placeholders in this template are:
-       * `{{navurl}}` - a relative or absolute hyperlink
-       * `{{navtext}}` - the link text.
-
-     * `navlabel`: A (non-navigable) label in the navigation bar.
-       Supported content placeholders in this template are:
-       * `{{navtext}}` - the label text.
-
-     * `navseparator`: A seperator between sections of the navigation bar. This
-       template does not support any placeholders.
-
-     * `navheading`: A template for navigation links to page headings.
-       Supported content placeholders in this template are:
-       * `{{level}}` - the heading level (a number between 1 and 6).
-       * `{{navtext}}` - the heading text.
-
-### The Project Build Script `Build.ps1`
-The project build script implements the Markdown to HTML conversion time.
-
-If a new placeholder is to be used in the `md-template.html` the mapping of that
-placeholder must be defined in this file. By default following mappings are
-defined in the _Set-up the content mapping rules_ section:
-
-~~~ PowerShell
-# Set-up the content mapping rules
-$SCRIPT:contentMap = @{
-	# Add additional mappings here...
-	'{{footer}}' =  $config.Footer # Footer text from configuration
-	'{{nav}}'    = {
-		param($fragment) # the html fragment created from a markdown file
-		$navcfg = $config.navigation_bar # navigation bar configuration
-		# Create the navigation items configured in 'Build.json'
-		$config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
-		                                                   -NavTemplate $navcfg.template
-		# Create navigation items to headings on the local page.
-		# This requires the `autoidentifiers` extension to be enabled.
-		ConvertTo-PageHeadingNavigation $fragment.HTMLFragment -NavTemplate $navcfg.template `
-		                                                       -HeadingLevels $navcfg.capture_page_headings
-	}
-}
-~~~
+See [Project Customization](about_MarkdownToHTML.md#static-site-project-customization)
+for details about the project directory structure and site customization.
 
 .PARAMETER ProjectDirectory
 The location of the new Markdown to HTML site conversion project.
@@ -1094,10 +779,11 @@ Create a new conversion project names 'MyProject' in the current directory. The
 project is ready for build.
 
 .LINK
-https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/New-StaticHTMLSiteProject.md
+https://wethat.github.io/MarkdownToHtml/2.3.1/New-StaticHTMLSiteProject.html
 .LINK
 `New-HTMLTemplate`
-
+.LINK
+[Project Customization](about_MarkdownToHTML.md#static-site-project-customization)
 #>
 function New-StaticHTMLSiteProject {
     [OutputType([System.IO.DirectoryInfo])]
@@ -1140,63 +826,83 @@ $SCRIPT:defaultNavTemplate = @{
 
 <#
 .SYNOPSIS
-Convert a navigation specification to a HTML element representing a navigation
-link..
+Convert a navigation specification to a single item in a navigation bar of a
+static HTML site projects created by `New-StaticHTMLSiteProject`.
 
 .DESCRIPTION
-Converts a navigation specification to an HTML an element representing a single
-navigation line in a simple vertical navigation bar.
-
-Following kinds of navigation links are supported:
-* navigatable links
-* separator lines
-* labels (without link)
-
-The generated HTML element is assigned to the class `navitem` to enable
-styling in `md-styles.css`.
+Converts the specification for a single item in the navigation bar by
+* finding an HTML template to represent the item in the navigation bar.
+* replacing placeholders in the template by data taken from the
+* specification.
 
 .PARAMETER RelativePath
-A path relative to the site root for the HTML document the navigation is to used
-for. This relative path is used to adjust the relative links which may be
-present in the link specification so that they work from the location of the
-HTML page the navifation is build for. The given path should be in HTML notation
-and is expected to use forward slash '/' path separators.
+Path to Markdown document relative to the site root. That file's relative path
+is used to adjust the target path of in the given navigation bar item,
+so that it can be reached from the location of the HTML page currently being
+assembled. The given path should use forward slash '/' path separators.
 
 .PARAMETER NavSpec
-An object or hashtables with one NoteProperty or key. The property or key name
-defines the link label, the associated value defines the link target location.
+An object or dictionary with exactly one `NoteProperty` or key representing
+a single key-value pair. This parameter provides the data for one item in
+the navigation bar.
 
-If the link target location of a specification item is the **empty string**, the
-item has special meaning. If the name is the '---', a horizontal separator line
-is generated. If it is just plain text (or a HTML fragment), a label without
-clickable link is generated.
+Following key-value pairs are recognized:
+
++ :----: + :---: + :--------: + ---------------------------------------------- +
+| Key    | Value | Name       | Description
++ ====== + ===== + ========== + ============================================== +
+|"_text_"|"_url_"| navitem    | A clickable hyperlink where _text_ is the link
+|        |       |            | text and _url_ a link to a web page or a local
+|        |       |            | Markdown file. Local file links must be
+|        |       |            | relative to the project root.
++ ------ + ----- + ---------- + ---------------------------------------------- +
+|"_text_"| ""    | navlabel   | A label without hyperlink.
++ ------ + ----- + ---------- + ---------------------------------------------- +
+| "---"  | ""    |navseparator| A speparator line.
++ ------ + ----- + ---------- + ---------------------------------------------- +
+
+The structure of the data determines the type of navigation bar item to build.
+The table above maps supported key-value combinations to the associated named
+HTML templates.
 
 .PARAMETER NavTemplate
-A table of template html fragments with placeholders for:
+An optional dictionary of named HTML templates.
 
-* the hyperlink: placeholder `{{navurl}}`.
-* the link text: placeholder `{{navtext}}`.
++ :--------: + :----------: + ----------------------------------------
+| Type       | Key          | HTML Template
++ ========== + ============ + ========================================
+| clickable  | "navitem"    | ~~~ html
+| link       |              | <button class='navitem'>
+|            |              |     <a href='{{navurl}}'>{{navtext}}</a>
+|            |              | </button>
+|            |              | ~~~
++ ---------- + ------------ + ----------------------------------------
+| label (no  | "navlabel"   | ~~~ html
+| link)      |              | <div class='navlabel'>{{navtext}}</div>
+|            |              | ~~~
++ ---------- + ------------ + ----------------------------------------
+| separator  |"navseparator"| ~~~ html
+|            |              | <hr/>
+|            |              | ~~~
++ ---------- + ------------ + ----------------------------------------
 
-These templates can also be configured in `Build.json`. See `New-StaticHTMLSiteProject` for more
-details.
+The HTML templates listed above are the values configured in `Build.json`.
+These values are used for keys not provided in the given dictionary or if no
+dictionary is given at all.  Additional mappings contained in dictionary are
+ignored.
 
-The default templates are:
+For more customization options see
+[Static Site Project Customization](about_MarkdownToHTML.md#static-site-project-customization).
 
-~~~ html
-<!-- navitem - Navigation link item template -->
-<button class="navitem">
-  <a href="{{navurl}}">{{navtext}}</a>
-</button>
+The css styles used in the templates are defined in `md-styles.css`.
 
-<!-- navlabel - Navigation panel section label -->
-<div class="navitem">{{navtext}}</div>
+During the build process the placeholders contained in the HTML template
+are replaced with content extracted from the `NavSpec` parameter .
 
-<!-- navseparator - Navigation panel section separator -->
-<hr class="navitem"/>
-
-<!-- navheading - auto-generated links to page headings -->
-<span class="navitem{{level}}">{{navtext}}</span>
-~~~
+| Placeholder   | Description
+| :-----------: | -----------
+| `{{navurl}}`  | hyperlink to web-page or local file.
+| `{{navtext}}` | link or label text
 
 .INPUTS
 Objects or hashtables with one NoteProperty or key.
@@ -1314,8 +1020,9 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
+https://wethat.github.io/MarkdownToHtml/2.3.1/ConvertTo-NavigationItem.html
+.LINK
 `New-StaticHTMLSiteProject`
-
 .LINK
 `ConvertTo-PageHeadingNavigation`
 #>
@@ -1339,18 +1046,21 @@ function ConvertTo-NavigationItem {
         # the current location specified by `RelativePath`
         $name = if ($NavSpec -is [hashtable]) {
                     $NavSpec.Keys | Select-Object -First 1
-                } else {
+                } else { # json object
                     (Get-Member -InputObject $NavSpec -MemberType NoteProperty).Name
                 }
-	    $link = $NavSpec.$name
+        $link = $NavSpec.$name
+        # fixup links in the navitem name in case it contains an html fragment
+        $name = $name -Replace '((src|href)\s*=\s*[''"])(?!http|ftp|\./#)',('$1' + $up)
+
 	    if ([string]::IsNullOrWhiteSpace($link)) {
-		    if ($name.StartsWith('---')) {
+		    if ($name.StartsWith('---')) { # separator line
                 [string]$navseparator = $NavTemplate.navseparator
                 if (!$navseparator) {
                     $navseparator = $SCRIPT:defaultNavTemplate.navseparator
                 }
 			    Write-Output $navseparator # separator
-		    } else {
+		    } else { # label
                 [string]$navlabel = $NavTemplate.navlabel
                 if (!$navlabel) {
                     $navlabel = $SCRIPT:defaultNavTemplate.navlabel
@@ -1358,7 +1068,7 @@ function ConvertTo-NavigationItem {
                 Write-Output $navlabel.Replace('{{navtext}}',$name) # label
 		    }
 	    } else {
-		    if (!$link.StartsWith('http')){
+		    if (!$link.StartsWith('http')) {
 			    # handle fragment on page
 
                 $hash = $link.IndexOf('#')
@@ -1408,38 +1118,58 @@ $aRE = New-Object regex '</{0,1} *a[^>]*>'
 
 <#
 .SYNOPSIS
-Generate navigation specifications for all headings found in an HTML fragment.
+Generate navigation specifications for specified headings found in an HTML
+fragment.
 
 .DESCRIPTION
-Retrieves all headings (`h1`.. `h6`) from a HTML fragment and generates a link
-specification for each heading that has an `id` attribute.
+Generates a link specification for each heading in an HTML fragment which
+* has an `id` attribute
+* matches heading level constraint
 
-The link specifications have a format suitable for conversion to HTML
-navigation code by `ConvertTo-NavigationItem`
+The link specifications have the format required by `ConvertTo-NavigationItem`
+to generate navigation bar items.
 
 .PARAMETER HTMLfragment
-HTML text to be scanned for headings.
+HTML fragment to scan for headings.
 
 .PARAMETER NavTemplate
-A table of template html fragments with placeholders for:
-* the heading text: placeholder `{{navtext}}`
-* the heading level: placeholder `{{level}}`
+An optional dictionary of the named HTML template needed to add a heading
+link to the navigation bar.
 
-The default template for page headings is:
++ :--------: + :----------: + ----------------------------------------
+| Type       | Key          | HTML Template
++ ========== + ============ + ========================================
+| Heading    | "navheading" | ~~~ html
+| link       |              |<span class='navitem{{level}}'>{{navtext}}</span>"
+| template   |              | ~~~
++ ---------- + ------------ + ----------------------------------------
 
-~~~ html
-<!-- navheading - auto-generated links to page headings -->
-<span class="navitem{{level}}">{{navtext}}</span>
-~~~
+The HTML template above is the value defined in
+`Build.json`. That value is used if the given dictionary does not define the
+"navheading" mapping or if no dictionary is given at all. Additional mappings
+contained in the dictionary are ignored.
 
-This template can also be configured in `Build.json`. See `New-StaticHTMLSiteProject` for more
-details.
+For more customization options see
+[Static Site Project Customization](about_MarkdownToHTML.md#static-site-project-customization).
+
+The css styles used in the template is defined in `md-styles.css`.
+
+Following placeholders in the HTML template are recognized.
+
+| Placeholder   | Description
+| :-----------: | -----------
+| `{{level}}`   | heading level.
+| `{{navtext}}` | heading text
+
+During the build process the placeholders are replaced with content taken from
+the `NavSpec` parameter.
 
 .PARAMETER HeadingLevels
 A string of numbers denoting the levels of the headings to add to the navigation
 bar. By default the headings at level 1,2 and 3 are added to the Navigation bar.
 If headings should not be automatically added to the navigation bar, use the
-empty string `''` for this parameter.
+empty string `''` for this parameter. If omitted, the default configuration
+defined by option "capture_page_headings" in `Build.json` is used.
 
 .INPUTS
 None. This function does not read from a pipe.
@@ -1449,9 +1179,9 @@ HTML elements representing navigation links to headings on the input HTML
 fragment for use in a vertical navigation bar.
 
 .EXAMPLE
-ConvertTo-PageHeadingNavigation '<h2 id="bob">Hello World</h2>' -HeadingLevels '123'| ConvertTo-NavigationItem
+ConvertTo-PageHeadingNavigation '<h2 id="bob">Hello World</h2>' -HeadingLevels '234'| ConvertTo-NavigationItem
 
-Create an HTML element for navigation to page headings `<h1>`, `<h2>`, '<h3>'.
+Create an HTML element for navigation to page headings `<h2>`, `<h3>`, `<h4>`.
 All other headings are ignored.
 
 Output:
@@ -1488,8 +1218,9 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
+https://wethat.github.io/MarkdownToHtml/2.3.1/ConvertTo-PageHeadingNavigation.html
+.LINK
 `New-StaticHTMLSiteProject`
-
 .LINK
 `ConvertTo-NavigationItem`
 #>
@@ -1529,8 +1260,8 @@ function ConvertTo-PageHeadingNavigation {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU0tFOXRx1pIZzXKgSyeOQI57Q
-# BfegggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUig6XqX5T6yb3K0omT5jhHNNB
+# zAOgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1549,11 +1280,11 @@ function ConvertTo-PageHeadingNavigation {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQGj643SngiYX2q22SmP6jHyKNu
-# ITANBgkqhkiG9w0BAQEFAASCAQBn+f+juUFqyjMlyPnAULAYR7w1HCIwZ4Oe/w/9
-# h1NpQz8CGGyZCCJHZ/3P9Tckkvp+u9X69nopKt6+/9PQ1WSxepqmQSEvm8WC2g3y
-# HGhmvZnRri5HviVDqrSOLavUtFQktvxTTzhdjZ4nZSIWYVmKoUa4DmSIuSkio6WP
-# 5TQ5UWssVvxGuAFtgplfFkTAplqL5e5Zj37B/F0+ufCE0QguHv4ikbxdbc3u9xOA
-# lVdyLJz2TjlEWRcf9YYdKlUIn2upkCsXL1cYV4ZoXeQUnjlB3e2RnppXCZ0DOO3y
-# Iumb2ddvHmykoKvIWxO+l/iPNlWkVgCyipOoO1ZTnVnzSzzH
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTV9pCxK7dCSMaSthyI162HhE3v
+# eTANBgkqhkiG9w0BAQEFAASCAQB2NlDi9SZvuWAUFp9F1tmcuvXeUvA2Rtmjex8A
+# WnLWQsFOWHtZQwYwHvqzHkkKMQwoQSO9DViwEuyw936hWs7fgJ8P2ePWojrrarVb
+# gzgSsMWsdawXk+pTHTs3eP7Bxx0T46aUe/QKvNkQAr622d3PmEX8YX6KOSq5coDz
+# eH+ME36CWJSA+LBk1slIaZn/Ux3ZzOqLldeVMaaBHmwsyhTznIxjS9CwuRIhGlRM
+# LcD/eyjLxcxA/TKP3igodnYlwsLqoRaAAKm7hzqloVcaFzYmMtPlZ4bcLqsvmICp
+# BqnUI0KDPro7VWem3pDKcqmVViXFKdATe2rn4j67AuFdZsPV
 # SIG # End signature block
