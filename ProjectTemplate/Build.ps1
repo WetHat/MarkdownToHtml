@@ -17,7 +17,7 @@ $SCRIPT:staticSite = Join-Path $projectDir $config.site_dir
 # Clean up the static HTML site before build.
 Remove-Item $staticSite -Recurse -Force -ErrorAction:SilentlyContinue
 
-# Set-up the content mapping rules for replacing the templace placeholders
+# Set-up the content mapping rules for replacing template placeholders
 # of the form {{name}}.
 $SCRIPT:contentMap = @{
 	# Add additional mappings here...

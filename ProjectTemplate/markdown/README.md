@@ -1,11 +1,12 @@
 # Static HTML Site Project Template - Readme
 
-_If you are reading this file as Markdown source (`README.md`), consider building the
-project first by running the build script `Build.ps1` and then open `README.html` in the browser._
+_If you are reading this `README` file as Markdown source, consider building the
+project first by running the build script `Build.ps1` and then open
+`README.html` in the browser._
 
 Site projects allow you to build static HTML sites from Markdown sources
-in a fast and simple way. Just add markdown content to the project's `markdown`
-directory and run the build script to update the HTML site.
+in a fast and simple way. Just add Markdown content to the project's `markdown`
+directory and then run the build script to update the HTML site.
 
 The initial configuration of the project contains all site assets locally.
 This allows the site to be viewed offline (without internet connection). 
@@ -27,7 +28,7 @@ For information about project structure and customization options
 check out the documentation for `New-StaticHTMLSiteProject`:
 
 ~~~ Powershell
-PS> Get-Help New-StaticHTMLSiteProject
+PS> Get-Help New-StaticHTMLSiteProject -Online
 ~~~
 
 Also read the module's conceptual documentation:
@@ -36,9 +37,13 @@ Also read the module's conceptual documentation:
 PS> Get-Help about_MarkdownToHTML
 ~~~
 
+Finally you can browse the documentation of the `MarkdownToHTML`
+module [online](https://wethat.github.io/MarkdownToHtml/).
+
 # Feature Showcase
 
-In the following sections some selected features are demonstrated.
+In the following sections some selected features are of the
+capabilities of `MarkdownToHTML` are demonstrated.
 
 ## Mermaid Diagrams
 
