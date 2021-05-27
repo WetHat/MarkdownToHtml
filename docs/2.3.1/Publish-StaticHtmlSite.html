@@ -52,8 +52,8 @@
     <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
 <div class='navlabel'>MarkdownToHtml</div>
 <button class='navitem'><a href='../index.html'>Home</a></button>
-<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Manifest</a></button>
+<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <div class='navlabel'>Page Content</div>
 <button class='navitem'><a href='#publish-statichtmlsite'><span class='navitem1'>Publish-StaticHtmlSite</span></a></button>
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
@@ -79,17 +79,22 @@
 </code></pre>
 <h1 id="description">Description</h1>
 <p>Html fragment objects piped into this function (or passed via the <code>InputObject</code>
-parameter) are converted into HTML documents and saved to a static Html site
+parameter) are converted into standalone HTML documents and saved to a Html site
 directory.</p>
-<p>The Markdown to Html document conversion uses a default or custom template with
-stylesheets and JavaScript resources to render Markdown extensions for LaTeX
-math, code syntax highlighting and diagrams (see <a href="New-HtmlTemplate.html"><code>New-HtmlTemplate</code></a>) for details).</p>
+<p>The Markdown to HTML document conversion uses default or custom templates with
+stylesheets and JavaScript resources to render Markdown extensions for:</p>
+<ul>
+<li>LaTeX math</li>
+<li>code syntax highlighting</li>
+<li>diagrams</li>
+</ul>
+<p>See <a href="New-HtmlTemplate.html"><code>New-HtmlTemplate</code></a> for details.</p>
 <h1 id="parameters">Parameters</h1>
 <blockquote>
 <h2 id="inputobject-object">-InputObject &lt;Object&gt;</h2>
 <blockquote>
-<p>An object representing an Html fragment. Ideally this is an output object of
-<a href="Convert-MarkdownToHTMLFragment.html"><code>Convert-MarkdownToHTMLFragment</code></a>, but any object will
+<p>An object representing an Html fragment. Ideally this is an output object
+returned by <a href="Convert-MarkdownToHTMLFragment.html"><code>Convert-MarkdownToHTMLFragment</code></a>, but any object will
 work provided following properties are present:</p>
 <dl>
 <dt><code>RelativePath</code></dt>
@@ -106,8 +111,9 @@ This property is automatically provided by:</p>
 <dt><code>Title</code></dt>
 <dd>The page title.</dd>
 <dt><code>HtmlFragment</code></dt>
-<dd>A html fragment to be used a main content of the HTML document.</dd>
+<dd>A html fragment to be used as main content of the HTML document.</dd>
 </dl>
+<hr />
 <table>
 <thead>
 <tr>
@@ -142,10 +148,14 @@ This property is automatically provided by:</p>
  
 <h2 id="template-string">-Template &lt;String&gt;</h2>
 <blockquote>
-<p>Optional directory containing the html template file <code>md-template.html</code> and its resources
-which will be used to convert the Html fragments into standalone Html documents.
-If no template directory is specified, a default factory-installed template is used.
-For infomations about creating custom templates see <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a>.</p>
+<p>Optional directory containing the html template file <code>md-template.html</code> and its
+resources which will be used to convert the Html fragments into standalone Html
+documents. If no template directory is specified, a default factory-installed
+template is used. For infomations about creating custom templates see
+<a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a>. See
+<a href="about_MarkdownToHTML.html#conversion-template-customization">Template Customization</a>
+for customization options.</p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -180,14 +190,13 @@ For infomations about creating custom templates see <a href="New-HTMLTemplate.ht
  
 <h2 id="contentmap-hashtable">-ContentMap &lt;Hashtable&gt;</h2>
 <blockquote>
-<p>Placeholder substitution mappings. This map should contain an entry
-for each custom placeholder in the HTML-template (<code>md-template.html</code>).</p>
-<p>Following default substitution mappings are added automatically unless they
-are explicitely defined in the given map:</p>
+<p>Placeholder substitution mapping as described in
+<a href="about_MarkdownToHTML.html#conversion-template-customization">Template Customization</a>.</p>
+<p>Following substitution mappings are used by default unless explicitely defined.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Key</th>
+<th style="text-align: left;">Placeholder</th>
 <th style="text-align: left;">Description</th>
 <th style="text-align: left;">Origin</th>
 </tr>
@@ -215,22 +224,32 @@ are explicitely defined in the given map:</p>
 </tr>
 </tbody>
 </table>
-<p>The keys of this map represent the place holders verbatim, including the
-delimiters. E.g <a href="%7B%7Bmy-placeholder%7D%7D.html"><code>{{my-placeholder}}</code></a>. The values in this map can be</p>
-<ul>
-<li><p>one or more strings</p>
-</li>
-<li><p>a script block which takes <strong>one</strong> parameter to which the InputObject is bound.
-The script block should return one or more strings which define the
-substitution value.</p>
-<p>Example:</p>
-<pre><code class="language-PowerShell">{
-    param($Input)
-    &quot;Source = $($Input.RelativePath)&quot;
-}
-</code></pre>
-</li>
-</ul>
+<p>For static HTML site projects additional mappings are defined:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Placeholder</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Origin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>{{nav}}</code></td>
+<td style="text-align: left;">Navigation bar content</td>
+<td style="text-align: left;"><code>Build.json</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>{{footer}}</code></td>
+<td style="text-align: left;">Page footer content</td>
+<td style="text-align: left;"><code>Build.json</code></td>
+</tr>
+</tbody>
+</table>
+<p>For static HTML site projects additional placeholders can be added to the map.
+See
+<a href="about_MarkdownToHTML.html#defining-content-mapping-rules">Defining Content Mapping Rules</a></p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -265,8 +284,9 @@ substitution value.</p>
  
 <h2 id="mediadirectory-string">-MediaDirectory &lt;String&gt;</h2>
 <blockquote>
-<p>An optional directory containing additional media for the Html site
+<p>An optional directory containing additional media for the HTML site
 such as images, videos etc.</p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -306,6 +326,7 @@ in the same relative location below this directory as related Markdown document
 has below the input directory. If the site directory does not exist it will be created.
 If the site directory already exists its files will be retained, but possibly overwitten
 by generated HTML files.</p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -367,6 +388,7 @@ a simpler version of the functionality provided by the function <a href="Convert
 <li><a href="Find-MarkdownFiles.html"><code>Find-MarkdownFiles</code></a></li>
 <li><a href="Convert-MarkdownToHTMLFragment.html"><code>Convert-MarkdownToHTMLFragment</code></a></li>
 <li><a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a></li>
+<li><a href="about_MarkdownToHTML.html#defining-content-mapping-rules">Defining Content Mapping Rules</a></li>
 </ul>
 <hr />
 <p><cite>Module: MarkDownToHTML; Version: 2.3.1; (c) 2018-2021 WetHat Lab. All rights reserved.</cite></p>

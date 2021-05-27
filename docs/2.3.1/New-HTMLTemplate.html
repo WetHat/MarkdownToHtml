@@ -52,8 +52,8 @@
     <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
 <div class='navlabel'>MarkdownToHtml</div>
 <button class='navitem'><a href='../index.html'>Home</a></button>
-<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Manifest</a></button>
+<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <div class='navlabel'>Page Content</div>
 <button class='navitem'><a href='#new-htmltemplate'><span class='navitem1'>New-HTMLTemplate</span></a></button>
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
@@ -69,7 +69,8 @@
     <main>
         <article>
             <h1 id="new-htmltemplate">New-HTMLTemplate</h1>
-<p>Create a customizable template directory for Markdown to HTML conversion.</p>
+<p>Create a customizable template directory for building HTML files from
+Markdown files.</p>
 <h1 id="syntax">Syntax</h1>
 <pre><code class="language-PowerShell"> New-HTMLTemplate [-Destination] &lt;String&gt;  [&lt;CommonParameters&gt;] 
 </code></pre>
@@ -77,16 +78,16 @@
 <p>The factory-default conversion template is copied to the destination directory
 to seed the customization process. The new template directory contains the
 resources necesssary to generate fully functional, standalone HTML files.</p>
-<p>Information about the template
-<a href="about_MarkdownToHTML.html#default-conversion-templates">factory default configuration</a>
-and <a href="about_MarkdownToHTML.html#conversion-templates-customization">template customization</a>
-can be found on the <a href="about_MarkdownToHTML.html"><code>about_MarkdownToHTML</code></a> help page.</p>
+<p>See
+<a href="about_MarkdownToHTML.html#conversion-template-customization">Conversion Template Customization</a>
+for ways to customize the template.</p>
 <h1 id="parameters">Parameters</h1>
 <blockquote>
 <h2 id="destination-string">-Destination &lt;String&gt;</h2>
 <blockquote>
 <p>Location of the new conversion template directory. The template directory
 should be empty or non-existent.</p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -120,7 +121,7 @@ should be empty or non-existent.</p>
 </blockquote>
 </blockquote>
 <h1 id="inputs">Inputs</h1>
-<p>This function does not read from the pipe</p>
+<p>This function does not read from the pipe.</p>
 <h1 id="outputs">Outputs</h1>
 <p>The new conversion template directory <code>[System.IO.DirectoryInfo]</code>.</p>
 <h1 id="examples">Examples</h1>
@@ -128,7 +129,7 @@ should be empty or non-existent.</p>
 <blockquote>
 <pre><code class="language-PowerShell">New-HTMLTemplate -Destination &#39;E:\MyTemplate&#39;
 </code></pre>
-<p>Create a copy of the default template in <code>E:\MyTemplate</code> for customization.</p>
+<p>Create a copy of the factory template in <code>E:\MyTemplate</code> for customization.</p>
 </blockquote>
 <h1 id="related-links">Related Links</h1>
 <ul>

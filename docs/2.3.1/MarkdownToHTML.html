@@ -52,8 +52,8 @@
     <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
 <div class='navlabel'>MarkdownToHtml</div>
 <button class='navitem'><a href='../index.html'>Home</a></button>
-<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Manifest</a></button>
+<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <div class='navlabel'>Page Content</div>
 <button class='navitem'><a href='#module-markdowntohtml-2.3.1'><span class='navitem1'>Module MarkDownToHTML 2.3.1</span></a></button>
 <button class='navitem'><a href='#known-incompatibilities'><span class='navitem1'>Known Incompatibilities</span></a></button>
@@ -108,23 +108,27 @@ See <a href="MarkdownToHTML.html#2.0.0">version 2.0.0</a> release notes for upgr
 </ul>
 <h1 id="release-notes">Release Notes</h1>
 <h2 id="2.3.2">2.3.2</h2>
+<p>Navigation bar improvements (Static HTML site projects):</p>
 <ul>
-<li><p>Navigation bar improvements (Static HTML site projects):</p>
-<ul>
-<li>scrollbar added to long navbars.</li>
-<li><code>md-styles.css</code> overhauled for static site template to make navbar usable
-for overflowing navitems</li>
-<li>Image links supported in navitem names. Example (Build.json):
-~~~Json
-&quot;site_navigation&quot;: [
-{ &quot;<img width='90%' src='site_logo.png'/>&quot;: &quot;README.md&quot; },
-{ &quot;Home&quot;: &quot;README.md&quot; },
-{ &quot;---&quot;: &quot;&quot; }
-]
-~~~</li>
-</ul>
+<li><p>scrollbar added to long navbars.</p>
 </li>
-<li><p>documentation overhauled and published on <a href="https://wethat.github.io/MarkdownToHtml">GitHub Pages</a></p>
+<li><p><code>md-styles.css</code> overhauled for static site template to make navbar usable
+for overflowing navitems</p>
+</li>
+<li><p>Image links supported in navitem names. Example (Build.json):</p>
+<pre><code class="language-Json">&quot;site_navigation&quot;: [
+    { &quot;&lt;img width=&#39;90%&#39; src=&#39;site_logo.png&#39;/&gt;&quot;: &quot;README.md&quot; },
+    { &quot;Home&quot;: &quot;README.md&quot; },
+    { &quot;---&quot;: &quot;&quot; }
+]
+</code></pre>
+</li>
+<li><p>Module Documentation</p>
+<ul>
+<li>Code and conceptial documentation improved</li>
+<li>Documentation generated with this module andp ublished to
+<a href="https://wethat.github.io/MarkdownToHtml">GitHub Pages</a></li>
+</ul>
 </li>
 </ul>
 <h2 id="2.3.1">2.3.1</h2>

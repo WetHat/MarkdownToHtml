@@ -52,8 +52,8 @@
     <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
 <div class='navlabel'>MarkdownToHtml</div>
 <button class='navitem'><a href='../index.html'>Home</a></button>
-<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Manifest</a></button>
+<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <div class='navlabel'>Page Content</div>
 <button class='navitem'><a href='#convertto-pageheadingnavigation'><span class='navitem1'>ConvertTo-PageHeadingNavigation</span></a></button>
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
@@ -67,25 +67,31 @@
 <button class='navitem'><a href='#notes'><span class='navitem1'>Notes</span></a></button>
 <button class='navitem'><a href='#examples'><span class='navitem1'>Examples</span></a></button>
 <button class='navitem'><a href='#example-1'><span class='navitem2'>EXAMPLE 1</span></a></button>
+<button class='navitem'><a href='#example-2'><span class='navitem2'>EXAMPLE 2</span></a></button>
 <button class='navitem'><a href='#related-links'><span class='navitem1'>Related Links</span></a></button>
 </nav>
     <main>
         <article>
             <h1 id="convertto-pageheadingnavigation">ConvertTo-PageHeadingNavigation</h1>
-<p>Generate navigation specifications for all headings found in an HTML fragment.</p>
+<p>Generate navigation specifications for specified headings found in an HTML
+fragment.</p>
 <h1 id="syntax">Syntax</h1>
 <pre><code class="language-PowerShell"> ConvertTo-PageHeadingNavigation [-HTMLfragment] &lt;String&gt; [-NavTemplate] &lt;Object&gt; [-HeadingLevels] &lt;String&gt;  [&lt;CommonParameters&gt;] 
 </code></pre>
 <h1 id="description">Description</h1>
-<p>Retrieves all headings (<code>h1</code>.. <code>h6</code>) from a HTML fragment and generates a link
-specification for each heading that has an <code>id</code> attribute.</p>
-<p>The link specifications have a format suitable for conversion to HTML
-navigation code by <a href="ConvertTo-NavigationItem.html"><code>ConvertTo-NavigationItem</code></a></p>
+<p>Generates a link specification for each heading in an HTML fragment which</p>
+<ul>
+<li>has an <code>id</code> attribute</li>
+<li>matches heading level constraint</li>
+</ul>
+<p>The link specifications have the format required by <a href="ConvertTo-NavigationItem.html"><code>ConvertTo-NavigationItem</code></a>
+to generate navigation bar items.</p>
 <h1 id="parameters">Parameters</h1>
 <blockquote>
 <h2 id="htmlfragment-string">-HTMLfragment &lt;String&gt;</h2>
 <blockquote>
-<p>HTML text to be scanned for headings.</p>
+<p>HTML fragment to scan for headings.</p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -120,17 +126,61 @@ navigation code by <a href="ConvertTo-NavigationItem.html"><code>ConvertTo-Navig
  
 <h2 id="navtemplate-object">-NavTemplate &lt;Object&gt;</h2>
 <blockquote>
-<p>A dictionary of template html fragments with placeholders for:</p>
-<ul>
-<li>the heading text: placeholder <code>{{navtext}}</code></li>
-<li>the heading level: placeholder <code>{{level}}</code></li>
-</ul>
-<p>The default template for page headings is:</p>
-<pre><code class="language-html">&lt;!-- navheading - auto-generated links to page headings --&gt;
-&lt;span class=&quot;navitem{{level}}&quot;&gt;{{navtext}}&lt;/span&gt;
+<p>An optional dictionary of the named HTML template needed to add a heading
+link to the navigation bar.</p>
+<table>
+<col style="width:17.91%" />
+<col style="width:20.9%" />
+<col style="width:61.19%" />
+<thead>
+<tr>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Key</th>
+<th>HTML Template</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Heading
+link
+template</td>
+<td style="text-align: center;">&quot;navheading&quot;</td>
+<td>
+<pre><code class="language-html">&lt;span class=&#39;navitem{{level}}&#39;&gt;{{navtext}}&lt;/span&gt;&quot;
 </code></pre>
-<p>This template can also be configured in <code>Build.json</code>. See <a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a> for more
-details.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The HTML template above is the value defined in
+<code>Build.json</code>. That value is used if the given dictionary does not define the
+&quot;navheading&quot; mapping or if no dictionary is given at all. Additional mappings
+contained in the dictionary are ignored.</p>
+<p>For more customization options see
+<a href="about_MarkdownToHTML.html#static-site-project-customization">Static Site Project Customization</a>.</p>
+<p>The css styles used in the template is defined in <code>md-styles.css</code>.</p>
+<p>Following placeholders in the HTML template are recognized.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Placeholder</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>{{level}}</code></td>
+<td>heading level.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>{{navtext}}</code></td>
+<td>heading text</td>
+</tr>
+</tbody>
+</table>
+<p>During the build process the placeholders are replaced with content taken from
+the <code>NavSpec</code> parameter.</p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -168,7 +218,9 @@ details.</p>
 <p>A string of numbers denoting the levels of the headings to add to the navigation
 bar. By default the headings at level 1,2 and 3 are added to the Navigation bar.
 If headings should not be automatically added to the navigation bar, use the
-empty string <code>&#39;&#39;</code> for this parameter.</p>
+empty string <code>&#39;&#39;</code> for this parameter. If omitted, the default configuration
+defined by option &quot;capture_page_headings&quot; in <code>Build.json</code> is used.</p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -225,7 +277,7 @@ All other headings are ignored.</p>
 </code></pre>
 <p>Note that the heading level has been added to the css class.</p>
 </blockquote>
- ## EXAMPLE 2
+<h2 id="example-2">EXAMPLE 2</h2>
 <blockquote>
 <pre><code class="language-PowerShell">Hello World&lt;/h2&gt;&#39; -NavTemplate $custom | ConvertTo-NavigationItem
 </code></pre>

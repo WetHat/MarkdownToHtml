@@ -52,8 +52,8 @@
     <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
 <div class='navlabel'>MarkdownToHtml</div>
 <button class='navitem'><a href='../index.html'>Home</a></button>
-<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Manifest</a></button>
+<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <div class='navlabel'>Page Content</div>
 <button class='navitem'><a href='#find-markdownfiles'><span class='navitem1'>Find-MarkdownFiles</span></a></button>
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
@@ -75,13 +75,16 @@
 <pre><code class="language-PowerShell"> Find-MarkdownFiles [-Path] &lt;String&gt; [-Exclude] &lt;String[]&gt;  [&lt;CommonParameters&gt;] 
 </code></pre>
 <h1 id="description">Description</h1>
-<p>Recursively scans a directory and generates annotated <code>[System.IO.FileInfo]</code> objects
-for each Markdown file.</p>
+<p>Recursively scans a directory and generates annotated <code>[System.IO.FileInfo]</code>
+objects for each Markdown file.</p>
+<p>The annotation is a <code>NoteProperty</code> named <code>RelativePath</code>. It contains the
+relative path of the Markdown file below the given directory.</p>
 <h1 id="parameters">Parameters</h1>
 <blockquote>
 <h2 id="path-string">-Path &lt;String&gt;</h2>
 <blockquote>
-<p>Path to a directory containing markdown files.</p>
+<p>Path to a directory containing Markdown files.</p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -116,8 +119,9 @@ for each Markdown file.</p>
  
 <h2 id="exclude-string">-Exclude &lt;String[]&gt;</h2>
 <blockquote>
-<p>Omits the specified markdown files. The value of this parameter qualifies the Path parameter. Enter a path element or
-pattern, such as &quot;D*.md&quot;. Wildcards are permitted.</p>
+<p>Omit the specified files. Enter comma separated list of path elements or
+patterns, such as &quot;D*.md&quot;. Wildcards are permitted.</p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -153,9 +157,11 @@ pattern, such as &quot;D*.md&quot;. Wildcards are permitted.</p>
 <h1 id="inputs">Inputs</h1>
 <p>None</p>
 <h1 id="outputs">Outputs</h1>
-<p>A <code>[System.IO.FileInfo]</code> object for each Markdown file found below the given directory. The emitted
-<code>[System.IO.FileInfo]</code> objects are annotated with a note property <code>RelativePath</code> which is a string
-specifying the relative path of the markdown file below the given directory. The <code>RelativePath</code> property is
+<p>An <code>[System.IO.FileInfo]</code> object for each Markdown file found below
+the given directory. The emitted
+<code>[System.IO.FileInfo]</code> objects are annotated with a <code>NoteProperty</code> named
+<code>RelativePath</code> which specifies the relative path of the Markdown file below the
+given directory. The <code>RelativePath</code> property is
 <strong>mandatory</strong> if <code>Publish-StaticHtmlSite</code> is used in the downstream conversion
 pipeline.</p>
 <h1 id="examples">Examples</h1>

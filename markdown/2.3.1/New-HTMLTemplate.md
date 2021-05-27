@@ -1,6 +1,7 @@
 ﻿# New-HTMLTemplate
 
-Create a customizable template directory for Markdown to HTML conversion.
+Create a customizable template directory for building HTML files from
+Markdown files.
 
 # Syntax
 ```PowerShell
@@ -15,10 +16,9 @@ The factory-default conversion template is copied to the destination directory
 to seed the customization process. The new template directory contains the
 resources necesssary to generate fully functional, standalone HTML files.
 
-Information about the template
-[factory default configuration](about_MarkdownToHTML.md#default-conversion-templates)
-and [template customization](about_MarkdownToHTML.md#conversion-templates-customization)
-can be found on the [`about_MarkdownToHTML`](about_MarkdownToHTML.md) help page.
+See
+[Conversion Template Customization](about_MarkdownToHTML.md#conversion-template-customization)
+for ways to customize the template.
 
 
 
@@ -37,6 +37,8 @@ can be found on the [`about_MarkdownToHTML`](about_MarkdownToHTML.md) help page.
 Location of the new conversion template directory. The template directory
 should be empty or non-existent.
 
+---
+
 Parameter Property         | Value
 --------------------------:|:----------
 Required?                  | true
@@ -52,7 +54,7 @@ Accept wildcard characters?| false
 
 
 # Inputs
-This function does not read from the pipe
+This function does not read from the pipe.
 
 
 # Outputs
@@ -60,30 +62,27 @@ The new conversion template directory `[System.IO.DirectoryInfo]`.
 
 # Examples
 
+
 ## EXAMPLE 1
 
-<blockquote>
-
-```PowerShell
-New-HTMLTemplate -Destination 'E:\MyTemplate'
-```
-
-
-Create a copy of the default template in `E:\MyTemplate` for customization.
-
-
-
-
-
-
-
-
-
-
-
-
-
-</blockquote>
+> ~~~ PowerShell
+> New-HTMLTemplate -Destination 'E:\MyTemplate'
+> ~~~
+>
+> 
+> Create a copy of the factory template in `E:\MyTemplate` for customization.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
 
 
 # Related Links

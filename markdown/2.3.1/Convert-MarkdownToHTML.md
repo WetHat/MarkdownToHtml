@@ -1,6 +1,6 @@
 ﻿# Convert-MarkdownToHTML
 
-Convert Markdown files to HTML files.
+Convert Markdown files to static HTML files.
 
 # Syntax
 ```PowerShell
@@ -12,12 +12,11 @@ Convert Markdown files to HTML files.
 
 
 This function reads all Markdown files from a source folder and converts each
-of them to standalone html documents using configurable Markdown extensions and
-a customizable HTML template. For an annotated list of supported extensions
-see [MarkdownToHTML](about_MarkdownToHTML.md#supported-markdown-extensions).
-See
-[about_MarkdownToHTML](about_MarkdownToHTML.md#customization) for customization
-options.
+of them to a standalone html document using:
+
+* configurable [Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions)
+* a customizable or default HTML template. See [`New-HTMLTemplate`](New-HTMLTemplate.md) about
+  the creation of custom templates.
 
 
 
@@ -35,6 +34,8 @@ options.
 
 Path to Markdown files or directories containing Markdown files.
 
+---
+
 Parameter Property         | Value
 --------------------------:|:----------
 Required?                  | true
@@ -51,8 +52,10 @@ Accept wildcard characters?| true
 <blockquote>
 
 Optional directory containing the html template file `md-template.html` and its resources.
-If no template directory is specified, a default factory-installed template is used.
+If no template directory is specified, the factory-installed default template is used.
 For information about creating custom templates see [`New-HTMLTemplate`](New-HTMLTemplate.md).
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -73,6 +76,8 @@ Comma separated list of Markdown parsing extensions to use.
 See [about_MarkdownToHTML](MarkdownToHTML.md#markdown-extensions) for an
 annotated list of supported extensions.
 
+---
+
 Parameter Property         | Value
 --------------------------:|:----------
 Required?                  | false
@@ -92,6 +97,8 @@ Comma separated list of Markdown parsing extensions to exclude.
 Mostly used when the the 'advanced' parsing option is included and
 certain individual options need to be removed,
 
+---
+
 Parameter Property         | Value
 --------------------------:|:----------
 Required?                  | false
@@ -109,6 +116,8 @@ Accept wildcard characters?| false
 
 An optional directory containing additional media for the Html site
 such as images, videos etc. Defaults to the directory given in `-Path`
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -128,6 +137,8 @@ Accept wildcard characters?| false
 Directory for the generated HTML files. The Html files will be placed
 in the same relative location below this directory as related Markdown document
 has below the Markdown source directory.
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -152,130 +163,109 @@ File objects `[System.IO.FileInfo]` of the generated HTML files.
 
 # Examples
 
+
 ## EXAMPLE 1
 
-<blockquote>
-
-```PowerShell
-Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles'
-```
-
-
-Convert all Markdown files in `E:\MyMarkdownFiles` and save the generated HTML files
-in `E:\MyHTMLFiles`
-
-
-
-
-
-
-
-
-
-
-
-
-
-</blockquote>
- ## EXAMPLE 2
-
-<blockquote>
-
-```PowerShell
-Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -Template 'E:\MyTemplate' -SiteDirectory 'E:\MyHTMLFiles'
-```
-
-
-Convert all Markdown files in `E:\MyMarkdownFiles` using
-* the 'common' parsing configuration
-* the custom template in `E:\MyTemplate`
-
-The generated HTML files are saved to `E:\MyHTMLFiles`.
-
-
-
-
-
-
-
-
-
-
-
-
-
-</blockquote>
- ## EXAMPLE 3
-
-<blockquote>
-
-```PowerShell
-Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
-```
-
-
-Convert all Markdown files in `E:\MyMarkdownFiles` using
-* the 'advanced' and 'diagrams' parsing extension.
-* the default template
-
-The generated HTML files are saved to `E:\MyHTMLFiles`.
-
-
-
-
-
-
-
-
-
-
-
-
-
-</blockquote>
- ## EXAMPLE 4
-
-<blockquote>
-
-```PowerShell
-Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -MediaDirectory 'e:\Media' -SiteDirectory 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
-```
-
-
-Convert all Markdown files in `E:\MyMarkdownFiles` using
-* the 'advanced' and 'diagrams' parsing extension.
-* the default template
-* Media files (images, Videos, etc.) from the directory `e:\Media`
-
-The generated HTML files are saved to the directory `E:\MyHTMLFiles`.
-
-
-
-
-
-
-
-
-
-
-
-
-
-</blockquote>
+> ~~~ PowerShell
+> Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles'
+> ~~~
+>
+> 
+> Convert all Markdown files in `E:\MyMarkdownFiles` and save the generated HTML
+> files to `E:\MyHTMLFiles`.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+ 
+## EXAMPLE 2
+
+> ~~~ PowerShell
+> Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -Template 'E:\MyTemplate' -SiteDirectory 'E:\MyHTMLFiles'
+> ~~~
+>
+> 
+> Convert all Markdown files in `E:\MyMarkdownFiles` using the 'common' parsing
+> configuration and the custom template in `E:\MyTemplate`.
+> 
+> The generated HTML files are saved to `E:\MyHTMLFiles`.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+ 
+## EXAMPLE 3
+
+> ~~~ PowerShell
+> Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
+> ~~~
+>
+> 
+> Convert all Markdown files in `E:\MyMarkdownFiles` using the 'advanced' and
+> 'diagrams' parsing extension and the default template.
+> 
+> The generated HTML files are saved to `E:\MyHTMLFiles`.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+ 
+## EXAMPLE 4
+
+> ~~~ PowerShell
+> Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -MediaDirectory 'e:\Media' -SiteDirectory 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
+> ~~~
+>
+> 
+> Convert all Markdown files in `E:\MyMarkdownFiles` using
+> * the 'advanced' and 'diagrams' parsing extension.
+> * the default template
+> * Media files (images, Videos, etc.) from the directory `e:\Media`
+> 
+> The generated HTML files are saved to the directory `E:\MyHTMLFiles`.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
 
 
 # Related Links
 
 * [https://wethat.github.io/MarkdownToHtml/2.3.1/Convert-MarkdownToHTML.html](https://wethat.github.io/MarkdownToHtml/2.3.1/Convert-MarkdownToHTML.html) 
-* [https://github.com/lunet-io/markdig](https://github.com/lunet-io/markdig) 
-* [http://commonmark.org/](http://commonmark.org/) 
-* [https://highlightjs.org/](https://highlightjs.org/) 
-* [https://mermaidjs.github.io/](https://mermaidjs.github.io/) 
-* [https://katex.org/](https://katex.org/) 
-* [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
-* [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md) 
-* [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) 
-* [`New-HTMLTemplate`](New-HTMLTemplate.md)
+* [`New-HTMLTemplate`](New-HTMLTemplate.md) 
+* [Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions)
 
 ---
 

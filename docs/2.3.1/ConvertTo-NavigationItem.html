@@ -52,8 +52,8 @@
     <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
 <div class='navlabel'>MarkdownToHtml</div>
 <button class='navitem'><a href='../index.html'>Home</a></button>
-<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Manifest</a></button>
+<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <div class='navlabel'>Page Content</div>
 <button class='navitem'><a href='#convertto-navigationitem'><span class='navitem1'>ConvertTo-NavigationItem</span></a></button>
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
@@ -67,40 +67,78 @@
 <button class='navitem'><a href='#notes'><span class='navitem1'>Notes</span></a></button>
 <button class='navitem'><a href='#examples'><span class='navitem1'>Examples</span></a></button>
 <button class='navitem'><a href='#example-1'><span class='navitem2'>EXAMPLE 1</span></a></button>
+<button class='navitem'><a href='#example-2'><span class='navitem2'>EXAMPLE 2</span></a></button>
+<button class='navitem'><a href='#example-3'><span class='navitem2'>EXAMPLE 3</span></a></button>
+<button class='navitem'><a href='#example-4'><span class='navitem2'>EXAMPLE 4</span></a></button>
+<button class='navitem'><a href='#example-5'><span class='navitem2'>EXAMPLE 5</span></a></button>
+<button class='navitem'><a href='#example-6'><span class='navitem2'>EXAMPLE 6</span></a></button>
+<button class='navitem'><a href='#example-7'><span class='navitem2'>EXAMPLE 7</span></a></button>
 <button class='navitem'><a href='#related-links'><span class='navitem1'>Related Links</span></a></button>
 </nav>
     <main>
         <article>
             <h1 id="convertto-navigationitem">ConvertTo-NavigationItem</h1>
-<p>Convert a navigation specification to a HTML element representing a navigation
-link..</p>
+<p>Convert a navigation specification to a single item in a navigation bar of a
+static HTML site projects created by <code>New-StaticHTMLSiteProject</code>.</p>
 <h1 id="syntax">Syntax</h1>
 <pre><code class="language-PowerShell"> ConvertTo-NavigationItem [-NavSpec] &lt;Object&gt; [-RelativePath] &lt;String&gt; [-NavTemplate] &lt;Object&gt;  [&lt;CommonParameters&gt;] 
 </code></pre>
 <h1 id="description">Description</h1>
-<p>Converts a navigation specification to an HTML an element representing a single
-navigation line in a simple vertical navigation bar.</p>
-<p>Following kinds of navigation links are supported:</p>
+<p>Converts the specification for a single item in the navigation bar by</p>
 <ul>
-<li>navigatable links</li>
-<li>separator lines</li>
-<li>labels (without link)</li>
+<li>finding an HTML template to represent the item in the navigation bar.</li>
+<li>replacing placeholders in the template by data taken from the</li>
+<li>specification.</li>
 </ul>
-<p>The generated HTML element is assigned to the class <code>navitem</code> to enable
-styling in <code>md-styles.css</code>.</p>
 <h1 id="parameters">Parameters</h1>
 <blockquote>
 <h2 id="navspec-object">-NavSpec &lt;Object&gt;</h2>
 <blockquote>
-<p>An object or list of hashtables with one NoteProperty or key.
-The property or key name defines the link label,
-the associated value defines the link target location. The link label can
-be a HTML fragment containing for example an <code>&lt;img&gt;</code> tag. Local links should be
-relative to the project root.</p>
-<p>If the link target location of a specification item is the <strong>empty string</strong>, the
-item has special meaning. If the name is the '---', a horizontal separator line
-is generated. If it is just plain text (or a HTML fragment), a label without
-clickable link is generated.</p>
+<p>An object or dictionary with exactly one <code>NoteProperty</code> or key representing
+a single key-value pair. This parameter provides the data for one item in
+the navigation bar.</p>
+<p>Following key-value pairs are recognized:</p>
+<table>
+<col style="width:10.67%" />
+<col style="width:9.33%" />
+<col style="width:16%" />
+<col style="width:64%" />
+<thead>
+<tr>
+<th style="text-align: center;">Key</th>
+<th style="text-align: center;">Value</th>
+<th style="text-align: center;">Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">&quot;<em>text</em>&quot;</td>
+<td style="text-align: center;">&quot;<em>url</em>&quot;</td>
+<td style="text-align: center;">navitem</td>
+<td>A clickable hyperlink where <em>text</em> is the link
+text and <em>url</em> a link to a web page or a local
+Markdown file. Local file links must be
+relative to the project root.</td>
+</tr>
+<tr>
+<td style="text-align: center;">&quot;<em>text</em>&quot;</td>
+<td style="text-align: center;">&quot;&quot;</td>
+<td style="text-align: center;">navlabel</td>
+<td>A label without hyperlink.</td>
+</tr>
+<tr>
+<td style="text-align: center;">&quot;---&quot;</td>
+<td style="text-align: center;">&quot;&quot;</td>
+<td style="text-align: center;">navseparator</td>
+<td>A speparator line.</td>
+</tr>
+</tbody>
+</table>
+<p>The structure of the data determines the type of navigation bar item to build.
+The table above maps supported key-value combinations to the associated named
+HTML templates.</p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -138,7 +176,8 @@ clickable link is generated.</p>
 <p>Path to Markdown document relative to the site root. That file's relative path
 is used to adjust the target path of in the given navigation bar item,
 so that it can be reached from the location of the HTML page currently being
-assembled   . The given path should use forward slash '/' path separators.</p>
+assembled. The given path should use forward slash '/' path separators.</p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -173,29 +212,77 @@ assembled   . The given path should use forward slash '/' path separators.</p>
  
 <h2 id="navtemplate-object">-NavTemplate &lt;Object&gt;</h2>
 <blockquote>
-<p>A table of template html fragments with placeholders for:</p>
-<ul>
-<li>the hyperlink: placeholder <code>{{navurl}}</code>.</li>
-<li>the link text: placeholder <code>{{navtext}}</code>.</li>
-</ul>
-<p>These templates can also be configured in <code>Build.json</code>.
-See <a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a> for more
-details.</p>
-<p>The default templates are:</p>
-<pre><code class="language-html">&lt;!-- navitem - Navigation link item template --&gt;
-&lt;button class=&quot;navitem&quot;&gt;
-  &lt;a href=&quot;{{navurl}}&quot;&gt;{{navtext}}&lt;/a&gt;
+<p>An optional dictionary of named HTML templates.</p>
+<table>
+<col style="width:17.91%" />
+<col style="width:20.9%" />
+<col style="width:61.19%" />
+<thead>
+<tr>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Key</th>
+<th>HTML Template</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">clickable
+link</td>
+<td style="text-align: center;">&quot;navitem&quot;</td>
+<td>
+<pre><code class="language-html">&lt;button class=&#39;navitem&#39;&gt;
+    &lt;a href=&#39;{{navurl}}&#39;&gt;{{navtext}}&lt;/a&gt;
 &lt;/button&gt;
-
-&lt;!-- navlabel - Navigation panel section label --&gt;
-&lt;div class=&quot;navitem&quot;&gt;{{navtext}}&lt;/div&gt;
-
-&lt;!-- navseparator - Navigation panel section separator --&gt;
-&lt;hr class=&quot;navitem&quot;/&gt;
-
-&lt;!-- navheading - auto-generated links to page headings --&gt;
-&lt;span class=&quot;navitem{{level}}&quot;&gt;{{navtext}}&lt;/span&gt;
 </code></pre>
+</td>
+</tr>
+<tr>
+<td style="text-align: center;">label (no
+link)</td>
+<td style="text-align: center;">&quot;navlabel&quot;</td>
+<td>
+<pre><code class="language-html">&lt;div class=&#39;navlabel&#39;&gt;{{navtext}}&lt;/div&gt;
+</code></pre>
+</td>
+</tr>
+<tr>
+<td style="text-align: center;">separator</td>
+<td style="text-align: center;">&quot;navseparator&quot;</td>
+<td>
+<pre><code class="language-html">&lt;hr/&gt;
+</code></pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The HTML templates listed above are the values configured in <code>Build.json</code>.
+These values are used for keys not provided in the given dictionary or if no
+dictionary is given at all.  Additional mappings contained in dictionary are
+ignored.</p>
+<p>For more customization options see
+<a href="about_MarkdownToHTML.html#static-site-project-customization">Static Site Project Customization</a>.</p>
+<p>The css styles used in the templates are defined in <code>md-styles.css</code>.</p>
+<p>During the build process the placeholders contained in the HTML template
+are replaced with content extracted from the <code>NavSpec</code> parameter .</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Placeholder</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>{{navurl}}</code></td>
+<td>hyperlink to web-page or local file.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>{{navtext}}</code></td>
+<td>link or label text</td>
+</tr>
+</tbody>
+</table>
+<hr />
 <table>
 <thead>
 <tr>
@@ -253,7 +340,7 @@ non-local.</p>
 &lt;/button&gt;&lt;br/&gt;
 </code></pre>
 </blockquote>
- ## EXAMPLE 2
+<h2 id="example-2">EXAMPLE 2</h2>
 <blockquote>
 <pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Index&#39;=&#39;index.md&#39;} -RelativePath &#39;intro/about.md&#39;
 </code></pre>
@@ -266,7 +353,7 @@ adjusted accordingly.</p>
 &lt;/button&gt;
 </code></pre>
 </blockquote>
- ## EXAMPLE 3
+<h2 id="example-3">EXAMPLE 3</h2>
 <blockquote>
 <pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Index&#39;=&#39;index.md&#39;} -RelativePath &#39;intro/about.md&#39; -NavTemplate $custom
 </code></pre>
@@ -282,7 +369,7 @@ adjusted accordingly.</p>
 &lt;/li&gt;
 </code></pre>
 </blockquote>
- ## EXAMPLE 4
+<h2 id="example-4">EXAMPLE 4</h2>
 <blockquote>
 <pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;---&#39;=&#39;&#39;} -RelativePath &#39;intro/about.md&#39;
 </code></pre>
@@ -291,7 +378,7 @@ adjusted accordingly.</p>
 <pre><code class="language-html">&lt;hr class=&quot;navitem&quot; /&gt;
 </code></pre>
 </blockquote>
- ## EXAMPLE 5
+<h2 id="example-5">EXAMPLE 5</h2>
 <blockquote>
 <pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;---&#39;=&#39;&#39;} -NavTemplate $custom
 </code></pre>
@@ -302,7 +389,7 @@ adjusted accordingly.</p>
 <pre><code class="language-html">&lt;hr class=&quot;li-item&quot; /&gt;
 </code></pre>
 </blockquote>
- ## EXAMPLE 6
+<h2 id="example-6">EXAMPLE 6</h2>
 <blockquote>
 <pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Introduction&#39;=&#39;&#39;}
 </code></pre>
@@ -311,7 +398,7 @@ adjusted accordingly.</p>
 <pre><code class="language-html">&lt;div class=&#39;navitem&#39;&gt;Introduction&lt;/div&gt;
 </code></pre>
 </blockquote>
- ## EXAMPLE 7
+<h2 id="example-7">EXAMPLE 7</h2>
 <blockquote>
 <pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Introduction&#39;=&#39;&#39;} -NavTemplate $custom
 </code></pre>

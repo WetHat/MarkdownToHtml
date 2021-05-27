@@ -1,6 +1,7 @@
 ﻿# ConvertTo-PageHeadingNavigation
 
-Generate navigation specifications for all headings found in an HTML fragment.
+Generate navigation specifications for specified headings found in an HTML
+fragment.
 
 # Syntax
 ```PowerShell
@@ -11,11 +12,12 @@ Generate navigation specifications for all headings found in an HTML fragment.
 # Description
 
 
-Retrieves all headings (`h1`.. `h6`) from a HTML fragment and generates a link
-specification for each heading that has an `id` attribute.
+Generates a link specification for each heading in an HTML fragment which
+* has an `id` attribute
+* matches heading level constraint
 
-The link specifications have a format suitable for conversion to HTML
-navigation code by [`ConvertTo-NavigationItem`](ConvertTo-NavigationItem.md)
+The link specifications have the format required by [`ConvertTo-NavigationItem`](ConvertTo-NavigationItem.md)
+to generate navigation bar items.
 
 
 
@@ -31,7 +33,9 @@ navigation code by [`ConvertTo-NavigationItem`](ConvertTo-NavigationItem.md)
 
 <blockquote>
 
-HTML text to be scanned for headings.
+HTML fragment to scan for headings.
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -48,19 +52,38 @@ Accept wildcard characters?| false
 
 <blockquote>
 
-A dictionary of template html fragments with placeholders for:
-* the heading text: placeholder `{{navtext}}`
-* the heading level: placeholder `{{level}}`
+An optional dictionary of the named HTML template needed to add a heading
+link to the navigation bar.
 
-The default template for page headings is:
++ :--------: + :----------: + ----------------------------------------
+| Type       | Key          | HTML Template
++ ========== + ============ + ========================================
+| Heading    | "navheading" | ~~~ html
+| link       |              |<span class='navitem{{level}}'>{{navtext}}</span>"
+| template   |              | ~~~
++ ---------- + ------------ + ----------------------------------------
 
-~~~ html
-<!-- navheading - auto-generated links to page headings -->
-<span class="navitem{{level}}">{{navtext}}</span>
-~~~
+The HTML template above is the value defined in
+`Build.json`. That value is used if the given dictionary does not define the
+"navheading" mapping or if no dictionary is given at all. Additional mappings
+contained in the dictionary are ignored.
 
-This template can also be configured in `Build.json`. See [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md) for more
-details.
+For more customization options see
+[Static Site Project Customization](about_MarkdownToHTML.md#static-site-project-customization).
+
+The css styles used in the template is defined in `md-styles.css`.
+
+Following placeholders in the HTML template are recognized.
+
+| Placeholder   | Description
+| :-----------: | -----------
+| `{{level}}`   | heading level.
+| `{{navtext}}` | heading text
+
+During the build process the placeholders are replaced with content taken from
+the `NavSpec` parameter.
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -80,7 +103,10 @@ Accept wildcard characters?| false
 A string of numbers denoting the levels of the headings to add to the navigation
 bar. By default the headings at level 1,2 and 3 are added to the Navigation bar.
 If headings should not be automatically added to the navigation bar, use the
-empty string `''` for this parameter.
+empty string `''` for this parameter. If omitted, the default configuration
+defined by option "capture_page_headings" in `Build.json` is used.
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -113,81 +139,76 @@ the contents of the navigation bar (placeholder `{{nav}}`).
 
 </blockquote>
 
+
 # Examples
+
 
 ## EXAMPLE 1
 
-<blockquote>
+> ~~~ PowerShell
+> Hello World</h2>' -HeadingLevels '234'| ConvertTo-NavigationItem
+> ~~~
+>
+> 
+> Create an HTML element for navigation to page headings `<h2>`, `<h3>`, `<h4>`.
+> All other headings are ignored.
+> 
+> Output:
+> 
+> ~~~ HTML
+> <button class="navitem">
+>    <a href="#bob"><span class="navitem2">Hello World</span></a>
+> </button>
+> ~~~
+> 
+> Note that the heading level has been added to the css class.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+ 
+## EXAMPLE 2
 
-```PowerShell
-Hello World</h2>' -HeadingLevels '234'| ConvertTo-NavigationItem
-```
-
-
-Create an HTML element for navigation to page headings `<h2>`, `<h3>`, `<h4>`.
-All other headings are ignored.
-
-Output:
-
-~~~ HTML
-<button class="navitem">
-   <a href="#bob"><span class="navitem2">Hello World</span></a>
-</button>
-~~~
-
-Note that the heading level has been added to the css class.
-
-
-
-
-
-
-
-
-
-
-
-
-
-</blockquote>
- ## EXAMPLE 2
-
-<blockquote>
-
-```PowerShell
-Hello World</h2>' -NavTemplate $custom | ConvertTo-NavigationItem
-```
-
-
-Create an HTML element for navigation to an heading using the custom template `$custom`.
-
-~~~ PowerShell
-    $custom = @{ navheading = '<span class="li-item{{level}}">{{navtext}}</span>'}
-~~~
-
-Output:
-
-~~~ HTML
-<button class="navitem">
-    <a href="#bob"><span class="li-item2">Hello World</span></a>
-</button>
-~~~
-
-Note that the heading level is used as a postfix for the css class.
-
-
-
-
-
-
-
-
-
-
-
-
-
-</blockquote>
+> ~~~ PowerShell
+> Hello World</h2>' -NavTemplate $custom | ConvertTo-NavigationItem
+> ~~~
+>
+> 
+> Create an HTML element for navigation to an heading using the custom template `$custom`.
+> 
+> ~~~ PowerShell
+>     $custom = @{ navheading = '<span class="li-item{{level}}">{{navtext}}</span>'}
+> ~~~
+> 
+> Output:
+> 
+> ~~~ HTML
+> <button class="navitem">
+>     <a href="#bob"><span class="li-item2">Hello World</span></a>
+> </button>
+> ~~~
+> 
+> Note that the heading level is used as a postfix for the css class.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
 
 
 # Related Links

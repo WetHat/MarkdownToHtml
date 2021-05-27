@@ -52,8 +52,8 @@
     <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
 <div class='navlabel'>MarkdownToHtml</div>
 <button class='navitem'><a href='../index.html'>Home</a></button>
-<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <button class='navitem'><a href='../2.3.1/MarkdownToHTML.html'>Module Manifest</a></button>
+<button class='navitem'><a href='../2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <div class='navlabel'>Page Content</div>
 <button class='navitem'><a href='#convert-markdowntohtmlfragment'><span class='navitem1'>Convert-MarkdownToHTMLFragment</span></a></button>
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
@@ -67,6 +67,7 @@
 <button class='navitem'><a href='#notes'><span class='navitem1'>Notes</span></a></button>
 <button class='navitem'><a href='#examples'><span class='navitem1'>Examples</span></a></button>
 <button class='navitem'><a href='#example-1'><span class='navitem2'>EXAMPLE 1</span></a></button>
+<button class='navitem'><a href='#example-2'><span class='navitem2'>EXAMPLE 2</span></a></button>
 <button class='navitem'><a href='#related-links'><span class='navitem1'>Related Links</span></a></button>
 </nav>
     <main>
@@ -77,7 +78,8 @@
 <pre><code class="language-PowerShell"> Convert-MarkdownToHTMLFragment [-InputObject] &lt;Object&gt; [-IncludeExtension] &lt;String[]&gt; [-ExcludeExtension] &lt;String[]&gt;  [&lt;CommonParameters&gt;] 
 </code></pre>
 <h1 id="description">Description</h1>
-<p>Converts Markdown text to HTML fragments using configured Markdown parser extensions.</p>
+<p>Converts Markdown text to HTML fragments using configured
+<a href="about_MarkdownToHTML.html#supported-markdown-extensions">Markdown extensions</a>.</p>
 <h1 id="parameters">Parameters</h1>
 <blockquote>
 <h2 id="inputobject-object">-InputObject &lt;Object&gt;</h2>
@@ -112,6 +114,7 @@
 </table>
 </li>
 </ul>
+<hr />
 <table>
 <thead>
 <tr>
@@ -147,8 +150,9 @@
 <h2 id="includeextension-string">-IncludeExtension &lt;String[]&gt;</h2>
 <blockquote>
 <p>Comma separated list of Markdown parsing extension names.
-See the module manifest <a href="MarkdownToHTML.html#markdown-extensions">MarkdownToHTML</a>
+See <a href="about_MarkdownToHTML.html#supported-markdown-extensions">Markdown extensions</a>
 for an annotated list of supported extensions.</p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -186,6 +190,7 @@ for an annotated list of supported extensions.</p>
 <p>Comma separated list of Markdown parsing extensions to exclude.
 Mostly used when the the 'advanced' parsing option is included and
 certain individual options need to be removed.</p>
+<hr />
 <table>
 <thead>
 <tr>
@@ -219,7 +224,8 @@ certain individual options need to be removed.</p>
 </blockquote>
 </blockquote>
 <h1 id="inputs">Inputs</h1>
-<p>Markdown text <code>[string]</code>, Markdown file <code>[System.IO.FileInfo]</code>, or a markdown descriptor <code>[hashtable]</code>.</p>
+<p>Markdown text <code>[string]</code>, Markdown file <code>[System.IO.FileInfo]</code>,
+or a markdown descriptor <code>[hashtable]</code>.</p>
 <h1 id="outputs">Outputs</h1>
 <p>HTML fragment object with following properties:</p>
 <table>
@@ -292,7 +298,7 @@ HtmlFragment       &lt;h1 id=&quot;hello-world&quot;&gt;Hello World&lt;/h1&gt;..
 Title              Hello World
 </code></pre>
 </blockquote>
- ## EXAMPLE 2
+<h2 id="example-2">EXAMPLE 2</h2>
 <blockquote>
 <pre><code class="language-PowerShell">Get-Item -LiteralPath &quot;Convert-MarkdownToHTML.md&quot; | Convert-MarkdownToHTMLFragment
 </code></pre>
@@ -311,6 +317,7 @@ RelativePath       Convert-MarkdownToHTML.md
 <li><a href="Find-MarkdownFiles.html"><code>Find-MarkdownFiles</code></a></li>
 <li><a href="Publish-StaticHtmlSite.html"><code>Publish-StaticHtmlSite</code></a></li>
 <li><a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a></li>
+<li><a href="about_MarkdownToHTML.html#supported-markdown-extensions">Markdown extensions</a></li>
 </ul>
 <hr />
 <p><cite>Module: MarkDownToHTML; Version: 2.3.1; (c) 2018-2021 WetHat Lab. All rights reserved.</cite></p>

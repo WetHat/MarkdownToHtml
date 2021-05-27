@@ -12,12 +12,16 @@ Create a static HTML site from HTML fragment objects.
 
 
 Html fragment objects piped into this function (or passed via the `InputObject`
-parameter) are converted into HTML documents and saved to a static Html site
+parameter) are converted into standalone HTML documents and saved to a Html site
 directory.
 
-The Markdown to Html document conversion uses a default or custom template with
-stylesheets and JavaScript resources to render Markdown extensions for LaTeX
-math, code syntax highlighting and diagrams (see [`New-HtmlTemplate`](New-HtmlTemplate.md)) for details).
+The Markdown to HTML document conversion uses default or custom templates with
+stylesheets and JavaScript resources to render Markdown extensions for:
+* LaTeX math
+* code syntax highlighting
+* diagrams
+
+See [`New-HtmlTemplate`](New-HtmlTemplate.md) for details.
 
 
 
@@ -33,8 +37,8 @@ math, code syntax highlighting and diagrams (see [`New-HtmlTemplate`](New-HtmlTe
 
 <blockquote>
 
-An object representing an Html fragment. Ideally this is an output object of
-[`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md), but any object will
+An object representing an Html fragment. Ideally this is an output object
+returned by [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md), but any object will
 work provided following properties are present:
 
 `RelativePath`
@@ -49,7 +53,9 @@ work provided following properties are present:
 :   The page title.
 
 `HtmlFragment`
-:   A html fragment to be used a main content of the HTML document.
+:   A html fragment to be used as main content of the HTML document.
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -66,10 +72,15 @@ Accept wildcard characters?| false
 
 <blockquote>
 
-Optional directory containing the html template file `md-template.html` and its resources
-which will be used to convert the Html fragments into standalone Html documents.
-If no template directory is specified, a default factory-installed template is used.
-For infomations about creating custom templates see [`New-HTMLTemplate`](New-HTMLTemplate.md).
+Optional directory containing the html template file `md-template.html` and its
+resources which will be used to convert the Html fragments into standalone Html
+documents. If no template directory is specified, a default factory-installed
+template is used. For infomations about creating custom templates see
+[`New-HTMLTemplate`](New-HTMLTemplate.md). See
+[Template Customization](about_MarkdownToHTML.md#conversion-template-customization)
+for customization options.
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -86,34 +97,30 @@ Accept wildcard characters?| false
 
 <blockquote>
 
-Placeholder substitution mappings. This map should contain an entry
-for each custom placeholder in the HTML-template (`md-template.html`).
+Placeholder substitution mapping as described in
+[Template Customization](about_MarkdownToHTML.md#conversion-template-customization).
 
-Following default substitution mappings are added automatically unless they
-are explicitely defined in the given map:
+Following substitution mappings are used by default unless explicitely defined.
 
-| Key           | Description                  | Origin                      |
+| Placeholder   | Description                  | Origin                      |
 |:------------- | :--------------------------- | :-------------------------- |
 | `{{title}}`   | Auto generated page title    | `$inputObject.Title`        |
 | `[title]`     | For backwards compatibility. | `$inputObject.Title`        |
 | `{{content}}` | HTML content                 | `$inputObject.HtmlFragment` |
 | `[content]`   | For backwards compatibility. | `$inputObject.HtmlFragment` |
 
-The keys of this map represent the place holders verbatim, including the
-delimiters. E.g [`{{my-placeholder}}`]({{my-placeholder}}.md). The values in this map can be
-* one or more strings
-* a script block which takes **one** parameter to which the InputObject is bound.
-  The script block should return one or more strings which define the
-  substitution value.
+For static HTML site projects additional mappings are defined:
 
-  Example:
+| Placeholder   | Description                  | Origin       |
+|:------------- | :--------------------------- | :----------- |
+| `{{nav}}`     | Navigation bar content       | `Build.json` |
+| `{{footer}}`  | Page footer content          | `Build.json` |
 
-  ~~~ PowerShell
-  {
-      param($Input)
-      "Source = $($Input.RelativePath)"
-  }
-  ~~~
+For static HTML site projects additional placeholders can be added to the map.
+See
+[Defining Content Mapping Rules](about_MarkdownToHTML.md#defining-content-mapping-rules)
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -130,8 +137,10 @@ Accept wildcard characters?| false
 
 <blockquote>
 
-An optional directory containing additional media for the Html site
+An optional directory containing additional media for the HTML site
 such as images, videos etc.
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -153,6 +162,8 @@ in the same relative location below this directory as related Markdown document
 has below the input directory. If the site directory does not exist it will be created.
 If the site directory already exists its files will be retained, but possibly overwitten
 by generated HTML files.
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -178,41 +189,38 @@ File objects [System.IO.FileInfo] of the generated HTML documents.
 
 # Examples
 
+
 ## EXAMPLE 1
 
-<blockquote>
-
-```PowerShell
-Find-MarkdownFiles '...\Modules\MarkdownToHtml' | Convert-MarkdownToHTMLFragment | Publish-StaticHtmlSite -SiteDirectory 'e:\temp\site'
-```
-
-
-Generates a static HTML site from the Markdown files in '...\Modules\MarkdownToHtml'. This is
-a simpler version of the functionality provided by the function [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md).
-
-The generated Html file objects are returned like so:
-
-    Mode                LastWriteTime         Length Name
-    ----                -------------         ------ ----
-    -a----       15.09.2019     10:03          16395 Convert-MarkdownToHTML.html
-    -a----       15.09.2019     10:03          14714 Convert-MarkdownToHTMLFragment.html
-    -a----       15.09.2019     10:03           4612 Find-MarkdownFiles.html
-    -a----       15.09.2019     10:03           6068 MarkdownToHTML.html
-    ...          ...            ...            ...
-
-
-
-
-
-
-
-
-
-
-
-
-
-</blockquote>
+> ~~~ PowerShell
+> Find-MarkdownFiles '...\Modules\MarkdownToHtml' | Convert-MarkdownToHTMLFragment | Publish-StaticHtmlSite -SiteDirectory 'e:\temp\site'
+> ~~~
+>
+> 
+> Generates a static HTML site from the Markdown files in '...\Modules\MarkdownToHtml'. This is
+> a simpler version of the functionality provided by the function [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md).
+> 
+> The generated Html file objects are returned like so:
+> 
+>     Mode                LastWriteTime         Length Name
+>     ----                -------------         ------ ----
+>     -a----       15.09.2019     10:03          16395 Convert-MarkdownToHTML.html
+>     -a----       15.09.2019     10:03          14714 Convert-MarkdownToHTMLFragment.html
+>     -a----       15.09.2019     10:03           4612 Find-MarkdownFiles.html
+>     -a----       15.09.2019     10:03           6068 MarkdownToHTML.html
+>     ...          ...            ...            ...
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
 
 
 # Related Links
@@ -221,7 +229,8 @@ The generated Html file objects are returned like so:
 * [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md) 
 * [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
 * [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md) 
-* [`New-HTMLTemplate`](New-HTMLTemplate.md)
+* [`New-HTMLTemplate`](New-HTMLTemplate.md) 
+* [Defining Content Mapping Rules](about_MarkdownToHTML.md#defining-content-mapping-rules)
 
 ---
 

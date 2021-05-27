@@ -208,7 +208,7 @@ See the [customization](#customization) for options.
 >
 > `noreferrerlinks`
 > :   Add `rel=noreferrer` to all links rendered to HTML preventing the browser, when you navigate to
->     another page, to send the referring webpage�s address.
+>     another page, to send the referring webpage's address.
 >
 > `pipetables`
 > :   [Pipe tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md)
@@ -304,9 +304,11 @@ conversion process you should
 
 ## Conversion Template Customization
 
-> Simple Markdown to HTML conversions and static site projects are based
-> on very similar conversion templates. These templates
-> reside in a directories with the following structure:
+> Simple Markdown to HTML conversions performed by [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md)
+> and static site projects created by [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md) are based
+> on very similar conversion templates.
+>
+> In both cases the template directories have following structure:
 >
 > ~~~
 > <root>                 <- template root directory
@@ -323,33 +325,33 @@ conversion process you should
 >     the final HTML page in the desired way.
 >
 >     Content placeholders on the page are enclosed in double curly brackets,
->     e.g. `{{foo}}`. The command [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) locates placeholders on
->     the template page and replaces them with content. This replacement
+>     e.g. `{{foo}}`. The command [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) locates these
+>     placeholders on the template page and replaces them with content. This replacement
 >     is performed for simple conversion projects based on the
 >     [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md) command and also for static HTML site projects
 >     created by [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md). By default following
->     placeholders are defined:
+>     placeholders are defined in the content map dictionary:
 >
->     * `{{title}}`: Placeholder for a page title generated from the
->       Markdown content or filename.
->     * `{{content}}`: Placeholder for the HTML content fragment generated from Markdown
->         content.
+>     | Placeholder   | Description                  | Origin                      |
+>     |:------------- | :--------------------------- | :-------------------------- |
+>     | `{{title}}`   | Auto generated page title    | `$inputObject.Title`        |
+>     | `[title]`     | For backwards compatibility. | `$inputObject.Title`        |
+>     | `{{content}}` | HTML content                 | `$inputObject.HtmlFragment` |
+>     | `[content]`   | For backwards compatibility. | `$inputObject.HtmlFragment` |
 >
 >     For static HTML site projects following additional placeholders are
->     available by default in `md-template.html` :
+>     present in `md-template.html`:
 >
->     * `{{nav}}`: Placehoder which is replaced by a HTML content fragment
->       defining a navigatation sidebar on each page. The navigation
->       sidebar can be configured in `Build.json`.
->     * `{{footer}}`: Placeholder which is replaced by a HTML content
->       fragment defining the page footer. The page footer content can be
->       configured in `Build.json`
+>     | Placeholder   | Description                  | Origin       |
+>     |:------------- | :--------------------------- | :----------- |
+>     | `{{nav}}`     | Navigation bar content       | `Build.json` |
+>     | `{{footer}}`  | Page footer content          | `Build.json` |
 >
->     New custom placeholders can be added as needed. For
->     each new placeholder a content mapping rule must be added to the
->     build script `Build.json` as described in section
->     [Static Site Project Customization](#static-site-project-customization)
->     below.
+>     For static HTML site projects additional custom placeholders can be
+>     added to `md-template.html` as needed.
+>     Each new placeholder a content requires mapping rule which must be
+>     added to the build script `Build.json`.
+>     See [Defining Content Mapping Rules](#defining-content-mapping-rules).
 >
 > The `js` directory
 > :   Contains JavaScript resources to support rendering extensions.
@@ -567,12 +569,18 @@ conversion process you should
 >     To implement custom build rules PowerShell code can be addes to the
 >     build file as needed.
 >
-> When a custom placeholders was added to `md-template.html` it needs to
-> be replaced with content in the project's build process.
-> This requires an addition to the content map dictionary
+> The `Template' directory`
+> :   Covered in section
+>     [Conversion Template Customization](#conversion-template-customization)
+>
+> ### Defining Content Mapping Rules
+>
+> When a custom placeholder was added to `md-template.html` a rule to
+> replaced it with content in the project's build process is required.
+> This rule is added to the content map dictionary
 > `$SCRIPT:contentMap` defined in `Build.ps1`. For example a simple
 > rule to replace the placeholder `{{my_placeholder}}` with static text
-> `<b>Hello</b>` looks like so:
+> `<b>Hello</b>` looks like:
 >
 > ~~~ Powershell
 > SCRIPT:contentMap = @{
@@ -585,10 +593,10 @@ conversion process you should
 > }
 > ~~~
 >
-> The replacement value for a placeholders can be also bedynamically
+> The replacement value for a placeholders can be also be dynamically
 > computed. To do this a script block must be assigned to the placeholder.
-> The script block must consume **one** parameter to which an object is bound
-> which has these properties:
+> The script block must consume **one** parameter to which an object
+> with following properties is bound:
 >
 > | Property       | Description                                                     |
 > | :------------: | :-------------------------------------------------------------- |

@@ -11,7 +11,8 @@ Convert Markdown text to HTML fragments.
 # Description
 
 
-Converts Markdown text to HTML fragments using configured Markdown parser extensions.
+Converts Markdown text to HTML fragments using configured
+[Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions).
 
 
 
@@ -37,6 +38,8 @@ The input object can have one of the following of types:
   | `Markdown`     | [`string`] | The markdown text.                                       |
   | `RelativePath` | [`string`] | Relative path of the html file below the site directory. |
 
+---
+
 Parameter Property         | Value
 --------------------------:|:----------
 Required?                  | true
@@ -53,8 +56,10 @@ Accept wildcard characters?| false
 <blockquote>
 
 Comma separated list of Markdown parsing extension names.
-See the module manifest [MarkdownToHTML](MarkdownToHTML.md#markdown-extensions)
+See [Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions)
 for an annotated list of supported extensions.
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -75,6 +80,8 @@ Comma separated list of Markdown parsing extensions to exclude.
 Mostly used when the the 'advanced' parsing option is included and
 certain individual options need to be removed.
 
+---
+
 Parameter Property         | Value
 --------------------------:|:----------
 Required?                  | false
@@ -90,7 +97,8 @@ Accept wildcard characters?| false
 
 
 # Inputs
-Markdown text `[string]`, Markdown file `[System.IO.FileInfo]`, or a markdown descriptor `[hashtable]`.
+Markdown text `[string]`, Markdown file `[System.IO.FileInfo]`,
+or a markdown descriptor `[hashtable]`.
 
 
 # Outputs
@@ -153,67 +161,62 @@ The conversion to HTML fragments also includes:
 
 </blockquote>
 
+
 # Examples
+
 
 ## EXAMPLE 1
 
-<blockquote>
+> ~~~ PowerShell
+> Convert-MarkdownToHTMLFragment -Markdown '# Hello World'
+> ~~~
+>
+> 
+> Returns the HTML fragment object:
+> 
+>     Name               Value
+>     ----               -----
+>     HtmlFragment       <h1 id="hello-world">Hello World</h1>...
+>     Title              Hello World
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+ 
+## EXAMPLE 2
 
-```PowerShell
-Convert-MarkdownToHTMLFragment -Markdown '# Hello World'
-```
-
-
-Returns the HTML fragment object:
-
-    Name               Value
-    ----               -----
-    HtmlFragment       <h1 id="hello-world">Hello World</h1>...
-    Title              Hello World
-
-
-
-
-
-
-
-
-
-
-
-
-
-</blockquote>
- ## EXAMPLE 2
-
-<blockquote>
-
-```PowerShell
-Get-Item -LiteralPath "Convert-MarkdownToHTML.md" | Convert-MarkdownToHTMLFragment
-```
-
-
-Reads the content of Markdown file `Example.md` and returns a Html fragment object.
-
-    Name               Value
-    ----               -----
-    Title              Convert-MarkdownToHTML
-    HtmlFragment       <h1 id="convert-Markdowntohtml">Convert-MarkdownToHTML</h1>...
-    RelativePath       Convert-MarkdownToHTML.md
-
-
-
-
-
-
-
-
-
-
-
-
-
-</blockquote>
+> ~~~ PowerShell
+> Get-Item -LiteralPath "Convert-MarkdownToHTML.md" | Convert-MarkdownToHTMLFragment
+> ~~~
+>
+> 
+> Reads the content of Markdown file `Example.md` and returns a Html fragment object.
+> 
+>     Name               Value
+>     ----               -----
+>     Title              Convert-MarkdownToHTML
+>     HtmlFragment       <h1 id="convert-Markdowntohtml">Convert-MarkdownToHTML</h1>...
+>     RelativePath       Convert-MarkdownToHTML.md
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
 
 
 # Related Links
@@ -222,7 +225,8 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
 * [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md) 
 * [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
 * [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) 
-* [`New-HTMLTemplate`](New-HTMLTemplate.md)
+* [`New-HTMLTemplate`](New-HTMLTemplate.md) 
+* [Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions)
 
 ---
 

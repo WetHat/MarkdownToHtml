@@ -11,8 +11,11 @@ Find all Markdown file below a given directory.
 # Description
 
 
-Recursively scans a directory and generates annotated `[System.IO.FileInfo]` objects
-for each Markdown file.
+Recursively scans a directory and generates annotated `[System.IO.FileInfo]`
+objects for each Markdown file.
+
+The annotation is a `NoteProperty` named `RelativePath`. It contains the
+relative path of the Markdown file below the given directory.
 
 
 
@@ -28,7 +31,9 @@ for each Markdown file.
 
 <blockquote>
 
-Path to a directory containing markdown files.
+Path to a directory containing Markdown files.
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -45,8 +50,10 @@ Accept wildcard characters?| true
 
 <blockquote>
 
-Omits the specified markdown files. The value of this parameter qualifies the Path parameter. Enter a path element or
-pattern, such as "D*.md". Wildcards are permitted.
+Omit the specified files. Enter comma separated list of path elements or
+patterns, such as "D*.md". Wildcards are permitted.
+
+---
 
 Parameter Property         | Value
 --------------------------:|:----------
@@ -67,46 +74,45 @@ None
 
 
 # Outputs
-A `[System.IO.FileInfo]` object for each Markdown file found below the given directory. The emitted
-`[System.IO.FileInfo]` objects are annotated with a note property `RelativePath` which is a string
-specifying the relative path of the markdown file below the given directory. The `RelativePath` property is
+An `[System.IO.FileInfo]` object for each Markdown file found below
+the given directory. The emitted
+`[System.IO.FileInfo]` objects are annotated with a `NoteProperty` named
+`RelativePath` which specifies the relative path of the Markdown file below the
+given directory. The `RelativePath` property is
 **mandatory** if `Publish-StaticHtmlSite` is used in the downstream conversion
 pipeline.
 
 # Examples
 
+
 ## EXAMPLE 1
 
-<blockquote>
-
-```PowerShell
-Find-MarkdownFiles -Path '...\Modules\MarkdownToHtml' | Select-Object -Property Mode,LastWriteTime,Length,Name,RelativePath | Format-Table
-```
-
-
-Returns following annotated Markdown file objects of type `[System.IO.FileInfo]` for this PowerShell module:
-
-    LastWriteTime        Length Name                       RelativePath
-    -------------        ------ ----                       ------------
-    13.09.2019 13:56:21  10751  Convert-MarkdownToHTML.md  Documentation\Convert-MarkdownToHTML.md
-    13.09.2019 13:56:20   3348  MarkdownToHTML.md          Documentation\MarkdownToHTML.md
-    13.09.2019 13:56:21   7193  New-HTMLTemplate.md        Documentation\New-HTMLTemplate.md
-    11.09.2019 17:01:13   4455  README.md                  ReferenceData\katex\README.md
-    ...                   ...   ...                        ...
-
-
-
-
-
-
-
-
-
-
-
-
-
-</blockquote>
+> ~~~ PowerShell
+> Find-MarkdownFiles -Path '...\Modules\MarkdownToHtml' | Select-Object -Property Mode,LastWriteTime,Length,Name,RelativePath | Format-Table
+> ~~~
+>
+> 
+> Returns following annotated Markdown file objects of type `[System.IO.FileInfo]` for this PowerShell module:
+> 
+>     LastWriteTime        Length Name                       RelativePath
+>     -------------        ------ ----                       ------------
+>     13.09.2019 13:56:21  10751  Convert-MarkdownToHTML.md  Documentation\Convert-MarkdownToHTML.md
+>     13.09.2019 13:56:20   3348  MarkdownToHTML.md          Documentation\MarkdownToHTML.md
+>     13.09.2019 13:56:21   7193  New-HTMLTemplate.md        Documentation\New-HTMLTemplate.md
+>     11.09.2019 17:01:13   4455  README.md                  ReferenceData\katex\README.md
+>     ...                   ...   ...                        ...
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
 
 
 # Related Links

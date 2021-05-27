@@ -26,20 +26,24 @@ See [version 2.0.0](MarkdownToHTML.md#2.0.0) release notes for upgrade instructi
 
 ## 2.3.2 {#2.3.2}
 
-* Navigation bar improvements (Static HTML site projects):
-    * scrollbar added to long navbars.
-    * `md-styles.css` overhauled for static site template to make navbar usable
-    for overflowing navitems
-    * Image links supported in navitem names. Example (Build.json):
-    ~~~Json
-    "site_navigation": [
-        { "<img width='90%' src='site_logo.png'/>": "README.md" },
-        { "Home": "README.md" },
-        { "---": "" }
-    ]
-    ~~~
+Navigation bar improvements (Static HTML site projects):
 
-* documentation overhauled and published on [GitHub Pages](https://wethat.github.io/MarkdownToHtml)
+* scrollbar added to long navbars.
+* `md-styles.css` overhauled for static site template to make navbar usable
+  for overflowing navitems
+* Image links supported in navitem names. Example (Build.json):
+  ~~~Json
+  "site_navigation": [
+      { "<img width='90%' src='site_logo.png'/>": "README.md" },
+      { "Home": "README.md" },
+      { "---": "" }
+  ]
+  ~~~
+
+* Module Documentation
+  * Code and conceptial documentation improved
+  * Documentation generated with this module andp ublished to
+   [GitHub Pages](https://wethat.github.io/MarkdownToHtml)
 
 ## 2.3.1 {#2.3.1}
 
@@ -182,14 +186,14 @@ To address this incompaibility the _KaTex_ configuration in
 #### Bugfixes
 * Rendering of math blocks now creates centered output with the correct (bigger) font.
 * Changed the default html template (`md_template.html`) to address the incompatible
-    change in the LaTeX math output of the _mathematics_ extension of _Markdig_.
+  change in the LaTeX math output of the _mathematics_ extension of _Markdig_.
 
 ## 1.3.0
 
 * upgrade of markdig to version 0.17.2
 * KaTex upgraded to 0.11.0
 * Re-factored the Markdown converter pipeline and made it parts public
-    to make it useful for a broader range of Markdown conversion scenarios.
+  to make it useful for a broader range of Markdown conversion scenarios.
 
 ## 1.2.8
 
@@ -199,13 +203,13 @@ To address this incompaibility the _KaTex_ configuration in
 ## 1.2.7
 
 * Empty lines allowed im 'md-template.html` to remove an ugly but harmless
-    exception.
+  exception.
 * Syntax highlighting updated to version 9.14.2
 * Upgrade to markdig version 0.15.7
 * Added Resources and configuration for the [mermaid](https://mermaidjs.github.io/) diagram and
-    flowchart generator version 8.0.0 to the HTML template.
+  flowchart generator version 8.0.0 to the HTML template.
 * Added Resources and configuration for the [KaTeX](https://katex.org/) LaTeX Math
-    typesetting library version 0.10.0 to the HTML template.
+  typesetting library version 0.10.0 to the HTML template.
 * Documentation improved.
 
 ## 1.2.6
@@ -215,7 +219,7 @@ To address this incompaibility the _KaTex_ configuration in
 ## 1.2.4
 
 * Replaced `[System.Web.HttpUtility]` by `[System.Net.WebUtility]` to fix issue
-    when powershell is run with `-noprofile`
+  when powershell is run with `-noprofile`
 
 ## 1.2.3
 
@@ -225,7 +229,8 @@ To address this incompaibility the _KaTex_ configuration in
 ## 1.2.2
 
 * Support for markdown files in a directory hierarchy fixed.
-    (directory scanning fixed and relative path added to resource links)
+  (directory scanning fixed and relative path added to resource links)
+
 ## 1.2.1
 
 Handle partially HTML encoded code blocks
@@ -233,7 +238,7 @@ Handle partially HTML encoded code blocks
 ## 1.2.0
 
 * Replaced XML template processing with text based template processing,
-    to relax constraints on the HTML fragment quality.
+  to relax constraints on the HTML fragment quality.
 * HTML encode text in `<code>` blocks
 
 ## 1.1.0
