@@ -84,6 +84,7 @@ FunctionsToExport = @(
                         'Expand-HtmlTemplate'
                         'Find-MarkdownFiles'
                         'New-PageHeadingNavigation'
+                        'New-SiteNavigation'
                         'New-StaticHTMLSiteProject'
                         'New-HTMLTemplate'
                         'Publish-StaticHtmlSite'

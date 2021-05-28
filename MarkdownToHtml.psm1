@@ -873,23 +873,6 @@ $SCRIPT:defaultNavTemplate = @{
 }
 
 <#
-#>
-function New-NavigationBar {
-    [OutputType([string])]
-    [CmdletBinding()]
-    param (
-            [object]$NavbarConfig,
-            [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-            [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-            [object[]]$SiteNavspec,
-            [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-
-            [object]$fragment
-          )
-
-}
-
-<#
 .SYNOPSIS
 Convert a navigation specification to a single item in a navigation bar of a
 static HTML site projects created by `New-StaticHTMLSiteProject`.
@@ -901,10 +884,11 @@ Converts the specification for a single item in the navigation bar by
 * specification.
 
 .PARAMETER RelativePath
-Path to Markdown document relative to the site root. That file's relative path
-is used to adjust the target path of in the given navigation bar item,
+Path to a Markdown file relative to the site root. That file's relative path
+is used to adjust the links of in the given navigation bar item,
 so that it can be reached from the location of the HTML page currently being
-assembled. The given path should use forward slash '/' path separators.
+assembled using the Markdown file.
+The given path should use forward slash '/' path separators.
 
 .PARAMETER NavSpec
 An object or dictionary with exactly one `NoteProperty` or key representing
@@ -914,7 +898,8 @@ the navigation bar.
 Following key-value pairs are recognized:
 
 + :----: + :---: + :--------: + ---------------------------------------------- +
-| Key    | Value | Name       | Description
+| Key    | Value | Template   | Description
+|        |       | Name       |
 + ====== + ===== + ========== + ============================================== +
 |"_text_"|"_url_"| navitem    | A clickable hyperlink where _text_ is the link
 |        |       |            | text and _url_ a link to a web page or a local
@@ -951,7 +936,7 @@ An optional dictionary of named HTML templates.
 |            |              | ~~~
 + ---------- + ------------ + ----------------------------------------
 
-The HTML templates listed above are the values configured in `Build.json`.
+The HTML templates listed represent are the values configured in `Build.json`.
 These values are used for keys not provided in the given dictionary or if no
 dictionary is given at all.  Additional mappings contained in dictionary are
 ignored.
@@ -1172,6 +1157,117 @@ function ConvertTo-NavigationItem {
     }
 }
 
+<#
+.SYNOPSIS
+Build navigation bar content for a HTML page from a specification and
+redering templates
+
+.DESCRIPTION
+A navigation bar section for a HTML page is built by:
+* processing a list of item specification which define the navigation bar
+  content
+* picking the appropriate HTML template for each navigation bar item
+  and expanding the template using data from the item specification
+
+.PARAMETER NavitemSpecs
+An array where each item án object or dictionary with exactly one `NoteProperty`
+or key representing a single key-value pair. This parameter provides the data
+for one item in the navigation bar.
+
+Following key-value pairs are recognized:
+
++ :----: + :---: + :--------: + ---------------------------------------------- +
+| Key    | Value | Template   | Description
+|        |       | Name       |
++ ====== + ===== + ========== + ============================================== +
+|"_text_"|"_url_"| navitem    | A clickable hyperlink where _text_ is the link
+|        |       |            | text and _url_ a link to a web page or a local
+|        |       |            | Markdown file. Local file links must be
+|        |       |            | relative to the project root.
++ ------ + ----- + ---------- + ---------------------------------------------- +
+|"_text_"| ""    | navlabel   | A label without hyperlink.
++ ------ + ----- + ---------- + ---------------------------------------------- +
+| "---"  | ""    |navseparator| A speparator line.
++ ------ + ----- + ---------- + ---------------------------------------------- +
+
+The structure of the data determines the type of navigation bar item to build.
+The table above maps supported key-value combinations to the associated named
+HTML templates.
+
+.PARAMETER RelativePath
+Path to a Markdown file relative to the site root. That file's relative path
+is used to adjust the links of in the given navigation bar item,
+so that it can be reached from the location of the HTML page currently being
+assembled using the Markdown file.
+The given path should use forward slash '/' path separators.
+
+.PARAMETER NavTemplate
+An optional dictionary of named HTML templates.
+
++ :--------: + :----------: + ----------------------------------------
+| Type       | Key          | HTML Template
++ ========== + ============ + ========================================
+| clickable  | "navitem"    | ~~~ html
+| link       |              | <button class='navitem'>
+|            |              |     <a href='{{navurl}}'>{{navtext}}</a>
+|            |              | </button>
+|            |              | ~~~
++ ---------- + ------------ + ----------------------------------------
+| label (no  | "navlabel"   | ~~~ html
+| link)      |              | <div class='navlabel'>{{navtext}}</div>
+|            |              | ~~~
++ ---------- + ------------ + ----------------------------------------
+| separator  |"navseparator"| ~~~ html
+|            |              | <hr/>
+|            |              | ~~~
++ ---------- + ------------ + ----------------------------------------
+
+The HTML templates listed represent are the values configured in `Build.json`.
+These values are used for keys not provided in the given dictionary or if no
+dictionary is given at all.  Additional mappings contained in dictionary are
+ignored.
+
+For more customization options see
+[Static Site Project Customization](about_MarkdownToHTML.md#static-site-project-customization).
+
+The css styles used in the templates are defined in `md-styles.css`.
+
+During the build process the placeholders contained in the HTML template
+are replaced with content extracted from the `NavSpec` parameter .
+
+| Placeholder   | Description
+| :-----------: | -----------
+| `{{navurl}}`  | hyperlink to web-page or local file.
+| `{{navtext}}` | link or label text
+
+.INPUTS
+None
+
+.OUTPUTS
+HTML fragment for a  navigation bar
+.LINK
+https://wethat.github.io/MarkdownToHtml/2.4.0/New-SiteNavigation.html
+#>
+function New-SiteNavigation {
+    [OutputType([string])]
+    [CmdletBinding()]
+
+    param(
+        [parameter(Mandatory=$true,ValueFromPipeline=$false)]
+        [ValidateNotNull()]
+        [object[]]$NavitemSpecs,
+
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [string]$RelativePath = '',
+
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [object]$NavTemplate = $defaultNavTemplate
+    )
+
+    $NavitemSpecs | ConvertTo-NavigationItem -RelativePath $RelativePath `
+                                             -NavTemplate $NavTemplate
+}
+
 # find headings h1 .. h6 in an HTML fragment.
 $SCRIPT:hRE   = New-Object regex '<h(\d)[^<>]* id="([^"])+"[^<]*>(.+?)\s*(?=<\/h\d.*|$)'
 
@@ -1343,14 +1439,13 @@ site to compute valid resource links and update the template.
 
 .PARAMETER InputObject
 An html fragment containing root-relative resource links.
-.PARAMETER RelativePath
-The root-relative path to a location in the HTML site to. Resource links valid
-for that location will be computed.
 
 .PARAMETER RelativePath
-A file path relative to the site root. The path separator must be '/'
-(forward slash). The resource links in the givem HTML template will
-adjusted to make them valid for this location.
+Path to a Markdown file relative to the site root. That file's relative path
+is used to adjust the links of in the given navigation bar item,
+so that it can be reached from the location of the HTML page currently being
+assembled using the Markdown file.
+The given path should use forward slash '/' path separators.
 
 .INPUTS
 HTML fragments containing resource links relative to the HTML site root.
@@ -1404,8 +1499,8 @@ function Update-ResourceLinks {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU19THjqCPS3K4YlCUWrKLBnZv
-# psmgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUS6ZrCRPqSZfyEEg/ey/QG0gb
+# DrmgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1424,11 +1519,11 @@ function Update-ResourceLinks {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBT6TJrzj9sm4FZFc8Vy5qq6hu8p
-# wTANBgkqhkiG9w0BAQEFAASCAQBU2F3+825MAPN7p02dkvwoCh1m1P6s1o9c9UIl
-# uGUVkIvfARZz838Fc3kZ8T3byMzPEwFDX20IzVHcbuH/dHnZZ3q9tY4VXqNhMYKC
-# jXkRABugH1ZsF5+6xq8/PONRjWVBoKO85pZMDGmSwGDYiqgfRBPXYdrR8A3oHV7M
-# HTO/bupqAZsP+QrmRThF0FfZU0nuxyQlo9aRx/fmHioSQeJq+eIONPrVf33vy0he
-# jm1k5JPRE7Vsj4wHQD3uJUCISl3w+ucS5RPQ98MGDu7ngfC/eIAVvmBfgtC8iXSf
-# k+NqZEbhMy5V9CBxa5cj3Ca69FxJ48lsDjjF2ZiJb6mkLCx9
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRJIueuk2uL06mgT633o2MC+OuP
+# qjANBgkqhkiG9w0BAQEFAASCAQABRyHrwaua6PKxRtBUAIJhUdFEsTEvJFc4Ur6i
+# W3Ty+FBZXXdkgSgLkbTYgTntWrgsiqrM8Lf/302hyPw/RsG03kEcc645TfatLJSL
+# wiLXIh5qvkNJyzQhLAqb6ithC/U19LnsSPQLKdcadY4j6+mQKx7P2Qc711rqe4Ei
+# +G3ALq6/EW7pO+DZ1ePfMLqYsvLaOehyjnwYoBqDCbwKZihA1RpcLsjPYyTb+hS2
+# XIng8NLCXPdD/JnICWgQTSGFpeqjDBqMetxoy5BOBj0Tnd0aSwaxOD+g4ExnmTBV
+# j7cr0kwdHzcF07BBXT4/HRvdWBKxgggTP1JehrLV1TR2vB3u
 # SIG # End signature block
