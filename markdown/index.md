@@ -91,6 +91,14 @@ An installable package of this module is hosted on the
 
 # Documentation
 
+Documentation for individual commands can be obtained with the `Get-Help` command
+
+~~~ PowerShell
+PS> Get-Help New-StaticHTMLSiteProject -Online
+~~~
+
+Make sure to use the `-Online` switch for best reading experience.
+
 ## Latest Version
 
 > * **2.4.0**: [Documentation](2.4.0/MarkdownToHTML.md) - [Release Notes](2.4.0/MarkdownToHTML.md#release-notes).
