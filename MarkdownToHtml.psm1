@@ -20,7 +20,84 @@
     'autolinks' ## .UseAutoLinks()
     'attributes' ## .UseGenericAttributes();
 )
+<#
+.SYNOPSIS
+Simple template expansion based on a content substitution dictionary.
 
+.DESCRIPTION
+Locates placeholders in the input string abd replaced them
+with values found for the placeholders in the given dictionary. The placeholder
+expansion is non-recursive.
+
+.PARAMETER InputObject
+An string representing an Html fragment.
+
+.PARAMETER ContentMap
+A dictionary whose keys define placeholders and whose values define the
+replacements.
+
+.INPUTS
+HTML template with placeholders.
+
+.OUTPUTS
+HTML fragment with all paceholders replaced by the content specified
+by the `ContentMap`.
+
+.EXAMPLE
+Expand-Template -InputObject $template -ContentMap $map
+
+Expand the HTML template `$template` mappings provided with `$map`.
+
+With:
+
+~~~ PowerShell
+$template = '<span class="navitem{{level}}">{{navtext}}</span>'
+$map = @{
+    '{{level}}'   = 1
+    '{{navtext}}' = 'foo'
+}
+~~~
+
+this HTML fragment is generated:
+
+~~~ html
+<span class="navitem1">foo</span>
+~~~
+#>
+function Expand-Template {
+    [OutputType([string])]
+    [CmdletBinding()]
+
+    param(
+        [parameter(Mandatory=$true,ValueFromPipeline=$true)]
+        [AllowEmptyString()]
+        [Alias('Template')]
+        [string]$InputObject,
+
+        [parameter(Mandatory=$true,ValueFromPipeline=$false)]
+        [hashtable]$ContentMap
+    )
+
+    PROCESS {
+        # map the locations of placeholders found in the current line of the
+        # HTML template
+        $placeholderMap = @{}
+        foreach ($placeholder in $ContentMap.keys) {
+            [int]$ndx = $InputObject.IndexOf($placeholder)
+            while ($ndx -ge 0)  { # map all occurrences of the placeholder
+                $placeholderMap[$ndx] = $placeholder; # map it
+                $ndx = $InputObject.IndexOf($placeholder,$ndx+$placeholder.Length)
+            }
+        }
+        # replace the placeholders bottom up
+        $placeholderMap.keys | Sort-Object -Descending | ForEach-Object {
+            [int]$ndx = $_
+            [string]$placeholder = $placeholderMap[$ndx]
+            $InputObject = $InputObject.Substring(0,$ndx) + $ContentMap[$placeholder] + $InputObject.Substring($ndx+$placeholder.Length)
+        }
+        Write-Output $InputObject # expanded fragment
+    }
+}
 <#
 .SYNOPSIS
 Create a static HTML site from HTML fragment objects.
@@ -125,7 +202,7 @@ The generated Html file objects are returned like so:
     ...          ...            ...            ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.2/Publish-StaticHtmlSite.html
+https://wethat.github.io/MarkdownToHtml/2.4.0/Publish-StaticHtmlSite.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -136,7 +213,6 @@ https://wethat.github.io/MarkdownToHtml/2.3.2/Publish-StaticHtmlSite.html
 `New-HTMLTemplate`
 .LINK
 [Defining Content Mapping Rules](about_MarkdownToHTML.md#defining-content-mapping-rules)
-.LINK
 #>
 function Publish-StaticHtmlSite {
     [OutputType([System.IO.FileInfo])]
@@ -185,14 +261,7 @@ function Publish-StaticHtmlSite {
         [System.IO.FileInfo]$htmlFile = Join-Path $siteDir.FullName ([System.IO.Path]::ChangeExtension($InputObject.RelativePath,'html'))
         Write-Verbose  "$($InputObject.RelativePath) -> $($htmlFile.Name)"
         $htmlfile.Directory.Create() # make sure we have all directories
-        $relativeResourcePath = '' # relative path to resources at the root of the output directory
-        if ($InputObject.RelativePath) {
-            foreach ($dir in (Split-Path $InputObject.RelativePath -Parent) -split '\\+') {
-                if (![string]::IsNullOrWhiteSpace($dir)) {
-                    $relativeResourcePath += '../'
-                }
-            }
-        }
+
         # prepare the map for content injection
         # we need a pristine map every time
         $map = @{
@@ -213,33 +282,9 @@ function Publish-StaticHtmlSite {
         }
 
         # Inject page content
-        $htmlTemplate | ForEach-Object {
-            [string]$line = $_
-
-            ## fixup resource pathes in the template header first
-            $line = $line -replace '(?<=(href|src)=")(?=[^/][^:"]+")',$relativeResourcePath
-
-            # inject content - we need to make sure that we do not scan injected
-            # content for tokens
-            $tokenMap = @{}
-            foreach ($token in $map.keys) {
-                [int]$ndx = $line.IndexOf($token)
-                while ($ndx -ge 0)  {
-                    $tokenMap[$ndx] = $token;
-                    $ndx = $line.IndexOf($token,$ndx+$token.Length)
-                }
-            }
-
-            # replace the tokens from the back
-            $tokenMap.keys | Sort-Object -Descending | ForEach-Object {
-                [int]$ndx = $_
-                [string]$token = $tokenMap[$ndx]
-                $line = $line.Substring(0,$ndx) + $map[$token] + $line.Substring($ndx+$token.Length)
-            }
-
-            Write-Output $line
-        } `
-        | Out-File -LiteralPath $htmlFile -Encoding    utf8
+        $htmlTemplate | Update-ResourceLinks -RelativePath $InputObject.RelativePath `
+        | Expand-Template -ContentMap $map `
+        | Out-File -LiteralPath $htmlFile -Encoding utf8
         $htmlFile
     }
 
@@ -295,7 +340,7 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
     ...                   ...   ...                        ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.2/Find-MarkdownFiles.html
+https://wethat.github.io/MarkdownToHtml/2.4.0/Find-MarkdownFiles.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -447,7 +492,7 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
     RelativePath       Convert-MarkdownToHTML.md
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.2/Convert-MarkdownToHTMLFragment.html
+https://wethat.github.io/MarkdownToHtml/2.4.0/Convert-MarkdownToHTMLFragment.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -640,7 +685,7 @@ Convert all Markdown files in `E:\MyMarkdownFiles` using
 The generated HTML files are saved to the directory `E:\MyHTMLFiles`.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.2/Convert-MarkdownToHTML.html
+https://wethat.github.io/MarkdownToHtml/2.4.0/Convert-MarkdownToHTML.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -715,7 +760,7 @@ This function does not read from the pipe.
 The new conversion template directory `[System.IO.DirectoryInfo]`.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.2/New-HTMLTemplate.html
+https://wethat.github.io/MarkdownToHtml/2.4.0/New-HTMLTemplate.html
 .LINK
 `New-StaticHTMLSiteProject`
 
@@ -779,7 +824,7 @@ Create a new conversion project names 'MyProject' in the current directory. The
 project is ready for build.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.2/New-StaticHTMLSiteProject.html
+https://wethat.github.io/MarkdownToHtml/2.4.0/New-StaticHTMLSiteProject.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -822,6 +867,23 @@ $SCRIPT:defaultNavTemplate = @{
      navlabel     = '<div class="navlabel">{{navtext}}</div>';
      navseparator = '<hr/>';
      navheading   = '<span class="navitem{{level}}">{{navtext}}</span>'
+}
+
+<#
+#>
+function New-NavigationBar {
+    [OutputType([string])]
+    [CmdletBinding()]
+    param (
+            [object]$NavbarConfig,
+            [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+            [parameter(Mandatory=$true,ValueFromPipeline=$false)]
+            [object[]]$SiteNavspec,
+            [parameter(Mandatory=$true,ValueFromPipeline=$false)]
+
+            [object]$fragment
+          )
+
 }
 
 <#
@@ -1020,17 +1082,17 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.2/ConvertTo-NavigationItem.html
+https://wethat.github.io/MarkdownToHtml/2.4.0/ConvertTo-NavigationItem.html
 .LINK
 `New-StaticHTMLSiteProject`
 .LINK
-`ConvertTo-PageHeadingNavigation`
+`New-PageHeadingNavigation`
 #>
 function ConvertTo-NavigationItem {
     [OutputType([string])]
     [CmdletBinding()]
     param(
-        [parameter(Mandatory=$true,ValueFromPipeline=$true)]
+        [parameter(Mandatory=$false,ValueFromPipeline=$true)]
         [ValidateNotNull()]
         [object]$NavSpec,
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
@@ -1039,9 +1101,6 @@ function ConvertTo-NavigationItem {
         [object]$NavTemplate = $defaultNavTemplate
     )
     PROCESS {
-        # Determine the relative navigation path of this page to root
-	    $up = '../' * ($RelativePath.Split('/').Length - 1)
-
 	    # create page specific navigation links by making the path relative to
         # the current location specified by `RelativePath`
         $name = if ($NavSpec -is [hashtable]) {
@@ -1050,9 +1109,6 @@ function ConvertTo-NavigationItem {
                     (Get-Member -InputObject $NavSpec -MemberType NoteProperty).Name
                 }
         $link = $NavSpec.$name
-        # fixup links in the navitem name in case it contains an html fragment
-        $name = $name -Replace '((src|href)\s*=\s*[''"])(?!http|ftp|\./#)',('$1' + $up)
-
 	    if ([string]::IsNullOrWhiteSpace($link)) {
 		    if ($name.StartsWith('---')) { # separator line
                 [string]$navseparator = $NavTemplate.navseparator
@@ -1065,7 +1121,7 @@ function ConvertTo-NavigationItem {
                 if (!$navlabel) {
                     $navlabel = $SCRIPT:defaultNavTemplate.navlabel
                 }
-                Write-Output $navlabel.Replace('{{navtext}}',$name) # label
+                Expand-Template -InputObject $navlabel -ContentMap @{'{{navtext}}' = $name}
 		    }
 	    } else {
 		    if (!$link.StartsWith('http')) {
@@ -1090,14 +1146,13 @@ function ConvertTo-NavigationItem {
                     }
                 }
 
-                # rewrite the link so that it works from the current location
-                $file = if ($file.EndsWith('.md') -or $file.EndsWith('.markdown')) {
-	                        $up + [System.IO.Path]::ChangeExtension($file,'html')
-                        } elseif (![string]::IsNullOrWhiteSpace($file)) {
-                            $up + $file
-                        }
 
-                # re-assemble the updated link
+                # fix file type
+                if ($file.EndsWith('.md') -or $file.EndsWith('.markdown')) {
+	                $file = [System.IO.Path]::ChangeExtension($file,'html')
+                 }
+
+                # Re-assemble the link
                 $link = $file + $fragment
 		    }
 
@@ -1105,7 +1160,11 @@ function ConvertTo-NavigationItem {
             if (!$navitem) {
                 $navitem = $SCRIPT:defaultNavTemplate.navitem
             }
-            Write-Output $navitem.Replace('{{navurl}}',$link).Replace('{{navtext}}',$name)
+
+            Expand-Template -InputObject $navitem -ContentMap @{
+                '{{navurl}}'  = $link
+                '{{navtext}}' = $name
+            } |  Update-ResourceLinks -RelativePath $RelativePath
 	    }
     }
 }
@@ -1115,6 +1174,7 @@ $SCRIPT:hRE   = New-Object regex '<h(\d)[^<>]* id="([^"])+"[^<]*>(.+?)\s*(?=<\/h
 
 # Match a hyperlink
 $aRE = New-Object regex '</{0,1} *a[^>]*>'
+Set-Alias -Name 'ConvertTo-PageHeadingNavigation' -Value 'New-PageHeadingNavigation'
 
 <#
 .SYNOPSIS
@@ -1176,13 +1236,18 @@ None. This function does not read from a pipe.
 
 .OUTPUTS
 HTML elements representing navigation links to headings on the input HTML
-fragment for use in a vertical navigation bar.
+fragment for use in the navigation bar of sites created by
+`New-StaticHTMLSiteProject`.
 
 .EXAMPLE
-ConvertTo-PageHeadingNavigation '<h2 id="bob">Hello World</h2>' -HeadingLevels '234'| ConvertTo-NavigationItem
+New-PageHeadingNavigation $fragment -HeadingLevels '234'
 
 Create an HTML element for navigation to page headings `<h2>`, `<h3>`, `<h4>`.
-All other headings are ignored.
+All other headings are ignored. `$fragment` is a HTML framgment defined as:
+
+~~~ PowerShell
+$fragment = '<h2 id="bob">Hello World</h2>'
+~~~
 
 Output:
 
@@ -1195,7 +1260,7 @@ Output:
 Note that the heading level has been added to the css class.
 
 .EXAMPLE
-ConvertTo-PageHeadingNavigation '<h2 id="bob">Hello World</h2>' -NavTemplate $custom | ConvertTo-NavigationItem
+New-PageHeadingNavigation '<h2 id="bob">Hello World</h2>' -NavTemplate $custom
 
 Create an HTML element for navigation to an heading using the custom template `$custom`.
 
@@ -1218,13 +1283,13 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.3.2/ConvertTo-PageHeadingNavigation.html
+https://wethat.github.io/MarkdownToHtml/2.4.0/New-PageHeadingNavigation.html
 .LINK
 `New-StaticHTMLSiteProject`
 .LINK
 `ConvertTo-NavigationItem`
 #>
-function ConvertTo-PageHeadingNavigation {
+function New-PageHeadingNavigation {
     [OutputType([hashtable])]
     [CmdletBinding()]
     param(
@@ -1257,11 +1322,87 @@ function ConvertTo-PageHeadingNavigation {
     } | ConvertTo-NavigationItem -NavTemplate $NavTemplate
 }
 
+# Match resource links
+[regex]$SCRIPT:linkRE = New-Object regex '((src|href)\s*=\s*[''"])(?!http|ftp|\.|/|#)'
+
+<#
+.SYNOPSIS
+Rewrite resource links which are relative to the projects root to make them
+valid for other site locations.
+
+.DESCRIPTION
+HTML templates use links which are relative to the HTML site root directory
+to link to resources such as JavaScript, css, or image files. When a HTML
+file is assembled (e.g with ``Publish-StaticHtmlSite``) using such a template,
+the resource links in the template may not be valid for the location of that
+HTML file. This command uses the relative position of the new HTML file in the
+site to compute valid resource links and update the template.
+
+.PARAMETER InputObject
+An html fragment containing root-relative resource links.
+.PARAMETER RelativePath
+The root-relative path to a location in the HTML site to. Resource links valid
+for that location will be computed.
+
+.PARAMETER RelativePath
+A file path relative to the site root. The path separator must be '/'
+(forward slash). The resource links in the givem HTML template will
+adjusted to make them valid for this location.
+
+.INPUTS
+HTML fragments containing resource links relative to the HTML site root.
+
+.OUTPUTS
+HTML fragment with updated resource links.
+
+.EXAMPLE
+Update-ResourceLinks -HtmlFragment $fragment -RelativePath 'a/b/v/test.html'
+
+Adjust link to a resource at `images/logo.png` so that it is valid for a
+file located at `a/b/v/test.html`. The input `$fragment` is defined as:
+
+~~~ PowerShell
+$fragment = '<img width="90%" src="images/logo.png"/>'
+~~~
+
+Outut:
+
+~~~ html
+<img width="90%" src="../../../images/logo.png"/>
+~~~
+
+.LINK
+https://wethat.github.io/MarkdownToHtml/2.4.0/Update-ResourceLinks.html
+.LINK
+`Publish-StaticHtmlSite`
+#>
+
+function Update-ResourceLinks {
+    [OutputType([string])]
+    [CmdletBinding()]
+
+    param(
+        [parameter(Mandatory=$true,ValueFromPipeline=$true)]
+        [AllowEmptyString()]
+        [Alias('HtmlFragment')]
+        [string]$InputObject,
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [string]$RelativePath = '')
+
+    BEGIN {
+         # Determine the relative navigation path of the current page to root
+	    $up = '../' * ($RelativePath.Split('/').Length - 1)
+    }
+    PROCESS {
+        $SCRIPT:linkRE.Replace($InputObject,'$1' + $up)
+    }
+}
+
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUXKfx0/XGzGANsBRp3FI0MZQs
-# AG6gggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUbsV3xAnXpSCwgUvz2fUdXrgX
+# yeKgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1280,11 +1421,11 @@ function ConvertTo-PageHeadingNavigation {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRcAsaWblmQxA+vlhZCHYIBp8ho
-# SDANBgkqhkiG9w0BAQEFAASCAQBwmz4mzJkfOe3yxPJ2dSMeQqTmhecxK3t6sc3p
-# 43Rzf91u6a+gJiJ4h0c71nmdJvWXELnbJ24k0i+eSda19vlHfftKWz+NVah5M0Sm
-# 964I0xnk2S5nTtlQnCPZAnRFefNI4gcf9rxoe2i0BQ/N7kc/sx44gXNHpwlavBR2
-# HJ62gPqWn5Q/PUDsV6Utswh11R5BgLURYRUpZtQ9Ldt7H1PPVAir35eexObn0B+n
-# mxlKOqEom3gc9xP6WPL1sWPcpGlHMNS4PYcqo6Rkj2XJVLAmKKyHbaFC6sNyAqjH
-# 7cTuLMJXYgibwb1MFBe9tgFoiMTW6afaAP4gZ8gs6Oh9nrL/
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBS3nIochYXfvT9SrEm6+3Wald1E
+# 4jANBgkqhkiG9w0BAQEFAASCAQCYr4s6vilrFSYE/PvN3ImvKNDztQ1oUYPxvg/n
+# ojZF0VJa0K0M2GB4V5w7e7nX1xSFWzLJLrLFFN/ozWOkqobkl4parP8kF4TEbpEA
+# wgF+LVDhopqFP6Y7XCi2LyM5EVHQdueK8rq5Rh1ypIn4nKJjvGkWVaDg6lYXZ/MS
+# 80bZy25+vgGSwJKmYeIU6GSWxCbXPjXFBZTr1k1r8rMmmxvIc/+c5c/AXXt2kWlG
+# /6Oi/D9gJq4a60J5vRpvyEgxJLBEG8JQGaIXBeYsdZops8HD3K//LQzJ/wuk55Vt
+# zJBDdqNXBZ+sA0B4l4I0FIqfONoT5CV/CSIta6Dx0I637K2K
 # SIG # End signature block

@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.3.2'
+ModuleVersion = '2.4.0'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'
@@ -80,12 +80,14 @@ RequiredAssemblies = @('Markdig.dll')
 FunctionsToExport = @(
                         'Convert-MarkdownToHTML'
                         'Convert-MarkdownToHTMLFragment'
-                        'ConvertTo-PageHeadingNavigation'
                         'ConvertTo-NavigationItem'
+                        'Expand-Template'
                         'Find-MarkdownFiles'
+                        'New-PageHeadingNavigation'
                         'New-StaticHTMLSiteProject'
                         'New-HTMLTemplate'
                         'Publish-StaticHtmlSite'
+                        'Update-ResourceLinks'
 	                 )
 
 # Cmdlets to export from this module
@@ -130,21 +132,24 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
-## 2.3.2 {#2.3.2}
+## 2.4.0 {#2.4.0}
 
-Navigation bar improvements (Static HTML site projects):
+* Navigation bar improvements (Static HTML site projects):
 
-* scrollbar added to long navbars.
-* `md-styles.css` overhauled for static site template to make navbar usable
-  for overflowing navitems
-* Image links supported in navitem names. Example (Build.json):
-  ~~~Json
-  "site_navigation": [
-      { "<img width='90%' src='site_logo.png'/>": "README.md" },
-      { "Home": "README.md" },
-      { "---": "" }
-  ]
-  ~~~
+  * scrollbar added to long navbars.
+  * `md-styles.css` overhauled for static site template to make navbar usable
+    for overflowing navitems
+  * HTML fragments with resource links supported in navitem names.
+    Example from a `Build.json` which displays an image:
+    ~~~Json
+    "site_navigation": [
+        { "<img width='90%' src='site_logo.png'/>": "README.md" },
+        { "Home": "README.md" },
+        { "---": "" }
+    ]
+    ~~~
+  * Utility function `Update-ResourceLinks` implemented to update resource
+    links in HTML fragments.
 
 * Module Documentation
   * Code and conceptial documentation improved
