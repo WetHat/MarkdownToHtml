@@ -81,7 +81,7 @@ FunctionsToExport = @(
                         'Convert-MarkdownToHTML'
                         'Convert-MarkdownToHTMLFragment'
                         'ConvertTo-NavigationItem'
-                        'Expand-Template'
+                        'Expand-HtmlTemplate'
                         'Find-MarkdownFiles'
                         'New-PageHeadingNavigation'
                         'New-StaticHTMLSiteProject'

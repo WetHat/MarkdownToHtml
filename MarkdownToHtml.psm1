@@ -44,7 +44,7 @@ HTML fragment with all paceholders replaced by the content specified
 by the `ContentMap`.
 
 .EXAMPLE
-Expand-Template -InputObject $template -ContentMap $map
+Expand-HtmlTemplate -InputObject $template -ContentMap $map
 
 Expand the HTML template `$template` mappings provided with `$map`.
 
@@ -63,8 +63,11 @@ this HTML fragment is generated:
 ~~~ html
 <span class="navitem1">foo</span>
 ~~~
+
+.LINK
+https://wethat.github.io/MarkdownToHtml/2.4.0/Expand-HtmlTemplate.html
 #>
-function Expand-Template {
+function Expand-HtmlTemplate {
     [OutputType([string])]
     [CmdletBinding()]
 
@@ -283,7 +286,7 @@ function Publish-StaticHtmlSite {
 
         # Inject page content
         $htmlTemplate | Update-ResourceLinks -RelativePath $InputObject.RelativePath `
-        | Expand-Template -ContentMap $map `
+        | Expand-HtmlTemplate -ContentMap $map `
         | Out-File -LiteralPath $htmlFile -Encoding utf8
         $htmlFile
     }
@@ -1121,7 +1124,7 @@ function ConvertTo-NavigationItem {
                 if (!$navlabel) {
                     $navlabel = $SCRIPT:defaultNavTemplate.navlabel
                 }
-                Expand-Template -InputObject $navlabel -ContentMap @{'{{navtext}}' = $name}
+                Expand-HtmlTemplate -InputObject $navlabel -ContentMap @{'{{navtext}}' = $name}
 		    }
 	    } else {
 		    if (!$link.StartsWith('http')) {
@@ -1161,7 +1164,7 @@ function ConvertTo-NavigationItem {
                 $navitem = $SCRIPT:defaultNavTemplate.navitem
             }
 
-            Expand-Template -InputObject $navitem -ContentMap @{
+            Expand-HtmlTemplate -InputObject $navitem -ContentMap @{
                 '{{navurl}}'  = $link
                 '{{navtext}}' = $name
             } |  Update-ResourceLinks -RelativePath $RelativePath
@@ -1290,7 +1293,7 @@ https://wethat.github.io/MarkdownToHtml/2.4.0/New-PageHeadingNavigation.html
 `ConvertTo-NavigationItem`
 #>
 function New-PageHeadingNavigation {
-    [OutputType([hashtable])]
+    [OutputType([string])]
     [CmdletBinding()]
     param(
         [parameter(Mandatory=$true,ValueFromPipeline=$false)]
@@ -1401,8 +1404,8 @@ function Update-ResourceLinks {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUbsV3xAnXpSCwgUvz2fUdXrgX
-# yeKgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU19THjqCPS3K4YlCUWrKLBnZv
+# psmgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1421,11 +1424,11 @@ function Update-ResourceLinks {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBS3nIochYXfvT9SrEm6+3Wald1E
-# 4jANBgkqhkiG9w0BAQEFAASCAQCYr4s6vilrFSYE/PvN3ImvKNDztQ1oUYPxvg/n
-# ojZF0VJa0K0M2GB4V5w7e7nX1xSFWzLJLrLFFN/ozWOkqobkl4parP8kF4TEbpEA
-# wgF+LVDhopqFP6Y7XCi2LyM5EVHQdueK8rq5Rh1ypIn4nKJjvGkWVaDg6lYXZ/MS
-# 80bZy25+vgGSwJKmYeIU6GSWxCbXPjXFBZTr1k1r8rMmmxvIc/+c5c/AXXt2kWlG
-# /6Oi/D9gJq4a60J5vRpvyEgxJLBEG8JQGaIXBeYsdZops8HD3K//LQzJ/wuk55Vt
-# zJBDdqNXBZ+sA0B4l4I0FIqfONoT5CV/CSIta6Dx0I637K2K
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBT6TJrzj9sm4FZFc8Vy5qq6hu8p
+# wTANBgkqhkiG9w0BAQEFAASCAQBU2F3+825MAPN7p02dkvwoCh1m1P6s1o9c9UIl
+# uGUVkIvfARZz838Fc3kZ8T3byMzPEwFDX20IzVHcbuH/dHnZZ3q9tY4VXqNhMYKC
+# jXkRABugH1ZsF5+6xq8/PONRjWVBoKO85pZMDGmSwGDYiqgfRBPXYdrR8A3oHV7M
+# HTO/bupqAZsP+QrmRThF0FfZU0nuxyQlo9aRx/fmHioSQeJq+eIONPrVf33vy0he
+# jm1k5JPRE7Vsj4wHQD3uJUCISl3w+ucS5RPQ98MGDu7ngfC/eIAVvmBfgtC8iXSf
+# k+NqZEbhMy5V9CBxa5cj3Ca69FxJ48lsDjjF2ZiJb6mkLCx9
 # SIG # End signature block
