@@ -176,8 +176,8 @@ PrivateData = @{
 
 * Module Documentation
   * Code and conceptial documentation improved
-  * Documentation generated with this module andp ublished to
-   [GitHub Pages](https://wethat.github.io/MarkdownToHtml)
+  * Documentation generated with this module and published to
+    [GitHub Pages](https://wethat.github.io/MarkdownToHtml)
 
 ## 2.3.1 {#2.3.1}
 
