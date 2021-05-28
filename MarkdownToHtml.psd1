@@ -141,7 +141,7 @@ PrivateData = @{
   * `md-styles.css` overhauled for static site template to make navbar usable
     for overflowing navitems
   * HTML fragments with resource links supported in navitem names.
-    Example from a `Build.json` which displays an image:
+    Example from a `Build.json` which displays a navigatable image:
     ~~~Json
     "site_navigation": [
         { "<img width='90%' src='site_logo.png'/>": "README.md" },
@@ -149,8 +149,30 @@ PrivateData = @{
         { "---": "" }
     ]
     ~~~
-  * Utility function `Update-ResourceLinks` implemented to update resource
-    links in HTML fragments.
+  * New commands implemented to remove code duplication and make the `Build.ps1`
+    file more consistent.
+    Upgrade of the `Build.ps1` file of existing projects is optional. All changes
+    are backeard compatible. If you want to upgrade anyways change the content
+    map section of`Build.ps1` file like so:
+    ~~~ PowerShell
+    $SCRIPT:contentMap = @{
+	    # Add additional mappings here...
+	    '{{footer}}' =  $config.Footer # Footer text from configuration
+	    '{{nav}}'    = {
+		    param($fragment) # the html fragment created from a markdown file
+		    $navcfg = $config.navigation_bar # navigation bar configuration
+		    # Create the navigation items configured in 'Build.json'
+		    New-SiteNavigation -NavitemSpecs $config.site_navigation `
+		                       -RelativePath $fragment.RelativePath `
+		                       -NavTemplate $navcfg.templates
+		    # Create navigation items to headings on the local page.
+		    # This requires the `autoidentifiers` extension to be enabled.
+		    New-PageHeadingNavigation -HTMLfragment $fragment.HTMLFragment `
+		                              -NavTemplate $navcfg.templates `
+		                              -HeadingLevels $navcfg.capture_page_headings
+	    }
+    }
+    ~~~
 
 * Module Documentation
   * Code and conceptial documentation improved

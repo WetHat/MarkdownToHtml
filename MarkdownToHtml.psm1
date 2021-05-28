@@ -1244,7 +1244,42 @@ are replaced with content extracted from the `NavSpec` parameter .
 None
 
 .OUTPUTS
-HTML fragment for a  navigation bar
+HTML fragment for a navigation bar.
+
+.EXAMPLE
+New-SiteNavigation -NavitemSpecs $specs -RelativePath 'a/b/c/bob.md'
+
+Create navigation content for a file with relative path `a/b/c/bob.md` and
+the specification `$specs` and default templates:
+
+`$specs` is defined like so:
+
+~~~PowerShell
+$specs = @(
+    @{ "<img width='90%' src='logo.png' />" = "README.md" },
+    @{ "README" = "" },
+    @{ "Home" = "README.md" },
+    @{ "---" = "" }
+)
+~~~
+
+Output:
+
+~~~ html
+<button class="navitem">
+   <a href="../../../README.html">
+      <img width='90%' src='../../../logo.png' />
+   </a>
+</button>
+<div class="navlabel">README</div>
+<button class="navitem">
+   <a href="../../../README.html">Home</a>
+</button>
+<hr/>
+~~~
+
+Note how the relative path parameter was used to update the links.
+
 .LINK
 https://wethat.github.io/MarkdownToHtml/2.4.0/New-SiteNavigation.html
 #>
@@ -1499,8 +1534,8 @@ function Update-ResourceLinks {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUS6ZrCRPqSZfyEEg/ey/QG0gb
-# DrmgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUS5yr0uXqFCGlTIg9DI2hzkvA
+# pM+gggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1519,11 +1554,11 @@ function Update-ResourceLinks {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRJIueuk2uL06mgT633o2MC+OuP
-# qjANBgkqhkiG9w0BAQEFAASCAQABRyHrwaua6PKxRtBUAIJhUdFEsTEvJFc4Ur6i
-# W3Ty+FBZXXdkgSgLkbTYgTntWrgsiqrM8Lf/302hyPw/RsG03kEcc645TfatLJSL
-# wiLXIh5qvkNJyzQhLAqb6ithC/U19LnsSPQLKdcadY4j6+mQKx7P2Qc711rqe4Ei
-# +G3ALq6/EW7pO+DZ1ePfMLqYsvLaOehyjnwYoBqDCbwKZihA1RpcLsjPYyTb+hS2
-# XIng8NLCXPdD/JnICWgQTSGFpeqjDBqMetxoy5BOBj0Tnd0aSwaxOD+g4ExnmTBV
-# j7cr0kwdHzcF07BBXT4/HRvdWBKxgggTP1JehrLV1TR2vB3u
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBR1LsPoCjtP+8sxA3GK7otwC7pY
+# BDANBgkqhkiG9w0BAQEFAASCAQA0NGK174CBK4VG+TNoGH8eh2RGBiogDzAyv1rL
+# Exni/uU2lYdjhqlXededItzqrKcEpm1JhH8q33yQv/8fxOn9fnpEGpPl1wX86pCM
+# UGtHiD/BXHXHmFSMmeGwuZgmPHRNCk4wv0dAUEWNP6Ehh6i1NwxDss9TmjPdP+Kl
+# LYoTYJ9LhzSPOBL5RzIhdA3lVY3TlNpXW5a8dwitVm4LCZ+a0bNGu7d2KdmbHT2q
+# 8nUOSlOl0XHSvtFxag24C5TMZUXsE8BuAl6MrOI2G9LKqyjJeNJ8ben5m+qX3f9E
+# 08bq1t3r8p4glNGNKldsXEnA4h7cIMM9M/UGEsZsi9Fo+oZA
 # SIG # End signature block
