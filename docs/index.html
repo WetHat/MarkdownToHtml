@@ -52,18 +52,22 @@
     <nav><button class='navitem'><a href='index.html'><img width='90%' src='Markdown2HTML.png'/></a></button>
 <div class='navlabel'>MarkdownToHtml</div>
 <button class='navitem'><a href='index.html'>Home</a></button>
-<button class='navitem'><a href='2.3.1/MarkdownToHTML.html'>Module Manifest</a></button>
-<button class='navitem'><a href='2.3.1/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
+<button class='navitem'><a href='2.4.0/MarkdownToHTML.html'>Module Manifest</a></button>
+<button class='navitem'><a href='2.4.0/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <div class='navlabel'>Page Content</div>
 <button class='navitem'><a href='#markdowntohtml-documentation'><span class='navitem1'><em>MarkdownToHtml</em> Documentation</span></a></button>
-<button class='navitem'><a href='#latest-version'><span class='navitem1'>Latest Version</span></a></button>
-<button class='navitem'><a href='#installation'><span class='navitem1'>Installation</span></a></button>
-<button class='navitem'><a href='#updates'><span class='navitem1'>Updates</span></a></button>
+<button class='navitem'><a href='#features'><span class='navitem2'>Features</span></a></button>
+<button class='navitem'><a href='#installation-and-update'><span class='navitem1'>Installation and Update</span></a></button>
+<button class='navitem'><a href='#installation'><span class='navitem2'>Installation</span></a></button>
+<button class='navitem'><a href='#update'><span class='navitem2'>Update</span></a></button>
+<button class='navitem'><a href='#backward-compatibility'><span class='navitem3'>Backward Compatibility</span></a></button>
 <button class='navitem'><a href='#quickstart'><span class='navitem1'>Quickstart</span></a></button>
-<button class='navitem'><a href='#convert-a-bunch-of-markdown-files-to-html'><span class='navitem2'>Convert a bunch of Markdown files to HTML</span></a></button>
-<button class='navitem'><a href='#bootstrap-a-static-site-project'><span class='navitem2'>Bootstrap a static site project:</span></a></button>
+<button class='navitem'><a href='#convert-some-markdown-files-to-html'><span class='navitem2'>Convert Some Markdown Files to HTML</span></a></button>
+<button class='navitem'><a href='#bootstrap-a-static-site-project'><span class='navitem2'>Bootstrap a Static Site Project:</span></a></button>
+<button class='navitem'><a href='#documentation'><span class='navitem1'>Documentation</span></a></button>
+<button class='navitem'><a href='#latest-version'><span class='navitem2'>Latest Version</span></a></button>
+<button class='navitem'><a href='#old-versions'><span class='navitem2'>Old Versions</span></a></button>
 <button class='navitem'><a href='#bugs-and-enhancements'><span class='navitem1'>Bugs and Enhancements</span></a></button>
-<button class='navitem'><a href='#backward-compatibility'><span class='navitem1'>Backward Compatibility</span></a></button>
 <button class='navitem'><a href='#feature-showcase'><span class='navitem1'>Feature Showcase</span></a></button>
 <button class='navitem'><a href='#mermaid-diagrams'><span class='navitem2'>Mermaid Diagrams</span></a></button>
 <button class='navitem'><a href='#latex-math'><span class='navitem2'>LaTeX Math</span></a></button>
@@ -72,29 +76,69 @@
     <main>
         <article>
             <h1 id="markdowntohtml-documentation" class="title"><em>MarkdownToHtml</em> Documentation</h1>
-<h1 id="latest-version">Latest Version</h1>
+<p>The content of this documentation site was build from Markdown sources
+with the PowerShell module <code>MarkdownToHtml</code>. This module is hosted as
+Open Source project on GitHub at: <a href="https://github.com/WetHat/MarkdownToHtml">WetHat/MarkdownToHtml</a>.</p>
+<h2 id="features">Features</h2>
+<blockquote>
 <ul>
-<li><strong>2.3.1</strong>: <a href="2.3.1/MarkdownToHTML.html">Documentation</a> - <a href="2.3.1/MarkdownToHTML.html#release-notes">Release Notes</a>.</li>
+<li>Fully <em>hackable</em>.</li>
+<li>Out-of-the box support for diagrams, math typesetting and code syntax
+highlighting.</li>
+<li>Based on <a href="https://github.com/lunet-io/markdig">Markdig</a>,
+a fast, powerful, <a href="http://commonmark.org/">CommonMark</a> compliant Markdown
+processor for .NET with more than 20 configurable extensions.</li>
+<li>Built with high quality Open Source web components:
+<ul>
+<li><strong>Code Highlighting</strong>: <a href="https://highlightjs.org/">highlight.js</a>; supports
+189 languages and 91 styles.</li>
+<li><strong>Math typesetting</strong>: <a href="https://katex.org/">KaTeX</a>; The fastest math
+typesetting library for the web.</li>
+<li><strong>Diagramming</strong>: <a href="http://mermaid-js.github.io/mermaid/">Mermaid</a>; Generation
+of diagrams and flowcharts from text in a similar manner as Markdown.</li>
 </ul>
-<h1 id="installation">Installation</h1>
-<p>This module is available on the <a href="https://www.powershellgallery.com/packages/MarkdownToHtml">PowerShell Gallery</a>
-and can be installed from a PowerShell command prompt like so:</p>
+</li>
+<li>Highly configurable static website projects with configuration file and build
+script.</li>
+<li>Sites can be used offline (without connection to the internet). All
+site assets are local.</li>
+</ul>
+</blockquote>
+<h1 id="installation-and-update">Installation and Update</h1>
+<p>An installable package of this module is hosted on the
+<a href="https://www.powershellgallery.com/packages/MarkdownToHtml">PowerShell Gallery</a></p>
+<h2 id="installation">Installation</h2>
+<blockquote>
+<p>To install the module enter the following command into the command prompt of 
+an admin PowerShell:</p>
 <pre><code class="language-PowerShell">PS&gt; Install-Module -Name MarkdownToHTML
 </code></pre>
-<h1 id="updates">Updates</h1>
-<p>If the module was installed via <code>Install-Module</code> it can be conveniently updated
-via the <a href="https://www.powershellgallery.com/packages/MarkdownToHtml">PowerShell Gallery</a>
-from a PowerShell command prompt like so:</p>
+</blockquote>
+<h2 id="update">Update</h2>
+<blockquote>
+<p>To update the module enter the following command into the command prompt of 
+an admin PowerShell:</p>
 <pre><code class="language-PowerShell">PS&gt; Update-Module -Name MarkdownToHTML
 </code></pre>
-<p>Make sure you read the <a href="https://wethat.github.io/MarkdownToHtml">release notes</a>
-for information about backward compatibility.</p>
+<p>Make sure you read the <a href="#latest-version">release notes</a></p>
+<h3 id="backward-compatibility">Backward Compatibility</h3>
+<p>If you are upgrading the currently installed version to a newer version of the
+<strong>same</strong> major revision, all conversion or site projects are still fully functional.
+Unless you are having issues with any of the pre-installed <em>JavaScript</em>
+libraries no action is required.</p>
+<p>When updating to a new major revision there may be incompatibilities which
+affect existing custom templates and static site projects.
+Make sure to read the upgrade instructions in the release notes.
+However, you still may want to upgrade existing custom templates and
+static site projects to take advantage of new functionality.
+Check out the <a href="#latest-version">release notes</a> in the module's manifest for details.</p>
+</blockquote>
 <h1 id="quickstart">Quickstart</h1>
 <ol>
-<li>Install the MarkdownToHTML (see above).</li>
+<li>Install the MarkdownToHTML. See section <a href="#installation">Istallation</a>.</li>
 <li>Open a PowerShell command shell.</li>
 </ol>
-<h2 id="convert-a-bunch-of-markdown-files-to-html">Convert a bunch of Markdown files to HTML</h2>
+<h2 id="convert-some-markdown-files-to-html">Convert Some Markdown Files to HTML</h2>
 <blockquote>
 <ol start="3">
 <li>Enter this in a PowerShell command prompt:
@@ -105,7 +149,7 @@ for information about backward compatibility.</p>
 a browser.</li>
 </ol>
 </blockquote>
-<h2 id="bootstrap-a-static-site-project">Bootstrap a static site project:</h2>
+<h2 id="bootstrap-a-static-site-project">Bootstrap a Static Site Project:</h2>
 <blockquote>
 <ol start="3">
 <li>Enter this in a PowerShell command prompt:
@@ -117,6 +161,19 @@ PS&gt; ./Build.ps1
 <li>Open <code>html/README.html</code> a browser and enjoy the showcase section.</li>
 </ol>
 </blockquote>
+<h1 id="documentation">Documentation</h1>
+<h2 id="latest-version">Latest Version</h2>
+<blockquote>
+<ul>
+<li><strong>2.4.0</strong>: <a href="2.4.0/MarkdownToHTML.html">Documentation</a> - <a href="2.4.0/MarkdownToHTML.html#release-notes">Release Notes</a>.</li>
+</ul>
+</blockquote>
+<h2 id="old-versions">Old Versions</h2>
+<blockquote>
+<ul>
+<li><strong>2.3.1</strong>: <a href="2.3.1/MarkdownToHTML.html">Documentation</a> - <a href="2.3.1/MarkdownToHTML.html#release-notes">Release Notes</a>.</li>
+</ul>
+</blockquote>
 <h1 id="bugs-and-enhancements">Bugs and Enhancements</h1>
 <p>If you found an issue with the module or want to suggest and enhancement, head over to
 the <a href="https://github.com/WetHat/MarkdownToHtml/issues">Issues</a> page on GitHub and
@@ -124,17 +181,6 @@ submit a bug report or enhancement request. Make sure
 to also check the
 <a href="https://github.com/WetHat/MarkdownToHtml/wiki">wiki</a> for
 tips and the FAQ first.</p>
-<h1 id="backward-compatibility">Backward Compatibility</h1>
-<p>If you are upgrading the currently installed version to a newer version of the
-<strong>same</strong> major revision, all conversion or site projects are still fully functional.
-Unless you are having issues with any of the pre-installed <em>JavaScript</em>
-libraries no action is required.</p>
-<p>When updating to a new major revision there may be incompatibilities which
-affect existing custom templates and static site projects.
-Make sure to read the upgrade instructions in the release notes.
-However, you still may want to upgrade existing custom templates and
-static site projects to take advantage of new functionality or bug fixes.
-See the release notes in the module's manifest for details.</p>
 <h1 id="feature-showcase">Feature Showcase</h1>
 <p>In the following sections some selected features are demonstrated.</p>
 <h2 id="mermaid-diagrams">Mermaid Diagrams</h2>
