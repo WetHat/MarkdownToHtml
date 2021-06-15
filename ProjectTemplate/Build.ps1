@@ -46,3 +46,9 @@ Find-MarkdownFiles $markdown -Exclude $config.Exclude `
 						 -MediaDirectory $markdown `
 	                     -SiteDirectory $staticSite
 
+if ($config.github_pages) {
+	# Switch off Jekyll publishing when building for GitHub pages
+	New-Item -Path $staticSite -Name .nojekyll -ItemType File
+}
+
+
