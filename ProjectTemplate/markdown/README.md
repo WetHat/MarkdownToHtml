@@ -9,7 +9,7 @@ in a fast and simple way. Just add Markdown content to the project's `markdown`
 directory and then run the build script to update the HTML site.
 
 The initial configuration of the project contains all site assets locally.
-This allows the site to be viewed offline (without internet connection). 
+This allows the site to be viewed offline (without internet connection).
 
 ## What Next?
 
@@ -18,11 +18,11 @@ The project is fully functional with the out-of-the-box configuration.
 To author the HTML site following do this:
 1. Create Markdown files (`*.md`) in the `markdown` directory of the project.
    All resources linked to by Markdown content such as images or videos should
-   also added be to this directory. Make sure to use only **relative** links to 
+   also added be to this directory. Make sure to use only **relative** links to
    other markdown or media files.
 2. Build the site by executing the build script `Build.ps1`.
 3. Locate the site's home page in the `html` directory and open it in the
-   browser 
+   browser
 
 For information about project structure and customization options
 check out the documentation for `New-StaticHTMLSiteProject`:
@@ -49,90 +49,135 @@ capabilities of `MarkdownToHTML` are demonstrated.
 
 Markdown extension: `mermaid`:
 
-``` markdown
-~~~ mermaid
-stateDiagram
-	[*] --> Still
-	Still --> [*]
-
-	Still --> Moving
-	Moving --> Still
-	Moving --> Crash
-	Crash --> [*]
-~~~
-```
-
-rendered as:
-
-~~~ mermaid
-stateDiagram
-	[*] --> Still
-	Still --> [*]
-
-	Still --> Moving
-	Moving --> Still
-	Moving --> Crash
-	Crash --> [*]
-~~~
+> ``` markdown
+> ~~~ mermaid
+> stateDiagram
+> 	[*] --> Still
+> 	Still --> [*]
+>
+> 	Still --> Moving
+> 	Moving --> Still
+> 	Moving --> Crash
+> 	Crash --> [*]
+> ~~~
+> ```
+>
+> rendered as:
+>
+> ~~~ mermaid
+> stateDiagram
+> 	[*] --> Still
+> 	Still --> [*]
+>
+> 	Still --> Moving
+> 	Moving --> Still
+> 	Moving --> Crash
+> 	Crash --> [*]
+> ~~~
 
 ## LaTeX Math
 
-Markdown extensions: `mathematics`:
-
-~~~ markdown
-$$
-\left( \sum_{k=1}^n a_k b_k \right)^2 
-\leq 
-\left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)  
-$$
-~~~
-
-renders as:
-
-$$
-\left( \sum_{k=1}^n a_k b_k \right)^2 
-\leq 
-\left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)  
-$$
+> Markdown extensions: `mathematics`:
+>
+> ~~~ markdown
+> $$
+> \left( \sum_{k=1}^n a_k b_k \right)^2
+> \leq
+> \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
+> $$
+> ~~~
+>
+> renders as:
+>
+> $$
+> \left( \sum_{k=1}^n a_k b_k \right)^2
+> \leq
+> \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
+> $$
 
 ## Code Syntax Highlighting
 
-Markdown extension: `common`
+> Markdown extension: `common`
+>
+> ``` markdown
+> ~~~ cpp
+> #include <iostream>
+>
+> int main(int argc, char *argv[]) {
+>
+>   /* An annoying "Hello World" example */
+>   for (auto i = 0; i < 0xFFFF; i++)
+>     cout << "Hello, World!" << endl;
+>
+>   char c = '\n';
+>   unordered_map <string, vector<string> > m;
+>   m["key"] = "\\\\"; // this is an error
+>
+>   return -2e3 + 12l;
+> }
+> ~~~
+> ```
+>
+> renders as:
+>
+> ~~~ cpp
+> #include <iostream>
+>
+> int main(int argc, char *argv[]) {
+>
+>   /* An annoying "Hello World" example */
+>   for (auto i = 0; i < 0xFFFF; i++)
+>     cout << "Hello, World!" << endl;
+>
+>   char c = '\n';
+>   unordered_map <string, vector<string> > m;
+>   m["key"] = "\\\\"; // this is an error
+>
+>   return -2e3 + 12l;
+> }
+> ~~~
 
-``` markdown
-~~~ cpp
-#include <iostream>
+## Svgbob Plain Text Diagrams
 
-int main(int argc, char *argv[]) {
+The example below uses unicode _box_ drawing characters
+to make the diagrams more readable in Markdown text.
 
-  /* An annoying "Hello World" example */
-  for (auto i = 0; i < 0xFFFF; i++)
-    cout << "Hello, World!" << endl;
-
-  char c = '\n';
-  unordered_map <string, vector<string> > m;
-  m["key"] = "\\\\"; // this is an error
-
-  return -2e3 + 12l;
-}
-~~~
-```
-
-renders as:
-
-~~~ cpp
-#include <iostream>
-
-int main(int argc, char *argv[]) {
-
-  /* An annoying "Hello World" example */
-  for (auto i = 0; i < 0xFFFF; i++)
-    cout << "Hello, World!" << endl;
-
-  char c = '\n';
-  unordered_map <string, vector<string> > m;
-  m["key"] = "\\\\"; // this is an error
-
-  return -2e3 + 12l;
-}
-~~~
+> ``` markdown
+> ˜˜˜ bob
+>        ┌──────┐   .─.  ┌───┐
+> o──╮───┤ elem ├──( ; )─┤ n ├──╭──o
+>    │   └──────┘   '─'  └───┘  │
+>    │ ╭──────>──────╮          │
+>    │ │    ┌───┐    │          │
+>    ╰─╯─╭──┤ x ├──╮─╰──────────╯
+>    │   │  └───┘  │            │
+>    │   │   .─.   │            │
+>    │   ╰──( , )──╯            ^
+>    │       '─'                │
+>    │  ╭────────>─────────╮    │
+>    │  │   ┌───┐   .-.    │    │
+>    ╰──╰─╭─┤ x ├──( , )─╮─╯────╯
+>         │ └───┘   '-'  │
+>         ╰───────<──────╯
+> ˜˜˜
+> ```
+>
+> renders as:
+>
+> ~~~ bob
+>        ┌──────┐   .─.  ┌───┐
+> o──╮───┤ elem ├──( ; )─┤ n ├──╭──o
+>    │   └──────┘   '─'  └───┘  │
+>    │ ╭──────>──────╮          │
+>    │ │    ┌───┐    │          │
+>    ╰─╯─╭──┤ x ├──╮─╰──────────╯
+>    │   │  └───┘  │            │
+>    │   │   .─.   │            │
+>    │   ╰──( , )──╯            ^
+>    │       '─'                │
+>    │  ╭────────>─────────╮    │
+>    │  │   ┌───┐   .-.    │    │
+>    ╰──╰─╭─┤ x ├──( , )─╮─╯────╯
+>         │ └───┘   '-'  │
+>         ╰───────<──────╯
+> ~~~
