@@ -443,11 +443,11 @@ CUSTOMIZATION
     >
     > ~~~ bob
     > # root                    <- project root
-    > |- html                   <- config option "site_dir"
-    > |- markdown               <- config option "markdown_dir"
+    > |- html                   <- "site_dir" config option
+    > |- markdown               <- "markdown_dir" config option
     > |     |
     > |     '- README.md        <- initial content
-    > |- Template               <- config option "HTML_template"
+    > |- Template               <- "HTML_template" config option
     > |     |
     > |     |- js               <- javascripts "(*.js)"
     > |     |- katex            <- LaTeX math renderer
@@ -466,21 +466,21 @@ CUSTOMIZATION
     >     +=====================================================================+
     >     | `site_dir`
     >     | :   The location of the generated static HTML site.
-    >     |     Usually a path relative to the project `root`.
-    >     |
+    >     |     Usually a path relative to the project `root` directory.
+    >     +---------------------------------------------------------------------+
     >     | `markdown_dir`
     >     | :   The location of Markdown sources and assets. Usually
     >     |     a path relative to the project `root`.
-    >     |
+    >     +---------------------------------------------------------------------+
     >     | `HTML_template`
     >     | :   The location of the HTML templates. Usually a path
     >     |     relative to the project `root`.
-    >     |
+    >     +---------------------------------------------------------------------+
     >     | `Exclude`
     >     | :   A list of patterns to match files in `"markdown_dir`
     >     |     which should be excluded from the build process.
     >     |     See `Find-MarkdownFiles` for more information.
-    >     |
+    >     +---------------------------------------------------------------------+
     >     | `markdown_extensions`
     >     | :   A list of markdown extension to use for the
     >     |     conversion process. See
@@ -493,11 +493,11 @@ CUSTOMIZATION
     >     |     * "diagrams",
     >     |     * "pipetables",
     >     |     * "autoidentifiers"
-    >     |
+    >     +---------------------------------------------------------------------+
     >     | `footer`
     >     | :   A HTML fragment to be added to each generated HTML
     >     |     page as footer.
-    >     |
+    >     +---------------------------------------------------------------------+
     >     | `navigation_bar`
     >     | :   HTML fragments to specify appearance and content of
     >     |     items in the navigation bar.
@@ -509,7 +509,7 @@ CUSTOMIZATION
     >     |     |     indicating which headings of the current page are to be automatically
     >     |     |     appended to the navigation bar. If this option is
     >     |     |     the empty string no page headings will be appended.
-    >     |     |
+    >     |     +--------------------------------------------------------------+
     >     |     | `templates`
     >     |     | :   HTML fragments specifying the appearance of items
     >     |     |     in the navigation bar. These fragments contain placeholders which
@@ -545,6 +545,7 @@ CUSTOMIZATION
     >     |     |       ~~~
     >     |     +--------------------------------------------------------------+
     >     |
+    >     +---------------------------------------------------------------------+
     >     | `site_navigation`
     >     | :   The static contents of the navigation bar. If enabled the
     >     |     automatically generated links to page headings will be appended to
@@ -562,6 +563,41 @@ CUSTOMIZATION
     >     |       Configured with option `navseparator`.
     >     |     Custom options can be added to this json file as needed for special
     >     |     build processes.
+    >     +---------------------------------------------------------------------+
+    >     | `github_pages`
+    >     | :   A boolean value to configure the project for publishing
+    >     |     as [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages).
+    >     |     When set to `$true` a `.nojekyll` file is generated in `site_dir`
+    >     |     to turn off the
+    >     |     [Jekyll](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll)
+    >     |     publishing process as publishing is already handled by project
+    >     |     build process. To conform with the GitHub Pages project structure
+    >     |     `site_dir` should be set to `docs`.
+    >     +---------------------------------------------------------------------+
+    >     | `svgbob`
+    >     | :   Svg conversion options.
+    >     |     +--------------------------------------------------------------+
+    >     |     | `svgbob` Options
+    >     |     +==============================================================+
+    >     |     | `background`
+    >     |     | :   Diagram background color (default: white).
+    >     |     +--------------------------------------------------------------+
+    >     |     | `fill_color`
+    >     |     | :   Fill color for solid shapes (default: black).
+    >     |     +--------------------------------------------------------------+
+    >     |     | `font_family`
+    >     |     | :   Text font (default: monospace).
+    >     |     +--------------------------------------------------------------+
+    >     |     | `font_size`
+    >     |     | :   Text font size. Default is 14.
+    >     |     +--------------------------------------------------------------+
+    >     |     | `scale`
+    >     |     | :   Diagram scale. Default is 1.
+    >     |     +--------------------------------------------------------------+
+    >     |     | `stroke_width`
+    >     |     | :   Stroke width for all lines. Default is 2.
+    >     |     +--------------------------------------------------------------+
+    >     |
     >     +---------------------------------------------------------------------+
     >
     > The Project Build Script (`Build.ps1`)
@@ -608,7 +644,7 @@ CUSTOMIZATION
     >     To implement custom build rules PowerShell code can be addes to the
     >     build file as needed.
     >
-    > The `Template' directory`
+    > The Template directory
     > :   Covered in section
     >     [Conversion Template Customization](#conversion-template-customization)
     >

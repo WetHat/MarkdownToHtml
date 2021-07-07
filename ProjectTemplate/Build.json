@@ -40,10 +40,10 @@
 
     "svgbob": {
         "background": "white",
-        "fill-color": "black",
-        "font-size": 14,
-        "font-family": "Monospace",
+        "fill_color": "black",
+        "font_size": 14,
+        "font_family": "Monospace",
         "scale": 1,
-        "stroke-width": 2
+        "stroke_width": 2
     }
   }
