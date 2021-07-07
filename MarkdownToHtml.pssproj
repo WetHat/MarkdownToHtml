@@ -24,11 +24,12 @@ import-module 'WetHatLab'
 Protect-whPoshModule $pwd -Store Root
 </PostBuildScript>
     <PackageEntryPoint>MarkdownToHtml.tests.ps1</PackageEntryPoint>
-    <DotNetVersion>v4.7.2</DotNetVersion>
+    <DotNetVersion>net472</DotNetVersion>
     <PackageType>Console</PackageType>
     <DebugArguments>'ConversionProjects'</DebugArguments>
     <StartupFile>
     </StartupFile>
+    <PowerShellVersion>Windows PowerShell</PowerShellVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -77,6 +78,7 @@ Protect-whPoshModule $pwd -Store Root
     <Compile Include="MarkdownToHtml.psm1" />
     <Compile Include="MarkdownToHtml.tests.ps1" />
     <Compile Include="ProjectTemplate\Build.ps1" />
+    <Compile Include="MarkdownPreprocessor.psm1" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />

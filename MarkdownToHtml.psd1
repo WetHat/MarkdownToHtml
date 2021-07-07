@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.4.0'
+ModuleVersion = '2.5.0'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'
@@ -74,12 +74,14 @@ RequiredAssemblies = @('Markdig.dll')
 # FormatsToProcess = @()
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-# NestedModules = @()
+NestedModules = @('MarkdownPreprocessor.psm1')
 
 # Functions to export from this module
 FunctionsToExport = @(
+                        'Complete-MarkdownPreprocessor'
                         'Convert-MarkdownToHTML'
                         'Convert-MarkdownToHTMLFragment'
+                        'Convert-SvgbobToSvg'
                         'ConvertTo-NavigationItem'
                         'Expand-HtmlTemplate'
                         'Find-MarkdownFiles'
@@ -101,12 +103,17 @@ VariablesToExport = '*'
 AliasesToExport = '*'
 
 # List of all modules packaged with this module
-ModuleList = @()
+ModuleList = @(
+                'MarkdownToHtml.psm1'
+                'MarkdownPreprocessor.psm1'
+              )
 
 # List of all files packaged with this module
 FileList = @(
 	            'MarkdownToHtml.psm1'
+                'MarkdownPreprocessor.psm1'
 	            'Markdig.dll'
+                'svgbob.exe'
                 'System.Memory.dll'
                 'System.Runtime.CompilerServices.Unsafe.dll'
                 'System.Numerics.Vectors.dll'
