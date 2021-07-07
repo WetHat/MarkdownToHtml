@@ -5,6 +5,8 @@ Build a static HTML site from Markdown files.
 [string]$SCRIPT:projectDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Import-Module -Name MarkDownToHTML
 
+$OutputEncoding = [System.Text.Encoding]::UTF8 # Send utf8 to external programs
+
 # Load JSON configuration
 $SCRIPT:config = Get-Content (Join-Path $projectDir 'Build.json') | ConvertFrom-Json
 if (!$config) {
@@ -40,6 +42,13 @@ $SCRIPT:contentMap = @{
 # Conversion pipeline
 $SCRIPT:markdown = Join-Path $projectDir $config.markdown_dir
 Find-MarkdownFiles $markdown -Exclude $config.Exclude `
+| ForEach-Object { # Markdown Preprocessor
+    Get-Content $_ -Encoding UTF8 `
+    | Convert-SvgbobToSvg -SiteDirectory $staticSite `
+                          -RelativePath $_.RelativePath `
+                          -Options $SCRIPT:config.svgbob `
+    | Complete-MarkdownPreprocessor -RelativePath $_.RelativePath
+  }`
 | Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions `
 | Publish-StaticHTMLSite -Template (Join-Path $projectDir $config.HTML_Template) `
                          -ContentMap  $contentMap `

@@ -37,4 +37,13 @@
     ],
 
     "github_pages": false
+
+    "svgbob": {
+        "background": "white",
+        "fill-color": "black",
+        "font-size": 14,
+        "font-family": "Monospace",
+        "scale": 1,
+        "stroke-width": 2
+    }
   }
