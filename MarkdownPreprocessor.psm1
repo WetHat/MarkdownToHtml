@@ -89,8 +89,8 @@ Scans the input data (lines of Markdown text) for svgbob fenced code blocks
 and converts them to a Markdown style image link to a svg file containing
 the rendered diagram.
 
-Svgbob code blocks define human readable diagrams and a labeled as `bob` like
-so:
+Svgbob code blocks define human readable diagrams and are labeled as `bob`.
+For example:
 
 ~~~ Markdown
 ˜˜˜ bob
@@ -105,7 +105,7 @@ currently being assembled and named after that HTML file with an unique
 index appended.
 
 .PARAMETER SiteDirectory
-Location of the static HTML site. Svg file will be generated relative to this
+Location of the static HTML site. The Svg file will be generated relative to this
 path.
 
 .PARAMETER RelativePath
@@ -117,11 +117,14 @@ Svg conversion options. An object or hashtable with follwing properties or keys:
 | Property       | Description                                  |
 | :------------: | :------------------------------------------- |
 | `background`   | Diagram background color (default: white)    |
-| `fill-color`   | Fill color for solid shapes (default: black) |
-| `font-family`  | Text font (default: monospace)               |
-| `font-size`    | Text font size (default 14)                  |
+| `fill_color`   | Fill color for solid shapes (default: black) |
+| `font_family`  | Text font (default: monospace)               |
+| `font_size`    | Text font size (default 14)                  |
 | `scale`        | Diagram scale (default: 1)                   |
-| `stroke-width` | Stroke width for all lines (default: 2)      |
+| `stroke_width` | Stroke width for all lines (default: 2)      |
+
+When using conversion projects instantiated by `New-StaticHTMLSiteProject` these
+parameters are configured in `Build.json` parameter section `svgbob`.
 
 .INPUTS
 Lines of Markdown text.
@@ -212,15 +215,15 @@ function Convert-SvgbobToSvg {
             if ($value) {
                 $background = $value
             }
-            $value=$options.'fill-color'
+            $value=$options.fill_color
             if ($value) {
                 $fillColor = $value
             }
-            $value=$options.'font-size'
+            $value=$options.font_size
             if ($value) {
                 $fontSize = $value
             }
-            $value=$options.'font-family'
+            $value=$options.font_family
             if ($value) {
                 $fontFamily = $value
             }
@@ -228,7 +231,7 @@ function Convert-SvgbobToSvg {
             if ($value) {
                 $scale = $value
             }
-            $value=$options.'stroke-width'
+            $value=$options.stroke_width
             if ($value) {
                 $strokeWidth = $value
             }
@@ -279,8 +282,8 @@ function Convert-SvgbobToSvg {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUY3JpP7Mg/ziygU2wprnQ0DBV
-# v0mgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUn394OtWnAYrp/AxUcNde5b4h
+# YYegggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -299,11 +302,11 @@ function Convert-SvgbobToSvg {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQKbSGHOzHgH1kYYmL4nuSAXCX1
-# 6TANBgkqhkiG9w0BAQEFAASCAQBO94hHsj81o0Ny+hrVLWdvN0sy7hZEYDCuRNxW
-# 1HXPTSgrw8vlOp4veXDu+OtXGGCy6LW2ucX+R5E+67QEhTHbEfDEuHvwsBmBamU/
-# KA5UYYc2iaGI5xcEh8Fk0mj7QsInpI0piZwrowVB8Yu2xTTaNUyD6gk0H5/469QX
-# QEl3z7SBqu91fLOKnmiU1IJLdT45hRJdQiJcp4EbIaOmxKjn3bJRKhWWQo+939Bh
-# HQtpf+ePRGZQPOyCxVB+R6Z7KLQ5mIYks76lNH2HxgBL2LyQ89LjTfu/I6uRSpuM
-# HhZN8JFYmzNBUU3qcUB79ijPxZF04f1Fh6Cy3hzUs2NmlAxe
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTHCjvHfDjRtyX+41vbj1TxZKd0
+# CzANBgkqhkiG9w0BAQEFAASCAQBu2zApGVJEiTjXdB+ZWiyI8XqNwqqjSUEez8mI
+# XOlp/ciqLspcTVqnR4u5BRx1dmzW1N5YaE//VQyaWCK/1qJvUJ8IYPwRw3YSk492
+# 4kCzzwMNRJWkHLEbfHBMVifZl7q+vuQfdDffT4ZysH75lYZRErKi7Cyg8i/V/xC6
+# PhISr+L0PP+ZU9r4+c8nXUcF57wRvds2khFDARiWki0zFWPhv7SnYnB4UsJuC+PZ
+# w3XmXQlxORssPue/vfkMb5OLcV1Rhkb4bXvcWi3YwUtKoNaqK4oyUjBXIC95+U2Z
+# zJ8Gq3vFcoG64q6ObJCbi4LVFv2S+xe7QVWR2JkvFIY1YHp9
 # SIG # End signature block
