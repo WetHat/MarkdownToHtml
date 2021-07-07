@@ -2,6 +2,7 @@
 .SYNOPSIS
 Build a static HTML site from Markdown files.
 #>
+
 [string]$SCRIPT:projectDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Import-Module -Name '../MarkDownToHTML' -Force
 
@@ -64,11 +65,20 @@ $SCRIPT:contentMap = @{
 
 $SCRIPT:markdown = Join-Path $projectDir $config.markdown_dir
 Find-MarkdownFiles $markdown -Exclude $config.Exclude `
+| ForEach-Object { # Markdown Preprocessor
+    Get-Content $_ -Encoding UTF8 `
+    | Convert-SvgbobToSvg -SiteDirectory $staticSite `
+                          -RelativePath $_.RelativePath `
+                          -Options $SCRIPT:config.svgbob `
+    | Complete-MarkdownPreprocessor -RelativePath $_.RelativePath
+  }`
 | Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions `
 | Publish-StaticHTMLSite -Template (Join-Path $projectDir $config.HTML_Template) `
                          -ContentMap  $contentMap `
 						 -MediaDirectory $markdown `
 	                     -SiteDirectory $staticSite
 
-# Switch off Jekyll builds
-New-Item -Path $staticSite -Name .nojekyll -ItemType File
+if ($config.github_pages) {
+	# Switch off Jekyll publishing when building for GitHub pages
+	New-Item -Path $staticSite -Name .nojekyll -ItemType File
+}

@@ -1,0 +1,432 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>ConvertTo-NavigationItem</title>
+    <link rel="stylesheet" type="text/css" href="../styles/md-styles.css" />
+
+    <!-- Code syntax highlighting configuration -->
+    <!-- Comment this to deactivate syntax highlighting. -->
+    <link rel="stylesheet" type="text/css" href="../styles/vs.css" />
+    <!-- Alternative highlighting styles -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/agate.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/far.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/tomorrow-night-blue.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../vs2015.css" /> -->
+    <script src="../js/highlight.pack.js"></script>
+    <script>
+        hljs.configure({ languages: [] });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <!-- -->
+    <!-- mermaid diagram generator configuration -->
+    <!-- Comment this to deactivate the diagramming extension ('diagrams'). -->
+    <script src="../js/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true });</script>
+    <!-- -->
+    <!-- KaTeX LaTeX Math typesetting configuration -->
+    <!-- Comment this to deactivate the LaTeX math extension ('mathematics'). -->
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <script defer src="../katex/katex.min.js"></script>
+    <script>
+        // <![CDATA[
+        window.onload = function () {
+            var tex = document.getElementsByClassName("math");
+            Array.prototype.forEach.call(tex, function (el) {
+                katex.render(el.textContent, el, {
+                    displayMode: (el.nodeName == "DIV"),
+                    macros: {
+                        "\\(": "",
+                        "\\)": "",
+                        "\\[": "",
+                        "\\]": ""
+                    }
+                })
+            });
+        };
+          // ]]>
+    </script>
+    <!-- -->
+</head>
+<body>
+    <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
+<div class='navlabel'>MarkdownToHtml</div>
+<button class='navitem'><a href='../index.html'>Home</a></button>
+<button class='navitem'><a href='../2.5.0/MarkdownToHTML.html'>Module Manifest</a></button>
+<button class='navitem'><a href='../2.5.0/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
+<div class='navlabel'>Page Content</div>
+<button class='navitem'><a href='#convertto-navigationitem'><span class='navitem1'>ConvertTo-NavigationItem</span></a></button>
+<button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
+<button class='navitem'><a href='#description'><span class='navitem1'>Description</span></a></button>
+<button class='navitem'><a href='#parameters'><span class='navitem1'>Parameters</span></a></button>
+<button class='navitem'><a href='#navspec-object'><span class='navitem2'>-NavSpec &lt;Object&gt;</span></a></button>
+<button class='navitem'><a href='#relativepath-string'><span class='navitem2'>-RelativePath &lt;String&gt;</span></a></button>
+<button class='navitem'><a href='#navtemplate-object'><span class='navitem2'>-NavTemplate &lt;Object&gt;</span></a></button>
+<button class='navitem'><a href='#inputs'><span class='navitem1'>Inputs</span></a></button>
+<button class='navitem'><a href='#outputs'><span class='navitem1'>Outputs</span></a></button>
+<button class='navitem'><a href='#notes'><span class='navitem1'>Notes</span></a></button>
+<button class='navitem'><a href='#examples'><span class='navitem1'>Examples</span></a></button>
+<button class='navitem'><a href='#example-1'><span class='navitem2'>EXAMPLE 1</span></a></button>
+<button class='navitem'><a href='#example-2'><span class='navitem2'>EXAMPLE 2</span></a></button>
+<button class='navitem'><a href='#example-3'><span class='navitem2'>EXAMPLE 3</span></a></button>
+<button class='navitem'><a href='#example-4'><span class='navitem2'>EXAMPLE 4</span></a></button>
+<button class='navitem'><a href='#example-5'><span class='navitem2'>EXAMPLE 5</span></a></button>
+<button class='navitem'><a href='#example-6'><span class='navitem2'>EXAMPLE 6</span></a></button>
+<button class='navitem'><a href='#example-7'><span class='navitem2'>EXAMPLE 7</span></a></button>
+<button class='navitem'><a href='#related-links'><span class='navitem1'>Related Links</span></a></button>
+</nav>
+    <main>
+        <article>
+            <h1 id="convertto-navigationitem">ConvertTo-NavigationItem</h1>
+<p>Convert a navigation specification to a single item in a navigation bar of a
+static HTML site projects created by <code>New-StaticHTMLSiteProject</code>.</p>
+<h1 id="syntax">Syntax</h1>
+<pre><code class="language-PowerShell"> ConvertTo-NavigationItem [-NavSpec] &lt;Object&gt; [-RelativePath] &lt;String&gt; [-NavTemplate] &lt;Object&gt;  [&lt;CommonParameters&gt;] 
+</code></pre>
+<h1 id="description">Description</h1>
+<p>Converts the specification for a single item in the navigation bar by</p>
+<ul>
+<li>finding an HTML template to represent the item in the navigation bar.</li>
+<li>replacing placeholders in the template by data taken from the</li>
+<li>specification.</li>
+</ul>
+<h1 id="parameters">Parameters</h1>
+<blockquote>
+<h2 id="navspec-object">-NavSpec &lt;Object&gt;</h2>
+<blockquote>
+<p>An object or dictionary with exactly one <code>NoteProperty</code> or key representing
+a single key-value pair. This parameter provides the data for one item in
+the navigation bar.</p>
+<p>Following key-value pairs are recognized:</p>
+<table>
+<col style="width:10.67%" />
+<col style="width:9.33%" />
+<col style="width:16%" />
+<col style="width:64%" />
+<thead>
+<tr>
+<th style="text-align: center;">Key</th>
+<th style="text-align: center;">Value</th>
+<th style="text-align: center;">Template
+Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">&quot;<em>text</em>&quot;</td>
+<td style="text-align: center;">&quot;<em>url</em>&quot;</td>
+<td style="text-align: center;">navitem</td>
+<td>A clickable hyperlink where <em>text</em> is the link
+text and <em>url</em> a link to a web page or a local
+Markdown file. Local file links must be
+relative to the project root.</td>
+</tr>
+<tr>
+<td style="text-align: center;">&quot;<em>text</em>&quot;</td>
+<td style="text-align: center;">&quot;&quot;</td>
+<td style="text-align: center;">navlabel</td>
+<td>A label without hyperlink.</td>
+</tr>
+<tr>
+<td style="text-align: center;">&quot;---&quot;</td>
+<td style="text-align: center;">&quot;&quot;</td>
+<td style="text-align: center;">navseparator</td>
+<td>A speparator line.</td>
+</tr>
+</tbody>
+</table>
+<p>The structure of the data determines the type of navigation bar item to build.
+The table above maps supported key-value combinations to the associated named
+HTML templates.</p>
+<hr />
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Parameter Property</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">Required?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Position?</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr>
+<td style="text-align: right;">Default value</td>
+<td style="text-align: left;">``</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept pipeline input?</td>
+<td style="text-align: left;">true (ByValue)</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept wildcard characters?</td>
+<td style="text-align: left;">false</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+ 
+<h2 id="relativepath-string">-RelativePath &lt;String&gt;</h2>
+<blockquote>
+<p>The path to a Markdown (<code>*.md</code>) or HTML (<code>*.html</code>) file relative to its
+corresponding root configured in <code>Build.json</code>. For Markdown files the
+root is configured by parameter <code>&quot;markdown_dir&quot;</code> for html files it is
+<code>&quot;site_dir&quot;</code>. This parameter will be used to compute relative resource
+and navigation bar links for the HTML page currently
+being assembled.</p>
+<p>The given path should use forward slash '/' path separators.</p>
+<hr />
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Parameter Property</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">Required?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Position?</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr>
+<td style="text-align: right;">Default value</td>
+<td style="text-align: left;">``</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept pipeline input?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept wildcard characters?</td>
+<td style="text-align: left;">false</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+ 
+<h2 id="navtemplate-object">-NavTemplate &lt;Object&gt;</h2>
+<blockquote>
+<p>An optional dictionary of named HTML templates.</p>
+<table>
+<col style="width:17.91%" />
+<col style="width:20.9%" />
+<col style="width:61.19%" />
+<thead>
+<tr>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Key</th>
+<th>HTML Template</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">clickable
+link</td>
+<td style="text-align: center;">&quot;navitem&quot;</td>
+<td>
+<pre><code class="language-html">&lt;button class=&#39;navitem&#39;&gt;
+    &lt;a href=&#39;{{navurl}}&#39;&gt;{{navtext}}&lt;/a&gt;
+&lt;/button&gt;
+</code></pre>
+</td>
+</tr>
+<tr>
+<td style="text-align: center;">label (no
+link)</td>
+<td style="text-align: center;">&quot;navlabel&quot;</td>
+<td>
+<pre><code class="language-html">&lt;div class=&#39;navlabel&#39;&gt;{{navtext}}&lt;/div&gt;
+</code></pre>
+</td>
+</tr>
+<tr>
+<td style="text-align: center;">separator</td>
+<td style="text-align: center;">&quot;navseparator&quot;</td>
+<td>
+<pre><code class="language-html">&lt;hr/&gt;
+</code></pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The HTML templates listed represent are the values configured in <code>Build.json</code>.
+These values are used for keys not provided in the given dictionary or if no
+dictionary is given at all.  Additional mappings contained in dictionary are
+ignored.</p>
+<p>For more customization options see
+<a href="about_MarkdownToHTML.html#static-site-project-customization">Static Site Project Customization</a>.</p>
+<p>The css styles used in the templates are defined in <code>md-styles.css</code>.</p>
+<p>During the build process the placeholders contained in the HTML template
+are replaced with content extracted from the <code>NavSpec</code> parameter .</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Placeholder</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>{{navurl}}</code></td>
+<td>hyperlink to web-page or local file.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>{{navtext}}</code></td>
+<td>link or label text</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Parameter Property</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">Required?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Position?</td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr>
+<td style="text-align: right;">Default value</td>
+<td style="text-align: left;"><code>$defaultNavTemplate</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept pipeline input?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept wildcard characters?</td>
+<td style="text-align: left;">false</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</blockquote>
+<h1 id="inputs">Inputs</h1>
+<p>Objects or hashtables with one NoteProperty or key.</p>
+<h1 id="outputs">Outputs</h1>
+<p>HTML element representing one navigation item for use in a vertical navigation
+bar.</p>
+<h1 id="notes">Notes</h1>
+<blockquote>
+<p>This function is typically used in the build script <code>Build.ps1</code> to define
+the contents of the navigation bar (placeholder <code>{{nav}}</code>).</p>
+</blockquote>
+<h1 id="examples">Examples</h1>
+<h2 id="example-1">EXAMPLE 1</h2>
+<blockquote>
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Project HOME&#39;=&#39;https://github.com/WetHat/MarkdownToHtml&#39;} -RelativePath &#39;intro/about.md&#39;
+</code></pre>
+<p>Generates a web navigation link to be put on the page <code>intro/about.md</code>.
+Note:
+the parameter <code>RelativePath</code> is specified but not used because the link is
+non-local.</p>
+<p>Output:</p>
+<pre><code class="language-html">&lt;button class=&#39;navitem&#39;&gt;
+    &lt;a href=&quot;https://github.com/WetHat/MarkdownToHtml&quot;&gt;Project HOME&lt;/a&gt;
+&lt;/button&gt;&lt;br/&gt;
+</code></pre>
+</blockquote>
+<h2 id="example-2">EXAMPLE 2</h2>
+<blockquote>
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Index&#39;=&#39;index.md&#39;} -RelativePath &#39;intro/about.md&#39;
+</code></pre>
+<p>Generates a navigation link relative to <code>intro/about.md</code>. The
+link target <code>index.md</code> is a page at the root of the same site, hence the link is
+adjusted accordingly.</p>
+<p>Output:</p>
+<pre><code class="language-html">&lt;button class=&quot;navitem&quot;&gt;
+    &lt;a href=&quot;../index.html&quot;&gt;Index&lt;/a&gt;
+&lt;/button&gt;
+</code></pre>
+</blockquote>
+<h2 id="example-3">EXAMPLE 3</h2>
+<blockquote>
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Index&#39;=&#39;index.md&#39;} -RelativePath &#39;intro/about.md&#39; -NavTemplate $custom
+</code></pre>
+<p>Generates a navigation link relative to <code>intro/about.md</code>.
+A custom template definition <code>$custom</code> is used:</p>
+<pre><code class="language-PowerShell">    $custom = @{ navitem = &#39;&lt;li class=&quot;li-item&quot;&gt;&lt;a href=&quot;{{navurl}}&quot;&gt;{{navtext}}&lt;/a&gt;&lt;/li&gt;&#39;}
+</code></pre>
+<p>The link target <code>index.md</code> is a page at the root of the same site, hence the link is
+adjusted accordingly.</p>
+<p>Output:</p>
+<pre><code class="language-html">&lt;li class=&quot;li-item&quot;&gt;
+    &lt;a href=&quot;../index.html&quot;&gt;Index&lt;/a&gt;
+&lt;/li&gt;
+</code></pre>
+</blockquote>
+<h2 id="example-4">EXAMPLE 4</h2>
+<blockquote>
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;---&#39;=&#39;&#39;} -RelativePath &#39;intro/about.md&#39;
+</code></pre>
+<p>Generates a separator line in the navigation bar.</p>
+<p>Output:</p>
+<pre><code class="language-html">&lt;hr class=&quot;navitem&quot; /&gt;
+</code></pre>
+</blockquote>
+<h2 id="example-5">EXAMPLE 5</h2>
+<blockquote>
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;---&#39;=&#39;&#39;} -NavTemplate $custom
+</code></pre>
+<p>Generates a separator line in the navigation bar using a custom template <code>$custom</code>:</p>
+<pre><code class="language-PowerShell">    $custom = @{ navseparator = &#39;&lt;hr class=&quot;li-item&quot; /&gt;&#39;}
+</code></pre>
+<p>Output:</p>
+<pre><code class="language-html">&lt;hr class=&quot;li-item&quot; /&gt;
+</code></pre>
+</blockquote>
+<h2 id="example-6">EXAMPLE 6</h2>
+<blockquote>
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Introduction&#39;=&#39;&#39;}
+</code></pre>
+<p>Generates a label in the navigation bar.</p>
+<p>Output:</p>
+<pre><code class="language-html">&lt;div class=&#39;navitem&#39;&gt;Introduction&lt;/div&gt;
+</code></pre>
+</blockquote>
+<h2 id="example-7">EXAMPLE 7</h2>
+<blockquote>
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Introduction&#39;=&#39;&#39;} -NavTemplate $custom
+</code></pre>
+<p>Generates a label in the navigation bar using the custom template <code>$custom</code>:</p>
+<pre><code class="language-PowerShell">    $custom = @{ navlabel = &#39;&lt;div class=&#39;li-item&#39;&gt;Introduction&lt;/div&gt;&#39;}
+</code></pre>
+<p>Output:</p>
+<pre><code class="language-html">&lt;div class=&#39;li-item&#39;&gt;Introduction&lt;/div&gt;
+</code></pre>
+</blockquote>
+<h1 id="related-links">Related Links</h1>
+<ul>
+<li><a href="https://wethat.github.io/MarkdownToHtml/2.5.0/ConvertTo-NavigationItem.html">https://wethat.github.io/MarkdownToHtml/2.5.0/ConvertTo-NavigationItem.html</a></li>
+<li><a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a></li>
+<li><a href="New-PageHeadingNavigation.html"><code>New-PageHeadingNavigation</code></a></li>
+</ul>
+<hr />
+<p><cite>Module: MarkDownToHTML; Version: 2.5.0; (c) 2018-2021 WetHat Lab. All rights reserved.</cite></p>
+
+        </article>
+        <footer>
+            <hr />
+            Site created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.
+        </footer>
+    </main>
+</body>
+</html>

@@ -52,8 +52,8 @@
     <nav><button class='navitem'><a href='index.html'><img width='90%' src='Markdown2HTML.png'/></a></button>
 <div class='navlabel'>MarkdownToHtml</div>
 <button class='navitem'><a href='index.html'>Home</a></button>
-<button class='navitem'><a href='2.4.0/MarkdownToHTML.html'>Module Manifest</a></button>
-<button class='navitem'><a href='2.4.0/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
+<button class='navitem'><a href='2.5.0/MarkdownToHTML.html'>Module Manifest</a></button>
+<button class='navitem'><a href='2.5.0/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
 <div class='navlabel'>Page Content</div>
 <button class='navitem'><a href='#markdowntohtml-documentation'><span class='navitem1'><em>MarkdownToHtml</em> Documentation</span></a></button>
 <button class='navitem'><a href='#features'><span class='navitem2'>Features</span></a></button>
@@ -72,6 +72,7 @@
 <button class='navitem'><a href='#mermaid-diagrams'><span class='navitem2'>Mermaid Diagrams</span></a></button>
 <button class='navitem'><a href='#latex-math'><span class='navitem2'>LaTeX Math</span></a></button>
 <button class='navitem'><a href='#code-syntax-highlighting'><span class='navitem2'>Code Syntax Highlighting</span></a></button>
+<button class='navitem'><a href='#svgbob-plain-text-diagrams'><span class='navitem2'>Svgbob Plain Text Diagrams</span></a></button>
 </nav>
     <main>
         <article>
@@ -95,7 +96,9 @@ processor for .NET with more than 20 configurable extensions.</li>
 <li><strong>Math typesetting</strong>: <a href="https://katex.org/">KaTeX</a>; The fastest math
 typesetting library for the web.</li>
 <li><strong>Diagramming</strong>: <a href="http://mermaid-js.github.io/mermaid/">Mermaid</a>; Generation
-of diagrams and flowcharts from text in a similar manner as Markdown.</li>
+of diagrams and flowcharts from text in a similar manner as Markdown.
+<a href="https://ivanceras.github.io/svgbob-editor/">svgbob</a> for text based, human readable
+diagrams.</li>
 </ul>
 </li>
 <li>Highly configurable static website projects with configuration file and build
@@ -169,12 +172,13 @@ PS&gt; ./Build.ps1
 <h2 id="latest-version">Latest Version</h2>
 <blockquote>
 <ul>
-<li><strong>2.4.0</strong>: <a href="2.4.0/MarkdownToHTML.html">Documentation</a> - <a href="2.4.0/MarkdownToHTML.html#release-notes">Release Notes</a>.</li>
+<li><strong>2.4.0</strong>: <a href="2.5.0/MarkdownToHTML.html">Documentation</a> - <a href="2.5.0/MarkdownToHTML.html#release-notes">Release Notes</a>.</li>
 </ul>
 </blockquote>
 <h2 id="old-versions">Old Versions</h2>
 <blockquote>
 <ul>
+<li><strong>2.4.0</strong>: <a href="2.4.0/MarkdownToHTML.html">Documentation</a> - <a href="2.4.0/MarkdownToHTML.html#release-notes">Release Notes</a>.</li>
 <li><strong>2.3.1</strong>: <a href="2.3.1/MarkdownToHTML.html">Documentation</a> - <a href="2.3.1/MarkdownToHTML.html#release-notes">Release Notes</a>.</li>
 </ul>
 </blockquote>
@@ -265,6 +269,32 @@ int main(int argc, char *argv[]) {
   return -2e3 + 12l;
 }
 </code></pre>
+</blockquote>
+<h2 id="svgbob-plain-text-diagrams">Svgbob Plain Text Diagrams</h2>
+<p>Available since version 2.5.0. The example below uses
+unicode <em>box</em> drawing characters to make the diagrams more
+readable in Markdown text.</p>
+<blockquote>
+<pre><code class="language-markdown">˜˜˜ bob
+       ┌──────┐   .─.  ┌───┐
+o──╮───┤ elem ├──( ; )─┤ n ├──╭──o
+   │   └──────┘   &#39;─&#39;  └───┘  │
+   │ ╭──────&gt;──────╮          │
+   │ │    ┌───┐    │          │
+   ╰─╯─╭──┤ x ├──╮─╰──────────╯
+   │   │  └───┘  │            │
+   │   │   .─.   │            │
+   │   ╰──( , )──╯            ^
+   │       &#39;─&#39;                │
+   │  ╭────────&gt;─────────╮    │
+   │  │   ┌───┐   .-.    │    │
+   ╰──╰─╭─┤ x ├──( , )─╮─╯────╯
+        │ └───┘   &#39;-&#39;  │
+        ╰───────&lt;──────╯
+˜˜˜
+</code></pre>
+<p>renders as:</p>
+<p><img src="index1.svg" alt="Diagram 1." /></p>
 </blockquote>
 
         </article>

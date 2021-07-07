@@ -19,6 +19,8 @@ Open Source project on GitHub at: [WetHat/MarkdownToHtml](https://github.com/Wet
 >     typesetting library for the web.
 >   - **Diagramming**: [Mermaid](http://mermaid-js.github.io/mermaid/); Generation
 >     of diagrams and flowcharts from text in a similar manner as Markdown.
+>     [svgbob](https://ivanceras.github.io/svgbob-editor/) for text based, human readable
+>     diagrams.
 > * Highly configurable static website projects with configuration file and build
 >   script.
 > * Sites can be used offline (without connection to the internet). All
@@ -101,10 +103,11 @@ Make sure to use the `-Online` switch for best reading experience.
 
 ## Latest Version
 
-> * **2.4.0**: [Documentation](2.4.0/MarkdownToHTML.md) - [Release Notes](2.4.0/MarkdownToHTML.md#release-notes).
+> * **2.4.0**: [Documentation](2.5.0/MarkdownToHTML.md) - [Release Notes](2.5.0/MarkdownToHTML.md#release-notes).
 
 ## Old Versions
 
+> * **2.4.0**: [Documentation](2.4.0/MarkdownToHTML.md) - [Release Notes](2.4.0/MarkdownToHTML.md#release-notes).
 > * **2.3.1**: [Documentation](2.3.1/MarkdownToHTML.md) - [Release Notes](2.3.1/MarkdownToHTML.md#release-notes).
 
 # Bugs and Enhancements
@@ -210,4 +213,50 @@ In the following sections some selected features are demonstrated.
 > 
 >   return -2e3 + 12l;
 > }
+> ~~~
+
+## Svgbob Plain Text Diagrams
+
+Available since version 2.5.0. The example below uses
+unicode _box_ drawing characters to make the diagrams more
+readable in Markdown text. 
+
+> ``` markdown
+> ˜˜˜ bob
+>        ┌──────┐   .─.  ┌───┐
+> o──╮───┤ elem ├──( ; )─┤ n ├──╭──o
+>    │   └──────┘   '─'  └───┘  │
+>    │ ╭──────>──────╮          │
+>    │ │    ┌───┐    │          │
+>    ╰─╯─╭──┤ x ├──╮─╰──────────╯
+>    │   │  └───┘  │            │
+>    │   │   .─.   │            │
+>    │   ╰──( , )──╯            ^
+>    │       '─'                │
+>    │  ╭────────>─────────╮    │
+>    │  │   ┌───┐   .-.    │    │
+>    ╰──╰─╭─┤ x ├──( , )─╮─╯────╯
+>         │ └───┘   '-'  │
+>         ╰───────<──────╯
+> ˜˜˜
+> ```
+>
+> renders as:
+>
+> ~~~ bob
+>        ┌──────┐   .─.  ┌───┐
+> o──╮───┤ elem ├──( ; )─┤ n ├──╭──o
+>    │   └──────┘   '─'  └───┘  │
+>    │ ╭──────>──────╮          │
+>    │ │    ┌───┐    │          │
+>    ╰─╯─╭──┤ x ├──╮─╰──────────╯
+>    │   │  └───┘  │            │
+>    │   │   .─.   │            │
+>    │   ╰──( , )──╯            ^
+>    │       '─'                │
+>    │  ╭────────>─────────╮    │
+>    │  │   ┌───┐   .-.    │    │
+>    ╰──╰─╭─┤ x ├──( , )─╮─╯────╯
+>         │ └───┘   '-'  │
+>         ╰───────<──────╯
 > ~~~

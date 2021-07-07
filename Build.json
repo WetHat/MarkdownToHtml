@@ -38,5 +38,16 @@
         { "Module Manifest": "{{version}}/MarkdownToHTML.md"},
         { "About MarkdownToHtml": "{{version}}/about_MarkdownToHTML.md" },
         { "Page Content": "" }
-    ]
+    ],
+
+     "github_pages": true,
+
+     "svgbob": {
+        "background": "white",
+        "fill_color": "black",
+        "font_size": 14,
+        "font_family": "Monospace",
+        "scale": 1,
+        "stroke_width": 2
+    }
   }
