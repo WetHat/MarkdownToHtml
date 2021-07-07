@@ -1,7 +1,8 @@
 [System.IO.DirectoryInfo]$SCRIPT:moduleDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 [string]$SCRIPT:svgbob = Join-Path $SCRIPT:moduleDir 'svgbob.exe'
 
-$OutputEncoding =  New-Object System.Text.UTF8Encoding $False # Send utf8 throught the pipe
+# Send utf8 without BOM throught the pipe to external programs
+$OutputEncoding =  [Text.UTF8Encoding]::new($false)
 
 <#
 .SYNOPSIS
