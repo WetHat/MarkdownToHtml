@@ -29,35 +29,50 @@ SHORT DESCRIPTION
 LONG DESCRIPTION
     A collection of PowerShell commands to convert Markdown files to static
     HTML sites in various ways. This module uses a pipeline architecture with
-    three stages as outlined below:
+    four stages as outlined below:
 
-    ~~~
-                Markdown Directory
+    ~~~ bob
+               .--------------------.
+              / Markdown Directory /
+             '----------.---------'
                         |
                         v
-            .-----------'------------.
-    1       |  Markdown File Scanner |
-            '-----------.------------'
-                        |
-                   Markdown files
-                        |
-           .------------'-------------.
-    2      | HTML Fragment Conversion |
-           '------------.-------------'
-                        |
-           .------------'-------------.    .- Template
-    3      | HTML Document Assembler  | <--+
-           '------------.-------------'    '- Content Map
+           +------------o------------+
+    1      | Markdown File Collector |
+           +------------.------------+
                         |
                         v
-                 Static HTML Site
+                 .------o---------.
+                / Markdown files /
+               '--------.-------'
+                        |
+                        v
+           +------------o-------------+
+    2      | Markdown "Pre-Processor" |
+           +------------.-------------+
+                        |
+                        v
+           +------------o-------------+
+    3      | HTML Fragment Conversion |
+           +------------.-------------+
+                        |                   .----------.
+                        v                 .--\ Template \
+           +------------o-------------+   |   '----------'
+    4      | HTML Document Assembler  |<--+
+           +------------.-------------+   | .-------------.
+                        |                 '--\ Content Map \
+                        v                     '-------------'
+               .--------o----------.
+              / Static HTML Site  /
+             '-------------------'
     ~~~
 
     The PowerShell functions associated with the pipeline stages are:
 
     1. `Find-MarkdownFiles`
-    2. `Convert-MarkdownToHTMLFragment`
-    3. `Publish-StaticHtmlSite`
+    2. `Convert-SvgbobToSvg` and `Complete-MarkdownPreprocessor`
+    3. `Convert-MarkdownToHTMLFragment`
+    4. `Publish-StaticHtmlSite`
 
     A simple, non-customizable pipeline setup is implemented by the command
     `Convert-MarkdownToHTML`. A customizable conversion pipeline is available in
@@ -256,18 +271,21 @@ USAGE
     > ~~~
     > The code snippet above generates a fully functional static HTML site:
     >
-    > ~~~
-    > #                  <- project root
-    > |- html            <- build output (static site)
-    > |- markdown        <- authored Markdown content
-    > |-    '- README.md <- initial content
-    > |- Template        <- template resources
-    > |     |- js        <- javascripts (*.js)
-    > |     |- katex     <- LateX math renderer
-    > |     |- styles    <- stylesheets (*.css)
-    > |     '- md-template.html <- Html page template
-    > |- Build.json      <- project configuration
-    > '- Build.ps1       <- build script
+    > ~~~ bob
+    > #                          <- project root
+    > |- html                    <- build output "(static site)"
+    > |- markdown                <- authored Markdown content
+    > |     |
+    > |     '- README.md         <- initial content
+    > |- Template                <- template resources
+    > |     |
+    > |     |- js                <- javascripts "(*.js)"
+    > |     |- katex             <- LaTeX math renderer
+    > |     |- styles            <- stylesheets "(*.css)"
+    > |     '- md-template.html  <- Html page template
+    > |
+    > |- Build.json              <- project configuration
+    > '- Build.ps1               <- build script
     > ~~~
     >
     > The build script `Build.ps1` generates a `html/README.html` file which is
@@ -310,12 +328,14 @@ CUSTOMIZATION
     >
     > In both cases the template directories have following structure:
     >
-    > ~~~
-    > <root>                 <- template root directory
-    >    |- js               <- javascripts (*.js)
-    >    |- katex            <- LateX math renderer
-    >    |- styles           <- stylesheets (*.css)
-    >    '- md-template.html <- Html page template
+    > ~~~ bob
+    >  .----.
+    > ( root )                 <- template root directory
+    >  '-.--'
+    >    |- js                 <- javascripts "(*.js)"
+    >    |- katex              <- LateX math renderer
+    >    |- styles             <- stylesheets "(*.css)"
+    >    '- "md-template.html" <- Html page template
     > ~~~
     >
     > `md-template.html`
@@ -421,18 +441,21 @@ CUSTOMIZATION
     > Static site authoring projects have a default directory structure as shown
     > in the drawing below.
     >
-    > ~~~
-    > # root             <- project root
-    > |- html            <- config option: "site_dir"
-    > |- markdown        <- config option: "markdown_dir"
-    > |-    '- README.md <- initial content
-    > |- Template        <- config option: "HTML_template"
-    > |     |- js        <- javascripts (*.js)
-    > |     |- katex     <- LateX math renderer
-    > |     |- styles    <- stylesheets (*.css)
+    > ~~~ bob
+    > # root                    <- project root
+    > |- html                   <- config option "site_dir"
+    > |- markdown               <- config option "markdown_dir"
+    > |     |
+    > |     '- README.md        <- initial content
+    > |- Template               <- config option "HTML_template"
+    > |     |
+    > |     |- js               <- javascripts "(*.js)"
+    > |     |- katex            <- LaTeX math renderer
+    > |     |- styles           <- stylesheets "(*.css)"
     > |     '- md-template.html <- Html page template
-    > |- Build.json      <- project configuration
-    > '- Build.ps1       <- build script
+    > |
+    > |- Build.json             <- project configuration
+    > '- Build.ps1              <- build script
     > ~~~
     >
     > The Project Configuration File (`Build.json`):
@@ -536,34 +559,50 @@ CUSTOMIZATION
     >     |     - `{ "label text": "" }` - A navigation bar label without hyperlink.
     >     |        The label appearance os configured with option `navlabel`.
     >     |     - `{ "---": "" }` - Separator line in the navigation bar.
-    >     |       Configured with ` option `navseparator`.
+    >     |       Configured with option `navseparator`.
     >     |     Custom options can be added to this json file as needed for special
     >     |     build processes.
     >     +---------------------------------------------------------------------+
     >
     > The Project Build Script (`Build.ps1`)
     > :   The build script implements the Markdown conversion pipeline using the
-    >     configuration from `Build.json`.
-    >     ~~~
-    >                 Markdown Directory ("markdown_dir")
-    >                         |
-    >                         v
-    >             .-----------'------------.
-    >     1       |  Markdown File Scanner |
-    >             '-----------.------------'
-    >                         |
-    >                    Markdown files
-    >                         |
-    >            .------------'-------------.
-    >     2      | HTML Fragment Conversion |
-    >            '------------.-------------'
-    >                         |
-    >            .------------'-------------.    .- Template ("HTML_template")
-    >     3      | HTML Document Assembler  | <--+
-    >            '------------.-------------'    '- Content Map (Build.ps1)
-    >                         |
-    >                         v
-    >                  Static HTML Site ("site_dir")
+    >     configuration from `Build.json`. The build options for each stage are
+    >     mentioned in parenthesis in the diagram below
+    >
+    >     ~~~ bob
+    >           .-------------------------------------.
+    >          / Markdown Directory "(markdown_dir)" /
+    >         '-----------------.-------------------'
+    >                           |
+    >                           v
+    >              .------------o------------.
+    >     1        | Markdown File Collector |
+    >              '------------.------------'
+    >                           |
+    >                           v
+    >                .----------o--------------.
+    >               / Markdown files "(*.md)" /
+    >              '------------.------------'
+    >                           |
+    >                           v
+    >              .------------o------------.
+    >     2        | Markdown "Pre-Processor" |
+    >              '------------.------------'
+    >                           |
+    >                           v
+    >              .------------o------------.
+    >     3        | HTML Fragment Converter |
+    >              '------------.------------'
+    >                           |                  .----------------------------.
+    >                           v                .--\ Template "(HTML_template)" \
+    >              .------------o------------.   |   '----------------------------'
+    >     4        | HTML Document Assembler |<--+
+    >              '------------.------------'   | .---------------------------.
+    >                           |                '--\ Content Map "(Build.ps1)" \
+    >                           v                    '---------------------------'
+    >            .--------------o----------------.
+    >           / Static HTML Site "(site_dir)" /
+    >          '-------------------------------'
     >     ~~~
     >
     >     To implement custom build rules PowerShell code can be addes to the
