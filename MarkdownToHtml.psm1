@@ -65,7 +65,7 @@ this HTML fragment is generated:
 ~~~
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.4.0/Expand-HtmlTemplate.html
+https://wethat.github.io/MarkdownToHtml/2.5.0/Expand-HtmlTemplate.html
 #>
 function Expand-HtmlTemplate {
     [OutputType([string])]
@@ -205,7 +205,7 @@ The generated Html file objects are returned like so:
     ...          ...            ...            ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.4.0/Publish-StaticHtmlSite.html
+https://wethat.github.io/MarkdownToHtml/2.5.0/Publish-StaticHtmlSite.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -325,9 +325,9 @@ An `[System.IO.FileInfo]` object for each Markdown file found below
 the given directory. The emitted
 `[System.IO.FileInfo]` objects are annotated with a `NoteProperty` named
 `RelativePath` which specifies the relative path of the Markdown file below the
-given directory. The `RelativePath` property is
+directory specified in the `Path` parameter. The `RelativePath` property is
 **mandatory** if `Publish-StaticHtmlSite` is used in the downstream conversion
-pipeline.
+pipeline to generate HTML files in the correct locations.
 
 .EXAMPLE
 Find-MarkdownFiles -Path '...\Modules\MarkdownToHtml' | Select-Object -Property Mode,LastWriteTime,Length,Name,RelativePath | Format-Table
@@ -343,7 +343,7 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
     ...                   ...   ...                        ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.4.0/Find-MarkdownFiles.html
+https://wethat.github.io/MarkdownToHtml/2.5.0/Find-MarkdownFiles.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -394,15 +394,15 @@ Converts Markdown text to HTML fragments using configured
 [Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions).
 
 .PARAMETER InputObject
-The input object can have one of the following of types:
+The input object can have one of the following types:
 * An annotated `[System.IO.FileInfo]` object as emitted by `Find-MarkdownFiles`.
 * A plain markdown string [`string`].
-* A markdown descriptor object which is basically a [`hashtable`] whith following contents:
+* A markdown descriptor object which is a [`hashtable`] with following contents:
 
-  | Key            | Value Type | Description                                              |
-  | :------------- | :--------- | :------------------------------------------------------- |
-  | `Markdown`     | [`string`] | The markdown text.                                       |
-  | `RelativePath` | [`string`] | Relative path of the html file below the site directory. |
+  | Key            | Value Type | Description                                                   |
+  | :------------- | :--------- | :------------------------------------------------------------ |
+  | `Markdown`     | [`string`] | The markdown text.                                            |
+  | `RelativePath` | [`string`] | Relative path of the Markdown file below the input directory. |
 
 .PARAMETER IncludeExtension
 Comma separated list of Markdown parsing extension names.
@@ -425,7 +425,7 @@ HTML fragment object with following properties:
 | :------------: | :-------------------------------------------------------------- |
 | `Title`        | Optional page title. The first heading in the Markdown content. |
 | `HtmlFragment` | The HTML fragment string generated from the Markdown text.      |
-| `RelativePath` | Passed through form the input object, provided it exists.       |
+| `RelativePath` | Passed through from the input object, provided it exists.       |
 
 .NOTES
 The conversion to HTML fragments also includes:
@@ -495,7 +495,7 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
     RelativePath       Convert-MarkdownToHTML.md
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.4.0/Convert-MarkdownToHTMLFragment.html
+https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-MarkdownToHTMLFragment.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -688,7 +688,7 @@ Convert all Markdown files in `E:\MyMarkdownFiles` using
 The generated HTML files are saved to the directory `E:\MyHTMLFiles`.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.4.0/Convert-MarkdownToHTML.html
+https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-MarkdownToHTML.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -763,7 +763,7 @@ This function does not read from the pipe.
 The new conversion template directory `[System.IO.DirectoryInfo]`.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.4.0/New-HTMLTemplate.html
+https://wethat.github.io/MarkdownToHtml/2.5.0/New-HTMLTemplate.html
 .LINK
 `New-StaticHTMLSiteProject`
 
@@ -805,7 +805,7 @@ A single markdown file (`README.md`) is provided as initial content. It explains
 some customization options and the typical site authoring process.
 It is recommended to build the project by executing its build script
 `Build.ps1`. This creates the initial static HTML site with the HTML version of
-the README (`html/README.html`) which is more pleasant to read also showcases
+the README (`docs/README.html`) which is more pleasant to read also showcases
 some features.
 
 See [Project Customization](about_MarkdownToHTML.md#static-site-project-customization)
@@ -827,7 +827,7 @@ Create a new conversion project names 'MyProject' in the current directory. The
 project is ready for build.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.4.0/New-StaticHTMLSiteProject.html
+https://wethat.github.io/MarkdownToHtml/2.5.0/New-StaticHTMLSiteProject.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -860,7 +860,7 @@ function New-StaticHTMLSiteProject {
     Write-Information '' -InformationAction Continue
     Write-Information "Project '$($diritem.Name)' ready!" -InformationAction Continue
     Write-Information "1. Run the build script '$ProjectDirectory/Build.ps1'" -InformationAction Continue
-    Write-Information "2. Open '$ProjectDirectory/html/README.html' in the browser!" -InformationAction Continue
+    Write-Information "2. Open '$ProjectDirectory/docs/README.html' in the browser!" -InformationAction Continue
     $diritem
 }
 
@@ -884,10 +884,13 @@ Converts the specification for a single item in the navigation bar by
 * specification.
 
 .PARAMETER RelativePath
-Path to a Markdown file relative to the site root. That file's relative path
-is used to adjust the links of in the given navigation bar item,
-so that it can be reached from the location of the HTML page currently being
-assembled using the Markdown file.
+The path to a Markdown (`*.md`) or HTML (`*.html`) file relative to its
+corresponding root configured in `Build.json`. For Markdown files the
+root is configured by parameter `"markdown_dir"` for html files it is
+`"site_dir"`. This parameter will be used to compute relative resource
+and navigation bar links for the HTML page currently
+being assembled.
+
 The given path should use forward slash '/' path separators.
 
 .PARAMETER NavSpec
@@ -1070,7 +1073,7 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.4.0/ConvertTo-NavigationItem.html
+https://wethat.github.io/MarkdownToHtml/2.5.0/ConvertTo-NavigationItem.html
 .LINK
 `New-StaticHTMLSiteProject`
 .LINK
@@ -1195,10 +1198,13 @@ The table above maps supported key-value combinations to the associated named
 HTML templates.
 
 .PARAMETER RelativePath
-Path to a Markdown file relative to the site root. That file's relative path
-is used to adjust the links of in the given navigation bar item,
-so that it can be reached from the location of the HTML page currently being
-assembled using the Markdown file.
+The path to a Markdown (`*.md`) or HTML (`*.html`) file relative to its
+corresponding root configured in `Build.json`. For Markdown files the
+root is configured by parameter `"markdown_dir"` for html files it is
+`"site_dir"`. This parameter will be used to compute relative resource
+and navigation bar links for the HTML page currently
+being assembled.
+
 The given path should use forward slash '/' path separators.
 
 .PARAMETER NavTemplate
@@ -1281,7 +1287,7 @@ Output:
 Note how the relative path parameter was used to update the links.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.4.0/New-SiteNavigation.html
+https://wethat.github.io/MarkdownToHtml/2.5.0/New-SiteNavigation.html
 #>
 function New-SiteNavigation {
     [OutputType([string])]
@@ -1417,7 +1423,7 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.4.0/New-PageHeadingNavigation.html
+https://wethat.github.io/MarkdownToHtml/2.5.0/New-PageHeadingNavigation.html
 .LINK
 `New-StaticHTMLSiteProject`
 .LINK
@@ -1476,10 +1482,12 @@ site to compute valid resource links and update the template.
 An html fragment containing root-relative resource links.
 
 .PARAMETER RelativePath
-Path to a Markdown file relative to the site root. That file's relative path
+The path to a Markdown (`*.md`) or HTML (`*.html`) file relative to its root
+directory. That file's relative path
 is used to adjust the links of in the given navigation bar item,
 so that it can be reached from the location of the HTML page currently being
-assembled using the Markdown file.
+assembled.
+
 The given path should use forward slash '/' path separators.
 
 .INPUTS
@@ -1505,7 +1513,7 @@ Outut:
 ~~~
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.4.0/Update-ResourceLinks.html
+https://wethat.github.io/MarkdownToHtml/2.5.0/Update-ResourceLinks.html
 .LINK
 `Publish-StaticHtmlSite`
 #>
@@ -1534,8 +1542,8 @@ function Update-ResourceLinks {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUS5yr0uXqFCGlTIg9DI2hzkvA
-# pM+gggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUjksH200Z7u6Q5Tyakv63L50g
+# LKKgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1554,11 +1562,11 @@ function Update-ResourceLinks {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBR1LsPoCjtP+8sxA3GK7otwC7pY
-# BDANBgkqhkiG9w0BAQEFAASCAQA0NGK174CBK4VG+TNoGH8eh2RGBiogDzAyv1rL
-# Exni/uU2lYdjhqlXededItzqrKcEpm1JhH8q33yQv/8fxOn9fnpEGpPl1wX86pCM
-# UGtHiD/BXHXHmFSMmeGwuZgmPHRNCk4wv0dAUEWNP6Ehh6i1NwxDss9TmjPdP+Kl
-# LYoTYJ9LhzSPOBL5RzIhdA3lVY3TlNpXW5a8dwitVm4LCZ+a0bNGu7d2KdmbHT2q
-# 8nUOSlOl0XHSvtFxag24C5TMZUXsE8BuAl6MrOI2G9LKqyjJeNJ8ben5m+qX3f9E
-# 08bq1t3r8p4glNGNKldsXEnA4h7cIMM9M/UGEsZsi9Fo+oZA
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQ58bLLUavvDZ+cbNL3n7YmP1dY
+# vzANBgkqhkiG9w0BAQEFAASCAQA4b0J+sC16S2HqRD4rbC4vfzJ0VlN+Wm/MU8vi
+# odPXy1ztTviNB8D/0jVLSWOD0dDAz4vknF85IkdVKYaSgH0L4i4CBhWJPRG4y2lB
+# WKE+EBEdi9knTzGSCpXMTCzSq+9rRSoyddzWHmLS3/i2gT7Y3jD74RcXauP1O+X9
+# fjpoEtTmvVxvy+bNj0pZ6tqUBoA++dZ+CZdRz5bPkhFjTbQHvFwQHwKtmpAzwWJD
+# FcIxi3MioSKpvZxRB6/vLC2xHxMuG30nwTTyAmjJ3G58RMbZ2ZlvZbGTVfpeDDYU
+# BtXBAToBeuzgXrHgUgNvEbKm6sUKuf+9EKlw0GAwAlpQRzUq
 # SIG # End signature block
