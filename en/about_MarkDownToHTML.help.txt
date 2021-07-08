@@ -10,7 +10,7 @@ SHORT DESCRIPTION
 
     > * Out-of-the box support for diagrams, math typesetting and code syntax
     >   highlighting
-    > * Optional support for GitHub Pages.
+    > * Optional support for [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages).
     > * Highly configurable static website projects with configuration file and build
     >   script.
     > * Sites can be used offline (without connection to the internet). All
@@ -455,7 +455,7 @@ CUSTOMIZATION
     >
     > ~~~ bob
     > # root                      <- project root
-    > |- html                     <- "option 'site_dir' in Build.json"
+    > |- docs                     <- "option 'site_dir' in Build.json"
     > |- markdown                 <- "option 'markdown_dir' in Build.json"
     > |     |
     > |     '- README.md          <- initial content
