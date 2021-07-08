@@ -83,28 +83,27 @@ Open Source project on GitHub at: <a href="https://github.com/WetHat/MarkdownToH
 <h2 id="features">Features</h2>
 <blockquote>
 <ul>
-<li>Fully <em>hackable</em>.</li>
-<li>Out-of-the box support for diagrams, math typesetting and code syntax
-highlighting.</li>
+<li>Highly configurable static website projects with configuration file and build
+script.</li>
+<li>Optional support for <a href="https://docs.github.com/en/pages/getting-started-with-github-pages">GitHub Pages</a>.</li>
+<li>Sites can be used offline (without connection to the internet). All
+site assets are local.</li>
+<li>Out-of-the box support for:
+<ul>
+<li><a href="http://mermaid-js.github.io/mermaid/">Mermaid</a> diagrams and flowcharts.
+See the <a href="#mermaid-diagrams">example</a>.</li>
+<li><a href="https://ivanceras.github.io/content/Svgbob.html">Svgbob</a> plain text,
+human readable diagrams. See the <a href="#svgbob-plain-text-diagrams">example</a>.
+<strong>New!</strong></li>
+<li><a href="https://highlightjs.org/">highlight.js</a> code syntax highlighting.
+See the <a href="#code-syntax-highlighting">example</a>.</li>
+<li><a href="https://katex.org/">KaTeX</a> math typesetting.
+See the <a href="#latex-math">example</a>.</li>
+</ul>
+</li>
 <li>Based on <a href="https://github.com/lunet-io/markdig">Markdig</a>,
 a fast, powerful, <a href="http://commonmark.org/">CommonMark</a> compliant Markdown
 processor for .NET with more than 20 configurable extensions.</li>
-<li>Built with high quality Open Source web components:
-<ul>
-<li><strong>Code Highlighting</strong>: <a href="https://highlightjs.org/">highlight.js</a>; supports
-189 languages and 91 styles.</li>
-<li><strong>Math typesetting</strong>: <a href="https://katex.org/">KaTeX</a>; The fastest math
-typesetting library for the web.</li>
-<li><strong>Diagramming</strong>: <a href="http://mermaid-js.github.io/mermaid/">Mermaid</a>; Generation
-of diagrams and flowcharts from text in a similar manner as Markdown.
-<a href="https://ivanceras.github.io/svgbob-editor/">svgbob</a> for text based, human readable
-diagrams.</li>
-</ul>
-</li>
-<li>Highly configurable static website projects with configuration file and build
-script.</li>
-<li>Sites can be used offline (without connection to the internet). All
-site assets are local.</li>
 </ul>
 </blockquote>
 <h1 id="installation-and-update">Installation and Update</h1>
@@ -138,7 +137,8 @@ Check out the <a href="#latest-version">release notes</a> in the module's manife
 </blockquote>
 <h1 id="quickstart">Quickstart</h1>
 <ol>
-<li>Install the MarkdownToHTML. See section <a href="#installation">Istallation</a>.</li>
+<li>Install the MarkdownToHTML. See the <a href="#installation">Installation</a> section for more
+details.</li>
 <li>Open a PowerShell command shell.</li>
 </ol>
 <h2 id="convert-some-markdown-files-to-html">Convert Some Markdown Files to HTML</h2>
@@ -172,7 +172,7 @@ PS&gt; ./Build.ps1
 <h2 id="latest-version">Latest Version</h2>
 <blockquote>
 <ul>
-<li><strong>2.4.0</strong>: <a href="2.5.0/MarkdownToHTML.html">Documentation</a> - <a href="2.5.0/MarkdownToHTML.html#release-notes">Release Notes</a>.</li>
+<li><strong>2.5.0</strong>: <a href="2.5.0/MarkdownToHTML.html">Documentation</a> - <a href="2.5.0/MarkdownToHTML.html#release-notes">Release Notes</a>.</li>
 </ul>
 </blockquote>
 <h2 id="old-versions">Old Versions</h2>

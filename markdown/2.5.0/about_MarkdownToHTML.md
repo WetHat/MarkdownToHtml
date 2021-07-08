@@ -8,23 +8,34 @@ or sites.
 
 ## Features
 
-> * Open Source and fully _hackable_.
 > * Out-of-the box support for diagrams, math typesetting and code syntax
->   highlighting.
-> * Based on [Markdig](https://github.com/lunet-io/markdig),
->   a fast, powerful, [CommonMark](http://commonmark.org/) compliant Markdown
->   processor for .NET with more than 20 configurable extensions.
-> * Built with high quality Open Source web components:
->   - **Code Highlighting**: [highlight.js](https://highlightjs.org/); supports
->     189 languages and 91 styles.
->   - **Math typesetting**: [KaTeX](https://katex.org/); The fastest math
->     typesetting library for the web.
->   - **Diagramming**: [Mermaid](http://mermaid-js.github.io/mermaid/); Generation
->     of diagrams and flowcharts from text in a similar manner as Markdown.
+>   highlighting
+> * Optional support for [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages).
 > * Highly configurable static website projects with configuration file and build
->   script. See [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md).
+>   script.
 > * Sites can be used offline (without connection to the internet). All
 >   site assets are local.
+> * Based on [Markdig](https://github.com/lunet-io/markdig),
+>   a fast, powerful, [CommonMark](http://commonmark.org/) compliant Markdown
+>   processor for .NET with more than 20 configurable extensions. See also
+>   [Supported Markdown Extensions](#supported-markdown-extensions).
+> * Built with high quality Open Source components:
+>
+>   Code Syntax Highlighting
+>   :   [highlight.js](https://highlightjs.org/); supports
+>       189 languages and 91 styles. See the [example](../index.md#code-syntax-highlighting).
+>
+>   Math typesetting
+>   :   [KaTeX](https://katex.org/); Fast math typesetting library for the
+>       web. See the [example](../index.md#latex-math).
+>
+>   Diagramming
+>   :   - [Mermaid](http://mermaid-js.github.io/mermaid/): Generation
+>         of diagrams and flowcharts from text in a similar manner as Markdown.
+>         See the [example](../index.md#mermaid-diagrams).
+>       - [Svgbob](https://ivanceras.github.io/content/Svgbob.html): Text based, human readable
+>         diagrams. See the [example](../index.md#svgbob-plain-text-diagrams)
+>         and [Supported Markdown Preprocessors](#supported-markdown-preprocessors)
 
 # Long Description
 A collection of PowerShell commands to convert Markdown files to static
@@ -92,154 +103,155 @@ See the [customization](#customization) for options.
 > configuration in the HTML template (`md-template.html`). Refer to the
 > [`New-HTMLTemplate`](New-HTMLTemplate.md) for details.
 >
-> `abbreviations`
-> :   [Abbreviations](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AbbreviationSpecs.md)
+> +:---------------:+-----------------------------------------------------------------------------------------------+
+> | Extension       | Description                                                                                   |
+> +=================+===============================================================================================+
+> | abbreviations   | [Abbreviation](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AbbreviationSpecs.md)
+> |                 | elements representing an abbreviation or acronym
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | advanced        | Advanced parser configuration. A pre-build collection of                                      |
+> |                 | extensions including:                                                                         |
+> |                 |                                                                                               |
+> |                 | * 'abbreviations'                                                                             |
+> |                 | * 'autoidentifiers'                                                                           |
+> |                 | * 'citations'                                                                                 |
+> |                 | * 'customcontainers'                                                                          |
+> |                 | * 'definitionlists'                                                                           |
+> |                 | * 'emphasisextras'                                                                            |
+> |                 | * 'figures'                                                                                   |
+> |                 | * 'footers'                                                                                   |
+> |                 | * 'footnotes'                                                                                 |
+> |                 | * 'gridtables'                                                                                |
+> |                 | * 'mathematics'                                                                               |
+> |                 | * 'medialinks'                                                                                |
+> |                 | * 'pipetables'                                                                                |
+> |                 | * 'listextras'                                                                                |
+> |                 | * 'tasklists'                                                                                 |
+> |                 | * 'diagrams'                                                                                  |
+> |                 | * 'autolinks'                                                                                 |
+> |                 | * 'attributes'                                                                                |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | attributes      | [Special attributes](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GenericAttributesSpecs.md).
+> |                 | Set HTML attributes (e.g `id` or `class`).                                                    |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> |autoidentifiers  | [Auto-identifiers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoIdentifierSpecs.md).
+> |                 | Automatically creates an identifiers attributes (id) for headings.                            |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | autolinks       | [Auto-links](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoLinks.md)
+> |                 | generates links if a text starts with `http://` or `https://` or `ftp://` or `mailto:` or     |
+> |                 | `www.xxx.yyy`.                                                                                |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | bootstrap       | [Bootstrap](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/BootstrapSpecs.md)
+> |                 | classes auto-generation.                                                                      |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | citations       | [Citation text](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md)
+> |                 | by enclosing text with `''...''`                                                              |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | common          | CommonMark parsing; no parser extensions (default)                                            |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> |customcontainers | [Custom containers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/CustomContainerSpecs.md)
+> |                 | similar to fenced code block `:::` for generating a proper `<div>...</div>` instead.          |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> |definitionlists  | [Definition lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DefinitionListSpecs.md)
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | diagrams        | [Diagrams](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DiagramsSpecs.md)
+> |                 | whenever a fenced code block uses the 'mermaid' or `nomnoml` keyword,                         |
+> |                 | it will be converted to a div block with the content as-is                                    |
+> |                 | (currently, supports `mermaid` and `nomnoml` diagrams).                                       |
+> |                 | Resources for the `mermaid` diagram generator are pre-installed                               |
+> |                 | and configured.                                                                               |
+> |                 | See [New-HTMLTemplate](New-HTMLTemplate.md) for customization details.                        |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | emojis          | [Emoji](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmojiSpecs.md)|
+> |                 | support.                                                                                      |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | emphasisextras  | [Extra emphasis](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmphasisExtraSpecs.md)
+> |                 | markup:                                                                                       |
+> |                 | * strike through `~~`                                                                         |
+> |                 | * Subscript `~`                                                                               |
+> |                 | * Superscript `^`                                                                             |
+> |                 | * Inserted `++`                                                                               |
+> |                 | * Marked `==`                                                                                 |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | figures         | [Figures](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md).
+> |                 | A figure can be defined by using a pattern equivalent to a                                    |
+> |                 | fenced code block but with the character `^`.                                                 |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | footers         | [Footers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md).
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | footnotes       | [Footnotes](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FootnotesSpecs.md)
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | gfm-pipetables  | [Pipe tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md)
+> |                 | to generate tables from markup. Gfm pipe tables using header for column count.                |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | globalization   | [Globalization](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GlobalizationSpecs.md).
+> |                 | Adds support for RTL (Right To Left) content by adding `dir="rtl"` and `align="right"`        |
+> |                 | attributes to the appropriate html elements.                                                  |
+> |                 | Left to right text is not affected by this extension.                                         |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | gridtables      | [Grid tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GridTableSpecs.md)
+> |                 | allow to have multiple lines per cells and allows to span cells over multiple columns.        |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | hardlinebreak   | [Hard Linebreak](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/HardlineBreakSpecs.md)
+> |                 | A new line in a paragraph block will result in a hardline break `<br/>`:                      |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | listextras      | [Extra bullet lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/ListExtraSpecs.md),
+> |                 | supporting alpha bullet a. b. and roman bullet (i, ii...etc.)                                 |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | mathematics     | [Mathematics](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MathSpecs.md)
+> |                 | LaTeX extension by enclosing `$$` for block and `$` for inline math.                          |
+> |                 | Resources for this extension are pre-installed and configured.                                |
+> |                 | See [`New-HTMLTemplate`](New-HTMLTemplate.md) for customization details.                                             |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | medialinks      | [Media support](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md)
+> |                 | for media urls (youtube, vimeo, mp4...etc.).                                                  |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | nofollowlinks   | Add `rel=nofollow` to all links rendered to HTML.                                             |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | nohtml          | [NoHTML](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/NoHtmlSpecs.md)
+> |                 | disables the parsing of HTML embedded in Markdown text.                                       |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> |nonascii-noescape| Use this extension to disable URI escape with % characters for                                |
+> |                 | non-US-ASCII characters in order to workaround a bug under IE/Edge                            |
+> |                 | with local file links containing non US-ASCII chars. **DO NOT USE OTHERWISE**.                |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | noopenerlinks   | Add `rel=noopener` to all links rendered to HTML effectively telling                          |
+> |                 | the browser to open a link in a new tab without providing the context                         |
+> |                 | access to the webpage that opened the link.                                                   |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | noreferrerlinks | Add `rel=noreferrer` to all links rendered to HTML preventing                                 |
+> |                 | the browser, when you navigate to another page, to send                                       |
+> |                 | the referring webpage's address.                                                              |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | pipetables      | [Pipe tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md)
+> |                 | to generate tables from markup.                                                               |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | smartypants     | [SmartyPants](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/SmartyPantsSpecs.md)
+> |                 | quotes.                                                                                       |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | tasklists       | [Task Lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/TaskListSpecs.md).
+> |                 | A task list item consist of `[ ]` or `[x]` or `[X]` inside a list item (ordered or unordered) |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+> | yaml            | [YAML frontmatter](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/YamlSpecs.md)
+> |                 | parsing.                                                                                      |
+> +-----------------+-----------------------------------------------------------------------------------------------+
+
+## Supported Markdown Preprocessors
+
+> Preprocessors transform non-standard Markdown into a
+> [Markdig](https://github.com/lunet-io/markdig) compatible format.
 >
-> `advanced`
-> :   advanced parser configuration. A pre-build collection of extensions including:
->     * 'abbreviations'
->     * 'autoidentifiers'
->     * 'citations'
->     * 'customcontainers'
->     * 'definitionlists'
->     * 'emphasisextras'
->     * 'figures'
->     * 'footers'
->     * 'footnotes'
->     * 'gridtables'
->     * 'mathematics'
->     * 'medialinks'
->     * 'pipetables'
->     * 'listextras'
->     * 'tasklists'
->     * 'diagrams'
->     * 'autolinks'
->     * 'attributes'
+> The preprocessors included in this version are:
 >
-> `attributes`
-> :   [Special attributes](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GenericAttributesSpecs.md).
->     Set HTML attributes (e.g `id` or class`).
->
-> `autoidentifiers`
-> :    [Auto-identifiers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoIdentifierSpecs.md).
->      Automatically creates an identifiers attributes (id) for headings.
->
-> `autolinks`
-> :   [Auto-links](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoLinks.md)
->     generates links if a text starts with `http://` or `https://` or `ftp://` or `mailto:` or `www.xxx.yyy`.
->
-> `bootstrap`
-> :   [Bootstrap](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/BootstrapSpecs.md)
->     to output bootstrap classes.
->
-> `citations`
-> :   [Citation text](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md)
-> by enclosing text with `''...''`
->
-> `common`
-> :   CommonMark parsing; no parser extensions (default)
->
-> `customcontainers`
-> :   [Custom containers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/CustomContainerSpecs.md)
-> similar to fenced code block `:::` for generating a proper `<div>...</div>` instead.
->
-> `definitionlists`
-> :   [Definition lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DefinitionListSpecs.md)
->
-> `diagrams`
-> :   [Diagrams](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DiagramsSpecs.md)
->     whenever a fenced code block uses the 'mermaid' keyword, it will be converted to a div block with the content as-is
->     (currently, supports `mermaid` and `nomnoml` diagrams). Resources for the `mermaid` diagram generator are pre-installed and configured.
->     See [New-HTMLTemplate](New-HTMLTemplate.md) for customization details.
->
-> `emojis`
-> :   [Emoji](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmojiSpecs.md) support.
->
-> `emphasisextras`
-> :   [Extra emphasis](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmphasisExtraSpecs.md)
->     markup.
->
->     * strike through `~~`
->     * Subscript `~`
->     * Superscript `^`
->     * Inserted `++`
->     * Marked `==`
->
-> `figures`
-> :   [Figures](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md).
-> A figure can be defined by using a pattern equivalent to a fenced code block but with the character `^`.
->
-> `footers`
-> :   [Footers](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md).
->
-> `footnotes`
-> :   [Footnotes](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FootnotesSpecs.md)
->
-> [`gfm-pipetables`](gfm-pipetables.md)
-> :   [Pipe tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md)
->     to generate tables from markup. Gfm pipe tables using header for column count
->
-> `globalization`
-> :   [Globalization](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GlobalizationSpecs.md).
->     Adds support for RTL (Right To Left) content by adding `dir="rtl"` and `align="right"` attributes to
->     the appropriate html elements. Left to right text is not affected by this extension.
->
-> `gridtables`
-> :   [Grid tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GridTableSpecs.md)
->     allow to have multiple lines per cells and allows to span cells over multiple columns.
->
-> `hardlinebreak`
-> :   [Hard Linebreak](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/HardlineBreakSpecs.md)
->     a new line in a paragraph block will result in a hardline break `<br/>`:
->
-> `listextras`
-> :   Extra bullet lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/ListExtraSpecs.md),
->     supporting alpha bullet a. b. and roman bullet (i, ii...etc.)
->
-> `mathematics`
-> :   [Mathematics](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MathSpecs.md)
->     LaTeX extension by enclosing `$$` for block and `$` for inline math. Resources for this extension are pre-installed and configured.
->     See [`New-HTMLTemplate`](New-HTMLTemplate.md) for customization details.
->
-> `medialinks`
-> :   [Media support](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md)
->     for media urls (youtube, vimeo, mp4...etc.).
->
-> `nofollowlinks`
-> :   Add `rel=nofollow` to all links rendered to HTML.
->
-> `nohtml`
-> :   [NoHTML](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/NoHtmlSpecs.md)
->     allows to disable the parsing of HTML.
->
-> [`nonascii-noescape`](nonascii-noescape.md)
-> :   Use this extension to disable URI escape with % characters for non-US-ASCII characters in order to
->     workaround a bug under IE/Edge with local file links containing non US-ASCII chars. DO NOT USE OTHERWISE.
->
-> `noopenerlinks`
-> :   Add `rel=noopener` to all links rendered to HTML effectively telling
->     the browser to open a link in a new tab without providing the context access to the webpage that
->     opened the link.
->
-> `noreferrerlinks`
-> :   Add `rel=noreferrer` to all links rendered to HTML preventing the browser, when you navigate to
->     another page, to send the referring webpage's address.
->
-> `pipetables`
-> :   [Pipe tables](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md)
->     to generate tables from markup.
->
-> `smartypants`
-> :   [SmartyPants](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/SmartyPantsSpecs.md)
->     quotes.
->
-> `tasklists`
-> :   [Task Lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/TaskListSpecs.md).
->     A task list item consist of `[ ]` or `[x]` or `[X]` inside a list item (ordered or unordered)
->
-> `yaml`
-> :   [YAML frontmatter](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/YamlSpecs.md)
->     parsing.
+> + :--------: +-----------------------------------------------------------------+
+> |Preprocessor| Decription
+> +============+=================================================================+
+> | svgbob     | Convert text based, human readable diagrams to svg images.
+> |            | [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
+> |            | diagrams are defined in fenced code blocks labelled
+> |            | with `bob`. Refer to the documentation for the preprocessor
+> |            | [`Convert-SvgbobToSvg`](Convert-SvgbobToSvg.md) for more details.
+> +------------+-----------------------------------------------------------------+
 
 # Usage
 This module supports a range of workflows involving conversion of Markdown
@@ -272,20 +284,20 @@ text to HTML. The most common uses cases are outlined below.
 > The code snippet above generates a fully functional static HTML site:
 >
 > ~~~ bob
-> #                          <- project root
-> |- html                    <- build output "(static site)"
-> |- markdown                <- authored Markdown content
+> #                           <- project root
+> |- html                     <- build output "(static site)"
+> |- markdown                 <- authored Markdown content
 > |     |
-> |     '- README.md         <- initial content
-> |- Template                <- template resources
+> |     '- README.md          <- initial content
+> |- Template                 <- template resources
 > |     |
-> |     |- js                <- javascripts "(*.js)"
-> |     |- katex             <- LaTeX math renderer
-> |     |- styles            <- stylesheets "(*.css)"
-> |     '- md-template.html  <- Html page template
+> |     |- js                 <- javascripts "(*.js)"
+> |     |- katex              <- LaTeX math renderer
+> |     |- styles             <- stylesheets "(*.css)"
+> |     '- "md-template.html" <- Html page template
 > |
-> |- Build.json              <- project configuration
-> '- Build.ps1               <- build script
+> |- Build.json               <- project configuration
+> '- Build.ps1                <- build script
 > ~~~
 >
 > The build script `Build.ps1` generates a `html/README.html` file which is
@@ -442,20 +454,20 @@ conversion process you should
 > in the drawing below.
 >
 > ~~~ bob
-> # root                    <- project root
-> |- html                   <- "site_dir" config option
-> |- markdown               <- "markdown_dir" config option
+> # root                      <- project root
+> |- html                     <- "option 'site_dir' in Build.json"
+> |- markdown                 <- "option 'markdown_dir' in Build.json"
 > |     |
-> |     '- README.md        <- initial content
-> |- Template               <- "HTML_template" config option
+> |     '- README.md          <- initial content
+> |- Template                 <- "option 'HTML_template' in Build.json".
 > |     |
-> |     |- js               <- javascripts "(*.js)"
-> |     |- katex            <- LaTeX math renderer
-> |     |- styles           <- stylesheets "(*.css)"
-> |     '- md-template.html <- Html page template
+> |     |- js                 <- javascripts "(*.js)"
+> |     |- katex              <- LaTeX math renderer
+> |     |- styles             <- stylesheets "(*.css)"
+> |     '- "md-template.html" <- Html page template
 > |
-> |- Build.json             <- project configuration
-> '- Build.ps1              <- build script
+> |- Build.json               <- project configuration
+> '- Build.ps1                <- build script
 > ~~~
 >
 > The Project Configuration File (`Build.json`):

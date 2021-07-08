@@ -60,6 +60,7 @@
 <button class='navitem'><a href='#features'><span class='navitem2'>Features</span></a></button>
 <button class='navitem'><a href='#long-description'><span class='navitem1'>Long Description</span></a></button>
 <button class='navitem'><a href='#supported-markdown-extensions'><span class='navitem2'>Supported Markdown Extensions</span></a></button>
+<button class='navitem'><a href='#supported-markdown-preprocessors'><span class='navitem2'>Supported Markdown Preprocessors</span></a></button>
 <button class='navitem'><a href='#usage'><span class='navitem1'>Usage</span></a></button>
 <button class='navitem'><a href='#converting-markdown-files-to-html-files'><span class='navitem2'>Converting Markdown files to HTML files</span></a></button>
 <button class='navitem'><a href='#static-html-site-authoring-projects'><span class='navitem2'>Static HTML Site Authoring Projects</span></a></button>
@@ -81,26 +82,38 @@ or sites.</p>
 <h2 id="features">Features</h2>
 <blockquote>
 <ul>
-<li>Open Source and fully <em>hackable</em>.</li>
 <li>Out-of-the box support for diagrams, math typesetting and code syntax
-highlighting.</li>
-<li>Based on <a href="https://github.com/lunet-io/markdig">Markdig</a>,
-a fast, powerful, <a href="http://commonmark.org/">CommonMark</a> compliant Markdown
-processor for .NET with more than 20 configurable extensions.</li>
-<li>Built with high quality Open Source web components:
-<ul>
-<li><strong>Code Highlighting</strong>: <a href="https://highlightjs.org/">highlight.js</a>; supports
-189 languages and 91 styles.</li>
-<li><strong>Math typesetting</strong>: <a href="https://katex.org/">KaTeX</a>; The fastest math
-typesetting library for the web.</li>
-<li><strong>Diagramming</strong>: <a href="http://mermaid-js.github.io/mermaid/">Mermaid</a>; Generation
-of diagrams and flowcharts from text in a similar manner as Markdown.</li>
-</ul>
-</li>
+highlighting</li>
+<li>Optional support for <a href="https://docs.github.com/en/pages/getting-started-with-github-pages">GitHub Pages</a>.</li>
 <li>Highly configurable static website projects with configuration file and build
-script. See <a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a>.</li>
+script.</li>
 <li>Sites can be used offline (without connection to the internet). All
 site assets are local.</li>
+<li>Based on <a href="https://github.com/lunet-io/markdig">Markdig</a>,
+a fast, powerful, <a href="http://commonmark.org/">CommonMark</a> compliant Markdown
+processor for .NET with more than 20 configurable extensions. See also
+<a href="#supported-markdown-extensions">Supported Markdown Extensions</a>.</li>
+<li>Built with high quality Open Source components:
+<dl>
+<dt>Code Syntax Highlighting</dt>
+<dd><a href="https://highlightjs.org/">highlight.js</a>; supports
+189 languages and 91 styles. See the <a href="../index.html#code-syntax-highlighting">example</a>.</dd>
+<dt>Math typesetting</dt>
+<dd><a href="https://katex.org/">KaTeX</a>; Fast math typesetting library for the
+web. See the <a href="../index.html#latex-math">example</a>.</dd>
+<dt>Diagramming</dt>
+<dd>
+<ul>
+<li><a href="http://mermaid-js.github.io/mermaid/">Mermaid</a>: Generation
+of diagrams and flowcharts from text in a similar manner as Markdown.
+See the <a href="../index.html#mermaid-diagrams">example</a>.</li>
+<li><a href="https://ivanceras.github.io/content/Svgbob.html">Svgbob</a>: Text based, human readable
+diagrams. See the <a href="../index.html#svgbob-plain-text-diagrams">example</a>
+and <a href="#supported-markdown-preprocessors">Supported Markdown Preprocessors</a></li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 </blockquote>
 <h1 id="long-description">Long Description</h1>
@@ -129,12 +142,25 @@ supported extensions which are used by <a href="Convert-MarkdownToHTML.html"><co
 <p><strong>Note</strong>: The 'mathematics' and 'diagramming' extensions require additional
 configuration in the HTML template (<code>md-template.html</code>). Refer to the
 <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a> for details.</p>
-<dl>
-<dt><code>abbreviations</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AbbreviationSpecs.md">Abbreviations</a></dd>
-<dt><code>advanced</code></dt>
-<dd>
-<p>advanced parser configuration. A pre-build collection of extensions including:</p>
+<table>
+<col style="width:15.18%" />
+<col style="width:84.82%" />
+<thead>
+<tr>
+<th style="text-align: center;">Extension</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">abbreviations</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AbbreviationSpecs.md">Abbreviation</a>
+elements representing an abbreviation or acronym</td>
+</tr>
+<tr>
+<td style="text-align: center;">advanced</td>
+<td><p>Advanced parser configuration. A pre-build collection of
+extensions including:</p>
 <ul>
 <li>'abbreviations'</li>
 <li>'autoidentifiers'</li>
@@ -155,40 +181,66 @@ configuration in the HTML template (<code>md-template.html</code>). Refer to the
 <li>'autolinks'</li>
 <li>'attributes'</li>
 </ul>
-</dd>
-<dt><code>attributes</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GenericAttributesSpecs.md">Special attributes</a>.
-Set HTML attributes (e.g <code>id</code> or class`).</dd>
-<dt><code>autoidentifiers</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoIdentifierSpecs.md">Auto-identifiers</a>.
-Automatically creates an identifiers attributes (id) for headings.</dd>
-<dt><code>autolinks</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoLinks.md">Auto-links</a>
-generates links if a text starts with <code>http://</code> or <code>https://</code> or <code>ftp://</code> or <code>mailto:</code> or <code>www.xxx.yyy</code>.</dd>
-<dt><code>bootstrap</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/BootstrapSpecs.md">Bootstrap</a>
-to output bootstrap classes.</dd>
-<dt><code>citations</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md">Citation text</a>
-by enclosing text with <code>&#39;&#39;...&#39;&#39;</code></dd>
-<dt><code>common</code></dt>
-<dd>CommonMark parsing; no parser extensions (default)</dd>
-<dt><code>customcontainers</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/CustomContainerSpecs.md">Custom containers</a>
-similar to fenced code block <code>:::</code> for generating a proper <code>&lt;div&gt;...&lt;/div&gt;</code> instead.</dd>
-<dt><code>definitionlists</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DefinitionListSpecs.md">Definition lists</a></dd>
-<dt><code>diagrams</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DiagramsSpecs.md">Diagrams</a>
-whenever a fenced code block uses the 'mermaid' keyword, it will be converted to a div block with the content as-is
-(currently, supports <code>mermaid</code> and <code>nomnoml</code> diagrams). Resources for the <code>mermaid</code> diagram generator are pre-installed and configured.
-See <a href="New-HTMLTemplate.html">New-HTMLTemplate</a> for customization details.</dd>
-<dt><code>emojis</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmojiSpecs.md">Emoji</a> support.</dd>
-<dt><code>emphasisextras</code></dt>
-<dd>
-<p><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmphasisExtraSpecs.md">Extra emphasis</a>
-markup.</p>
+</td>
+</tr>
+<tr>
+<td style="text-align: center;">attributes</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GenericAttributesSpecs.md">Special attributes</a>.
+Set HTML attributes (e.g <code>id</code> or <code>class</code>).</td>
+</tr>
+<tr>
+<td style="text-align: center;">autoidentifiers</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoIdentifierSpecs.md">Auto-identifiers</a>.
+Automatically creates an identifiers attributes (id) for headings.</td>
+</tr>
+<tr>
+<td style="text-align: center;">autolinks</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/AutoLinks.md">Auto-links</a>
+generates links if a text starts with <code>http://</code> or <code>https://</code> or <code>ftp://</code> or <code>mailto:</code> or
+<code>www.xxx.yyy</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">bootstrap</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/BootstrapSpecs.md">Bootstrap</a>
+classes auto-generation.</td>
+</tr>
+<tr>
+<td style="text-align: center;">citations</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md">Citation text</a>
+by enclosing text with <code>&#39;&#39;...&#39;&#39;</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">common</td>
+<td>CommonMark parsing; no parser extensions (default)</td>
+</tr>
+<tr>
+<td style="text-align: center;">customcontainers</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/CustomContainerSpecs.md">Custom containers</a>
+similar to fenced code block <code>:::</code> for generating a proper <code>&lt;div&gt;...&lt;/div&gt;</code> instead.</td>
+</tr>
+<tr>
+<td style="text-align: center;">definitionlists</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DefinitionListSpecs.md">Definition lists</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">diagrams</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/DiagramsSpecs.md">Diagrams</a>
+whenever a fenced code block uses the 'mermaid' or <code>nomnoml</code> keyword,
+it will be converted to a div block with the content as-is
+(currently, supports <code>mermaid</code> and <code>nomnoml</code> diagrams).
+Resources for the <code>mermaid</code> diagram generator are pre-installed
+and configured.
+See <a href="New-HTMLTemplate.html">New-HTMLTemplate</a> for customization details.</td>
+</tr>
+<tr>
+<td style="text-align: center;">emojis</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmojiSpecs.md">Emoji</a>
+support.</td>
+</tr>
+<tr>
+<td style="text-align: center;">emphasisextras</td>
+<td><p><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/EmphasisExtraSpecs.md">Extra emphasis</a>
+markup:</p>
 <ul>
 <li>strike through <code>~~</code></li>
 <li>Subscript <code>~</code></li>
@@ -196,65 +248,136 @@ markup.</p>
 <li>Inserted <code>++</code></li>
 <li>Marked <code>==</code></li>
 </ul>
-</dd>
-<dt><code>figures</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md">Figures</a>.
-A figure can be defined by using a pattern equivalent to a fenced code block but with the character <code>^</code>.</dd>
-<dt><code>footers</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md">Footers</a>.</dd>
-<dt><code>footnotes</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FootnotesSpecs.md">Footnotes</a></dd>
-<dt><a href="gfm-pipetables.html"><code>gfm-pipetables</code></a></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md">Pipe tables</a>
-to generate tables from markup. Gfm pipe tables using header for column count</dd>
-<dt><code>globalization</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GlobalizationSpecs.md">Globalization</a>.
-Adds support for RTL (Right To Left) content by adding <code>dir=&quot;rtl&quot;</code> and <code>align=&quot;right&quot;</code> attributes to
-the appropriate html elements. Left to right text is not affected by this extension.</dd>
-<dt><code>gridtables</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GridTableSpecs.md">Grid tables</a>
-allow to have multiple lines per cells and allows to span cells over multiple columns.</dd>
-<dt><code>hardlinebreak</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/HardlineBreakSpecs.md">Hard Linebreak</a>
-a new line in a paragraph block will result in a hardline break <code>&lt;br/&gt;</code>:</dd>
-<dt><code>listextras</code></dt>
-<dd>Extra bullet lists](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/ListExtraSpecs.md),
-supporting alpha bullet a. b. and roman bullet (i, ii...etc.)</dd>
-<dt><code>mathematics</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MathSpecs.md">Mathematics</a>
-LaTeX extension by enclosing <code>$$</code> for block and <code>$</code> for inline math. Resources for this extension are pre-installed and configured.
-See <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a> for customization details.</dd>
-<dt><code>medialinks</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md">Media support</a>
-for media urls (youtube, vimeo, mp4...etc.).</dd>
-<dt><code>nofollowlinks</code></dt>
-<dd>Add <code>rel=nofollow</code> to all links rendered to HTML.</dd>
-<dt><code>nohtml</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/NoHtmlSpecs.md">NoHTML</a>
-allows to disable the parsing of HTML.</dd>
-<dt><a href="nonascii-noescape.html"><code>nonascii-noescape</code></a></dt>
-<dd>Use this extension to disable URI escape with % characters for non-US-ASCII characters in order to
-workaround a bug under IE/Edge with local file links containing non US-ASCII chars. DO NOT USE OTHERWISE.</dd>
-<dt><code>noopenerlinks</code></dt>
-<dd>Add <code>rel=noopener</code> to all links rendered to HTML effectively telling
-the browser to open a link in a new tab without providing the context access to the webpage that
-opened the link.</dd>
-<dt><code>noreferrerlinks</code></dt>
-<dd>Add <code>rel=noreferrer</code> to all links rendered to HTML preventing the browser, when you navigate to
-another page, to send the referring webpage's address.</dd>
-<dt><code>pipetables</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md">Pipe tables</a>
-to generate tables from markup.</dd>
-<dt><code>smartypants</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/SmartyPantsSpecs.md">SmartyPants</a>
-quotes.</dd>
-<dt><code>tasklists</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/TaskListSpecs.md">Task Lists</a>.
-A task list item consist of <code>[ ]</code> or <code>[x]</code> or <code>[X]</code> inside a list item (ordered or unordered)</dd>
-<dt><code>yaml</code></dt>
-<dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/YamlSpecs.md">YAML frontmatter</a>
-parsing.</dd>
-</dl>
+</td>
+</tr>
+<tr>
+<td style="text-align: center;">figures</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md">Figures</a>.
+A figure can be defined by using a pattern equivalent to a
+fenced code block but with the character <code>^</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">footers</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md">Footers</a>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">footnotes</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FootnotesSpecs.md">Footnotes</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">gfm-pipetables</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md">Pipe tables</a>
+to generate tables from markup. Gfm pipe tables using header for column count.</td>
+</tr>
+<tr>
+<td style="text-align: center;">globalization</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GlobalizationSpecs.md">Globalization</a>.
+Adds support for RTL (Right To Left) content by adding <code>dir=&quot;rtl&quot;</code> and <code>align=&quot;right&quot;</code>
+attributes to the appropriate html elements.
+Left to right text is not affected by this extension.</td>
+</tr>
+<tr>
+<td style="text-align: center;">gridtables</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/GridTableSpecs.md">Grid tables</a>
+allow to have multiple lines per cells and allows to span cells over multiple columns.</td>
+</tr>
+<tr>
+<td style="text-align: center;">hardlinebreak</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/HardlineBreakSpecs.md">Hard Linebreak</a>
+A new line in a paragraph block will result in a hardline break <code>&lt;br/&gt;</code>:</td>
+</tr>
+<tr>
+<td style="text-align: center;">listextras</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/ListExtraSpecs.md">Extra bullet lists</a>,
+supporting alpha bullet a. b. and roman bullet (i, ii...etc.)</td>
+</tr>
+<tr>
+<td style="text-align: center;">mathematics</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MathSpecs.md">Mathematics</a>
+LaTeX extension by enclosing <code>$$</code> for block and <code>$</code> for inline math.
+Resources for this extension are pre-installed and configured.
+See <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a> for customization details.                                             |</td>
+</tr>
+<tr>
+<td style="text-align: center;">medialinks</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md">Media support</a>
+for media urls (youtube, vimeo, mp4...etc.).</td>
+</tr>
+<tr>
+<td style="text-align: center;">nofollowlinks</td>
+<td>Add <code>rel=nofollow</code> to all links rendered to HTML.</td>
+</tr>
+<tr>
+<td style="text-align: center;">nohtml</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/NoHtmlSpecs.md">NoHTML</a>
+disables the parsing of HTML embedded in Markdown text.</td>
+</tr>
+<tr>
+<td style="text-align: center;">nonascii-noescape</td>
+<td>Use this extension to disable URI escape with % characters for
+non-US-ASCII characters in order to workaround a bug under IE/Edge
+with local file links containing non US-ASCII chars. <strong>DO NOT USE OTHERWISE</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">noopenerlinks</td>
+<td>Add <code>rel=noopener</code> to all links rendered to HTML effectively telling
+the browser to open a link in a new tab without providing the context
+access to the webpage that opened the link.</td>
+</tr>
+<tr>
+<td style="text-align: center;">noreferrerlinks</td>
+<td>Add <code>rel=noreferrer</code> to all links rendered to HTML preventing
+the browser, when you navigate to another page, to send
+the referring webpage's address.</td>
+</tr>
+<tr>
+<td style="text-align: center;">pipetables</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/PipeTableSpecs.md">Pipe tables</a>
+to generate tables from markup.</td>
+</tr>
+<tr>
+<td style="text-align: center;">smartypants</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/SmartyPantsSpecs.md">SmartyPants</a>
+quotes.</td>
+</tr>
+<tr>
+<td style="text-align: center;">tasklists</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/TaskListSpecs.md">Task Lists</a>.
+A task list item consist of <code>[ ]</code> or <code>[x]</code> or <code>[X]</code> inside a list item (ordered or unordered)</td>
+</tr>
+<tr>
+<td style="text-align: center;">yaml</td>
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/YamlSpecs.md">YAML frontmatter</a>
+parsing.</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h2 id="supported-markdown-preprocessors">Supported Markdown Preprocessors</h2>
+<blockquote>
+<p>Preprocessors transform non-standard Markdown into a
+<a href="https://github.com/lunet-io/markdig">Markdig</a> compatible format.</p>
+<p>The preprocessors included in this version are:</p>
+<table>
+<col style="width:15.58%" />
+<col style="width:84.42%" />
+<thead>
+<tr>
+<th style="text-align: center;">Preprocessor</th>
+<th>Decription</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">svgbob</td>
+<td>Convert text based, human readable diagrams to svg images.
+<a href="https://ivanceras.github.io/content/Svgbob.html">Svgbob</a>
+diagrams are defined in fenced code blocks labelled
+with <code>bob</code>. Refer to the documentation for the preprocessor
+<a href="Convert-SvgbobToSvg.html"><code>Convert-SvgbobToSvg</code></a> for more details.</td>
+</tr>
+</tbody>
+</table>
 </blockquote>
 <h1 id="usage">Usage</h1>
 <p>This module supports a range of workflows involving conversion of Markdown

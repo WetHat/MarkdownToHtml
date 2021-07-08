@@ -213,7 +213,7 @@ The svg conversion is performed by the external utility
 # Related Links
 
 * [https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-SvgbobToSvg.html](https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-SvgbobToSvg.html) 
-* [Svgbob](https://ivanceras.github.io/svgbob-editor/)
+* [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
 
 ---
 
