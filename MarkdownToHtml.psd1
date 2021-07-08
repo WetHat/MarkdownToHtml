@@ -33,6 +33,16 @@ Description = @'
 A collection of PowerShell commands to convert Markdown files to static
 HTML sites in various ways.
 
+## Components packaged with this module:
+
+| Component                                               |Version | Description
+|---------------------------------------------------------|--------|-----------------------------------
+| [Markdig](https://github.com/lunet-io/markdig)          | 0.25.0 | Fast Markdown processor for .NET
+| [highlight.js](https://highlightjs.org/)                | 9.17.1 | Code syntax highlighter
+| [KaTeX](https://katex.org/)                             | 0.13.11| Math typesetting
+| [Mermaid](http://mermaid-js.github.io/mermaid/)         | 8.10.1 | Diagramming
+|[Svgbob](https://ivanceras.github.io/content/Svgbob.html)| 0.5.0  | Text based diagrammimg
+
 # Known Incompatibilities
 
 If you have have conversion projects which use the _mathematics_ extensions and
@@ -140,6 +150,101 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
+## 2.5.0 {#2.5.0}
+
+* [Markdig](https://github.com/lunet-io/markdig)  update to version 0.25.0
+* Support for publishing static websites to
+  [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages).
+
+  This new feature is backwards compatible with existing static site projects.
+  However, if you want to use this new feature in existing site projects
+  following changes must be applied:
+
+  `Build.json` project configuration file
+  :   The `site_dir` option needs to be changed and a new option `github_pages`
+      must be added as shown below:
+
+      ~~~ json
+      {
+         ...
+
+         "site_dir": "docs",
+         ...
+         "github_pages": false,
+         ...
+      }
+      ~~~
+
+      Using the name `docs` for the site directory makes it possible to check-in
+      the entire conversion project as-is. As soon as _GitHub Pages_ are
+      enabled and configured to publish the static site from the `docs`
+      directory, the site is accessible on the web through its canonical
+      _GitHub Pages_ url.
+
+  :   Add a statement to disable the GitHub publishing process (jekyll) which
+      is not necessary for static sites created by this module. Add
+      following code to the end of the build file:
+
+      ~~~ PowerShell
+      ...
+      if ($config.github_pages) {
+	      # Switch off Jekyll publishing when building for GitHub pages
+	      New-Item -Path $staticSite -Name .nojekyll -ItemType File
+      }
+      ~~~
+* Added a Markdown pre-processing step to the conversion pipelione.
+
+  The default preprocessing converts [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
+  character art diagrams to svg images. See the
+  [feature showcase](../index.html#svgbob-plain-text-diagrams)
+  for an example.
+
+  This new feature is backwards compatible with existing static site projects.
+  However, if you want to use `Svgbob` diagrams in existing site projects
+  following changes must be made:
+
+  `Build.json` project configuration file
+  :   A new option `svgbob` option needs to be added to for configuration
+      of the svg conversion.
+
+      ~~~ json
+      {
+         ...
+         "svgbob": {
+            "background":   "white",
+            "fill_color":   "black",
+            "font_size":    14,
+            "font_family":  "Monospace",
+            "scale":        1,
+            "stroke_width": 2
+        }
+      }
+      ~~~
+
+      See [Static Site Project Customization](about_MarkdownToHTML.md#static-site-project-customization)
+      for more details.
+
+    `Build.json` project configuration file
+    :   A Preprocessing stage needs to be added to the conversion pipeline:
+
+        ~~~ PowerShell
+        # Conversion pipeline
+        $SCRIPT:markdown = Join-Path $projectDir $config.markdown_dir
+        Find-MarkdownFiles $markdown -Exclude $config.Exclude `
+        | ForEach-Object { # Markdown Preprocessor
+            Get-Content $_ -Encoding UTF8 `
+            | Convert-SvgbobToSvg -SiteDirectory $staticSite `
+                                  -RelativePath $_.RelativePath `
+                                  -Options $SCRIPT:config.svgbob `
+            | Complete-MarkdownPreprocessor -RelativePath $_.RelativePath
+          }`
+        | Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions `
+        | Publish-StaticHTMLSite -Template (Join-Path $projectDir $config.HTML_Template) `
+                                 -ContentMap  $contentMap `
+						         -MediaDirectory $markdown `
+	                             -SiteDirectory $staticSite
+        ~~~
+
 ## 2.4.0 {#2.4.0}
 
 * Navigation bar improvements (Static HTML site projects):
