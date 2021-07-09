@@ -43,13 +43,13 @@ the rendered diagram.
 Svgbob code blocks define human readable diagrams and are labeled as `bob`.
 For example:
 
-~~~ Markdown
-˜˜˜ bob
+``` Markdown
+~~~ bob
       +------+   .-.   +---+
  o----| elem |--( ; )--| n |----o
       +------+   '-'   +---+
-˜˜˜
 ~~~
+```
 
 The generated svg file is put right next to the HTML file
 currently being assembled and named after that HTML file with an unique
@@ -100,17 +100,17 @@ Where
 
 `$md`
 :   represents a file named `test.md` which contains a fenced svgbob diagram.
-    ~~~ Markdown
+    ``` Markdown
     Some text ...
 
-    ˜˜˜ bob
+    ~~~ bob
           +------+   .-.   +---+
      o----| elem |--( ; )--| n |----o
           +------+   '-'   +---+
-    ˜˜˜
+    ~~~
 
     Some more text ...
-    ~~~
+    ```
 
 this is converted to:
 
@@ -195,6 +195,7 @@ function Convert-SvgbobToSvg {
             if ($bob -is [Array]) {
                 if ($itm -eq '</code>') {
                     # svgbob drawing complete
+                    $n++
                     $svgname = $fullpath.BaseName + "$n.svg"
                     # replace the fenced code block by a hyperlink
                     $fragment[$i] = "<img src='$svgname' alt='Diagram ${n}.' />"
@@ -206,6 +207,7 @@ function Convert-SvgbobToSvg {
                     }
 
                     $svgfullpath = Join-Path $fullpath.DirectoryName $svgname
+
                     # do the conversion
                     $bob | & $SCRIPT:svgbob -o "$svgfullpath" `
                                             --background   $background `
@@ -217,7 +219,7 @@ function Convert-SvgbobToSvg {
                     $bob = $null # starting over
                 }
                 else {
-                    $bob += [System.Net.WebUtility]::HtmlDecode($itm)
+                    $bob += [System.Net.WebUtility]::HtmlDecode($itm.TrimEnd())
                     $fragment[$i] = [string]::Empty
                 }
             }
