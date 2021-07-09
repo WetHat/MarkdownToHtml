@@ -42,14 +42,9 @@ $SCRIPT:contentMap = @{
 # Conversion pipeline
 $SCRIPT:markdown = Join-Path $projectDir $config.markdown_dir
 Find-MarkdownFiles $markdown -Exclude $config.Exclude `
-| ForEach-Object { # Markdown Preprocessor
-    Get-Content $_ -Encoding UTF8 `
-    | Convert-SvgbobToSvg -SiteDirectory $staticSite `
-                          -RelativePath $_.RelativePath `
-                          -Options $SCRIPT:config.svgbob `
-    | Complete-MarkdownPreprocessor -RelativePath $_.RelativePath
-  }`
-| Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions `
+| Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions -Split `
+| Convert-SvgbobToSvg -SiteDirectory $staticSite -Options $SCRIPT:config.svgbob `
+| Complete-HtmlFragment `
 | Publish-StaticHTMLSite -Template (Join-Path $projectDir $config.HTML_Template) `
                          -ContentMap  $contentMap `
 						 -MediaDirectory $markdown `

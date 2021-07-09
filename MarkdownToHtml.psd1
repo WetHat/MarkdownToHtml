@@ -84,11 +84,11 @@ RequiredAssemblies = @('Markdig.dll')
 # FormatsToProcess = @()
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-NestedModules = @('MarkdownPreprocessor.psm1')
+NestedModules = @('HtmlFragments.psm1')
 
 # Functions to export from this module
 FunctionsToExport = @(
-                        'Complete-MarkdownPreprocessor'
+                        'Complete-HtmlFragment'
                         'Convert-MarkdownToHTML'
                         'Convert-MarkdownToHTMLFragment'
                         'Convert-SvgbobToSvg'
@@ -115,13 +115,13 @@ AliasesToExport = '*'
 # List of all modules packaged with this module
 ModuleList = @(
                 'MarkdownToHtml.psm1'
-                'MarkdownPreprocessor.psm1'
+                'HtmlFragments.psm1'
               )
 
 # List of all files packaged with this module
 FileList = @(
 	            'MarkdownToHtml.psm1'
-                'MarkdownPreprocessor.psm1'
+                'HtmlFragments.psm1'
 	            'Markdig.dll'
                 'svgbob.exe'
                 'System.Memory.dll'
