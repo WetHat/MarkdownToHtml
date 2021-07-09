@@ -5,7 +5,7 @@
 $OutputEncoding =  [Text.UTF8Encoding]::new($false)
 
 # Match hyperlinks to Markdown files
-$SCRIPT:mdhrefRE = New-Object Regex '(?<=^<a [^>]* href=")([^"]+).(md|markdown)(?=["#])'
+$SCRIPT:mdhrefRE = New-Object Regex '(?<=^<a[^>]*href=")([^"]+)\.(md|markdown)(?=["#])'
 
 <#
 #>
