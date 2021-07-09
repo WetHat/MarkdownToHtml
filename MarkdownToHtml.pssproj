@@ -74,11 +74,11 @@ Protect-whPoshModule $pwd -Store Root
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug.ps1" />
+    <Compile Include="HtmlFragments.psm1" />
     <Compile Include="MarkdownToHtml.psd1" />
     <Compile Include="MarkdownToHtml.psm1" />
     <Compile Include="MarkdownToHtml.tests.ps1" />
     <Compile Include="ProjectTemplate\Build.ps1" />
-    <Compile Include="MarkdownPreprocessor.psm1" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
