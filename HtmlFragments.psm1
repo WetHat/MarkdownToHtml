@@ -4,7 +4,7 @@
 # Send utf8 without BOM throught the pipe to external programs
 $OutputEncoding =  [Text.UTF8Encoding]::new($false)
 
-# Match hyprlinks to Markdown files
+# Match hyperlinks to Markdown files
 $SCRIPT:mdhrefRE = New-Object Regex '(?<=^<a [^>]* href=")([^"]+).(md|markdown)(?=["#])'
 
 <#
@@ -17,12 +17,12 @@ function Complete-HtmlFragment {
           [Alias('HtmlFragment')]
           [hashtable]$InputObject)
     Process {
-        $fragment = foreach ($itm in $InputObject.HtmlFragment) {
+        $fragment = $InputObject.HtmlFragment
+
+        for($i=0; $i -lt $fragment.Count; $i++) {
+            $itm = $fragment[$i]
             if ($itm.StartsWith('<a') -and $itm -notlike '*://*') {
-                $SCRIPT:mdhrefRE.Replace($itm,'$1.html')
-            }
-            else {
-                $itm
+                $fragment[$i] = $SCRIPT:mdhrefRE.Replace($itm,'$1.html')
             }
         }
 
@@ -59,9 +59,6 @@ index appended.
 Location of the static HTML site. The Svg file will be generated relative to this
 path.
 
-.PARAMETER RelativePath
-Svg file path relative to `SiteDirectory`.
-
 .PARAMETER Options
 Svg conversion options. An object or hashtable with follwing properties or keys:
 
@@ -78,7 +75,8 @@ When using conversion projects instantiated by `New-StaticHTMLSiteProject` these
 parameters are configured in `Build.json` parameter section `svgbob`.
 
 .INPUTS
-Lines of Markdown text.
+HTML fragment objects emitted by `Convert-MarkdownToHTMLFragment` or
+equivalent objects.
 
 .OUTPUTS
 Lines of Markdown text where all fenced code blocks labelled `bob` are
@@ -134,7 +132,7 @@ https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-SvgbobToSvg.html
 [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
 #>
 function Convert-SvgbobToSvg {
-    [OutputType([string])]
+    [OutputType([hashtable])]
     [CmdletBinding()]
     param(
         [parameter(Mandatory=$true,ValueFromPipeline=$true)]
@@ -190,13 +188,16 @@ function Convert-SvgbobToSvg {
 
         [System.IO.Fileinfo]$fullpath = Join-Path $SiteDirectory $_.RelativePath
 
-        $fragment = foreach ($itm in $_.HtmlFragment) {
+        $fragment = $InputObject.HtmlFragment
+
+        for($i=0; $i -lt $fragment.Count; $i++) {
+            $itm = $fragment[$i]
             if ($bob -is [Array]) {
                 if ($itm -eq '</code>') {
                     # svgbob drawing complete
                     $svgname = $fullpath.BaseName + "$n.svg"
-                    # write link to the svg image in Markdown notation
-                    Write-Output "<img src='$svgname' alt='Diagram ${n}.' />"
+                    # replace the fenced code block by a hyperlink
+                    $fragment[$i] = "<img src='$svgname' alt='Diagram ${n}.' />"
 
                     # we need to create that site directory upfront so that the
                     # svg image can be put there
@@ -217,17 +218,16 @@ function Convert-SvgbobToSvg {
                 }
                 else {
                     $bob += [System.Net.WebUtility]::HtmlDecode($itm)
+                    $fragment[$i] = [string]::Empty
                 }
             }
             elseif ($itm -eq '<code class="language-bob">') {
+                $fragment[$i] = [string]::Empty
                 $bob=@() # Enable capturing of svgbob drawing
             }
-            else {
-               $itm
-            }
         }
-        $_.HtmlFragment = $fragment # update fragment and pass on
-        $_
+
+        $InputObject
     }
 }
 
@@ -412,7 +412,7 @@ function Convert-MarkdownToHTMLFragment
                       } else {
                           $InputObject
                       }
-        [string[]]$fragment = [Markdig.Markdown]::ToHtml($md, $pipeline) -split '(<[^<>]+>)'
+        $fragment = [Markdig.Markdown]::ToHtml($md, $pipeline) -split '(<[^<>]+>)' | Where-Object { $_ }
         $htmlDescriptor = @{'HtmlFragment' = $fragment }
         $match = [regex]::Match($md,'^[#\s]*([^\r\n\{]+)')
         if ($match.Success) {
