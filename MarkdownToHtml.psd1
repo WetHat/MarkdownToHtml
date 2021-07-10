@@ -88,7 +88,6 @@ NestedModules = @('HtmlFragments.psm1')
 
 # Functions to export from this module
 FunctionsToExport = @(
-                        'Complete-HtmlFragment'
                         'Convert-MarkdownToHTML'
                         'Convert-MarkdownToHTMLFragment'
                         'Convert-SvgbobToSvg'

@@ -135,7 +135,8 @@ work provided following properties are present:
 :   The page title.
 
 `HtmlFragment`
-:   A html fragment to be used as main content of the HTML document.
+:   A html fragment, as string or array of strings to be used as main content of
+    the HTML document.
 
 .PARAMETER Template
 Optional directory containing the html template file `md-template.html` and its
@@ -267,6 +268,10 @@ function Publish-StaticHtmlSite {
 
         # prepare the map for content injection
         # we need a pristine map every time
+        if ( $InputObject.HTMLFragment -is [Array]) {
+            # a single string wanted
+            $InputObject.HTMLFragment = $InputObject.HTMLFragment -join ''
+        }
         $map = @{
             '{{title}}'   = $InputObject.Title
             '[title]'     = $InputObject.Title
@@ -279,7 +284,7 @@ function Publish-StaticHtmlSite {
             $value = $ContentMap[$k]
             if ($value -is [ScriptBlock]) {
                 # Compute the substitution value
-                $value = Invoke-Command -ScriptBlock $value -ArgumentList $_ | Out-String
+                $value = Invoke-Command -ScriptBlock $value -ArgumentList $InputObject | Out-String
             }
             $map[$k] = $value
         }

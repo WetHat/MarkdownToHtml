@@ -8,30 +8,6 @@ $OutputEncoding =  [Text.UTF8Encoding]::new($false)
 $SCRIPT:mdhrefRE = New-Object Regex '(?<=^<a[^>]*href=")([^"]+)\.(md|markdown)(?=["#])'
 
 <#
-#>
-function Complete-HtmlFragment {
-    [OutputType([hashtable])]
-    [CmdletBinding()]
-    param([parameter(Mandatory=$true,ValueFromPipeline=$true)]
-          [ValidateScript({$_.HtmlFragment})]
-          [Alias('HtmlFragment')]
-          [hashtable]$InputObject)
-    Process {
-        $fragment = $InputObject.HtmlFragment
-
-        for($i=0; $i -lt $fragment.Count; $i++) {
-            $itm = $fragment[$i]
-            if ($itm.StartsWith('<a') -and $itm -notlike '*://*') {
-                $fragment[$i] = $SCRIPT:mdhrefRE.Replace($itm,'$1.html')
-            }
-        }
-
-        $InputObject.HtmlFragment = $fragment -join '' # one string
-        $InputObject
-    }
-}
-
-<#
 .SYNOPSIS
 Convert fenced svgbob code blocks to svg images.
 
@@ -414,7 +390,24 @@ function Convert-MarkdownToHTMLFragment
                       } else {
                           $InputObject
                       }
+        # Create HTML fragment and split it at tag level.
+        #                                                             |----------| <- Html tag
         $fragment = [Markdig.Markdown]::ToHtml($md, $pipeline) -split '(<[^<>]+>)' | Where-Object { $_ }
+
+        # update local markdown links to make them point to HTML
+        for($i=0; $i -lt $fragment.Count; $i++) {
+            $itm = $fragment[$i]
+            if ($itm.StartsWith('<a') -and $itm -notlike '*://*') {
+                $fragment[$i] = $SCRIPT:mdhrefRE.Replace($itm,'$1.html')
+            }
+        }
+
+        if (!$Split) {
+            # make it one string
+            $fragment = $fragment -join ''
+        }
+
+        # assemble the descriptor object
         $htmlDescriptor = @{'HtmlFragment' = $fragment }
         $match = [regex]::Match($md,'^[#\s]*([^\r\n\{]+)')
         if ($match.Success) {
@@ -430,10 +423,6 @@ function Convert-MarkdownToHTMLFragment
         }
 
         # return the annotated HTML fragment
-        if ($split) {
-            $htmlDescriptor
-        } else {
-            Complete-HtmlFragment -InputObject $htmlDescriptor
-        }
+        $htmlDescriptor
     }
 }
