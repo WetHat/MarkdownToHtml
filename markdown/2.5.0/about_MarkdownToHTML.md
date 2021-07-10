@@ -455,7 +455,7 @@ conversion process you should
 >
 > ~~~ bob
 > # root                      <- project root
-> |- html                     <- "option 'site_dir' in Build.json"
+> |- docs                     <- "option 'site_dir' in Build.json"
 > |- markdown                 <- "option 'markdown_dir' in Build.json"
 > |     |
 > |     '- README.md          <- initial content

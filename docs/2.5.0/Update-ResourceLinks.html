@@ -168,11 +168,11 @@ assembled.</p>
 <h1 id="examples">Examples</h1>
 <h2 id="example-1">EXAMPLE 1</h2>
 <blockquote>
-<pre><code class="language-PowerShell">Update-ResourceLinks -HtmlFragment $fragment -RelativePath &#39;a/b/v/test.html&#39;
+<pre><code class="language-PowerShell">Update-ResourceLinks -HtmlFragment $fragment -RelativePath 'a/b/v/test.html'
 </code></pre>
 <p>Adjust link to a resource at <code>images/logo.png</code> so that it is valid for a
 file located at <code>a/b/v/test.html</code>. The input <code>$fragment</code> is defined as:</p>
-<pre><code class="language-PowerShell">$fragment = &#39;&lt;img width=&quot;90%&quot; src=&quot;images/logo.png&quot;/&gt;&#39;
+<pre><code class="language-PowerShell">$fragment = '&lt;img width=&quot;90%&quot; src=&quot;images/logo.png&quot;/&gt;'
 </code></pre>
 <p>Outut:</p>
 <pre><code class="language-html">&lt;img width=&quot;90%&quot; src=&quot;../../../images/logo.png&quot;/&gt;

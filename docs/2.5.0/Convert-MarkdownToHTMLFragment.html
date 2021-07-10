@@ -62,6 +62,7 @@
 <button class='navitem'><a href='#inputobject-object'><span class='navitem2'>-InputObject &lt;Object&gt;</span></a></button>
 <button class='navitem'><a href='#includeextension-string'><span class='navitem2'>-IncludeExtension &lt;String[]&gt;</span></a></button>
 <button class='navitem'><a href='#excludeextension-string'><span class='navitem2'>-ExcludeExtension &lt;String[]&gt;</span></a></button>
+<button class='navitem'><a href='#split-switchparameter'><span class='navitem2'>-Split &lt;SwitchParameter&gt;</span></a></button>
 <button class='navitem'><a href='#inputs'><span class='navitem1'>Inputs</span></a></button>
 <button class='navitem'><a href='#outputs'><span class='navitem1'>Outputs</span></a></button>
 <button class='navitem'><a href='#notes'><span class='navitem1'>Notes</span></a></button>
@@ -75,7 +76,7 @@
             <h1 id="convert-markdowntohtmlfragment">Convert-MarkdownToHTMLFragment</h1>
 <p>Convert Markdown text to HTML fragments.</p>
 <h1 id="syntax">Syntax</h1>
-<pre><code class="language-PowerShell"> Convert-MarkdownToHTMLFragment [-InputObject] &lt;Object&gt; [-IncludeExtension] &lt;String[]&gt; [-ExcludeExtension] &lt;String[]&gt;  [&lt;CommonParameters&gt;] 
+<pre><code class="language-PowerShell"> Convert-MarkdownToHTMLFragment [-InputObject] &lt;Object&gt; [-IncludeExtension] &lt;String[]&gt; [-ExcludeExtension] &lt;String[]&gt; [-Split] &lt;object&gt;  [&lt;CommonParameters&gt;] 
 </code></pre>
 <h1 id="description">Description</h1>
 <p>Converts Markdown text to HTML fragments using configured
@@ -171,7 +172,7 @@ for an annotated list of supported extensions.</p>
 </tr>
 <tr>
 <td style="text-align: right;">Default value</td>
-<td style="text-align: left;"><code>@(&#39;advanced&#39;)</code></td>
+<td style="text-align: left;"><code>@('advanced')</code></td>
 </tr>
 <tr>
 <td style="text-align: right;">Accept pipeline input?</td>
@@ -210,6 +211,41 @@ certain individual options need to be removed.</p>
 <tr>
 <td style="text-align: right;">Default value</td>
 <td style="text-align: left;"><code>@()</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept pipeline input?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept wildcard characters?</td>
+<td style="text-align: left;">false</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+ 
+<h2 id="split-switchparameter">-Split &lt;SwitchParameter&gt;</h2>
+<blockquote>
+<hr />
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Parameter Property</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">Required?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Position?</td>
+<td style="text-align: left;">named</td>
+</tr>
+<tr>
+<td style="text-align: right;">Default value</td>
+<td style="text-align: left;"><code>False</code></td>
 </tr>
 <tr>
 <td style="text-align: right;">Accept pipeline input?</td>
@@ -289,7 +325,7 @@ or a markdown descriptor <code>[hashtable]</code>.</p>
 <h1 id="examples">Examples</h1>
 <h2 id="example-1">EXAMPLE 1</h2>
 <blockquote>
-<pre><code class="language-PowerShell">Convert-MarkdownToHTMLFragment -Markdown &#39;# Hello World&#39;
+<pre><code class="language-PowerShell">Convert-MarkdownToHTMLFragment -Markdown '# Hello World'
 </code></pre>
 <p>Returns the HTML fragment object:</p>
 <pre><code>Name               Value

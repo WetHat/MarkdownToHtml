@@ -124,7 +124,7 @@ HTML sites in various ways.</p>
 <td>Diagramming</td>
 </tr>
 <tr>
-<td><a href="https://ivanceras.github.io/content/Svgbob.html">Svgbob</a></td>
+<td><a href="https://lib.rs/crates/svgbob_cli">Svgbob</a></td>
 <td>0.5.0</td>
 <td>Text based diagrammimg</td>
 </tr>
@@ -136,7 +136,6 @@ were created with versions of this module older than 2.0.0 (i.e. 1.* or 0.*).
 See <a href="MarkdownToHTML.html#2.0.0">version 2.0.0</a> release notes for upgrade instructions.</p>
 <h1 id="exported-functions">Exported Functions</h1>
 <ul>
-<li><a href="Complete-MarkdownPreprocessor.html">Complete-MarkdownPreprocessor</a></li>
 <li><a href="Convert-MarkdownToHTML.html">Convert-MarkdownToHTML</a></li>
 <li><a href="Convert-MarkdownToHTMLFragment.html">Convert-MarkdownToHTMLFragment</a></li>
 <li><a href="Convert-SvgbobToSvg.html">Convert-SvgbobToSvg</a></li>
@@ -256,7 +255,7 @@ for overflowing navitems</li>
 <li>HTML fragments with resource links supported in navitem names.
 Example from a <code>Build.json</code> which displays a navigatable image:
 <pre><code class="language-Json">&quot;site_navigation&quot;: [
-    { &quot;&lt;img width=&#39;90%&#39; src=&#39;site_logo.png&#39;/&gt;&quot;: &quot;README.md&quot; },
+    { &quot;&lt;img width='90%' src='site_logo.png'/&gt;&quot;: &quot;README.md&quot; },
     { &quot;Home&quot;: &quot;README.md&quot; },
     { &quot;---&quot;: &quot;&quot; }
 ]
@@ -269,11 +268,11 @@ are backeard compatible. If you want to upgrade anyways change the content
 map section of<code>Build.ps1</code> file like so:
 <pre><code class="language-PowerShell">$SCRIPT:contentMap = @{
     # Add additional mappings here...
-    &#39;{{footer}}&#39; =  $config.Footer # Footer text from configuration
-    &#39;{{nav}}&#39;    = {
+    '{{footer}}' =  $config.Footer # Footer text from configuration
+    '{{nav}}'    = {
 	    param($fragment) # the html fragment created from a markdown file
 	    $navcfg = $config.navigation_bar # navigation bar configuration
-	    # Create the navigation items configured in &#39;Build.json&#39;
+	    # Create the navigation items configured in 'Build.json'
 	    New-SiteNavigation -NavitemSpecs $config.site_navigation `
 	                       -RelativePath $fragment.RelativePath `
 	                       -NavTemplate $navcfg.templates
@@ -322,11 +321,11 @@ For example:</li>
 <pre><code class="language-PowerShell"># Set-up the content mapping rules for replacing the templace placeholders
 $SCRIPT:contentMap = @{
       # Add additional mappings here...
-      &#39;{{footer}}&#39; =  $config.Footer # Footer text from configuration
-      &#39;{{nav}}&#39;    = {
+      '{{footer}}' =  $config.Footer # Footer text from configuration
+      '{{nav}}'    = {
   	    param($fragment) # the html fragment created from a markdown file
   	    $navcfg = $config.navigation_bar # navigation bar configuration
-  	    # Create the navigation items configured in &#39;Build.json&#39;
+  	    # Create the navigation items configured in 'Build.json'
   	    $config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
   	                                                        -NavTemplate $navcfg.templates
   	    # Create navigation items to headings on the local page.
@@ -343,10 +342,10 @@ $SCRIPT:contentMap = @{
 &quot;navigation_bar&quot;: {
     &quot;capture_page_headings&quot;: &quot;123456&quot;,
     &quot;templates&quot;: {
-        &quot;navitem&quot;: &quot;&lt;button class=&#39;navitem&#39;&gt;&lt;a href=&#39;{{navurl}}&#39;&gt;{{navtext}}&lt;/a&gt;&lt;/button&gt;&quot;,
-        &quot;navlabel&quot;: &quot;&lt;div class=&#39;navitem&#39;&gt;{{navtext}}&lt;/div&gt;&quot;,
-        &quot;navseparator&quot;: &quot;&lt;hr class=&#39;navitem&#39;/&gt;&quot;,
-        &quot;navheading&quot;: &quot;&lt;span class=&#39;navitem{{level}}&#39;&gt;{{navtext}}&lt;/span&gt;&quot;
+        &quot;navitem&quot;: &quot;&lt;button class='navitem'&gt;&lt;a href='{{navurl}}'&gt;{{navtext}}&lt;/a&gt;&lt;/button&gt;&quot;,
+        &quot;navlabel&quot;: &quot;&lt;div class='navitem'&gt;{{navtext}}&lt;/div&gt;&quot;,
+        &quot;navseparator&quot;: &quot;&lt;hr class='navitem'/&gt;&quot;,
+        &quot;navheading&quot;: &quot;&lt;span class='navitem{{level}}'&gt;{{navtext}}&lt;/span&gt;&quot;
     }
 },
 ...

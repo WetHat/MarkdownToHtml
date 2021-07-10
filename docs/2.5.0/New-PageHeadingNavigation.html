@@ -146,7 +146,7 @@ link
 template</td>
 <td style="text-align: center;">&quot;navheading&quot;</td>
 <td>
-<pre><code class="language-html">&lt;span class=&#39;navitem{{level}}&#39;&gt;{{navtext}}&lt;/span&gt;&quot;
+<pre><code class="language-html">&lt;span class='navitem{{level}}'&gt;{{navtext}}&lt;/span&gt;&quot;
 </code></pre>
 </td>
 </tr>
@@ -218,7 +218,7 @@ the <code>NavSpec</code> parameter.</p>
 <p>A string of numbers denoting the levels of the headings to add to the navigation
 bar. By default the headings at level 1,2 and 3 are added to the Navigation bar.
 If headings should not be automatically added to the navigation bar, use the
-empty string <code>&#39;&#39;</code> for this parameter. If omitted, the default configuration
+empty string <code>''</code> for this parameter. If omitted, the default configuration
 defined by option &quot;capture_page_headings&quot; in <code>Build.json</code> is used.</p>
 <hr />
 <table>
@@ -267,11 +267,11 @@ the contents of the navigation bar (placeholder <code>{{nav}}</code>).</p>
 <h1 id="examples">Examples</h1>
 <h2 id="example-1">EXAMPLE 1</h2>
 <blockquote>
-<pre><code class="language-PowerShell">New-PageHeadingNavigation $fragment -HeadingLevels &#39;234&#39;
+<pre><code class="language-PowerShell">New-PageHeadingNavigation $fragment -HeadingLevels '234'
 </code></pre>
 <p>Create an HTML element for navigation to page headings <code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code>, <code>&lt;h4&gt;</code>.
 All other headings are ignored. <code>$fragment</code> is a HTML framgment defined as:</p>
-<pre><code class="language-PowerShell">$fragment = &#39;&lt;h2 id=&quot;bob&quot;&gt;Hello World&lt;/h2&gt;&#39;
+<pre><code class="language-PowerShell">$fragment = '&lt;h2 id=&quot;bob&quot;&gt;Hello World&lt;/h2&gt;'
 </code></pre>
 <p>Output:</p>
 <pre><code class="language-HTML">&lt;button class=&quot;navitem&quot;&gt;
@@ -282,10 +282,10 @@ All other headings are ignored. <code>$fragment</code> is a HTML framgment defin
 </blockquote>
 <h2 id="example-2">EXAMPLE 2</h2>
 <blockquote>
-<pre><code class="language-PowerShell">Hello World&lt;/h2&gt;&#39; -NavTemplate $custom
+<pre><code class="language-PowerShell">Hello World&lt;/h2&gt;' -NavTemplate $custom
 </code></pre>
 <p>Create an HTML element for navigation to an heading using the custom template <code>$custom</code>.</p>
-<pre><code class="language-PowerShell">    $custom = @{ navheading = &#39;&lt;span class=&quot;li-item{{level}}&quot;&gt;{{navtext}}&lt;/span&gt;&#39;}
+<pre><code class="language-PowerShell">    $custom = @{ navheading = '&lt;span class=&quot;li-item{{level}}&quot;&gt;{{navtext}}&lt;/span&gt;'}
 </code></pre>
 <p>Output:</p>
 <pre><code class="language-HTML">&lt;button class=&quot;navitem&quot;&gt;

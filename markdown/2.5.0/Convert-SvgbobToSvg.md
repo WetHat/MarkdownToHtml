@@ -4,7 +4,7 @@ Convert fenced svgbob code blocks to svg images.
 
 # Syntax
 ```PowerShell
- Convert-SvgbobToSvg [-MarkdownLine] <String> [-SiteDirectory] <String> [-RelativePath] <String> [-Options] <Object>  [<CommonParameters>] 
+ Convert-SvgbobToSvg [-InputObject] <Hashtable> [-SiteDirectory] <String> [-Options] <Object>  [<CommonParameters>] 
 ```
 
 
@@ -18,13 +18,13 @@ the rendered diagram.
 Svgbob code blocks define human readable diagrams and are labeled as `bob`.
 For example:
 
-~~~ Markdown
-˜˜˜ bob
+``` Markdown
+~~~ bob
       +------+   .-.   +---+
  o----| elem |--( ; )--| n |----o
       +------+   '-'   +---+
-˜˜˜
 ~~~
+```
 
 The generated svg file is put right next to the HTML file
 currently being assembled and named after that HTML file with an unique
@@ -40,7 +40,7 @@ index appended.
 
 
 
-## -MarkdownLine \<String\>
+## -InputObject \<Hashtable\>
 
 <blockquote>
 
@@ -79,25 +79,6 @@ Accept wildcard characters?| false
 </blockquote>
  
 
-## -RelativePath \<String\>
-
-<blockquote>
-
-Svg file path relative to `SiteDirectory`.
-
----
-
-Parameter Property         | Value
---------------------------:|:----------
-Required?                  | true
-Position?                  | 3
-Default value              | ``
-Accept pipeline input?     | false
-Accept wildcard characters?| false
-
-</blockquote>
- 
-
 ## -Options \<Object\>
 
 <blockquote>
@@ -121,7 +102,7 @@ parameters are configured in `Build.json` parameter section `svgbob`.
 Parameter Property         | Value
 --------------------------:|:----------
 Required?                  | false
-Position?                  | 4
+Position?                  | 3
 Default value              | ``
 Accept pipeline input?     | false
 Accept wildcard characters?| false
@@ -133,7 +114,8 @@ Accept wildcard characters?| false
 
 
 # Inputs
-Lines of Markdown text.
+HTML fragment objects emitted by `Convert-MarkdownToHTMLFragment` or
+equivalent objects.
 
 
 # Outputs
@@ -146,6 +128,9 @@ replaced by Markdown style image links to svg files.
 
 The svg conversion is performed by the external utility
 `svgbob.exe` which is packaged with this module.
+`svgbob.exe` is a [Rust](https://www.rust-lang.org/)
+[crate](https://doc.rust-lang.org/rust-by-example/crates.html) which can be
+installed from [lib.rs](https://lib.rs/crates/svgbob_cli).
 
 </blockquote>
 
@@ -156,7 +141,7 @@ The svg conversion is performed by the external utility
 ## EXAMPLE 1
 
 > ~~~ PowerShell
-> Get-Content $md -Encoding UTF8 | Convert-SvgbobToSvg -SiteDirectory $site -RelativePath $relativePath
+> Get-Content $html -Encoding UTF8 | Convert-SvgbobToSvg -SiteDirectory $site -RelativePath $relativePath
 > ~~~
 >
 > 
@@ -173,29 +158,44 @@ The svg conversion is performed by the external utility
 > :   is the **relative path** of the HTML file currently being assembled below
 >     `$site`.
 > 
-> `$md`
-> :   represents a file named `test.md` which contains a fenced svgbob diagram.
->     ~~~ Markdown
+> `$html`
+> :   represents a Html fragment created from a Markdown file `test.md` which
+>     contains a fenced svgbob diagram:
+>     ``` Markdown
 >     Some text ...
 > 
->     ˜˜˜ bob
+>     ~~~ bob
 >           +------+   .-.   +---+
 >      o----| elem |--( ; )--| n |----o
 >           +------+   '-'   +---+
->     ˜˜˜
-> 
->     Some more text ...
 >     ~~~
 > 
-> this is converted to:
+>     Some more text ...
+>     ```
 > 
-> ~~~ Markdown
-> Some text ...
+> this fragment is converted to:
 > 
-> ![Diagram 1.](test1.svg)
+> * A file `test1.svg` which is placed right next to the html file `test.html`
+>   which is going to be created by [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) in a subsequent
+>   stage of the conversion pipeline. The numerical postfix is the index of the
+>   Svgbob diagram in the fragment. The svg image renders as:
 > 
-> Some more text ...
-> ~~~
+>   ~~~ bob
+>        +------+   .-.   +---+
+>   o----| elem |--( ; )--| n |----o
+>        +------+   '-'   +---+
+>   ~~~
+> 
+> * An updated html fragment where the fenced Svgbob diagram is replaced with
+>   a reference to the svg image.
+> 
+>   ~~~ html
+>   Some text ...
+> 
+>   <img src='test1.svg' alt='Diagram 1.' />
+> 
+>   Some more text ...
+>   ~~~
 > 
 > 
 > 

@@ -53,7 +53,8 @@ work provided following properties are present:
 :   The page title.
 
 `HtmlFragment`
-:   A html fragment to be used as main content of the HTML document.
+:   A html fragment, as string or array of strings to be used as main content of
+    the HTML document.
 
 ---
 

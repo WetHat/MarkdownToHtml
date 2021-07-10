@@ -222,7 +222,7 @@ unicode _box_ drawing characters to make the diagrams more
 readable in Markdown text. 
 
 > ``` markdown
-> ˜˜˜ bob
+> ~~~ bob
 >        ┌──────┐   .─.  ┌───┐
 > o──╮───┤ elem ├──( ; )─┤ n ├──╭──o
 >    │   └──────┘   '─'  └───┘  │
@@ -238,7 +238,7 @@ readable in Markdown text.
 >    ╰──╰─╭─┤ x ├──( , )─╮─╯────╯
 >         │ └───┘   '-'  │
 >         ╰───────<──────╯
-> ˜˜˜
+> ~~~
 > ```
 >
 > renders as:

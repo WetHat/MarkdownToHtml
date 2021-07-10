@@ -120,7 +120,7 @@ and <a href="#supported-markdown-preprocessors">Supported Markdown Preprocessors
 <p>A collection of PowerShell commands to convert Markdown files to static
 HTML sites in various ways. This module uses a pipeline architecture with
 four stages as outlined below:</p>
-<p><img src="about_MarkdownToHTML1.svg" alt="Diagram 1." /></p>
+<pre><img src='about_MarkdownToHTML1.svg' alt='Diagram 1.' /></pre>
 <p>The PowerShell functions associated with the pipeline stages are:</p>
 <ol>
 <li><a href="Find-MarkdownFiles.html"><code>Find-MarkdownFiles</code></a></li>
@@ -207,7 +207,7 @@ classes auto-generation.</td>
 <tr>
 <td style="text-align: center;">citations</td>
 <td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md">Citation text</a>
-by enclosing text with <code>&#39;&#39;...&#39;&#39;</code></td>
+by enclosing text with <code>''...''</code></td>
 </tr>
 <tr>
 <td style="text-align: center;">common</td>
@@ -300,7 +300,7 @@ See <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a> for custom
 </tr>
 <tr>
 <td style="text-align: center;">medialinks</td>
-<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md">Media support</a>
+<td>[Media support](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md
 for media urls (youtube, vimeo, mp4...etc.).</td>
 </tr>
 <tr>
@@ -388,7 +388,7 @@ text to HTML. The most common uses cases are outlined below.</p>
 on <a href="Convert-MarkdownToHtml.html"><code>Convert-MarkdownToHtml</code></a>. This function picks up Markdown files
 and their resources (e.g images) from a source directory and outputs
 HTML files to a destination directory as shown below:</p>
-<pre><code class="language-PowerShell">PS&gt; Convert-MarkdownToHTML -Path &#39;&lt;directory with markdown files&gt;&#39; -SiteDirectory &#39;&lt;html site directory&gt;&#39; -IncludeExtension &#39;advanced&#39;
+<pre><code class="language-PowerShell">PS&gt; Convert-MarkdownToHTML -Path '&lt;directory with markdown files&gt;' -SiteDirectory '&lt;html site directory&gt;' -IncludeExtension 'advanced'
 </code></pre>
 <p>Local Links in the Markdown files are rewired to point to the corresponding
 HTML files.</p>
@@ -397,12 +397,12 @@ HTML files.</p>
 <blockquote>
 <p>Static HTML site projects can be easily bootstrapped with the
 <a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a> function.</p>
-<pre><code class="language-PowerShell">PS&gt; New-StaticHTMLSiteProject -ProjectDirectory &#39;MyProject&#39;
-PS&gt; cd &#39;MyProject&#39;
+<pre><code class="language-PowerShell">PS&gt; New-StaticHTMLSiteProject -ProjectDirectory 'MyProject'
+PS&gt; cd 'MyProject'
 PS&gt; ./Build.ps1
 </code></pre>
 <p>The code snippet above generates a fully functional static HTML site:</p>
-<p><img src="about_MarkdownToHTML2.svg" alt="Diagram 2." /></p>
+<pre><img src='about_MarkdownToHTML2.svg' alt='Diagram 2.' /></pre>
 <p>The build script <code>Build.ps1</code> generates a <code>html/README.html</code> file which is
 showcases some features and provides further tips  on authoring the static site.</p>
 <p>A typical authoring workflow for the static HTML site looks like this:</p>
@@ -439,7 +439,7 @@ knowledge in case you want to customize the build script <code>Build.ps1</code>.
 and static site projects created by <a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a> are based
 on very similar conversion templates.</p>
 <p>In both cases the template directories have following structure:</p>
-<p><img src="about_MarkdownToHTML3.svg" alt="Diagram 3." /></p>
+<pre><img src='about_MarkdownToHTML3.svg' alt='Diagram 3.' /></pre>
 <dl>
 <dt><code>md-template.html</code></dt>
 <dd>
@@ -602,7 +602,7 @@ can be added as needed.</dd>
 <blockquote>
 <p>Static site authoring projects have a default directory structure as shown
 in the drawing below.</p>
-<p><img src="about_MarkdownToHTML4.svg" alt="Diagram 4." /></p>
+<pre><img src='about_MarkdownToHTML4.svg' alt='Diagram 4.' /></pre>
 <dl>
 <dt>The Project Configuration File (<code>Build.json</code>):</dt>
 <dd>
@@ -728,15 +728,15 @@ Following placeholders can be used in these HTML templates:
 Following navigation bar item templates are available:
 <ul>
 <li><code>navitem</code>: A navigation link item template. Default:
-<pre><code class="language-html">&lt;button class=&#39;navitem&#39;&gt;
-    &lt;a href=&#39;{{navurl}}&#39;&gt;{{navtext}}&lt;/a&gt;
+<pre><code class="language-html">&lt;button class='navitem'&gt;
+    &lt;a href='{{navurl}}'&gt;{{navtext}}&lt;/a&gt;
 &lt;/button&gt;
 </code></pre>
 </li>
 <li><code>navlabel</code>: Template for a navigation bar label
 &gt;
 (without link). Default:
-<pre><code class="language-html">&lt;div class=&#39;navlabel&#39;&gt;{{navtext}}&lt;/div&gt;
+<pre><code class="language-html">&lt;div class='navlabel'&gt;{{navtext}}&lt;/div&gt;
 </code></pre>
 </li>
 <li><code>navseparator</code>:  A separator between navigation bar
@@ -750,7 +750,7 @@ sections. Default:
 headings. Default:
 &gt;     |     |       ~~~ html
 &gt;
-<pre><code class="language-html">&lt;span class=&#39;navitem{{level}}&#39;&gt;{{navtext}}&lt;/span&gt;
+<pre><code class="language-html">&lt;span class='navitem{{level}}'&gt;{{navtext}}&lt;/span&gt;
 </code></pre>
 </li>
 </ul>
@@ -880,7 +880,7 @@ build process. To conform with the GitHub Pages project structure
 <p>The build script implements the Markdown conversion pipeline using the
 configuration from <code>Build.json</code>. The build options for each stage are
 mentioned in parenthesis in the diagram below</p>
-<p><img src="about_MarkdownToHTML5.svg" alt="Diagram 5." /></p>
+<pre><img src='about_MarkdownToHTML5.svg' alt='Diagram 5.' /></pre>
 <p>To implement custom build rules PowerShell code can be addes to the
 build file as needed.</p>
 </dd>
@@ -897,9 +897,9 @@ rule to replace the placeholder <code>{{my_placeholder}}</code> with static text
 <code>&lt;b&gt;Hello&lt;/b&gt;</code> looks like:</p>
 <pre><code class="language-Powershell">SCRIPT:contentMap = @{
 
-&#39;{{my_placeholder}}&#39; = &#39;&lt;b&gt;Hello&lt;/b&gt;&#39;
+'{{my_placeholder}}' = '&lt;b&gt;Hello&lt;/b&gt;'
 
-&#39;{{footer}}&#39; =  $config.Footer # Footer text from configuration
+'{{footer}}' =  $config.Footer # Footer text from configuration
 
 # other mappings ...
 }

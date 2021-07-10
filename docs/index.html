@@ -145,7 +145,7 @@ details.</li>
 <blockquote>
 <ol start="3">
 <li>Enter this in a PowerShell command prompt:
-<pre><code class="language-PowerShell">PS&gt; Convert-MarkdownToHTML -Path &#39;&lt;directory with markdown files&gt;&#39; -SiteDirectory &#39;&lt;html site directory&gt;&#39; -IncludeExtension &#39;advanced&#39;
+<pre><code class="language-PowerShell">PS&gt; Convert-MarkdownToHTML -Path '&lt;directory with markdown files&gt;' -SiteDirectory '&lt;html site directory&gt;' -IncludeExtension 'advanced'
 </code></pre>
 </li>
 <li>Browse to <code>&lt;html site directory&gt;</code> and view some of the HTML files in
@@ -156,12 +156,12 @@ a browser.</li>
 <blockquote>
 <ol start="3">
 <li>Enter this in a PowerShell command prompt:
-<pre><code class="language-PowerShell">PS&gt; New-StaticHTMLSiteProject -ProjectDirectory &#39;MyProject&#39;
-PS&gt; cd &#39;MyProject&#39;
+<pre><code class="language-PowerShell">PS&gt; New-StaticHTMLSiteProject -ProjectDirectory 'MyProject'
+PS&gt; cd 'MyProject'
 PS&gt; ./Build.ps1
 </code></pre>
 </li>
-<li>Open <code>html/README.html</code> a browser and enjoy the showcase section.</li>
+<li>Open <code>docs/README.html</code> a browser and enjoy the showcase section.</li>
 </ol>
 </blockquote>
 <h1 id="documentation">Documentation</h1>
@@ -245,7 +245,7 @@ int main(int argc, char *argv[]) {
   for (auto i = 0; i &lt; 0xFFFF; i++)
     cout &lt;&lt; &quot;Hello, World!&quot; &lt;&lt; endl;
 
-  char c = &#39;\n&#39;;
+  char c = '\n';
   unordered_map &lt;string, vector&lt;string&gt; &gt; m;
   m[&quot;key&quot;] = &quot;\\\\&quot;; // this is an error
 
@@ -262,7 +262,7 @@ int main(int argc, char *argv[]) {
   for (auto i = 0; i &lt; 0xFFFF; i++)
     cout &lt;&lt; &quot;Hello, World!&quot; &lt;&lt; endl;
 
-  char c = &#39;\n&#39;;
+  char c = '\n';
   unordered_map &lt;string, vector&lt;string&gt; &gt; m;
   m[&quot;key&quot;] = &quot;\\\\&quot;; // this is an error
 
@@ -275,26 +275,26 @@ int main(int argc, char *argv[]) {
 unicode <em>box</em> drawing characters to make the diagrams more
 readable in Markdown text.</p>
 <blockquote>
-<pre><code class="language-markdown">˜˜˜ bob
+<pre><code class="language-markdown">~~~ bob
        ┌──────┐   .─.  ┌───┐
 o──╮───┤ elem ├──( ; )─┤ n ├──╭──o
-   │   └──────┘   &#39;─&#39;  └───┘  │
+   │   └──────┘   '─'  └───┘  │
    │ ╭──────&gt;──────╮          │
    │ │    ┌───┐    │          │
    ╰─╯─╭──┤ x ├──╮─╰──────────╯
    │   │  └───┘  │            │
    │   │   .─.   │            │
    │   ╰──( , )──╯            ^
-   │       &#39;─&#39;                │
+   │       '─'                │
    │  ╭────────&gt;─────────╮    │
    │  │   ┌───┐   .-.    │    │
    ╰──╰─╭─┤ x ├──( , )─╮─╯────╯
-        │ └───┘   &#39;-&#39;  │
+        │ └───┘   '-'  │
         ╰───────&lt;──────╯
-˜˜˜
+~~~
 </code></pre>
 <p>renders as:</p>
-<p><img src="index1.svg" alt="Diagram 1." /></p>
+<pre><img src='index1.svg' alt='Diagram 1.' /></pre>
 </blockquote>
 
         </article>

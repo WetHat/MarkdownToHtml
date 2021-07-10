@@ -4,7 +4,7 @@ Convert Markdown text to HTML fragments.
 
 # Syntax
 ```PowerShell
- Convert-MarkdownToHTMLFragment [-InputObject] <Object> [-IncludeExtension] <String[]> [-ExcludeExtension] <String[]>  [<CommonParameters>] 
+ Convert-MarkdownToHTMLFragment [-InputObject] <Object> [-IncludeExtension] <String[]> [-ExcludeExtension] <String[]> [-Split] <object>  [<CommonParameters>] 
 ```
 
 
@@ -87,6 +87,25 @@ Parameter Property         | Value
 Required?                  | false
 Position?                  | 3
 Default value              | `@()`
+Accept pipeline input?     | false
+Accept wildcard characters?| false
+
+</blockquote>
+ 
+
+## -Split \<SwitchParameter\>
+
+<blockquote>
+
+
+
+---
+
+Parameter Property         | Value
+--------------------------:|:----------
+Required?                  | false
+Position?                  | named
+Default value              | `False`
 Accept pipeline input?     | false
 Accept wildcard characters?| false
 
