@@ -226,8 +226,8 @@ The given path should use forward slash '/' path separators.</p>
 link</td>
 <td style="text-align: center;">&quot;navitem&quot;</td>
 <td>
-<pre><code class="language-html">&lt;button class=&#39;navitem&#39;&gt;
-    &lt;a href=&#39;{{navurl}}&#39;&gt;{{navtext}}&lt;/a&gt;
+<pre><code class="language-html">&lt;button class='navitem'&gt;
+    &lt;a href='{{navurl}}'&gt;{{navtext}}&lt;/a&gt;
 &lt;/button&gt;
 </code></pre>
 </td>
@@ -237,7 +237,7 @@ link</td>
 link)</td>
 <td style="text-align: center;">&quot;navlabel&quot;</td>
 <td>
-<pre><code class="language-html">&lt;div class=&#39;navlabel&#39;&gt;{{navtext}}&lt;/div&gt;
+<pre><code class="language-html">&lt;div class='navlabel'&gt;{{navtext}}&lt;/div&gt;
 </code></pre>
 </td>
 </tr>
@@ -318,13 +318,13 @@ are replaced with content extracted from the <code>NavSpec</code> parameter .</p
 <h1 id="examples">Examples</h1>
 <h2 id="example-1">EXAMPLE 1</h2>
 <blockquote>
-<pre><code class="language-PowerShell">New-SiteNavigation -NavitemSpecs $specs -RelativePath &#39;a/b/c/bob.md&#39;
+<pre><code class="language-PowerShell">New-SiteNavigation -NavitemSpecs $specs -RelativePath 'a/b/c/bob.md'
 </code></pre>
 <p>Create navigation content for a file with relative path <code>a/b/c/bob.md</code> and
 the specification <code>$specs</code> and default templates:</p>
 <p><code>$specs</code> is defined like so:</p>
 <pre><code class="language-PowerShell">$specs = @(
-    @{ &quot;&lt;img width=&#39;90%&#39; src=&#39;logo.png&#39; /&gt;&quot; = &quot;README.md&quot; },
+    @{ &quot;&lt;img width='90%' src='logo.png' /&gt;&quot; = &quot;README.md&quot; },
     @{ &quot;README&quot; = &quot;&quot; },
     @{ &quot;Home&quot; = &quot;README.md&quot; },
     @{ &quot;---&quot; = &quot;&quot; }
@@ -333,7 +333,7 @@ the specification <code>$specs</code> and default templates:</p>
 <p>Output:</p>
 <pre><code class="language-html">&lt;button class=&quot;navitem&quot;&gt;
    &lt;a href=&quot;../../../README.html&quot;&gt;
-      &lt;img width=&#39;90%&#39; src=&#39;../../../logo.png&#39; /&gt;
+      &lt;img width='90%' src='../../../logo.png' /&gt;
    &lt;/a&gt;
 &lt;/button&gt;
 &lt;div class=&quot;navlabel&quot;&gt;README&lt;/div&gt;

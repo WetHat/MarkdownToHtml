@@ -117,7 +117,7 @@ for overflowing navitems</p>
 </li>
 <li><p>Image links supported in navitem names. Example (Build.json):</p>
 <pre><code class="language-Json">&quot;site_navigation&quot;: [
-    { &quot;&lt;img width=&#39;90%&#39; src=&#39;site_logo.png&#39;/&gt;&quot;: &quot;README.md&quot; },
+    { &quot;&lt;img width='90%' src='site_logo.png'/&gt;&quot;: &quot;README.md&quot; },
     { &quot;Home&quot;: &quot;README.md&quot; },
     { &quot;---&quot;: &quot;&quot; }
 ]
@@ -157,11 +157,11 @@ For example:</li>
 <pre><code class="language-PowerShell"># Set-up the content mapping rules for replacing the templace placeholders
 $SCRIPT:contentMap = @{
       # Add additional mappings here...
-      &#39;{{footer}}&#39; =  $config.Footer # Footer text from configuration
-      &#39;{{nav}}&#39;    = {
+      '{{footer}}' =  $config.Footer # Footer text from configuration
+      '{{nav}}'    = {
   	    param($fragment) # the html fragment created from a markdown file
   	    $navcfg = $config.navigation_bar # navigation bar configuration
-  	    # Create the navigation items configured in &#39;Build.json&#39;
+  	    # Create the navigation items configured in 'Build.json'
   	    $config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
   	                                                        -NavTemplate $navcfg.templates
   	    # Create navigation items to headings on the local page.
@@ -178,10 +178,10 @@ $SCRIPT:contentMap = @{
 &quot;navigation_bar&quot;: {
     &quot;capture_page_headings&quot;: &quot;123456&quot;,
     &quot;templates&quot;: {
-        &quot;navitem&quot;: &quot;&lt;button class=&#39;navitem&#39;&gt;&lt;a href=&#39;{{navurl}}&#39;&gt;{{navtext}}&lt;/a&gt;&lt;/button&gt;&quot;,
-        &quot;navlabel&quot;: &quot;&lt;div class=&#39;navitem&#39;&gt;{{navtext}}&lt;/div&gt;&quot;,
-        &quot;navseparator&quot;: &quot;&lt;hr class=&#39;navitem&#39;/&gt;&quot;,
-        &quot;navheading&quot;: &quot;&lt;span class=&#39;navitem{{level}}&#39;&gt;{{navtext}}&lt;/span&gt;&quot;
+        &quot;navitem&quot;: &quot;&lt;button class='navitem'&gt;&lt;a href='{{navurl}}'&gt;{{navtext}}&lt;/a&gt;&lt;/button&gt;&quot;,
+        &quot;navlabel&quot;: &quot;&lt;div class='navitem'&gt;{{navtext}}&lt;/div&gt;&quot;,
+        &quot;navseparator&quot;: &quot;&lt;hr class='navitem'/&gt;&quot;,
+        &quot;navheading&quot;: &quot;&lt;span class='navitem{{level}}'&gt;{{navtext}}&lt;/span&gt;&quot;
     }
 },
 ...

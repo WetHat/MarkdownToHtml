@@ -110,19 +110,19 @@ three stages as outlined below:</p>
 <pre><code>            Markdown Directory
                     |
                     v
-        .-----------&#39;------------.
+        .-----------'------------.
 1       |  Markdown File Scanner |
-        &#39;-----------.------------&#39;
+        '-----------.------------'
                     |
                Markdown files
                     |
-       .------------&#39;-------------.
+       .------------'-------------.
 2      | HTML Fragment Conversion |
-       &#39;------------.-------------&#39;
+       '------------.-------------'
                     |
-       .------------&#39;-------------.    .- Template
+       .------------'-------------.    .- Template
 3      | HTML Document Assembler  | &lt;--+
-       &#39;------------.-------------&#39;    &#39;- Content Map
+       '------------.-------------'    '- Content Map
                     |
                     v
              Static HTML Site
@@ -188,7 +188,7 @@ generates links if a text starts with <code>http://</code> or <code>https://</co
 to output bootstrap classes.</dd>
 <dt><code>citations</code></dt>
 <dd><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/FigureFooterAndCiteSpecs.md">Citation text</a>
-by enclosing text with <code>&#39;&#39;...&#39;&#39;</code></dd>
+by enclosing text with <code>''...''</code></dd>
 <dt><code>common</code></dt>
 <dd>CommonMark parsing; no parser extensions (default)</dd>
 <dt><code>customcontainers</code></dt>
@@ -283,7 +283,7 @@ text to HTML. The most common uses cases are outlined below.</p>
 on <a href="Convert-MarkdownToHtml.html"><code>Convert-MarkdownToHtml</code></a>. This function picks up Markdown files
 and their resources (e.g images) from a source directory and outputs
 HTML files to a destination directory as shown below:</p>
-<pre><code class="language-PowerShell">PS&gt; Convert-MarkdownToHTML -Path &#39;&lt;directory with markdown files&gt;&#39; -SiteDirectory &#39;&lt;html site directory&gt;&#39; -IncludeExtension &#39;advanced&#39;
+<pre><code class="language-PowerShell">PS&gt; Convert-MarkdownToHTML -Path '&lt;directory with markdown files&gt;' -SiteDirectory '&lt;html site directory&gt;' -IncludeExtension 'advanced'
 </code></pre>
 <p>Local Links in the Markdown files are rewired to point to the corresponding
 HTML files.</p>
@@ -292,22 +292,22 @@ HTML files.</p>
 <blockquote>
 <p>Static HTML site projects can be easily bootstrapped with the
 <a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a> function.</p>
-<pre><code class="language-PowerShell">PS&gt; New-StaticHTMLSiteProject -ProjectDirectory &#39;MyProject&#39;
-PS&gt; cd &#39;MyProject&#39;
+<pre><code class="language-PowerShell">PS&gt; New-StaticHTMLSiteProject -ProjectDirectory 'MyProject'
+PS&gt; cd 'MyProject'
 PS&gt; ./Build.ps1
 </code></pre>
 <p>The code snippet above generates a fully functional static HTML site:</p>
 <pre><code>#                  &lt;- project root
 |- html            &lt;- build output (static site)
 |- markdown        &lt;- authored Markdown content
-|-    &#39;- README.md &lt;- initial content
+|-    '- README.md &lt;- initial content
 |- Template        &lt;- template resources
 |     |- js        &lt;- javascripts (*.js)
 |     |- katex     &lt;- LateX math renderer
 |     |- styles    &lt;- stylesheets (*.css)
-|     &#39;- md-template.html &lt;- Html page template
+|     '- md-template.html &lt;- Html page template
 |- Build.json      &lt;- project configuration
-&#39;- Build.ps1       &lt;- build script
+'- Build.ps1       &lt;- build script
 </code></pre>
 <p>The build script <code>Build.ps1</code> generates a <code>html/README.html</code> file which is
 showcases some features and provides further tips  on authoring the static site.</p>
@@ -349,7 +349,7 @@ on very similar conversion templates.</p>
    |- js               &lt;- javascripts (*.js)
    |- katex            &lt;- LateX math renderer
    |- styles           &lt;- stylesheets (*.css)
-   &#39;- md-template.html &lt;- Html page template
+   '- md-template.html &lt;- Html page template
 </code></pre>
 <dl>
 <dt><code>md-template.html</code></dt>
@@ -516,14 +516,14 @@ in the drawing below.</p>
 <pre><code># root             &lt;- project root
 |- html            &lt;- config option: &quot;site_dir&quot;
 |- markdown        &lt;- config option: &quot;markdown_dir&quot;
-|-    &#39;- README.md &lt;- initial content
+|-    '- README.md &lt;- initial content
 |- Template        &lt;- config option: &quot;HTML_template&quot;
 |     |- js        &lt;- javascripts (*.js)
 |     |- katex     &lt;- LateX math renderer
 |     |- styles    &lt;- stylesheets (*.css)
-|     &#39;- md-template.html &lt;- Html page template
+|     '- md-template.html &lt;- Html page template
 |- Build.json      &lt;- project configuration
-&#39;- Build.ps1       &lt;- build script
+'- Build.ps1       &lt;- build script
 </code></pre>
 <dl>
 <dt>The Project Configuration File (<code>Build.json</code>):</dt>
@@ -608,15 +608,15 @@ Following placeholders can be used in these HTML templates:
 Following navigation bar item templates are available:
 <ul>
 <li><code>navitem</code>: A navigation link item template. Default:
-<pre><code class="language-html">&lt;button class=&#39;navitem&#39;&gt;
-    &lt;a href=&#39;{{navurl}}&#39;&gt;{{navtext}}&lt;/a&gt;
+<pre><code class="language-html">&lt;button class='navitem'&gt;
+    &lt;a href='{{navurl}}'&gt;{{navtext}}&lt;/a&gt;
 &lt;/button&gt;
 </code></pre>
 </li>
 <li><code>navlabel</code>: Template for a navigation bar label
 &gt;
 (without link). Default:
-<pre><code class="language-html">&lt;div class=&#39;navlabel&#39;&gt;{{navtext}}&lt;/div&gt;
+<pre><code class="language-html">&lt;div class='navlabel'&gt;{{navtext}}&lt;/div&gt;
 </code></pre>
 </li>
 <li><code>navseparator</code>:  A separator between navigation bar
@@ -630,7 +630,7 @@ sections. Default:
 headings. Default:
 &gt;     |     |       ~~~ html
 &gt;
-<pre><code class="language-html">&lt;span class=&#39;navitem{{level}}&#39;&gt;{{navtext}}&lt;/span&gt;
+<pre><code class="language-html">&lt;span class='navitem{{level}}'&gt;{{navtext}}&lt;/span&gt;
 </code></pre>
 </li>
 </ul>
@@ -674,19 +674,19 @@ configuration specified in <code>Build.json</code>.</p>
 <pre><code>            Markdown Directory (&quot;markdown_dir&quot;)
                     |
                     v
-        .-----------&#39;------------.
+        .-----------'------------.
 1       |  Markdown File Scanner |
-        &#39;-----------.------------&#39;
+        '-----------.------------'
                     |
                Markdown files
                     |
-       .------------&#39;-------------.
+       .------------'-------------.
 2      | HTML Fragment Conversion |
-       &#39;------------.-------------&#39;
+       '------------.-------------'
                     |
-       .------------&#39;-------------.    .- Template (&quot;HTML_template&quot;)
+       .------------'-------------.    .- Template (&quot;HTML_template&quot;)
 3      | HTML Document Assembler  | &lt;--+
-       &#39;------------.-------------&#39;    &#39;- Content Map (Build.ps1)
+       '------------.-------------'    '- Content Map (Build.ps1)
                     |
                     v
              Static HTML Site (&quot;site_dir&quot;)
@@ -694,7 +694,7 @@ configuration specified in <code>Build.json</code>.</p>
 <p>To implement custom build rules PowerShell code can be addes to the
 build file as needed.</p>
 </dd>
-<dt>The <code>Template&#39; directory</code></dt>
+<dt>The <code>Template' directory</code></dt>
 <dd>Covered in section
 <a href="#conversion-template-customization">Conversion Template Customization</a></dd>
 </dl>
@@ -707,9 +707,9 @@ rule to replace the placeholder <code>{{my_placeholder}}</code> with static text
 <code>&lt;b&gt;Hello&lt;/b&gt;</code> looks like:</p>
 <pre><code class="language-Powershell">SCRIPT:contentMap = @{
 
-&#39;{{my_placeholder}}&#39; = &#39;&lt;b&gt;Hello&lt;/b&gt;&#39;
+'{{my_placeholder}}' = '&lt;b&gt;Hello&lt;/b&gt;'
 
-&#39;{{footer}}&#39; =  $config.Footer # Footer text from configuration
+'{{footer}}' =  $config.Footer # Footer text from configuration
 
 # other mappings ...
 }

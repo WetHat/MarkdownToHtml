@@ -167,7 +167,7 @@ pipeline.</p>
 <h1 id="examples">Examples</h1>
 <h2 id="example-1">EXAMPLE 1</h2>
 <blockquote>
-<pre><code class="language-PowerShell">Find-MarkdownFiles -Path &#39;...\Modules\MarkdownToHtml&#39; | Select-Object -Property Mode,LastWriteTime,Length,Name,RelativePath | Format-Table
+<pre><code class="language-PowerShell">Find-MarkdownFiles -Path '...\Modules\MarkdownToHtml' | Select-Object -Property Mode,LastWriteTime,Length,Name,RelativePath | Format-Table
 </code></pre>
 <p>Returns following annotated Markdown file objects of type <code>[System.IO.FileInfo]</code> for this PowerShell module:</p>
 <pre><code>LastWriteTime        Length Name                       RelativePath

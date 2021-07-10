@@ -230,8 +230,8 @@ assembled. The given path should use forward slash '/' path separators.</p>
 link</td>
 <td style="text-align: center;">&quot;navitem&quot;</td>
 <td>
-<pre><code class="language-html">&lt;button class=&#39;navitem&#39;&gt;
-    &lt;a href=&#39;{{navurl}}&#39;&gt;{{navtext}}&lt;/a&gt;
+<pre><code class="language-html">&lt;button class='navitem'&gt;
+    &lt;a href='{{navurl}}'&gt;{{navtext}}&lt;/a&gt;
 &lt;/button&gt;
 </code></pre>
 </td>
@@ -241,7 +241,7 @@ link</td>
 link)</td>
 <td style="text-align: center;">&quot;navlabel&quot;</td>
 <td>
-<pre><code class="language-html">&lt;div class=&#39;navlabel&#39;&gt;{{navtext}}&lt;/div&gt;
+<pre><code class="language-html">&lt;div class='navlabel'&gt;{{navtext}}&lt;/div&gt;
 </code></pre>
 </td>
 </tr>
@@ -328,21 +328,21 @@ the contents of the navigation bar (placeholder <code>{{nav}}</code>).</p>
 <h1 id="examples">Examples</h1>
 <h2 id="example-1">EXAMPLE 1</h2>
 <blockquote>
-<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Project HOME&#39;=&#39;https://github.com/WetHat/MarkdownToHtml&#39;} -RelativePath &#39;intro/about.md&#39;
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{'Project HOME'='https://github.com/WetHat/MarkdownToHtml'} -RelativePath 'intro/about.md'
 </code></pre>
 <p>Generates a web navigation link to be put on the page <code>intro/about.md</code>.
 Note:
 the parameter <code>RelativePath</code> is specified but not used because the link is
 non-local.</p>
 <p>Output:</p>
-<pre><code class="language-html">&lt;button class=&#39;navitem&#39;&gt;
+<pre><code class="language-html">&lt;button class='navitem'&gt;
     &lt;a href=&quot;https://github.com/WetHat/MarkdownToHtml&quot;&gt;Project HOME&lt;/a&gt;
 &lt;/button&gt;&lt;br/&gt;
 </code></pre>
 </blockquote>
 <h2 id="example-2">EXAMPLE 2</h2>
 <blockquote>
-<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Index&#39;=&#39;index.md&#39;} -RelativePath &#39;intro/about.md&#39;
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{'Index'='index.md'} -RelativePath 'intro/about.md'
 </code></pre>
 <p>Generates a navigation link relative to <code>intro/about.md</code>. The
 link target <code>index.md</code> is a page at the root of the same site, hence the link is
@@ -355,11 +355,11 @@ adjusted accordingly.</p>
 </blockquote>
 <h2 id="example-3">EXAMPLE 3</h2>
 <blockquote>
-<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Index&#39;=&#39;index.md&#39;} -RelativePath &#39;intro/about.md&#39; -NavTemplate $custom
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{'Index'='index.md'} -RelativePath 'intro/about.md' -NavTemplate $custom
 </code></pre>
 <p>Generates a navigation link relative to <code>intro/about.md</code>.
 A custom template definition <code>$custom</code> is used:</p>
-<pre><code class="language-PowerShell">    $custom = @{ navitem = &#39;&lt;li class=&quot;li-item&quot;&gt;&lt;a href=&quot;{{navurl}}&quot;&gt;{{navtext}}&lt;/a&gt;&lt;/li&gt;&#39;}
+<pre><code class="language-PowerShell">    $custom = @{ navitem = '&lt;li class=&quot;li-item&quot;&gt;&lt;a href=&quot;{{navurl}}&quot;&gt;{{navtext}}&lt;/a&gt;&lt;/li&gt;'}
 </code></pre>
 <p>The link target <code>index.md</code> is a page at the root of the same site, hence the link is
 adjusted accordingly.</p>
@@ -371,7 +371,7 @@ adjusted accordingly.</p>
 </blockquote>
 <h2 id="example-4">EXAMPLE 4</h2>
 <blockquote>
-<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;---&#39;=&#39;&#39;} -RelativePath &#39;intro/about.md&#39;
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{'---'=''} -RelativePath 'intro/about.md'
 </code></pre>
 <p>Generates a separator line in the navigation bar.</p>
 <p>Output:</p>
@@ -380,10 +380,10 @@ adjusted accordingly.</p>
 </blockquote>
 <h2 id="example-5">EXAMPLE 5</h2>
 <blockquote>
-<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;---&#39;=&#39;&#39;} -NavTemplate $custom
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{'---'=''} -NavTemplate $custom
 </code></pre>
 <p>Generates a separator line in the navigation bar using a custom template <code>$custom</code>:</p>
-<pre><code class="language-PowerShell">    $custom = @{ navseparator = &#39;&lt;hr class=&quot;li-item&quot; /&gt;&#39;}
+<pre><code class="language-PowerShell">    $custom = @{ navseparator = '&lt;hr class=&quot;li-item&quot; /&gt;'}
 </code></pre>
 <p>Output:</p>
 <pre><code class="language-html">&lt;hr class=&quot;li-item&quot; /&gt;
@@ -391,22 +391,22 @@ adjusted accordingly.</p>
 </blockquote>
 <h2 id="example-6">EXAMPLE 6</h2>
 <blockquote>
-<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Introduction&#39;=&#39;&#39;}
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{'Introduction'=''}
 </code></pre>
 <p>Generates a label in the navigation bar.</p>
 <p>Output:</p>
-<pre><code class="language-html">&lt;div class=&#39;navitem&#39;&gt;Introduction&lt;/div&gt;
+<pre><code class="language-html">&lt;div class='navitem'&gt;Introduction&lt;/div&gt;
 </code></pre>
 </blockquote>
 <h2 id="example-7">EXAMPLE 7</h2>
 <blockquote>
-<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{&#39;Introduction&#39;=&#39;&#39;} -NavTemplate $custom
+<pre><code class="language-PowerShell">ConvertTo-NavigationItem @{'Introduction'=''} -NavTemplate $custom
 </code></pre>
 <p>Generates a label in the navigation bar using the custom template <code>$custom</code>:</p>
-<pre><code class="language-PowerShell">    $custom = @{ navlabel = &#39;&lt;div class=&#39;li-item&#39;&gt;Introduction&lt;/div&gt;&#39;}
+<pre><code class="language-PowerShell">    $custom = @{ navlabel = '&lt;div class='li-item'&gt;Introduction&lt;/div&gt;'}
 </code></pre>
 <p>Output:</p>
-<pre><code class="language-html">&lt;div class=&#39;li-item&#39;&gt;Introduction&lt;/div&gt;
+<pre><code class="language-html">&lt;div class='li-item'&gt;Introduction&lt;/div&gt;
 </code></pre>
 </blockquote>
 <h1 id="related-links">Related Links</h1>
