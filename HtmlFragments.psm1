@@ -59,7 +59,7 @@ Lines of Markdown text where all fenced code blocks labelled `bob` are
 replaced by Markdown style image links to svg files.
 
 .EXAMPLE
-PS> Get-Content $md -Encoding UTF8 | Convert-SvgbobToSvg -SiteDirectory $site -RelativePath $relativePath
+PS> Get-Content $html -Encoding UTF8 | Convert-SvgbobToSvg -SiteDirectory $site -RelativePath $relativePath
 
 Read Markdown content from the file `$md` and replace all fenced code blocks
 marled as `bob` with Markdown style image links to the svg version of the
@@ -74,8 +74,9 @@ Where
 :   is the **relative path** of the HTML file currently being assembled below
     `$site`.
 
-`$md`
-:   represents a file named `test.md` which contains a fenced svgbob diagram.
+`$html`
+:   represents a Html fragment created from a Markdown file `test.md` which
+    contains a fenced svgbob diagram:
     ``` Markdown
     Some text ...
 
@@ -88,19 +89,36 @@ Where
     Some more text ...
     ```
 
-this is converted to:
+this fragment is converted to:
 
-~~~ Markdown
-Some text ...
+* A file `test1.svg` which is placed right next to the html file `test.html`
+  which is going to be created by `Publish-StaticHtmlSite` in a subsequent
+  stage of the conversion pipeline. The numerical postfix is the index of the
+  Svgbob diagram in the fragment. The svg image renders as:
 
-![Diagram 1.](test1.svg)
+  ~~~ bob
+       +------+   .-.   +---+
+  o----| elem |--( ; )--| n |----o
+       +------+   '-'   +---+
+  ~~~
 
-Some more text ...
-~~~
+* An updated html fragment where the fenced Svgbob diagram is replaced with
+  a reference to the svg image.
+
+  ~~~ html
+  Some text ...
+
+  <img src='test1.svg' alt='Diagram 1.' />
+
+  Some more text ...
+  ~~~
 
 .NOTES
 The svg conversion is performed by the external utility
 `svgbob.exe` which is packaged with this module.
+`svgbob.exe` is a [Rust](https://www.rust-lang.org/)
+[crate](https://doc.rust-lang.org/rust-by-example/crates.html) which can be
+installed from [lib.rs](https://lib.rs/crates/svgbob_cli).
 
 .LINK
 https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-SvgbobToSvg.html
@@ -426,3 +444,35 @@ function Convert-MarkdownToHTMLFragment
         $htmlDescriptor
     }
 }
+
+# SIG # Begin signature block
+# MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
+# gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUOP58JUJwkPrW2nsUK4s0m2TQ
+# gzugggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
+# NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
+# 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
+# yi34ZctnpyFUz+Cv547+MvzAr0uRuLkxn6ArBkVLeHVAB58jenSeLwDFls5gS0I+
+# pRJWO9eyyT64EcUSCMlfMLW2q1hzjfFckFR6iFnGp3TkE0s1kQANUNjAR9axC6ju
+# 4dpilIupCHW+/0s9aGz7LYuRQGcy3uIL9TURKdBtOsMOBeclUsEoFSEp/0D30E8r
+# PNk/VLu57G5H9n3HuX/DSBR2CL8LzOOv981hiS+SCds/pHqjCX9Qj+j47Kv7xZ1i
+# ha2fg4AEHDGbL/WJGnTpUKath+EmgmFRlsP7PgnZr4anvGdcdQIDAQABo0YwRDAO
+# BgNVHQ8BAf8EBAMCB4AwEwYDVR0lBAwwCgYIKwYBBQUHAwMwHQYDVR0OBBYEFKtE
+# 8xMwn4kGbe8AzXY0ineK5ToHMA0GCSqGSIb3DQEBBQUAA4IBAQAgaUJkHD9192H7
+# OUhf9W3gR0ZkApD5fnPqsIgS91JFQ2fCnonudJinwbODs01yA55uUw4GJUnAKQOx
+# 6auVAC5KVzE2dMDbOrBOseoKj12EbzbF509FkVoT5O77NDpFrGErR1zmQ8fd1DXw
+# FAFC1x1vpxW7/F6g+xewpqlFKzjkPeEvLgyoUmKMCOnT0JdXS0BfyAyyIfHwvILo
+# 2eJWVG2UMioKOJ6vsttTu8mQgVZlfcoF6r81ee3hTEK24aHNR+frHmyrL9UplZxD
+# AuoUGVzYdDyOejlLPm+d+ew1d6dTf9QfurRxoKgI6OMOVI3iIIXd6HTiIW4ACwI9
+# iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
+# ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
+# AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTd+FezFOtCfvDwMXHVYOGx6PO4
+# zjANBgkqhkiG9w0BAQEFAASCAQBRNKVX2zyk3fuS3IgRhB20LiHuMzM6jEBSiITu
+# vXxksM+0Sg5N982Rd9TaaYYBLgiSf7tURVLTJBSB98g4pFAt9nWDiZK1O0m9/nUh
+# TJiqX7iiWAQwPGwg9Bs6sBwpBHH3vKqPSQeA5ZIhMTthmW/G05kuGRwIhyLyS84a
+# 146UTDghnaSTowvsPh0AHJvZ8yMCaYyD0zCxaD9vsEi1eu4Nxil76xuMjspJA0pU
+# dprdDvxOmtv27FWUWEw9VPU+/2wR+rtkXwU9+d4Y1iaqqf7Z5xJnHpuvw3QUI6X4
+# z0rs6JJbaQsKe4kLqwLv0XOHZ1o7HtY9Eye4HvzPnYxQAySI
+# SIG # End signature block
