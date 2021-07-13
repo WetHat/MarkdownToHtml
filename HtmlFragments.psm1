@@ -51,15 +51,15 @@ When using conversion projects instantiated by `New-StaticHTMLSiteProject` these
 parameters are configured in `Build.json` parameter section `svgbob`.
 
 .INPUTS
-HTML fragment objects emitted by `Convert-MarkdownToHTMLFragment` or
-equivalent objects.
+HTML fragment objects emitted by `Convert-MarkdownToHTMLFragment` with
+the `-Split` switch or equivalent objects.
 
 .OUTPUTS
 Lines of Markdown text where all fenced code blocks labelled `bob` are
 replaced by Markdown style image links to svg files.
 
 .EXAMPLE
-PS> Get-Content $html -Encoding UTF8 | Convert-SvgbobToSvg -SiteDirectory $site -RelativePath $relativePath
+PS> Convert-MarkdownToHTMLFragment -InputObject $md -Split | Convert-SvgbobToSvg -SiteDirectory $site -RelativePath $relativePath
 
 Read Markdown content from the file `$md` and replace all fenced code blocks
 marled as `bob` with Markdown style image links to the svg version of the
@@ -74,9 +74,8 @@ Where
 :   is the **relative path** of the HTML file currently being assembled below
     `$site`.
 
-`$html`
-:   represents a Html fragment created from a Markdown file `test.md` which
-    contains a fenced svgbob diagram:
+`$md`
+:   is a Markdown file `test.md` which contains a fenced svgbob diagram:
     ``` Markdown
     Some text ...
 
@@ -256,6 +255,26 @@ Comma separated list of Markdown parsing extensions to exclude.
 Mostly used when the the 'advanced' parsing option is included and
 certain individual options need to be removed.
 
+.PARAMETER Split
+Split the Html fragment into an Array where each tag is in a separate slot.
+This somewhat simplifies Html fragment post-processing.
+
+For example the fragment
+
+~~~ html
+<pre><code class="language-PowerShell">PS&gt; Install-Module -Name MarkdownToHTML</pre></code>
+~~~
+
+is split up into the array
+
+| Index | Value                                        |
+| :---: | :------------------------------------------- |
+| 0     | `<pre>`                                      |
+| 1     | `<code class="language-PowerShell">`         |
+| 2     | `PS&gt; Install-Module -Name MarkdownToHTML` |
+| 3     | `</pre>`                                     |
+| 4     | `</code>`                                    |
+
 .INPUTS
 Markdown text `[string]`, Markdown file `[System.IO.FileInfo]`,
 or a markdown descriptor `[hashtable]`.
@@ -263,11 +282,11 @@ or a markdown descriptor `[hashtable]`.
 .OUTPUTS
 HTML fragment object with following properties:
 
-| Property       | Description                                                     |
-| :------------: | :-------------------------------------------------------------- |
-| `Title`        | Optional page title. The first heading in the Markdown content. |
-| `HtmlFragment` | The HTML fragment string generated from the Markdown text.      |
-| `RelativePath` | Passed through from the input object, provided it exists.       |
+| Property       | Description                                                         |
+| :------------: | :------------------------------------------------------------------ |
+| `Title`        | Optional page title. The first heading in the Markdown content.     |
+| `HtmlFragment` | The HTML fragment string or array generated from the Markdown text. |
+| `RelativePath` | Passed through from the input object, provided it exists.           |
 
 .NOTES
 The conversion to HTML fragments also includes:
@@ -326,6 +345,16 @@ Returns the HTML fragment object:
     Title              Hello World
 
 .EXAMPLE
+Convert-MarkdownToHTMLFragment -Markdown '# Hello World' -Split
+
+Returns the HTML fragment object:
+
+    Name               Value
+    ----               -----
+    HtmlFragment       {<h1 id="hello-world">,Hello World,</h1>,...}
+    Title              Hello World
+
+.EXAMPLE
 Get-Item -LiteralPath "Convert-MarkdownToHTML.md" | Convert-MarkdownToHTMLFragment
 
 Reads the content of Markdown file `Example.md` and returns a Html fragment object.
@@ -341,11 +370,14 @@ https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-MarkdownToHTMLFragment.htm
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
+`Convert-SvgbobToSvg`
+.LINK
 `Find-MarkdownFiles`
 .LINK
 `Publish-StaticHtmlSite`
 .LINK
 `New-HTMLTemplate`
+
 .LINK
 [Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions)
 #>
