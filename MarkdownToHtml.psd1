@@ -191,10 +191,11 @@ PrivateData = @{
 	      New-Item -Path $staticSite -Name .nojekyll -ItemType File
       }
       ~~~
-* Added a Markdown pre-processing step to the conversion pipelione.
+* Added a Html fragment post-processing step to the conversion pipeline.
 
-  The default preprocessing converts [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
-  character art diagrams to svg images. See the
+  The default post-processing function `Convert-SvgbobToSvg`
+  converts [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
+  ASCII art diagrams to svg images. See the
   [feature showcase](../index.html#svgbob-plain-text-diagrams)
   for an example.
 
@@ -224,23 +225,19 @@ PrivateData = @{
       for more details.
 
     `Build.json` project configuration file
-    :   A Preprocessing stage needs to be added to the conversion pipeline:
+    :   A postprocessing stage needs to be inserted into to the conversion pipeline by
+        adding a `-Split` switch to `Convert-MarkdownToHTMLFragment` and then piping
+        its output to `Convert-SvgbobToSvg` like so:
 
         ~~~ PowerShell
         # Conversion pipeline
         $SCRIPT:markdown = Join-Path $projectDir $config.markdown_dir
         Find-MarkdownFiles $markdown -Exclude $config.Exclude `
-        | ForEach-Object { # Markdown Preprocessor
-            Get-Content $_ -Encoding UTF8 `
-            | Convert-SvgbobToSvg -SiteDirectory $staticSite `
-                                  -RelativePath $_.RelativePath `
-                                  -Options $SCRIPT:config.svgbob `
-            | Complete-MarkdownPreprocessor -RelativePath $_.RelativePath
-          }`
-        | Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions `
+        | Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions -Split `
+        | Convert-SvgbobToSvg -SiteDirectory $staticSite -Options $SCRIPT:config.svgbob `
         | Publish-StaticHTMLSite -Template (Join-Path $projectDir $config.HTML_Template) `
                                  -ContentMap  $contentMap `
-						         -MediaDirectory $markdown `
+				        	     -MediaDirectory $markdown `
 	                             -SiteDirectory $staticSite
         ~~~
 
