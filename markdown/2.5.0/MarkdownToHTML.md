@@ -69,6 +69,7 @@ See [version 2.0.0](MarkdownToHTML.md#2.0.0) release notes for upgrade instructi
       directory, the site is accessible on the web through its canonical
       _GitHub Pages_ url.
 
+  `Build.ps1` project build file
   :   Add a statement to disable the GitHub publishing process (jekyll) which
       is not necessary for static sites created by this module. Add
       following code to the end of the build file:
@@ -272,114 +273,6 @@ See [version 2.0.0](MarkdownToHTML.md#2.0.0) release notes for upgrade instructi
 #### Maintenance
 
 * Minimum required Powershell version now 5.1 (Desktop)
-
-## 2.0.0 {#2.0.0}
-
-The version of _Markdig_ included in this release introduces an
-incompatiblity with projects which use the _mathematics_ extension
-**and** were created with versions of this module older than 2.0.0
-(i.e. 1.* or 0.*).
-
-To address this incompaibility the _KaTex_ configuration in
-**all** deployed html templates (`md_template.html`) need to be updated like so:
-
-~~~ html
-<script>
-    // <![CDATA[
-    window.onload = function() {
-        var tex = document.getElementsByClassName("math");
-        Array.prototype.forEach.call(tex, function(el) {
-            katex.render(el.textContent, el, {
-                                                displayMode: (el.nodeName == "DIV"),
-                                                macros: {
-                                                            "\\(": "",
-                                                            "\\)": "",
-                                                            "\\[": "",
-                                                            "\\]": ""
-                                                        }
-                                            })
-        });
-    };
-    // ]]>
-</script>
-~~~
-
-#### New Features
-
-* Highlighting languages _Perl_ and _YAML_ added
-
-#### Maintenance
-
-* Updated to _Markdig_ 0.18.0.
-* KaTeX updated to version 0.11.1
-* Code syntax highlighting updated to version 9.17.1
-
-#### Bugfixes
-* Rendering of math blocks now creates centered output with the correct (bigger) font.
-* Changed the default html template (`md_template.html`) to address the incompatible
-  change in the LaTeX math output of the _mathematics_ extension of _Markdig_.
-
-## 1.3.0
-
-* upgrade of markdig to version 0.17.2
-* KaTex upgraded to 0.11.0
-* Re-factored the Markdown converter pipeline and made it parts public
-  to make it useful for a broader range of Markdown conversion scenarios.
-
-## 1.2.8
-
-* [`Write-Host`](Write-Host.md) replaced by the more benign [`Write-Verbose`](Write-Verbose.md)
-* Minor code cleanup
-
-## 1.2.7
-
-* Empty lines allowed im 'md-template.html` to remove an ugly but harmless
-  exception.
-* Syntax highlighting updated to version 9.14.2
-* Upgrade to markdig version 0.15.7
-* Added Resources and configuration for the [mermaid](https://mermaidjs.github.io/) diagram and
-  flowchart generator version 8.0.0 to the HTML template.
-* Added Resources and configuration for the [KaTeX](https://katex.org/) LaTeX Math
-  typesetting library version 0.10.0 to the HTML template.
-* Documentation improved.
-
-## 1.2.6
-
-* Powershell Gallery metadata added.
-
-## 1.2.4
-
-* Replaced `[System.Web.HttpUtility]` by `[System.Net.WebUtility]` to fix issue
-  when powershell is run with `-noprofile`
-
-## 1.2.3
-
-* Fixed regression introduced in 1.2.2
-* Regression test setup
-
-## 1.2.2
-
-* Support for markdown files in a directory hierarchy fixed.
-  (directory scanning fixed and relative path added to resource links)
-
-## 1.2.1
-
-Handle partially HTML encoded code blocks
-
-## 1.2.0
-
-* Replaced XML template processing with text based template processing,
-  to relax constraints on the HTML fragment quality.
-* HTML encode text in `<code>` blocks
-
-## 1.1.0
-
-* Setting of Markdown parser options implemented
-* Wildcard support for pathes added
-
-## 1.0.0
-
-Initial Release
 
 ---
 
