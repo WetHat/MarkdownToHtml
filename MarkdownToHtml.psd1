@@ -180,6 +180,7 @@ PrivateData = @{
       directory, the site is accessible on the web through its canonical
       _GitHub Pages_ url.
 
+  `Build.ps1` project build file
   :   Add a statement to disable the GitHub publishing process (jekyll) which
       is not necessary for static sites created by this module. Add
       following code to the end of the build file:
