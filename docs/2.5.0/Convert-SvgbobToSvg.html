@@ -238,8 +238,8 @@ parameters are configured in <code>Build.json</code> parameter section <code>svg
 </blockquote>
 </blockquote>
 <h1 id="inputs">Inputs</h1>
-<p>HTML fragment objects emitted by <code>Convert-MarkdownToHTMLFragment</code> or
-equivalent objects.</p>
+<p>HTML fragment objects emitted by <code>Convert-MarkdownToHTMLFragment</code> with
+the <code>-Split</code> switch or equivalent objects.</p>
 <h1 id="outputs">Outputs</h1>
 <p>Lines of Markdown text where all fenced code blocks labelled <code>bob</code> are
 replaced by Markdown style image links to svg files.</p>
@@ -254,7 +254,7 @@ installed from <a href="https://lib.rs/crates/svgbob_cli">lib.rs</a>.</p>
 <h1 id="examples">Examples</h1>
 <h2 id="example-1">EXAMPLE 1</h2>
 <blockquote>
-<pre><code class="language-PowerShell">Get-Content $html -Encoding UTF8 | Convert-SvgbobToSvg -SiteDirectory $site -RelativePath $relativePath
+<pre><code class="language-PowerShell">Convert-MarkdownToHTMLFragment -InputObject $md -Split | Convert-SvgbobToSvg -SiteDirectory $site -RelativePath $relativePath
 </code></pre>
 <p>Read Markdown content from the file <code>$md</code> and replace all fenced code blocks
 marled as <code>bob</code> with Markdown style image links to the svg version of the
@@ -266,10 +266,9 @@ diagram. The conversion is performed using default svg rendering options.</p>
 <dt><code>$relativePath</code></dt>
 <dd>is the <strong>relative path</strong> of the HTML file currently being assembled below
 <code>$site</code>.</dd>
-<dt><code>$html</code></dt>
+<dt><code>$md</code></dt>
 <dd>
-<p>represents a Html fragment created from a Markdown file <code>test.md</code> which
-contains a fenced svgbob diagram:</p>
+<p>is a Markdown file <code>test.md</code> which contains a fenced svgbob diagram:</p>
 <pre><code class="language-Markdown">Some text ...
 
 ~~~ bob

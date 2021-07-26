@@ -192,9 +192,10 @@ if ($config.github_pages) {
 </dd>
 </dl>
 </li>
-<li><p>Added a Markdown pre-processing step to the conversion pipelione.</p>
-<p>The default preprocessing converts <a href="https://ivanceras.github.io/content/Svgbob.html">Svgbob</a>
-character art diagrams to svg images. See the
+<li><p>Added a Html fragment post-processing step to the conversion pipeline.</p>
+<p>The default post-processing function <a href="Convert-SvgbobToSvg.html"><code>Convert-SvgbobToSvg</code></a>
+converts <a href="https://ivanceras.github.io/content/Svgbob.html">Svgbob</a>
+ASCII art diagrams to svg images. See the
 <a href="../index.html#svgbob-plain-text-diagrams">feature showcase</a>
 for an example.</p>
 <p>This new feature is backwards compatible with existing static site projects.
@@ -224,21 +225,17 @@ for more details.</p>
 <dl>
 <dt><code>Build.json</code> project configuration file</dt>
 <dd>
-<p>A Preprocessing stage needs to be added to the conversion pipeline:</p>
+<p>A postprocessing stage needs to be inserted into to the conversion pipeline by
+adding a <code>-Split</code> switch to <a href="Convert-MarkdownToHTMLFragment.html"><code>Convert-MarkdownToHTMLFragment</code></a> and then piping
+its output to <a href="Convert-SvgbobToSvg.html"><code>Convert-SvgbobToSvg</code></a> like so:</p>
 <pre><code class="language-PowerShell"># Conversion pipeline
 $SCRIPT:markdown = Join-Path $projectDir $config.markdown_dir
 Find-MarkdownFiles $markdown -Exclude $config.Exclude `
-| ForEach-Object { # Markdown Preprocessor
-    Get-Content $_ -Encoding UTF8 `
-    | Convert-SvgbobToSvg -SiteDirectory $staticSite `
-                          -RelativePath $_.RelativePath `
-                          -Options $SCRIPT:config.svgbob `
-    | Complete-MarkdownPreprocessor -RelativePath $_.RelativePath
-  }`
-| Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions `
+| Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions -Split `
+| Convert-SvgbobToSvg -SiteDirectory $staticSite -Options $SCRIPT:config.svgbob `
 | Publish-StaticHTMLSite -Template (Join-Path $projectDir $config.HTML_Template) `
                          -ContentMap  $contentMap `
-  				         -MediaDirectory $markdown `
+  		        	     -MediaDirectory $markdown `
                          -SiteDirectory $staticSite
 </code></pre>
 </dd>

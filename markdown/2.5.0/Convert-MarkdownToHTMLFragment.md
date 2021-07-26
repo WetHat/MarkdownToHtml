@@ -97,7 +97,24 @@ Accept wildcard characters?| false
 
 <blockquote>
 
+Split the Html fragment into an Array where each tag is in a separate slot.
+This somewhat simplifies Html fragment post-processing.
 
+For example the fragment
+
+~~~ html
+<pre><code class="language-PowerShell">PS&gt; Install-Module -Name MarkdownToHTML</pre></code>
+~~~
+
+is split up into the array
+
+| Index | Value                                        |
+| :---: | :------------------------------------------- |
+| 0     | `<pre>`                                      |
+| 1     | `<code class="language-PowerShell">`         |
+| 2     | `PS&gt; Install-Module -Name MarkdownToHTML` |
+| 3     | `</pre>`                                     |
+| 4     | `</code>`                                    |
 
 ---
 
@@ -123,11 +140,11 @@ or a markdown descriptor `[hashtable]`.
 # Outputs
 HTML fragment object with following properties:
 
-| Property       | Description                                                     |
-| :------------: | :-------------------------------------------------------------- |
-| `Title`        | Optional page title. The first heading in the Markdown content. |
-| `HtmlFragment` | The HTML fragment string generated from the Markdown text.      |
-| `RelativePath` | Passed through from the input object, provided it exists.       |
+| Property       | Description                                                         |
+| :------------: | :------------------------------------------------------------------ |
+| `Title`        | Optional page title. The first heading in the Markdown content.     |
+| `HtmlFragment` | The HTML fragment string or array generated from the Markdown text. |
+| `RelativePath` | Passed through from the input object, provided it exists.           |
 
 # Notes
 
@@ -213,6 +230,32 @@ The conversion to HTML fragments also includes:
 ## EXAMPLE 2
 
 > ~~~ PowerShell
+> Convert-MarkdownToHTMLFragment -Markdown '# Hello World' -Split
+> ~~~
+>
+> 
+> Returns the HTML fragment object:
+> 
+>     Name               Value
+>     ----               -----
+>     HtmlFragment       {<h1 id="hello-world">,Hello World,</h1>,...}
+>     Title              Hello World
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+ 
+## EXAMPLE 3
+
+> ~~~ PowerShell
 > Get-Item -LiteralPath "Convert-MarkdownToHTML.md" | Convert-MarkdownToHTMLFragment
 > ~~~
 >
@@ -242,6 +285,7 @@ The conversion to HTML fragments also includes:
 
 * [https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-MarkdownToHTMLFragment.html](https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-MarkdownToHTMLFragment.html) 
 * [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md) 
+* [`Convert-SvgbobToSvg`](Convert-SvgbobToSvg.md) 
 * [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
 * [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) 
 * [`New-HTMLTemplate`](New-HTMLTemplate.md) 

@@ -114,8 +114,8 @@ Accept wildcard characters?| false
 
 
 # Inputs
-HTML fragment objects emitted by `Convert-MarkdownToHTMLFragment` or
-equivalent objects.
+HTML fragment objects emitted by `Convert-MarkdownToHTMLFragment` with
+the `-Split` switch or equivalent objects.
 
 
 # Outputs
@@ -141,7 +141,7 @@ installed from [lib.rs](https://lib.rs/crates/svgbob_cli).
 ## EXAMPLE 1
 
 > ~~~ PowerShell
-> Get-Content $html -Encoding UTF8 | Convert-SvgbobToSvg -SiteDirectory $site -RelativePath $relativePath
+> Convert-MarkdownToHTMLFragment -InputObject $md -Split | Convert-SvgbobToSvg -SiteDirectory $site -RelativePath $relativePath
 > ~~~
 >
 > 
@@ -158,9 +158,8 @@ installed from [lib.rs](https://lib.rs/crates/svgbob_cli).
 > :   is the **relative path** of the HTML file currently being assembled below
 >     `$site`.
 > 
-> `$html`
-> :   represents a Html fragment created from a Markdown file `test.md` which
->     contains a fenced svgbob diagram:
+> `$md`
+> :   is a Markdown file `test.md` which contains a fenced svgbob diagram:
 >     ``` Markdown
 >     Some text ...
 > 

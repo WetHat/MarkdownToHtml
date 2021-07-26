@@ -35,7 +35,7 @@ or sites.
 >         See the [example](../index.md#mermaid-diagrams).
 >       - [Svgbob](https://ivanceras.github.io/content/Svgbob.html): Text based, human readable
 >         diagrams. See the [example](../index.md#svgbob-plain-text-diagrams)
->         and [Supported Markdown Preprocessors](#supported-markdown-preprocessors)
+>         and [Supported HTML Fragment Postprocessors](#supported-fragment-preprocessors)
 
 # Long Description
 A collection of PowerShell commands to convert Markdown files to static
@@ -59,12 +59,12 @@ four stages as outlined below:
                     |
                     v
        +------------o-------------+
-2      | Markdown "Pre-Processor" |
+2      | HTML Fragment Conversion |
        +------------.-------------+
                     |
                     v
        +------------o-------------+
-3      | HTML Fragment Conversion |
+3      | Fragment "Post-Processor"|
        +------------.-------------+
                     |                   .----------.
                     v                 .--\ Template \
@@ -81,8 +81,8 @@ four stages as outlined below:
 The PowerShell functions associated with the pipeline stages are:
 
 1. [`Find-MarkdownFiles`](Find-MarkdownFiles.md)
-2. [`Convert-SvgbobToSvg`](Convert-SvgbobToSvg.md) and [`Complete-MarkdownPreprocessor`](Complete-MarkdownPreprocessor.md)
-3. [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md)
+2. [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md)
+3. [`Convert-SvgbobToSvg`](Convert-SvgbobToSvg.md)
 4. [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md)
 
 A simple, non-customizable pipeline setup is implemented by the command
@@ -236,22 +236,22 @@ See the [customization](#customization) for options.
 > |                 | parsing.                                                                                      |
 > +-----------------+-----------------------------------------------------------------------------------------------+
 
-## Supported Markdown Preprocessors
+## Supported Fragment Postprocessors
 
-> Preprocessors transform non-standard Markdown into a
-> [Markdig](https://github.com/lunet-io/markdig) compatible format.
+> Fragment postprocessors scan Html fragments for sections which need to
+> be transformed into a renderable format.
 >
-> The preprocessors included in this version are:
+> The postprocessor included in this version is:
 >
-> + :--------: +-----------------------------------------------------------------+
-> |Preprocessor| Decription
-> +============+=================================================================+
-> | svgbob     | Convert text based, human readable diagrams to svg images.
-> |            | [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
-> |            | diagrams are defined in fenced code blocks labelled
-> |            | with `bob`. Refer to the documentation for the preprocessor
-> |            | [`Convert-SvgbobToSvg`](Convert-SvgbobToSvg.md) for more details.
-> +------------+-----------------------------------------------------------------+
+> + :---------: +-----------------------------------------------------------------+
+> |Postprocessor| Decription
+> +=============+=================================================================+
+> | svgbob      | Convert text based, human readable diagrams to svg images.
+> |             | [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
+> |             | diagrams are defined in fenced code blocks labelled
+> |             | with `bob`. Refer to the documentation for the preprocessor
+> |             | [`Convert-SvgbobToSvg`](Convert-SvgbobToSvg.md) for more details.
+> +-------------+-----------------------------------------------------------------+
 
 # Usage
 This module supports a range of workflows involving conversion of Markdown
@@ -634,13 +634,13 @@ conversion process you should
 >                           |
 >                           v
 >              .------------o------------.
->     2        | Markdown "Pre-Processor" |
+>     2        | HTML Fragment Converter |
 >              '------------.------------'
 >                           |
 >                           v
->              .------------o------------.
->     3        | HTML Fragment Converter |
->              '------------.------------'
+>              .------------o-------------.
+>     3        | Fragment "Post-Processor"|
+>              '------------.-------------'
 >                           |                  .----------------------------.
 >                           v                .--\ Template "(HTML_template)" \
 >              .------------o------------.   |   '----------------------------'
@@ -653,7 +653,7 @@ conversion process you should
 >          '-------------------------------'
 >     ~~~
 >
->     To implement custom build rules PowerShell code can be addes to the
+>     To implement custom conversion steps PowerShell code can be added to the
 >     build file as needed.
 >
 > The Template directory
@@ -663,7 +663,7 @@ conversion process you should
 > ### Defining Content Mapping Rules
 >
 > When a custom placeholder was added to `md-template.html` a rule to
-> replaced it with content in the project's build process is required.
+> replace it with content in the project's build process is required.
 > This rule is added to the content map dictionary
 > `$SCRIPT:contentMap` defined in `Build.ps1`. For example a simple
 > rule to replace the placeholder `{{my_placeholder}}` with static text

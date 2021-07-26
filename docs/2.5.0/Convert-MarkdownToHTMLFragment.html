@@ -69,6 +69,7 @@
 <button class='navitem'><a href='#examples'><span class='navitem1'>Examples</span></a></button>
 <button class='navitem'><a href='#example-1'><span class='navitem2'>EXAMPLE 1</span></a></button>
 <button class='navitem'><a href='#example-2'><span class='navitem2'>EXAMPLE 2</span></a></button>
+<button class='navitem'><a href='#example-3'><span class='navitem2'>EXAMPLE 3</span></a></button>
 <button class='navitem'><a href='#related-links'><span class='navitem1'>Related Links</span></a></button>
 </nav>
     <main>
@@ -226,6 +227,42 @@ certain individual options need to be removed.</p>
  
 <h2 id="split-switchparameter">-Split &lt;SwitchParameter&gt;</h2>
 <blockquote>
+<p>Split the Html fragment into an Array where each tag is in a separate slot.
+This somewhat simplifies Html fragment post-processing.</p>
+<p>For example the fragment</p>
+<pre><code class="language-html">&lt;pre&gt;&lt;code class=&quot;language-PowerShell&quot;&gt;PS&amp;gt; Install-Module -Name MarkdownToHTML&lt;/pre&gt;&lt;/code&gt;
+</code></pre>
+<p>is split up into the array</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Index</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">0</td>
+<td style="text-align: left;"><code>&lt;pre&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;"><code>&lt;code class=&quot;language-PowerShell&quot;&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;"><code>PS&amp;gt; Install-Module -Name MarkdownToHTML</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;"><code>&lt;/pre&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;"><code>&lt;/code&gt;</code></td>
+</tr>
+</tbody>
+</table>
 <hr />
 <table>
 <thead>
@@ -278,7 +315,7 @@ or a markdown descriptor <code>[hashtable]</code>.</p>
 </tr>
 <tr>
 <td style="text-align: center;"><code>HtmlFragment</code></td>
-<td style="text-align: left;">The HTML fragment string generated from the Markdown text.</td>
+<td style="text-align: left;">The HTML fragment string or array generated from the Markdown text.</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>RelativePath</code></td>
@@ -336,6 +373,17 @@ Title              Hello World
 </blockquote>
 <h2 id="example-2">EXAMPLE 2</h2>
 <blockquote>
+<pre><code class="language-PowerShell">Convert-MarkdownToHTMLFragment -Markdown '# Hello World' -Split
+</code></pre>
+<p>Returns the HTML fragment object:</p>
+<pre><code>Name               Value
+----               -----
+HtmlFragment       {&lt;h1 id=&quot;hello-world&quot;&gt;,Hello World,&lt;/h1&gt;,...}
+Title              Hello World
+</code></pre>
+</blockquote>
+<h2 id="example-3">EXAMPLE 3</h2>
+<blockquote>
 <pre><code class="language-PowerShell">Get-Item -LiteralPath &quot;Convert-MarkdownToHTML.md&quot; | Convert-MarkdownToHTMLFragment
 </code></pre>
 <p>Reads the content of Markdown file <code>Example.md</code> and returns a Html fragment object.</p>
@@ -350,6 +398,7 @@ RelativePath       Convert-MarkdownToHTML.md
 <ul>
 <li><a href="https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-MarkdownToHTMLFragment.html">https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-MarkdownToHTMLFragment.html</a></li>
 <li><a href="Convert-MarkdownToHTML.html"><code>Convert-MarkdownToHTML</code></a></li>
+<li><a href="Convert-SvgbobToSvg.html"><code>Convert-SvgbobToSvg</code></a></li>
 <li><a href="Find-MarkdownFiles.html"><code>Find-MarkdownFiles</code></a></li>
 <li><a href="Publish-StaticHtmlSite.html"><code>Publish-StaticHtmlSite</code></a></li>
 <li><a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a></li>

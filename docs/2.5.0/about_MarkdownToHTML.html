@@ -60,7 +60,7 @@
 <button class='navitem'><a href='#features'><span class='navitem2'>Features</span></a></button>
 <button class='navitem'><a href='#long-description'><span class='navitem1'>Long Description</span></a></button>
 <button class='navitem'><a href='#supported-markdown-extensions'><span class='navitem2'>Supported Markdown Extensions</span></a></button>
-<button class='navitem'><a href='#supported-markdown-preprocessors'><span class='navitem2'>Supported Markdown Preprocessors</span></a></button>
+<button class='navitem'><a href='#supported-fragment-postprocessors'><span class='navitem2'>Supported Fragment Postprocessors</span></a></button>
 <button class='navitem'><a href='#usage'><span class='navitem1'>Usage</span></a></button>
 <button class='navitem'><a href='#converting-markdown-files-to-html-files'><span class='navitem2'>Converting Markdown files to HTML files</span></a></button>
 <button class='navitem'><a href='#static-html-site-authoring-projects'><span class='navitem2'>Static HTML Site Authoring Projects</span></a></button>
@@ -109,7 +109,7 @@ of diagrams and flowcharts from text in a similar manner as Markdown.
 See the <a href="../index.html#mermaid-diagrams">example</a>.</li>
 <li><a href="https://ivanceras.github.io/content/Svgbob.html">Svgbob</a>: Text based, human readable
 diagrams. See the <a href="../index.html#svgbob-plain-text-diagrams">example</a>
-and <a href="#supported-markdown-preprocessors">Supported Markdown Preprocessors</a></li>
+and <a href="#supported-fragment-preprocessors">Supported HTML Fragment Postprocessors</a></li>
 </ul>
 </dd>
 </dl>
@@ -124,8 +124,8 @@ four stages as outlined below:</p>
 <p>The PowerShell functions associated with the pipeline stages are:</p>
 <ol>
 <li><a href="Find-MarkdownFiles.html"><code>Find-MarkdownFiles</code></a></li>
-<li><a href="Convert-SvgbobToSvg.html"><code>Convert-SvgbobToSvg</code></a> and <a href="Complete-MarkdownPreprocessor.html"><code>Complete-MarkdownPreprocessor</code></a></li>
 <li><a href="Convert-MarkdownToHTMLFragment.html"><code>Convert-MarkdownToHTMLFragment</code></a></li>
+<li><a href="Convert-SvgbobToSvg.html"><code>Convert-SvgbobToSvg</code></a></li>
 <li><a href="Publish-StaticHtmlSite.html"><code>Publish-StaticHtmlSite</code></a></li>
 </ol>
 <p>A simple, non-customizable pipeline setup is implemented by the command
@@ -300,7 +300,7 @@ See <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a> for custom
 </tr>
 <tr>
 <td style="text-align: center;">medialinks</td>
-<td>[Media support](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md
+<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md">Media support</a>
 for media urls (youtube, vimeo, mp4...etc.).</td>
 </tr>
 <tr>
@@ -353,17 +353,17 @@ parsing.</td>
 </tbody>
 </table>
 </blockquote>
-<h2 id="supported-markdown-preprocessors">Supported Markdown Preprocessors</h2>
+<h2 id="supported-fragment-postprocessors">Supported Fragment Postprocessors</h2>
 <blockquote>
-<p>Preprocessors transform non-standard Markdown into a
-<a href="https://github.com/lunet-io/markdig">Markdig</a> compatible format.</p>
-<p>The preprocessors included in this version are:</p>
+<p>Fragment postprocessors scan Html fragments for sections which need to
+be transformed into a renderable format.</p>
+<p>The postprocessor included in this version is:</p>
 <table>
-<col style="width:15.58%" />
-<col style="width:84.42%" />
+<col style="width:16.67%" />
+<col style="width:83.33%" />
 <thead>
 <tr>
-<th style="text-align: center;">Preprocessor</th>
+<th style="text-align: center;">Postprocessor</th>
 <th>Decription</th>
 </tr>
 </thead>
@@ -881,7 +881,7 @@ build process. To conform with the GitHub Pages project structure
 configuration from <code>Build.json</code>. The build options for each stage are
 mentioned in parenthesis in the diagram below</p>
 <pre><img src='about_MarkdownToHTML5.svg' alt='Diagram 5.' /></pre>
-<p>To implement custom build rules PowerShell code can be addes to the
+<p>To implement custom conversion steps PowerShell code can be added to the
 build file as needed.</p>
 </dd>
 <dt>The Template directory</dt>
@@ -890,7 +890,7 @@ build file as needed.</p>
 </dl>
 <h3 id="defining-content-mapping-rules">Defining Content Mapping Rules</h3>
 <p>When a custom placeholder was added to <code>md-template.html</code> a rule to
-replaced it with content in the project's build process is required.
+replace it with content in the project's build process is required.
 This rule is added to the content map dictionary
 <code>$SCRIPT:contentMap</code> defined in <code>Build.ps1</code>. For example a simple
 rule to replace the placeholder <code>{{my_placeholder}}</code> with static text

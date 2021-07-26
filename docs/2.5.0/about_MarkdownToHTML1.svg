@@ -100,11 +100,11 @@
     <text x="114" y="188" >Markdown</text>
     <text x="186" y="188" >files</text>
     <circle cx="164" cy="248" r="3" class="nofill"></circle>
-    <text x="74" y="268" >Markdown</text>
+    <text x="74" y="268" >HTML</text>
+    <text x="114" y="268" >Fragment</text>
+    <text x="186" y="268" >Conversion</text>
     <circle cx="164" cy="328" r="3" class="nofill"></circle>
-    <text x="74" y="348" >HTML</text>
-    <text x="114" y="348" >Fragment</text>
-    <text x="186" y="348" >Conversion</text>
+    <text x="74" y="348" >Fragment</text>
     <text x="346" y="396" >Template</text>
     <circle cx="164" cy="408" r="3" class="nofill"></circle>
     <text x="74" y="428" >HTML</text>
@@ -120,7 +120,7 @@
     <text x="2" y="268" >2</text>
     <text x="2" y="348" >3</text>
     <text x="2" y="428" >4</text>
-    <text x="146" y="268" >Pre-Processor</text>
+    <text x="146" y="348" >Post-Processor</text>
     <g>
         <path d="M 96,8 A 8,8 0,0,0 90,12" class="nofill"></path>
         <line x1="90" y1="12" x2="78" y2="36" class="solid"></line>
