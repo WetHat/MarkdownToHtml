@@ -223,11 +223,13 @@ In the following sections some selected features are demonstrated.
 
 > [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
 > is a diagramming model which uses a set of typing characters to approximate
-> the intended shapes (ASCII art).
+> the intended shapes (ASCII art). Used to _draw_
+> diagrams which are human readable in their Markdown text
+> representation.
 >
 > Available since version 2.5.0. The example below uses
 > unicode _box_ drawing characters to make the diagrams more
->readable in Markdown text.
+> readable in Markdown text.
 >
 > ``` markdown
 > ~~~ bob
