@@ -32,7 +32,7 @@ An installable package of this module is hosted on the
 
 ## Installation
 >
-> To install the module enter the following command into the command prompt of 
+> To install the module enter the following command into the command prompt of
 > an admin PowerShell:
 >
 > ```PowerShell
@@ -42,7 +42,7 @@ An installable package of this module is hosted on the
 
 ## Update
 >
-> To update the module enter the following command into the command prompt of 
+> To update the module enter the following command into the command prompt of
 > an admin PowerShell:
 >
 >
@@ -105,7 +105,7 @@ Make sure to use the `-Online` switch for best reading experience.
 
 > * **2.5.0**: [Documentation](2.5.0/MarkdownToHTML.md) - [Release Notes](2.5.0/MarkdownToHTML.md#release-notes).
 
-## Old Versions
+## Previous Versions
 
 > * **2.4.0**: [Documentation](2.4.0/MarkdownToHTML.md) - [Release Notes](2.4.0/MarkdownToHTML.md#release-notes).
 > * **2.3.1**: [Documentation](2.3.1/MarkdownToHTML.md) - [Release Notes](2.3.1/MarkdownToHTML.md#release-notes).
@@ -125,6 +125,10 @@ In the following sections some selected features are demonstrated.
 
 ## Mermaid Diagrams
 
+> [Mermaid](https://mermaid-js.github.io/mermaid/#/) is a Javascript based
+> diagramming and charting tool that renders Markdown-inspired text definitions
+> to create and modify diagrams dynamically.
+>
 > Markdown extension: `mermaid`:
 >
 > ``` markdown
@@ -132,21 +136,21 @@ In the following sections some selected features are demonstrated.
 > stateDiagram
 > 	[*] --> Still
 > 	Still --> [*]
-> 
+>
 > 	Still --> Moving
 > 	Moving --> Still
 > 	Moving --> Crash
 > 	Crash --> [*]
 > ~~~
 > ```
-> 
+>
 > rendered as:
-> 
+>
 > ~~~ mermaid
 > stateDiagram
 > 	[*] --> Still
 > 	Still --> [*]
-> 
+>
 > 	Still --> Moving
 > 	Moving --> Still
 > 	Moving --> Crash
@@ -159,68 +163,72 @@ In the following sections some selected features are demonstrated.
 >
 > ~~~ markdown
 > $$
-> \left( \sum_{k=1}^n a_k b_k \right)^2 
-> \leq 
-> \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)  
+> \left( \sum_{k=1}^n a_k b_k \right)^2
+> \leq
+> \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
 > $$
 > ~~~
-> 
+>
 > renders as:
-> 
+>
 > $$
-> \left( \sum_{k=1}^n a_k b_k \right)^2 
-> \leq 
-> \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)  
+> \left( \sum_{k=1}^n a_k b_k \right)^2
+> \leq
+> \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
 > $$
 
 ## Code Syntax Highlighting
 
 > Markdown extension: `common`
-> 
+>
 > ``` markdown
 > ~~~ cpp
 > #include <iostream>
-> 
+>
 > int main(int argc, char *argv[]) {
-> 
+>
 >   /* An annoying "Hello World" example */
 >   for (auto i = 0; i < 0xFFFF; i++)
 >     cout << "Hello, World!" << endl;
-> 
+>
 >   char c = '\n';
 >   unordered_map <string, vector<string> > m;
 >   m["key"] = "\\\\"; // this is an error
-> 
+>
 >   return -2e3 + 12l;
 > }
 > ~~~
 > ```
-> 
+>
 > renders as:
-> 
+>
 > ~~~ cpp
 > #include <iostream>
-> 
+>
 > int main(int argc, char *argv[]) {
-> 
+>
 >   /* An annoying "Hello World" example */
 >   for (auto i = 0; i < 0xFFFF; i++)
 >     cout << "Hello, World!" << endl;
-> 
+>
 >   char c = '\n';
 >   unordered_map <string, vector<string> > m;
 >   m["key"] = "\\\\"; // this is an error
-> 
+>
 >   return -2e3 + 12l;
 > }
 > ~~~
 
 ## Svgbob Plain Text Diagrams
 
-Available since version 2.5.0. The example below uses
-unicode _box_ drawing characters to make the diagrams more
-readable in Markdown text. 
-
+> [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
+> is a diagramming model which uses a set of typing characters to approximate
+> the intended shapes (ASCII art).
+>
+> Available since version 2.5.0. The example below uses
+> unicode _box_ drawing characters to make the diagrams more
+>readable in Markdown text.
+>
 > ``` markdown
 > ~~~ bob
 >        ┌──────┐   .─.  ┌───┐
