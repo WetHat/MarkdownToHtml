@@ -6,7 +6,8 @@
   "HTML_template": "Template",
 
   "Exclude": [
-    "Code.md"
+    "Code.md",
+    "Svgbob.md"
   ],
 
   "markdown_extensions": [

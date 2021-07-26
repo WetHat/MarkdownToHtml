@@ -78,9 +78,10 @@ Describe 'Convert-MarkdownToHTMLFragment' {
 
 Describe 'ConversionProjects' {
 	It 'Converts markdown file(s) from ''<MDPath>'' to ''<ResultPath>'' with a custom converter pipeline' -ForEach @(
-		   @{MDPath='markdown'; Config='ProjectConfigs/Build1.json';ReferencePath='html_p1';  ResultPath='TestDrive:/P1.1'}
-		   @{MDPath='markdown'; Config='ProjectConfigs/Build1.json';ReferencePath='html_p1';  ResultPath='TestDrive:/P1.2'}
+		   @{MDPath='markdown'; Config='ProjectConfigs/Build1.json';ReferencePath='html_p1';  ResultPath='TestDrive:/P1'}
 		   @{MDPath='markdown'; Config='ProjectConfigs/Build2.json';ReferencePath='html_p2';  ResultPath='TestDrive:/P2'}
+		   @{MDPath='markdown'; Config='ProjectConfigs/Build3.json';ReferencePath='html_p3';  ResultPath='TestDrive:/P3'}
+
 		) `
 		{
 			[string]$markdown = Join-Path $testdata -ChildPath $MDPath
@@ -88,7 +89,7 @@ Describe 'ConversionProjects' {
             $config  = Get-Content $configPath -Encoding UTF8 | ConvertFrom-Json
 
 			# Debug
-		    # $ResultPath = $ResultPath -replace 'TestDrive:/','e:/temp/ttt/'
+		    #$ResultPath = $ResultPath -replace 'TestDrive:/',"e:/temp/"
 
             # Create a new Project
             New-StaticHTMLSiteProject -ProjectDirectory $ResultPath
