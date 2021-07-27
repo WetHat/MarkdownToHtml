@@ -10,8 +10,9 @@ Import-Module -Name '../MarkDownToHTML' -Force
 import-module -Name '../MarkdownCodeDocs' -Force
 
 $version = (Get-Module MarkDownToHTML).Version
+Write-Information -MessageData "Version: $version" -InformationAction Continue
+# Only major and minor revisions generate new docs
 $version = "$($version.Major).$($version.Minor).0"
-Write-Output "Version: $version"
 
 $markdown = "markdown/$version"
 # Clear previously generated Markdown
@@ -30,7 +31,7 @@ $SCRIPT:staticSite = Join-Path $projectDir $config.site_dir
 # Clean up the static HTML site before build
 Remove-Item $staticSite -Recurse -Force -ErrorAction:SilentlyContinue
 
-# Set-up the content mapping rules for replacing the templace placeholders
+# Set-up the content mapping rules for replacing the template placeholders
 $SCRIPT:contentMap = @{
 	# Add additional mappings here...
 	'{{footer}}' =  $config.Footer # Footer text from configuration
