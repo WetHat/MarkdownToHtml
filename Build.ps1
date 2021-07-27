@@ -9,7 +9,8 @@ Import-Module -Name '../MarkDownToHTML' -Force
 # Generate Markdown Docs for the current module version
 import-module -Name '../MarkdownCodeDocs' -Force
 
-$version = (Get-Module MarkDownToHTML).Version.ToString()
+$version = (Get-Module MarkDownToHTML).Version
+$version = "$($version.Major).$($version.Minor).0"
 Write-Output "Version: $version"
 
 $markdown = "markdown/$version"
