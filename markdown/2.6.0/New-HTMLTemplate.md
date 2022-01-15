@@ -87,7 +87,7 @@ The new conversion template directory `[System.IO.DirectoryInfo]`.
 
 # Related Links
 
-* [https://wethat.github.io/MarkdownToHtml/2.5.0/New-HTMLTemplate.html](https://wethat.github.io/MarkdownToHtml/2.5.0/New-HTMLTemplate.html) 
+* [https://wethat.github.io/MarkdownToHtml/2.6.0/New-HTMLTemplate.html](https://wethat.github.io/MarkdownToHtml/2.6.0/New-HTMLTemplate.html) 
 * [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md)
 
 ---

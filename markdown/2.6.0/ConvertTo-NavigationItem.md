@@ -1,7 +1,7 @@
 ﻿# ConvertTo-NavigationItem
 
-Convert a navigation specification to a single item in a navigation bar of a
-static HTML site projects created by `New-StaticHTMLSiteProject`.
+Convert a navigation specification to a single item in a navigation bar of pages
+in a static HTML site project created by `New-StaticHTMLSiteProject`.
 
 # Syntax
 ```PowerShell
@@ -15,7 +15,8 @@ static HTML site projects created by `New-StaticHTMLSiteProject`.
 Converts the specification for a single item in the navigation bar by
 * finding an HTML template to represent the item in the navigation bar.
 * replacing placeholders in the template by data taken from the
-* specification.
+  specification.
+* adjusting the navigation link based on the location in the directory tree.
 
 
 
@@ -280,7 +281,8 @@ the contents of the navigation bar (placeholder `{{nav}}`).
 > ~~~
 >
 > 
-> Generates a separator line in the navigation bar.
+> Generates a separator line in the navigation bar. The _RelativePath_ parameter
+> is not used (the specification does not contain a link).
 > 
 > Output:
 > 
@@ -392,7 +394,7 @@ the contents of the navigation bar (placeholder `{{nav}}`).
 
 # Related Links
 
-* [https://wethat.github.io/MarkdownToHtml/2.5.0/ConvertTo-NavigationItem.html](https://wethat.github.io/MarkdownToHtml/2.5.0/ConvertTo-NavigationItem.html) 
+* [https://wethat.github.io/MarkdownToHtml/2.6.0/ConvertTo-NavigationItem.html](https://wethat.github.io/MarkdownToHtml/2.6.0/ConvertTo-NavigationItem.html) 
 * [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md) 
 * [`New-PageHeadingNavigation`](New-PageHeadingNavigation.md)
 

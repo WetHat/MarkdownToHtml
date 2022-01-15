@@ -226,7 +226,7 @@ File objects [System.IO.FileInfo] of the generated HTML documents.
 
 # Related Links
 
-* [https://wethat.github.io/MarkdownToHtml/2.5.0/Publish-StaticHtmlSite.html](https://wethat.github.io/MarkdownToHtml/2.5.0/Publish-StaticHtmlSite.html) 
+* [https://wethat.github.io/MarkdownToHtml/2.6.0/Publish-StaticHtmlSite.html](https://wethat.github.io/MarkdownToHtml/2.6.0/Publish-StaticHtmlSite.html) 
 * [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md) 
 * [`Find-MarkdownFiles`](Find-MarkdownFiles.md) 
 * [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md) 

@@ -121,7 +121,7 @@ HTML fragment with updated resource links.
 
 # Related Links
 
-* [https://wethat.github.io/MarkdownToHtml/2.5.0/Update-ResourceLinks.html](https://wethat.github.io/MarkdownToHtml/2.5.0/Update-ResourceLinks.html) 
+* [https://wethat.github.io/MarkdownToHtml/2.6.0/Update-ResourceLinks.html](https://wethat.github.io/MarkdownToHtml/2.6.0/Update-ResourceLinks.html) 
 * [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md)
 
 ---

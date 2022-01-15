@@ -78,8 +78,8 @@
     <main>
         <article>
             <h1 id="convertto-navigationitem">ConvertTo-NavigationItem</h1>
-<p>Convert a navigation specification to a single item in a navigation bar of a
-static HTML site projects created by <code>New-StaticHTMLSiteProject</code>.</p>
+<p>Convert a navigation specification to a single item in a navigation bar of pages
+in a static HTML site project created by <code>New-StaticHTMLSiteProject</code>.</p>
 <h1 id="syntax">Syntax</h1>
 <pre><code class="language-PowerShell"> ConvertTo-NavigationItem [-NavSpec] &lt;Object&gt; [-RelativePath] &lt;String&gt; [-NavTemplate] &lt;Object&gt;  [&lt;CommonParameters&gt;] 
 </code></pre>
@@ -87,8 +87,9 @@ static HTML site projects created by <code>New-StaticHTMLSiteProject</code>.</p>
 <p>Converts the specification for a single item in the navigation bar by</p>
 <ul>
 <li>finding an HTML template to represent the item in the navigation bar.</li>
-<li>replacing placeholders in the template by data taken from the</li>
-<li>specification.</li>
+<li>replacing placeholders in the template by data taken from the
+specification.</li>
+<li>adjusting the navigation link based on the location in the directory tree.</li>
 </ul>
 <h1 id="parameters">Parameters</h1>
 <blockquote>
@@ -377,7 +378,8 @@ adjusted accordingly.</p>
 <blockquote>
 <pre><code class="language-PowerShell">ConvertTo-NavigationItem @{'---'=''} -RelativePath 'intro/about.md'
 </code></pre>
-<p>Generates a separator line in the navigation bar.</p>
+<p>Generates a separator line in the navigation bar. The <em>RelativePath</em> parameter
+is not used (the specification does not contain a link).</p>
 <p>Output:</p>
 <pre><code class="language-html">&lt;hr class=&quot;navitem&quot; /&gt;
 </code></pre>
@@ -415,7 +417,7 @@ adjusted accordingly.</p>
 </blockquote>
 <h1 id="related-links">Related Links</h1>
 <ul>
-<li><a href="https://wethat.github.io/MarkdownToHtml/2.5.0/ConvertTo-NavigationItem.html">https://wethat.github.io/MarkdownToHtml/2.5.0/ConvertTo-NavigationItem.html</a></li>
+<li><a href="https://wethat.github.io/MarkdownToHtml/2.6.0/ConvertTo-NavigationItem.html">https://wethat.github.io/MarkdownToHtml/2.6.0/ConvertTo-NavigationItem.html</a></li>
 <li><a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a></li>
 <li><a href="New-PageHeadingNavigation.html"><code>New-PageHeadingNavigation</code></a></li>
 </ul>

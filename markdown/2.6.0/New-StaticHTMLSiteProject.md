@@ -91,7 +91,7 @@ The new project directory object `[System.IO.DirectoryInfo]`
 
 # Related Links
 
-* [https://wethat.github.io/MarkdownToHtml/2.5.0/New-StaticHTMLSiteProject.html](https://wethat.github.io/MarkdownToHtml/2.5.0/New-StaticHTMLSiteProject.html) 
+* [https://wethat.github.io/MarkdownToHtml/2.6.0/New-StaticHTMLSiteProject.html](https://wethat.github.io/MarkdownToHtml/2.6.0/New-StaticHTMLSiteProject.html) 
 * [`New-HTMLTemplate`](New-HTMLTemplate.md) 
 * [Project Customization](about_MarkdownToHTML.md#static-site-project-customization)
 

@@ -263,7 +263,7 @@ File objects `[System.IO.FileInfo]` of the generated HTML files.
 
 # Related Links
 
-* [https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-MarkdownToHTML.html](https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-MarkdownToHTML.html) 
+* [https://wethat.github.io/MarkdownToHtml/2.6.0/Convert-MarkdownToHTML.html](https://wethat.github.io/MarkdownToHtml/2.6.0/Convert-MarkdownToHTML.html) 
 * [`New-HTMLTemplate`](New-HTMLTemplate.md) 
 * [Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions)
 

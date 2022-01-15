@@ -117,7 +117,7 @@ pipeline to generate HTML files in the correct locations.
 
 # Related Links
 
-* [https://wethat.github.io/MarkdownToHtml/2.5.0/Find-MarkdownFiles.html](https://wethat.github.io/MarkdownToHtml/2.5.0/Find-MarkdownFiles.html) 
+* [https://wethat.github.io/MarkdownToHtml/2.6.0/Find-MarkdownFiles.html](https://wethat.github.io/MarkdownToHtml/2.6.0/Find-MarkdownFiles.html) 
 * [`Convert-MarkdownToHTML`](Convert-MarkdownToHTML.md) 
 * [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md) 
 * [`Publish-StaticHtmlSite`](Publish-StaticHtmlSite.md) 

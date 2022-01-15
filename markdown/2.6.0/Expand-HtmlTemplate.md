@@ -118,7 +118,7 @@ by the `ContentMap`.
 
 # Related Links
 
-* [https://wethat.github.io/MarkdownToHtml/2.5.0/Expand-HtmlTemplate.html](https://wethat.github.io/MarkdownToHtml/2.5.0/Expand-HtmlTemplate.html)
+* [https://wethat.github.io/MarkdownToHtml/2.6.0/Expand-HtmlTemplate.html](https://wethat.github.io/MarkdownToHtml/2.6.0/Expand-HtmlTemplate.html)
 
 ---
 

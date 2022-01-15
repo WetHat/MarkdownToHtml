@@ -32,9 +32,9 @@ A navigation bar section for a HTML page is built by:
 
 <blockquote>
 
-An array where each item án object or dictionary with exactly one `NoteProperty`
+An array where each item is an object or dictionary with exactly one NoteProperty`
 or key representing a single key-value pair. This parameter provides the data
-for one item in the navigation bar.
+for **one** item in the navigation bar.
 
 Following key-value pairs are recognized:
 
@@ -75,7 +75,7 @@ Accept wildcard characters?| false
 
 The path to a Markdown (`*.md`) or HTML (`*.html`) file relative to its
 corresponding root configured in `Build.json`. For Markdown files the
-root is configured by parameter `"markdown_dir"` for html files it is
+root is configured by parameter `"markdown_dir"` for HTML files it is
 `"site_dir"`. This parameter will be used to compute relative resource
 and navigation bar links for the HTML page currently
 being assembled.
@@ -216,7 +216,7 @@ HTML fragment for a navigation bar.
 
 # Related Links
 
-* [https://wethat.github.io/MarkdownToHtml/2.5.0/New-SiteNavigation.html](https://wethat.github.io/MarkdownToHtml/2.5.0/New-SiteNavigation.html)
+* [https://wethat.github.io/MarkdownToHtml/2.6.0/New-SiteNavigation.html](https://wethat.github.io/MarkdownToHtml/2.6.0/New-SiteNavigation.html)
 
 ---
 
