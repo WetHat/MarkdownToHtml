@@ -37,7 +37,7 @@ HTML sites in various ways.
 
 | Component                                       |Version | Description
 |-------------------------------------------------|--------|-----------------------------------
-| [Markdig](https://github.com/lunet-io/markdig)  | 0.25.0 | Fast Markdown processor for .NET
+| [Markdig](https://github.com/lunet-io/markdig)  | 0.26.0 | Fast Markdown processor for .NET
 | [highlight.js](https://highlightjs.org/)        | 9.17.1 | Code syntax highlighter
 | [KaTeX](https://katex.org/)                     | 0.13.11| Math typesetting
 | [Mermaid](http://mermaid-js.github.io/mermaid/) | 8.10.1 | Diagramming
