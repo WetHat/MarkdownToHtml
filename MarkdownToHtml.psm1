@@ -65,7 +65,7 @@ this HTML fragment is generated:
 ~~~
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.5.0/Expand-HtmlTemplate.html
+https://wethat.github.io/MarkdownToHtml/2.6.0/Expand-HtmlTemplate.html
 #>
 function Expand-HtmlTemplate {
     [OutputType([string])]
@@ -206,7 +206,7 @@ The generated Html file objects are returned like so:
     ...          ...            ...            ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.5.0/Publish-StaticHtmlSite.html
+https://wethat.github.io/MarkdownToHtml/2.6.0/Publish-StaticHtmlSite.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -348,7 +348,7 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
     ...                   ...   ...                        ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.5.0/Find-MarkdownFiles.html
+https://wethat.github.io/MarkdownToHtml/2.6.0/Find-MarkdownFiles.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -468,7 +468,7 @@ Convert all Markdown files in `E:\MyMarkdownFiles` using
 The generated HTML files are saved to the directory `E:\MyHTMLFiles`.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-MarkdownToHTML.html
+https://wethat.github.io/MarkdownToHtml/2.6.0/Convert-MarkdownToHTML.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -543,7 +543,7 @@ This function does not read from the pipe.
 The new conversion template directory `[System.IO.DirectoryInfo]`.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.5.0/New-HTMLTemplate.html
+https://wethat.github.io/MarkdownToHtml/2.6.0/New-HTMLTemplate.html
 .LINK
 `New-StaticHTMLSiteProject`
 
@@ -607,7 +607,7 @@ Create a new conversion project names 'MyProject' in the current directory. The
 project is ready for build.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.5.0/New-StaticHTMLSiteProject.html
+https://wethat.github.io/MarkdownToHtml/2.6.0/New-StaticHTMLSiteProject.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -853,7 +853,7 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.5.0/ConvertTo-NavigationItem.html
+https://wethat.github.io/MarkdownToHtml/2.6.0/ConvertTo-NavigationItem.html
 .LINK
 `New-StaticHTMLSiteProject`
 .LINK
@@ -1067,7 +1067,7 @@ Output:
 Note how the relative path parameter was used to update the links.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.5.0/New-SiteNavigation.html
+https://wethat.github.io/MarkdownToHtml/2.6.0/New-SiteNavigation.html
 #>
 function New-SiteNavigation {
     [OutputType([string])]
@@ -1203,7 +1203,7 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.5.0/New-PageHeadingNavigation.html
+https://wethat.github.io/MarkdownToHtml/2.6.0/New-PageHeadingNavigation.html
 .LINK
 `New-StaticHTMLSiteProject`
 .LINK
@@ -1293,7 +1293,7 @@ Outut:
 ~~~
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.5.0/Update-ResourceLinks.html
+https://wethat.github.io/MarkdownToHtml/2.6.0/Update-ResourceLinks.html
 .LINK
 `Publish-StaticHtmlSite`
 #>
