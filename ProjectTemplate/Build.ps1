@@ -34,7 +34,7 @@ $SCRIPT:contentMap = @{
 		# Create navigation items to headings on the local page.
 		# This requires the `autoidentifiers` extension to be enabled!
 		New-PageHeadingNavigation -NavitemSpecs $config.page_navigation `
-		                          -HTMLfragment $fragment.HTMLFragment `
+		                          -HTMLfragment $fragment `
 		                          -NavTemplate $navcfg.templates `
 		                          -HeadingLevels $navcfg.capture_page_headings
 	}
