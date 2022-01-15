@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.5.0'
+ModuleVersion = '2.6.0'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'
@@ -26,7 +26,7 @@ Author = 'WetHat'
 CompanyName = 'WetHat Lab'
 
 # Copyright statement for this module
-Copyright = '(c) 2018-2021 WetHat Lab. All rights reserved.'
+Copyright = '(c) 2018-2022 WetHat Lab. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @'
