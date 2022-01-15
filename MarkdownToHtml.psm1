@@ -953,9 +953,9 @@ A navigation bar section for a HTML page is built by:
   and expanding the template using data from the item specification
 
 .PARAMETER NavitemSpecs
-An array where each item án object or dictionary with exactly one `NoteProperty`
+An array where each item is an object or dictionary with exactly one NoteProperty`
 or key representing a single key-value pair. This parameter provides the data
-for one item in the navigation bar.
+for **one** item in the navigation bar.
 
 Following key-value pairs are recognized:
 
@@ -980,7 +980,7 @@ HTML templates.
 .PARAMETER RelativePath
 The path to a Markdown (`*.md`) or HTML (`*.html`) file relative to its
 corresponding root configured in `Build.json`. For Markdown files the
-root is configured by parameter `"markdown_dir"` for html files it is
+root is configured by parameter `"markdown_dir"` for HTML files it is
 `"site_dir"`. This parameter will be used to compute relative resource
 and navigation bar links for the HTML page currently
 being assembled.
@@ -1112,9 +1112,28 @@ to generate navigation bar items.
 .PARAMETER HTMLfragment
 HTML fragment to scan for headings.
 
+.PARAMETER NavitemSpecs
+
+Navigation specification for links which are to appear on every page right
+before the page heading navigation links.
+
+Usually this specification is something like:
+
+`@{ '---' = ''}`
+:   to add a separator line between the site navigation links from the
+    page heading navigation links.
+
+`@{ 'Page Content' = ''}`
+:   to add the label _Page Content_ separating the site navigation links from
+    the page heading navigation links.
+
+However, all link specifications supported by the `NavitemSpecs`
+of the function `New-SiteNavigation` are supported for this parameter too.
+
 .PARAMETER NavTemplate
 An optional dictionary of the named HTML template needed to add a heading
-link to the navigation bar.
+link to the navigation bar. The dictionary should at least contain a
+`navheading` specification:
 
 + :--------: + :----------: + ----------------------------------------
 | Type       | Key          | HTML Template
@@ -1127,7 +1146,7 @@ link to the navigation bar.
 The HTML template above is the value defined in
 `Build.json`. That value is used if the given dictionary does not define the
 "navheading" mapping or if no dictionary is given at all. Additional mappings
-contained in the dictionary are ignored.
+contained in the dictionary not used by this function.
 
 For more customization options see
 [Static Site Project Customization](about_MarkdownToHTML.md#static-site-project-customization).
@@ -1205,6 +1224,8 @@ the contents of the navigation bar (placeholder `{{nav}}`).
 .LINK
 https://wethat.github.io/MarkdownToHtml/2.6.0/New-PageHeadingNavigation.html
 .LINK
+`New-SiteNavigation`
+.LINK
 `New-StaticHTMLSiteProject`
 .LINK
 `ConvertTo-NavigationItem`
@@ -1216,11 +1237,22 @@ function New-PageHeadingNavigation {
         [parameter(Mandatory=$true,ValueFromPipeline=$false)]
         [ValidateNotNull()]
         [string]$HTMLfragment,
+
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [object[]]$NavitemSpecs,
+
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
         [object]$NavTemplate = $SCRIPT:defaultNavTemplate,
+
         [ValidateNotNull()]
         [string]$HeadingLevels = "123" # capture levels 1 .. 3 by default
     )
+    # Emit the prefix page notation
+    if ($NavitemSpecs) {
+        New-SiteNavigation -NavitemSpecs $NavitemSpecs `
+		                   -RelativePath $HTMLfragment.RelativePath `
+		                   -NavTemplate $NavTemplate.templates
+    }
     $HTMLfragment -split "`n" | ForEach-Object {
         $m = $hRE.Match($_)
         if ($m.Success -and $m.Groups.Count -eq 4) {
@@ -1322,8 +1354,8 @@ function Update-ResourceLinks {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUlEWjZ4IdmSCQdszs+2orldxd
-# lgOgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUpadBcioSgYtV7d7bvwDWflTA
+# igegggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1342,11 +1374,11 @@ function Update-ResourceLinks {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBSrI8UF6BD7hIp03eJ5csTZMnd0
-# TzANBgkqhkiG9w0BAQEFAASCAQCGWlC83zbNQx+K8Rx0ZNqZEm/OehDqF8e6XzKa
-# 9Hv7563+qn1OhfEJKANQfrYYyHlKCupCkbL3KcDJMvRD6zniukJXMaHLQVdkSyAb
-# H5ctEjHGxhXdyiBhXt7vn6MVvKb57/Z+f6FF45x7uJ5lHvzU2IsxlwWA6gumL/AH
-# XHl9sQeBuDmmRExjtKxvBcxtGqlqrfRmjKnT1Mdq8OVHK+bnfMV6kkUNEhPwn+NE
-# lr1t00Qlm+FYv2Kq/J97bOOz9OgB6aoB0cEomI3XkqiOGJOGQkMBTgJK11+h20IS
-# VbbGsGPRvQB+O0VvPGaWRPGaVWrzDFdmiKoLWonfC1FmXETe
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRTnnCtQyb4rtBt21lvb3jSnSWy
+# 6zANBgkqhkiG9w0BAQEFAASCAQA0bdIMTtbWmO84uD9FAT6WcWIOstaoGAFDmMRr
+# DdFnhDeZp9ihdyCXtrYKs32TSAfkzm6COcMVaWtWtfKOfWSeY5fAS+uHMtWSgeTk
+# 1FyrOXLEeut35tCnOcY1EuLUg8IZ/eim031UsVPKZqzESFdquEONSACDyw+Ui876
+# oYsAz3YvXFBdRRMqmGq8gHUrGRVmnVb8MZbEv9KXFhv/1cPhIP4Z+HdR4kTvlgt9
+# tGMMn+BPbxME2H5e9kCMwYV11kGBfOt0hYB66ur4UO/U9MsUs4nuUYwzU/h6hjk7
+# n/IliQegbk0UwaEFgl4Axwb0OVqEIknP1yVpagOma9twyrIb
 # SIG # End signature block
