@@ -36,11 +36,14 @@
         { "MarkdownToHtml": "" },
         { "Home": "index.md" },
         { "Module Manifest": "{{version}}/MarkdownToHTML.md"},
-        { "About MarkdownToHtml": "{{version}}/about_MarkdownToHTML.md" },
+        { "About MarkdownToHtml": "{{version}}/about_MarkdownToHTML.md" }
+    ],
+
+    "page_navigation": [
         { "Page Content": "" }
     ],
 
-     "github_pages": true,
+    "github_pages": true,
 
      "svgbob": {
         "background": "white",
