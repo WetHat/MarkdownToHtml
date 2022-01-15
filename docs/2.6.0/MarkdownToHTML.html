@@ -1,0 +1,394 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Module MarkDownToHTML 2.6.0 </title>
+    <link rel="stylesheet" type="text/css" href="../styles/md-styles.css" />
+
+    <!-- Code syntax highlighting configuration -->
+    <!-- Comment this to deactivate syntax highlighting. -->
+    <link rel="stylesheet" type="text/css" href="../styles/vs.css" />
+    <!-- Alternative highlighting styles -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/agate.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/far.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/tomorrow-night-blue.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../vs2015.css" /> -->
+    <script src="../js/highlight.pack.js"></script>
+    <script>
+        hljs.configure({ languages: [] });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <!-- -->
+    <!-- mermaid diagram generator configuration -->
+    <!-- Comment this to deactivate the diagramming extension ('diagrams'). -->
+    <script src="../js/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true });</script>
+    <!-- -->
+    <!-- KaTeX LaTeX Math typesetting configuration -->
+    <!-- Comment this to deactivate the LaTeX math extension ('mathematics'). -->
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <script defer src="../katex/katex.min.js"></script>
+    <script>
+        // <![CDATA[
+        window.onload = function () {
+            var tex = document.getElementsByClassName("math");
+            Array.prototype.forEach.call(tex, function (el) {
+                katex.render(el.textContent, el, {
+                    displayMode: (el.nodeName == "DIV"),
+                    macros: {
+                        "\\(": "",
+                        "\\)": "",
+                        "\\[": "",
+                        "\\]": ""
+                    }
+                })
+            });
+        };
+          // ]]>
+    </script>
+    <!-- -->
+</head>
+<body>
+    <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
+<div class='navlabel'>MarkdownToHtml</div>
+<button class='navitem'><a href='../index.html'>Home</a></button>
+<button class='navitem'><a href='../2.6.0/MarkdownToHTML.html'>Module Manifest</a></button>
+<button class='navitem'><a href='../2.6.0/about_MarkdownToHTML.html'>About MarkdownToHtml</a></button>
+<div class='navlabel'>Page Content</div>
+<button class='navitem'><a href='#module-markdowntohtml-2.6.0'><span class='navitem1'>Module MarkDownToHTML 2.6.0</span></a></button>
+<button class='navitem'><a href='#components-packaged-with-this-module'><span class='navitem2'>Components packaged with this module:</span></a></button>
+<button class='navitem'><a href='#known-incompatibilities'><span class='navitem1'>Known Incompatibilities</span></a></button>
+<button class='navitem'><a href='#exported-functions'><span class='navitem1'>Exported Functions</span></a></button>
+<button class='navitem'><a href='#release-notes'><span class='navitem1'>Release Notes</span></a></button>
+<button class='navitem'><a href='#2.5.0'><span class='navitem2'>2.5.0</span></a></button>
+<button class='navitem'><a href='#2.4.0'><span class='navitem2'>2.4.0</span></a></button>
+<button class='navitem'><a href='#2.3.1'><span class='navitem2'>2.3.1</span></a></button>
+<button class='navitem'><a href='#section'><span class='navitem2'>2.3.0</span></a></button>
+<button class='navitem'><a href='#section-1'><span class='navitem2'>2.2.2</span></a></button>
+<button class='navitem'><a href='#section-2'><span class='navitem2'>2.2.1</span></a></button>
+<button class='navitem'><a href='#section-3'><span class='navitem2'>2.2.0</span></a></button>
+<button class='navitem'><a href='#section-4'><span class='navitem2'>2.1.1</span></a></button>
+<button class='navitem'><a href='#section-5'><span class='navitem2'>2.1.0</span></a></button>
+<button class='navitem'><a href='#enhancements'><span class='navitem4'>Enhancements</span></a></button>
+<button class='navitem'><a href='#maintenance'><span class='navitem4'>Maintenance</span></a></button>
+</nav>
+    <main>
+        <article>
+            <h1 id="module-markdowntohtml-2.6.0" class="title">Module MarkDownToHTML 2.6.0</h1>
+<p><strong>Tags</strong>: Markdown, HTML, Converter, Markdown, HTML, Converter</p>
+<p>A collection of PowerShell commands to convert Markdown files to static
+HTML sites in various ways.</p>
+<h2 id="components-packaged-with-this-module">Components packaged with this module:</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/lunet-io/markdig">Markdig</a></td>
+<td>0.25.0</td>
+<td>Fast Markdown processor for .NET</td>
+</tr>
+<tr>
+<td><a href="https://highlightjs.org/">highlight.js</a></td>
+<td>9.17.1</td>
+<td>Code syntax highlighter</td>
+</tr>
+<tr>
+<td><a href="https://katex.org/">KaTeX</a></td>
+<td>0.13.11</td>
+<td>Math typesetting</td>
+</tr>
+<tr>
+<td><a href="http://mermaid-js.github.io/mermaid/">Mermaid</a></td>
+<td>8.10.1</td>
+<td>Diagramming</td>
+</tr>
+<tr>
+<td><a href="https://lib.rs/crates/svgbob_cli">Svgbob</a></td>
+<td>0.5.0</td>
+<td>Text based diagrammimg</td>
+</tr>
+</tbody>
+</table>
+<h1 id="known-incompatibilities">Known Incompatibilities</h1>
+<p>If you have have conversion projects which use the <em>mathematics</em> extensions and
+were created with versions of this module older than 2.0.0 (i.e. 1.* or 0.*).
+See <a href="MarkdownToHTML.html#2.0.0">version 2.0.0</a> release notes for upgrade instructions.</p>
+<h1 id="exported-functions">Exported Functions</h1>
+<ul>
+<li><a href="Convert-MarkdownToHTML.html">Convert-MarkdownToHTML</a></li>
+<li><a href="Convert-MarkdownToHTMLFragment.html">Convert-MarkdownToHTMLFragment</a></li>
+<li><a href="Convert-SvgbobToSvg.html">Convert-SvgbobToSvg</a></li>
+<li><a href="ConvertTo-NavigationItem.html">ConvertTo-NavigationItem</a></li>
+<li><a href="Expand-HtmlTemplate.html">Expand-HtmlTemplate</a></li>
+<li><a href="Find-MarkdownFiles.html">Find-MarkdownFiles</a></li>
+<li><a href="New-HTMLTemplate.html">New-HTMLTemplate</a></li>
+<li><a href="New-PageHeadingNavigation.html">New-PageHeadingNavigation</a></li>
+<li><a href="New-SiteNavigation.html">New-SiteNavigation</a></li>
+<li><a href="New-StaticHTMLSiteProject.html">New-StaticHTMLSiteProject</a></li>
+<li><a href="Publish-StaticHtmlSite.html">Publish-StaticHtmlSite</a></li>
+<li><a href="Update-ResourceLinks.html">Update-ResourceLinks</a></li>
+</ul>
+<h1 id="release-notes">Release Notes</h1>
+<h2 id="2.5.0">2.5.0</h2>
+<ul>
+<li><p><a href="https://github.com/lunet-io/markdig">Markdig</a>  update to version 0.25.0</p>
+</li>
+<li><p>Support for publishing static websites to
+<a href="https://docs.github.com/en/pages/getting-started-with-github-pages">GitHub Pages</a>.</p>
+<p>This new feature is backwards compatible with existing static site projects.
+However, if you want to use this new feature in existing site projects
+following changes must be applied:</p>
+<dl>
+<dt><code>Build.json</code> project configuration file</dt>
+<dd>
+<p>The <code>site_dir</code> option needs to be changed and a new option <code>github_pages</code>
+must be added as shown below:</p>
+<pre><code class="language-json">{
+   ...
+
+   &quot;site_dir&quot;: &quot;docs&quot;,
+   ...
+   &quot;github_pages&quot;: false,
+   ...
+}
+</code></pre>
+<p>Using the name <code>docs</code> for the site directory makes it possible to check-in
+the entire conversion project as-is. As soon as <em>GitHub Pages</em> are
+enabled and configured to publish the static site from the <code>docs</code>
+directory, the site is accessible on the web through its canonical
+<em>GitHub Pages</em> url.</p>
+</dd>
+</dl>
+<dl>
+<dt><code>Build.ps1</code> project build file</dt>
+<dd>
+<p>Add a statement to disable the GitHub publishing process (jekyll) which
+is not necessary for static sites created by this module. Add
+following code to the end of the build file:</p>
+<pre><code class="language-PowerShell">...
+if ($config.github_pages) {
+    # Switch off Jekyll publishing when building for GitHub pages
+    New-Item -Path $staticSite -Name .nojekyll -ItemType File
+}
+</code></pre>
+</dd>
+</dl>
+</li>
+<li><p>Added a Html fragment post-processing step to the conversion pipeline.</p>
+<p>The default post-processing function <a href="Convert-SvgbobToSvg.html"><code>Convert-SvgbobToSvg</code></a>
+converts <a href="https://ivanceras.github.io/content/Svgbob.html">Svgbob</a>
+ASCII art diagrams to svg images. See the
+<a href="../index.html#svgbob-plain-text-diagrams">feature showcase</a>
+for an example.</p>
+<p>This new feature is backwards compatible with existing static site projects.
+However, if you want to use <code>Svgbob</code> diagrams in existing site projects
+following changes must be made:</p>
+<dl>
+<dt><code>Build.json</code> project configuration file</dt>
+<dd>
+<p>A new option <code>svgbob</code> option needs to be added to for configuration
+of the svg conversion.</p>
+<pre><code class="language-json">{
+   ...
+   &quot;svgbob&quot;: {
+      &quot;background&quot;:   &quot;white&quot;,
+      &quot;fill_color&quot;:   &quot;black&quot;,
+      &quot;font_size&quot;:    14,
+      &quot;font_family&quot;:  &quot;Monospace&quot;,
+      &quot;scale&quot;:        1,
+      &quot;stroke_width&quot;: 2
+  }
+}
+</code></pre>
+<p>See <a href="about_MarkdownToHTML.html#static-site-project-customization">Static Site Project Customization</a>
+for more details.</p>
+</dd>
+</dl>
+<dl>
+<dt><code>Build.json</code> project configuration file</dt>
+<dd>
+<p>A postprocessing stage needs to be inserted into to the conversion pipeline by
+adding a <code>-Split</code> switch to <a href="Convert-MarkdownToHTMLFragment.html"><code>Convert-MarkdownToHTMLFragment</code></a> and then piping
+its output to <a href="Convert-SvgbobToSvg.html"><code>Convert-SvgbobToSvg</code></a> like so:</p>
+<pre><code class="language-PowerShell"># Conversion pipeline
+$SCRIPT:markdown = Join-Path $projectDir $config.markdown_dir
+Find-MarkdownFiles $markdown -Exclude $config.Exclude `
+| Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions -Split `
+| Convert-SvgbobToSvg -SiteDirectory $staticSite -Options $SCRIPT:config.svgbob `
+| Publish-StaticHTMLSite -Template (Join-Path $projectDir $config.HTML_Template) `
+                         -ContentMap  $contentMap `
+  		        	     -MediaDirectory $markdown `
+                         -SiteDirectory $staticSite
+</code></pre>
+</dd>
+</dl>
+</li>
+</ul>
+<h2 id="2.4.0">2.4.0</h2>
+<ul>
+<li><p>Navigation bar improvements (Static HTML site projects):</p>
+<ul>
+<li>scrollbar added to long navbars.</li>
+<li><code>md-styles.css</code> overhauled for static site template to make navbar usable
+for overflowing navitems</li>
+<li>HTML fragments with resource links supported in navitem names.
+Example from a <code>Build.json</code> which displays a navigatable image:
+<pre><code class="language-Json">&quot;site_navigation&quot;: [
+    { &quot;&lt;img width='90%' src='site_logo.png'/&gt;&quot;: &quot;README.md&quot; },
+    { &quot;Home&quot;: &quot;README.md&quot; },
+    { &quot;---&quot;: &quot;&quot; }
+]
+</code></pre>
+</li>
+<li>New commands implemented to remove code duplication and make the <code>Build.ps1</code>
+file more consistent.
+Upgrade of the <code>Build.ps1</code> file of existing projects is optional. All changes
+are backeard compatible. If you want to upgrade anyways change the content
+map section of<code>Build.ps1</code> file like so:
+<pre><code class="language-PowerShell">$SCRIPT:contentMap = @{
+    # Add additional mappings here...
+    '{{footer}}' =  $config.Footer # Footer text from configuration
+    '{{nav}}'    = {
+	    param($fragment) # the html fragment created from a markdown file
+	    $navcfg = $config.navigation_bar # navigation bar configuration
+	    # Create the navigation items configured in 'Build.json'
+	    New-SiteNavigation -NavitemSpecs $config.site_navigation `
+	                       -RelativePath $fragment.RelativePath `
+	                       -NavTemplate $navcfg.templates
+	    # Create navigation items to headings on the local page.
+	    # This requires the `autoidentifiers` extension to be enabled.
+	    New-PageHeadingNavigation -HTMLfragment $fragment.HTMLFragment `
+	                              -NavTemplate $navcfg.templates `
+	                              -HeadingLevels $navcfg.capture_page_headings
+    }
+}
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>Module Documentation</p>
+<ul>
+<li>Code and conceptial documentation improved</li>
+<li>Documentation generated with this module and published to
+<a href="https://wethat.github.io/MarkdownToHtml">GitHub Pages</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="2.3.1">2.3.1</h2>
+<ul>
+<li>Navigation bar improvements (Static HTML site projects):
+<ul>
+<li>default navigation menu changed to a static vertical sidebar.</li>
+<li>navigation items pop out dynamically on mouse hover.</li>
+<li>auto-added navigation items for page headings indented according to heading
+level.</li>
+<li>navbar formatting made more consistent.</li>
+<li>navbar small screen support</li>
+</ul>
+</li>
+</ul>
+<h2 id="section">2.3.0</h2>
+<ul>
+<li><p>Page navigation bar made customizable. To take advantage of this feature
+in existing projects following files need to be updated:</p>
+<ul>
+<li><code>Build.ps1</code>: A <code>-NavTemplate</code> parameter needs to be added to the invokation of <a href="ConvertTo-NavigationItem.html"><code>ConvertTo-NavigationItem</code></a>.
+A <code>-NavTemplate</code> and a <code>-HeadingLevels</code> parameter needs to be added to
+the invokation of<a href="ConvertTo-PageHeadingNavigation.html"><code>ConvertTo-PageHeadingNavigation</code></a>.
+For example:</li>
+</ul>
+<pre><code class="language-PowerShell"># Set-up the content mapping rules for replacing the templace placeholders
+$SCRIPT:contentMap = @{
+      # Add additional mappings here...
+      '{{footer}}' =  $config.Footer # Footer text from configuration
+      '{{nav}}'    = {
+  	    param($fragment) # the html fragment created from a markdown file
+  	    $navcfg = $config.navigation_bar # navigation bar configuration
+  	    # Create the navigation items configured in 'Build.json'
+  	    $config.site_navigation | ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
+  	                                                        -NavTemplate $navcfg.templates
+  	    # Create navigation items to headings on the local page.
+  	    # This requires the `autoidentifiers` extension to be enabled.
+  	    ConvertTo-PageHeadingNavigation $fragment.HTMLFragment -NavTemplate $navcfg.templates `
+  	                                                            -HeadingLevels $navcfg.capture_page_headings
+      }
+}
+</code></pre>
+<ul>
+<li><code>Build.json</code>: a navigation bar configuration section needs to be added:</li>
+</ul>
+<pre><code class="language-json">...
+&quot;navigation_bar&quot;: {
+    &quot;capture_page_headings&quot;: &quot;123456&quot;,
+    &quot;templates&quot;: {
+        &quot;navitem&quot;: &quot;&lt;button class='navitem'&gt;&lt;a href='{{navurl}}'&gt;{{navtext}}&lt;/a&gt;&lt;/button&gt;&quot;,
+        &quot;navlabel&quot;: &quot;&lt;div class='navitem'&gt;{{navtext}}&lt;/div&gt;&quot;,
+        &quot;navseparator&quot;: &quot;&lt;hr class='navitem'/&gt;&quot;,
+        &quot;navheading&quot;: &quot;&lt;span class='navitem{{level}}'&gt;{{navtext}}&lt;/span&gt;&quot;
+    }
+},
+...
+</code></pre>
+</li>
+<li><p>Component updates:</p>
+<ul>
+<li><code>Markdig</code> update to version 0.24</li>
+<li><code>KateX</code> update to version 0.13.11</li>
+<li><code>Mermaid</code> update to version 8.10.1</li>
+</ul>
+</li>
+</ul>
+<h2 id="section-1">2.2.2</h2>
+<ul>
+<li>added referenced .net assemblies which may not be guaranteed to be present</li>
+</ul>
+<h2 id="section-2">2.2.1</h2>
+<ul>
+<li>Katex Updated to version 0.12.0</li>
+<li>Mermaid updated to version 8.8.2</li>
+<li>Markdig updated to version 0.22.0</li>
+<li>Code signed With long term self signed certificate</li>
+</ul>
+<h2 id="section-3">2.2.0</h2>
+<ul>
+<li>Fixed issue with <a href="ConvertTo-NavigationItem.html"><code>ConvertTo-NavigationItem</code></a> not understanding hyperlinks
+with <code>#</code> fragments.</li>
+<li>Added <code>autoidentifiers</code> to the <code>Build.json</code> in the project template so that
+headings get <code>id</code> attributes.</li>
+<li>Added navigation items for headings on the current page to the navbar.</li>
+</ul>
+<h2 id="section-4">2.1.1</h2>
+<ul>
+<li>Bugfix: Site assets not copied in build script</li>
+</ul>
+<h2 id="section-5">2.1.0</h2>
+<h4 id="enhancements">Enhancements</h4>
+<ul>
+<li><a href="Publish-StaticHtmlSite.html"><code>Publish-StaticHtmlSite</code></a> now accepts definition of custom placeholder
+mappins for expansion of <code>md-template.html</code>.</li>
+<li>Default template placeholder delimiters changed to <code>{{</code> and <code>}}</code>.</li>
+<li>Static HTML site projects added: See <a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a>.</li>
+<li>Documentation made more <a href="Get-Help.html"><code>Get-Help</code></a> friendly.</li>
+<li><em>Mermaid</em> assets updated to version 8.5.0</li>
+</ul>
+<h4 id="maintenance">Maintenance</h4>
+<ul>
+<li>Minimum required Powershell version now 5.1 (Desktop)</li>
+</ul>
+<hr />
+<p><cite>Module: MarkDownToHTML; Version: 2.6.0; (c) 2018-2022 WetHat Lab. All rights reserved.</cite></p>
+
+        </article>
+        <footer>
+            <hr />
+            Site created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.
+        </footer>
+    </main>
+</body>
+</html>
