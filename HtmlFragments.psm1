@@ -120,7 +120,7 @@ The svg conversion is performed by the external utility
 installed from [lib.rs](https://lib.rs/crates/svgbob_cli).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-SvgbobToSvg.html
+https://wethat.github.io/MarkdownToHtml/2.6/Convert-SvgbobToSvg.html
 .LINK
 [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
 #>
@@ -132,8 +132,10 @@ function Convert-SvgbobToSvg {
         [ValidateScript({$_.HtmlFragment})]
         [Alias('HtmlFragment')]
         [hashtable]$InputObject,
+
         [parameter(Mandatory=$true,ValueFromPipeline=$false)]
         [string]$SiteDirectory,
+
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
         [object]$Options
     )
@@ -146,13 +148,18 @@ function Convert-SvgbobToSvg {
         $scale               = 1
         $strokeWidth         = 2
 
+        if (!$Options -and ($cfg = $InputObject.EffectiveConfiguration))  {
+            # Check the effective configuration for options
+            $Options = $cfg.svgbob
+
+        }
         # override with specified options
-        if ($options) {
-            $value=$options.background
+        if ($Options) {
+            $value=$Options.background
             if ($value) {
                 $background = $value
             }
-            $value=$options.fill_color
+            $value=$Options.fill_color
             if ($value) {
                 $fillColor = $value
             }
@@ -176,6 +183,36 @@ function Convert-SvgbobToSvg {
     }
 
     Process {
+        if (!$Options -and ($cfg = $InputObject.EffectiveConfiguration))  {
+            # Update options from effective config
+            $opts = $cfg.svgbob
+            # override with specified options
+            $value=$opts.background
+            if ($value) {
+                $background = $value
+            }
+            $value=$opts.fill_color
+            if ($value) {
+                $fillColor = $value
+            }
+            $value=$opts.font_size
+            if ($value) {
+                $fontSize = $value
+            }
+            $value=$opts.font_family
+            if ($value) {
+                $fontFamily = $value
+            }
+            $value=$opts.scale
+            if ($value) {
+                $scale = $value
+            }
+            $value=$opts.stroke_width
+            if ($value) {
+                $strokeWidth = $value
+            }
+        }
+
         $n = 0
         $bob = $null
 
@@ -366,7 +403,7 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
     RelativePath       Convert-MarkdownToHTML.md
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.5.0/Convert-MarkdownToHTMLFragment.html
+https://wethat.github.io/MarkdownToHtml/2.6/Convert-MarkdownToHTMLFragment.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -471,6 +508,10 @@ function Convert-MarkdownToHTMLFragment
             $htmlDescriptor.RelativePath = $InputObject.Name
         }
 
+        if ($InputObject.EffectiveConfiguration) {
+            $htmlDescriptor.EffectiveConfiguration = $InputObject.EffectiveConfiguration
+        }
+
         # return the annotated HTML fragment
         $htmlDescriptor
     }
@@ -479,8 +520,8 @@ function Convert-MarkdownToHTMLFragment
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUQoV8acyUtylv7ICHMeOvOePC
-# FFWgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU6IFogUIIFTKWklK6v6fqLz/3
+# VaOgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -499,11 +540,11 @@ function Convert-MarkdownToHTMLFragment
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRugECfxVlYMXElJuPLRnJ6QOKq
-# xDANBgkqhkiG9w0BAQEFAASCAQCc7vq+YJrvKQQffXE5ZLNIs+lum1HjN570/wUV
-# Y/SN+L3VoGvsJ3wK/Tb1ZwAvVN38FxbmMKAlxrBKB+moLCOE30N5AabqjB38HWRV
-# UKTXSVRR77YCqaaHisNLzBLX0bVP4xs4hCnPcuSBT/fpKmGTndZRLyUykCkgjmsu
-# 7pB8blMkhKYIjjqE4zdGLYrITYf88ULHIWFRSGwVmcF5xjlgv8qmA+IvFr22hRR2
-# 5IcYbRjFD7l0k8qrfC3zhZrVL8eIYspDPHNf6QL43uXimfwEbMw60Me3H17+fuur
-# NXWjRLgtt4L/YdvIDQ3muKvJk8vF1tgPYbkYHMUe/g29ZD8e
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBSzm6adrMcEmXZI2HiEBa68yhfP
+# /TANBgkqhkiG9w0BAQEFAASCAQA/BMLf56i/6FWM0/9davrzwh8ePRTtA6TibYtn
+# fsixlHUiqteM5JF1rN7CHKtssrINGYKarA5b62iXUByslp8QrslR2D202vhocVcZ
+# H7BEQEHeMA9HY2xL1kSmXsAahq0TYAk9XTLLNPhHdW9UN4HFX4qO4zVq7Jcoo7nB
+# AgIB6+itDQbGplKTzv8nbFlWWluya0JqzTx/P2/JxRc1l8X9q6WVb1qxjxuhWpDE
+# h4HsJE+DftVEBIjNr+Kg6//TOxBLhiPpN1SoF4b9CnY5yYNna2qd3rl0/GEviuV+
+# 6ZnXs1m0Yct1JtFEPyQUnxlFbiBm3RZDM33eBG35AYDFXpWZ
 # SIG # End signature block

@@ -65,7 +65,7 @@ this HTML fragment is generated:
 ~~~
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6.0/Expand-HtmlTemplate.html
+https://wethat.github.io/MarkdownToHtml/2.6/Expand-HtmlTemplate.html
 #>
 function Expand-HtmlTemplate {
     [OutputType([string])]
@@ -206,7 +206,7 @@ The generated Html file objects are returned like so:
     ...          ...            ...            ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6.0/Publish-StaticHtmlSite.html
+https://wethat.github.io/MarkdownToHtml/2.6/Publish-StaticHtmlSite.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -348,7 +348,7 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
     ...                   ...   ...                        ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6.0/Find-MarkdownFiles.html
+https://wethat.github.io/MarkdownToHtml/2.6/Find-MarkdownFiles.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -366,26 +366,152 @@ function Find-MarkdownFiles {
         [parameter(Mandatory=$true,ValueFromPipeline=$false)]
         [ValidateNotNullorEmpty()]
         [string]$Path,
+
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-        [string[]]$Exclude
+        [string[]]$Exclude,
+
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [PSCustomObject]$BuildConfiguration
     )
-    Get-Item -Path $Path `
-    | ForEach-Object {
-        [string]$basePath = $_.FullName.TrimEnd('/\')
-        # Compute and attach the relative path
-        if ($_ -is [System.IO.DirectoryInfo]) {
-            Write-Verbose "Scanning $($basePath)"
-            Get-ChildItem -Path $basePath -Recurse -File -Include '*.md','*.Markdown' -Exclude $Exclude `
+
+    $except = if ($Exclude) {$exclude} else {@()}
+    Write-Verbose "Scanning $Path for Markdown files except $except"
+
+    # collect all build configurations and annotate the file objects with the
+    # effective configuration.
+    foreach ($topItem in Get-Item -Path $Path) {
+        [string]$basePath=$null
+        switch ($topItem) {
+            {$_ -is [System.IO.FileInfo]} {
+                $basePath = $topItem.DirectoryName
+                break
+            }
+            {$_ -is [System.IO.DirectoryInfo]} {
+                $basePath = $topItem.FullName
+                break
+            }
+        }
+        if ($basePath) {
+            # process everything under this starting point
+            $basePath = $basePath.TrimEnd('/\')
+
+            Get-ChildItem -Path $topItem `
+                          -Recurse `
+                          -File `
+                          -Include '*.md','*.Markdown' `
+                          -Exclude $except `
             | ForEach-Object {
-                # capture the relative path of the Markdown file
-                [string]$relativePath = $_.FullName.Substring($basePath.Length).Trim('/\').Replace('\','/')
-                Add-Member -InputObject $_ -MemberType NoteProperty -Name 'RelativePath' -Value $relativePath
-                $_
-              }
-        } else {
-            # Write-Verbose "Found: $_ - $($_.GetType())"
-            Add-Member -InputObject $_ -MemberType NoteProperty -Name 'RelativePath' -Value $_.Name
-            $_
+                    # Annotate the markdown file object with the relative path
+                    # to root
+                    [string]$relativePath = $_.FullName.Substring($basePath.Length+1)
+                    # Annotate the file object with a relative path (contains backslashes)
+                    Add-Member -InputObject $_ `
+                               -MemberType NoteProperty `
+                               -Name 'RelativePath' `
+                               -Value $relativePath
+                    $_ # pass it on
+              } `
+            | ForEach-Object `
+                -Begin {
+                    # Cache all local build configurations so that the effective
+                    # configuration for each markdown file can be determined.
+                    $effectiveBuildConfigs = $null
+                    if ($BuildConfiguration) {
+                        # gather all available local configurations and cache them
+                        # Mark the root configuration
+                        Add-Member -InputObject $BuildConfiguration `
+                                   -MemberType NoteProperty `
+                                   -Name 'Joined' `
+                                   -Value $true
+                        $effectiveBuildConfigs = @{'' = $BuildConfiguration} # location specific build configurations
+                        # collect and load all Build.json files.
+                        Write-Verbose "Scanning $($topItem) for Build.json configuration files..."
+                        Get-ChildItem -LiteralPath $topItem -Recurse -File -Filter 'Build.json' `
+                        | ForEach-Object {
+                            # load the configuration file we found
+                            $thisConfig = Get-Content $_.FullName | ConvertFrom-Json
+                            # make sure the accumulating properties exist
+                            if (!$thisConfig.site_navigation) {
+                                Add-Member -InputObject $thisConfig `
+                                           -MemberType NoteProperty `
+                                           -Name 'site_navigation' `
+                                           -Value @()
+                            }
+                            # Relative path to this config file. This information
+                            # is used later to shorten the relative URLs as much as
+                            # possible.
+                            $navRoot = $_.DirectoryName.Substring($basepath.Length + 1)
+                            # set the relative root path for the additional site navigation specs
+                            foreach ($navspec in $thisConfig.site_navigation) {
+                                Add-Member -InputObject $navspec `
+                                           -MemberType NoteProperty `
+                                           -Name 'NavRoot' `
+                                           -Value $navRoot
+                            }
+                            # record this configuration
+                            $effectiveBuildConfigs[$navRoot] = $thisConfig }
+                    }
+                    # these configuration options are ignored in local
+                    # Build.json files.
+                    $bannedProperties = @('site_navigation'
+                                          'Exclude'
+                                          'HTML_template'
+                                          'markdown_extensions'
+                                          'github_pages')
+                } `
+                -Process {
+                    # Annotate each markdown file with the effective build
+                    # configuration.
+                    if ($effectiveBuildConfigs) {
+                        $md = $_
+                        # determine and attach the effective build configuration
+                        # to this markdown file
+                        [string]$context = Split-Path $md.RelativePath -Parent
+                        $effectiveCfg = $effectiveBuildConfigs[$context];
+                        if (!$effectiveCfg) {
+                            $effectiveCfg = New-Object 'PSCustomObject' `
+                                                       -Property @{'site_navigation' = @()}
+                            # make a root configuration for this configuration
+                            # context directory.
+                            $effectiveBuildConfigs[$context] = $effectiveCfg
+                        }
+                        if (!$effectiveCfg.Joined) {
+                            # walk up the directory tree joining all configurations
+
+                            while ($context.Length -gt 0) {
+                                $context = Split-Path $context -Parent
+                                $thisCfg = $effectiveBuildConfigs[$context]
+                                if ($thisCfg) {
+                                    $effectiveCfg.site_navigation =  $thisCfg.site_navigation + $effectiveCfg.site_navigation
+
+                                    Get-Member -InputObject $thisCfg `
+                                               -MemberType NoteProperty `
+                                    | Where-Object { -Not ($_.Name -in $bannedProperties) `
+                                                     -and -Not (Get-Member -InputObject $effectiveCfg `
+                                                                           -MemberType NoteProperty `
+                                                                           -Name $_.Name)} `
+                                    | ForEach-Object {
+                                        Add-Member -InputObject $effectiveCfg `
+                                                   -MemberType NoteProperty `
+                                                   -Name $_.Name `
+                                                   -Value $thisCfg."$($_.Name)"
+
+                                    }
+                                    if ($thisCfg.Joined) {
+                                        break
+                                    }
+                                }
+                            }
+                        }
+                        Add-Member -InputObject $md `
+                                    -MemberType NoteProperty `
+                                    -Name 'EffectiveConfiguration' `
+                                    -Value $effectiveCfg
+                        $md # pass on annotated object
+                    } else {
+                        $_ # pass on
+                    }
+                }
         }
     }
 }
@@ -468,7 +594,7 @@ Convert all Markdown files in `E:\MyMarkdownFiles` using
 The generated HTML files are saved to the directory `E:\MyHTMLFiles`.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6.0/Convert-MarkdownToHTML.html
+https://wethat.github.io/MarkdownToHtml/2.6/Convert-MarkdownToHTML.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -543,7 +669,7 @@ This function does not read from the pipe.
 The new conversion template directory `[System.IO.DirectoryInfo]`.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6.0/New-HTMLTemplate.html
+https://wethat.github.io/MarkdownToHtml/2.6/New-HTMLTemplate.html
 .LINK
 `New-StaticHTMLSiteProject`
 
@@ -607,7 +733,7 @@ Create a new conversion project names 'MyProject' in the current directory. The
 project is ready for build.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6.0/New-StaticHTMLSiteProject.html
+https://wethat.github.io/MarkdownToHtml/2.6/New-StaticHTMLSiteProject.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -855,7 +981,7 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6.0/ConvertTo-NavigationItem.html
+https://wethat.github.io/MarkdownToHtml/2.6/ConvertTo-NavigationItem.html
 .LINK
 `New-StaticHTMLSiteProject`
 .LINK
@@ -879,8 +1005,9 @@ function ConvertTo-NavigationItem {
         $name = if ($NavSpec -is [hashtable]) {
                     $NavSpec.Keys | Select-Object -First 1
                 } else { # json object
-                    (Get-Member -InputObject $NavSpec -MemberType NoteProperty).Name
+                    (Get-Member -InputObject $NavSpec -MemberType NoteProperty | Where-Object {!$_.Name.Equals('NavRoot')}).Name
                 }
+
         $link = $NavSpec.$name
 	    if ([string]::IsNullOrWhiteSpace($link)) {
 		    if ($name.StartsWith('---')) { # separator line
@@ -934,6 +1061,17 @@ function ConvertTo-NavigationItem {
                 $navitem = $SCRIPT:defaultNavTemplate.navitem
             }
 
+            # optimize the path if the nav spec has a NavRoot property
+            if ($NavSpec.NavRoot) {
+                $fromPathSegments = $RelativePath.Split("\")
+                $toPathSegments = $NavSpec.NavRoot.Split("\")
+                [int]$n = [Math]::min($fromPathSegments.Length, $toPathSegments.Length)
+                [int]$unique=0
+                while ($fromPathSegments[$unique] -eq $toPathSegments[$unique] -and $unique -lt $n) {
+                    $unique++
+                }
+                $RelativePath = $fromPathSegments[$unique..$($fromPathSegments.Count-1)] -join '/'
+            }
             Expand-HtmlTemplate -InputObject $navitem -ContentMap @{
                 '{{navurl}}'  = $link
                 '{{navtext}}' = $name
@@ -941,8 +1079,6 @@ function ConvertTo-NavigationItem {
 	    }
     }
 }
-
-$SCRIPT:navCache = @{} # cached site navigation relative to directories
 
 <#
 .SYNOPSIS
@@ -1071,7 +1207,7 @@ Output:
 Note how the relative path parameter was used to update the links.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6.0/New-SiteNavigation.html
+https://wethat.github.io/MarkdownToHtml/2.6/New-SiteNavigation.html
 #>
 function New-SiteNavigation {
     [OutputType([string])]
@@ -1089,15 +1225,8 @@ function New-SiteNavigation {
         [object]$NavTemplate = $defaultNavTemplate
     )
 
-    # lookup specs for this directory
-    $dir = Split-Path $RelativePath -Parent
-
-    if ($nav = $SCRIPT:moduleDir[$dir]) {
-        Write-Output $nav
-    } else {
-        $NavitemSpecs | ConvertTo-NavigationItem -RelativePath $RelativePath `
-                                                -NavTemplate $NavTemplate
-    }
+    $NavitemSpecs | ConvertTo-NavigationItem -RelativePath $RelativePath `
+                                             -NavTemplate $NavTemplate
 }
 
 # find headings h1 .. h6 in an HTML fragment.
@@ -1241,7 +1370,7 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6.0/New-PageHeadingNavigation.html
+https://wethat.github.io/MarkdownToHtml/2.6/New-PageHeadingNavigation.html
 .LINK
 `Convert-MarkdownToHTMLFragment`
 .LINK
@@ -1263,12 +1392,30 @@ function New-PageHeadingNavigation {
         [object[]]$NavitemSpecs,
 
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
-        [object]$NavTemplate = $SCRIPT:defaultNavTemplate,
+        [object]$NavTemplate,
 
         [ValidateNotNull()]
-        [string]$HeadingLevels = "123" # capture levels 1 .. 3 by default
+        [string]$HeadingLevels
     )
+    # determine the values of missing parameters
+    if ($cfg = $HTMLFragment.EffectiveConfiguration) {
+        if (!$NavTemplate -and ($navbar = $cfg.navigation_bar )) {
+            $NavTemplate = $navbar.templates
+        }
+        if (!$NavTemplate) {
+            $NavTemplate = $SCRIPT:defaultNavTemplate
+        }
+
+        if (!$HeadingLevels -and $navbar -and $navbar.capture_page_headings) {
+            $HeadingLevels = $navbar.capture_page_headings
+        }
+        if (!$HeadingLevels) {
+            $HeadingLevels = "123" # capture levels 1 .. 3 by default
+        }
+    }
+
     # Emit the prefix page notation
+
 
     if ($NavitemSpecs -and $HTMLfragment.RelativePath) {
         New-SiteNavigation -NavitemSpecs $NavitemSpecs `
@@ -1351,7 +1498,7 @@ Outut:
 ~~~
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6.0/Update-ResourceLinks.html
+https://wethat.github.io/MarkdownToHtml/2.6/Update-ResourceLinks.html
 .LINK
 `Publish-StaticHtmlSite`
 #>
@@ -1369,43 +1516,19 @@ function Update-ResourceLinks {
         [string]$RelativePath = '')
 
     BEGIN {
-         # Determine the relative navigation path of the current page to root
-	    $up = '../' * ($RelativePath.Split('/').Length - 1)
+        # Determine the relative navigation path of the current page to root
+	    $up = '../' * ($RelativePath.Replace("\","/").Split('/').Length - 1)
     }
     PROCESS {
         $SCRIPT:linkRE.Replace($InputObject,'$1' + $up)
     }
 }
 
-function Get-RelativeNavigationPath {
-    [OutputType([string])]
-    [CmdletBinding()]
-
-    param(
-        [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-        [ValidateNotNullOrEmpty()]
-        [string]$ToRelativePath,
-
-        [parameter(Mandatory=$true,ValueFromPipeline=$false)]
-        [ValidateNotNullOrEmpty()]
-        [string]$FromRelativePath
-    )
-    $fromPathSegments = $FromRelativePath -Split '/'
-    $toPathSegments = $FromRelativePath -Split '/'
-    [int]$n = [Math]::min($fromPathSegments.Length, $toPathSegments.Length) - 1
-    [int]$unique=0
-    while ($fromPathSegments[$unique] -eq $toPathSegments[$unique] -and $unique -lt $n) {
-        $unique++
-    }
-    $up = '../' * ($fromPathSegments.Length - $unique + 1 )
-    "${up}$($fromPathSegments[-1])"
-}
-
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUJpk8r21VViuPItERCCVd2YtN
-# rxegggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUwaYCMy0hamJkPfx5r6Gj5gdd
+# tuagggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1424,11 +1547,11 @@ function Get-RelativeNavigationPath {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRV2h9Uzr74sl6i2WzkJ9z+uOF1
-# XDANBgkqhkiG9w0BAQEFAASCAQAgVtbZ7USx4GNTnAiOQmVQ147UrN3Qs+77XsV6
-# iIudNCnRQB+Kag14n1A2s3DiCKiJAgkf5eVVb/0w51rD9RXRz8IByxYsXkOc6hL2
-# Sfs1hyQ7sca3IenV7dZns6cjPZXHMEKDYJWaivXRQ2XP5AhIg61JTyvnIcktVdjl
-# gJq0x4Bk017se1eZHERPonBrnXJUvyI0NiuSIpRT7HKJ0/99edTOP728Y8YRM4qS
-# /C+zHstLbgRv4C8r7YpTWRRDhIeQW/UhDTHGAt3S5iZwXkMUbxEJUgbegz8AYDIO
-# 4W+Wk3ls34O/x3hPk9Vtgv85y7ScSYQ25vOs4lyRsz2LFOSJ
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBStQYm7dZb60oJQDQdXPzcs9Xkw
+# XTANBgkqhkiG9w0BAQEFAASCAQBe4iDWaKcAmnGe0gCwcuVsYajuO4w13Evs+lKX
+# +p7FzLgFYGADcsqY+C7CHyALiLO9xpGR0MaxOhzahbwuE4wrk1KU47WOeUOQMAI7
+# rr7TFkw1b629BIuTtb8RqUDoTZnsN2A+aQXiM/fxfkHo+2cjvJFvw+RRfizzmRF7
+# Bz3CIO31W+LtLuHeXW62b7i8Ng8+oxftW8o1uVl2AbQ9QPqWT2+EURae2UV0s9rK
+# eH5OsQU2RS87YM72BZoYmb2OJysN8CN1610fv3PBtojG3fgw8F5xRKm6x7TBNQYk
+# zny87bx7/I5Py9HJNKvJbN1826fZoMeD+3QTMKqmHIVNXsI8
 # SIG # End signature block

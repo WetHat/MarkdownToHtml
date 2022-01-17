@@ -94,7 +94,6 @@ FunctionsToExport = @(
                         'ConvertTo-NavigationItem'
                         'Expand-HtmlTemplate'
                         'Find-MarkdownFiles'
-                        'Get-RelativeNavigationPath'
                         'New-PageHeadingNavigation'
                         'New-SiteNavigation'
                         'New-StaticHTMLSiteProject'

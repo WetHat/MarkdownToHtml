@@ -49,7 +49,6 @@ Protect-whPoshModule $pwd -Store Root
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Documentation\" />
     <Folder Include="en\" />
     <Folder Include="ProjectTemplate\" />
     <Folder Include="ProjectTemplate\markdown\" />
@@ -82,16 +81,6 @@ Protect-whPoshModule $pwd -Store Root
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
-    <Content Include="Documentation\about_MarkdownToHTML.md" />
-    <Content Include="Documentation\Convert-MarkdownToHTML.md" />
-    <Content Include="Documentation\Convert-MarkdownToHTMLFragment.md" />
-    <Content Include="Documentation\ConvertTo-NavigationItem.md" />
-    <Content Include="Documentation\ConvertTo-PageHeadingNavigation.md" />
-    <Content Include="Documentation\Find-MarkdownFiles.md" />
-    <Content Include="Documentation\MarkdownToHTML.md" />
-    <Content Include="Documentation\New-HTMLTemplate.md" />
-    <Content Include="Documentation\New-StaticHTMLSiteProject.md" />
-    <Content Include="Documentation\Publish-StaticHtmlSite.md" />
     <Content Include="en\about_MarkdownToHTML.help.txt" />
     <Content Include="LICENSE" />
     <Content Include="Markdown2HTML.png" />

@@ -6,6 +6,7 @@
     "HTML_template": "Template",
 
     "Exclude": [
+        "Build.json"
     ],
 
     "markdown_extensions": [
@@ -35,7 +36,7 @@
         { "Home": "README.md" }
     ],
 
-    "page_navigation": [
+    "page_navigation_header": [
         { "---": "" }
     ],
 
