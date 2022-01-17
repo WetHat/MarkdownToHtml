@@ -113,6 +113,11 @@
 <td style="text-align: left;">[<code>string</code>]</td>
 <td style="text-align: left;">Relative path of the Markdown file below the input directory.</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>EffectiveConfiguration</code></td>
+<td style="text-align: left;">[<code>PSCustomObject</code>]</td>
+<td style="text-align: left;">Optional: Build configuration in effect for this fragment</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -320,6 +325,10 @@ or a markdown descriptor <code>[hashtable]</code>.</p>
 </tr>
 <tr>
 <td style="text-align: center;"><code>RelativePath</code></td>
+<td style="text-align: left;">Passed through from the input object, provided it exists.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>EffectiveConfiguration</code></td>
 <td style="text-align: left;">Passed through from the input object, provided it exists.</td>
 </tr>
 </tbody>

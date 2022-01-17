@@ -33,10 +33,11 @@ The input object can have one of the following types:
 * A plain markdown string [`string`].
 * A markdown descriptor object which is a [`hashtable`] with following contents:
 
-  | Key            | Value Type | Description                                                   |
-  | :------------- | :--------- | :------------------------------------------------------------ |
-  | `Markdown`     | [`string`] | The markdown text.                                            |
-  | `RelativePath` | [`string`] | Relative path of the Markdown file below the input directory. |
+  | Key                      | Value Type         | Description                                                   |
+  | :----------------------- | :----------------- | :------------------------------------------------------------ |
+  | `Markdown`               | [`string`]         | The markdown text.                                            |
+  | `RelativePath`           | [`string`]         | Relative path of the Markdown file below the input directory. |
+  | `EffectiveConfiguration` | [`PSCustomObject`] | Optional: Build configuration in effect for this fragment     |
 
 ---
 
@@ -140,11 +141,12 @@ or a markdown descriptor `[hashtable]`.
 # Outputs
 HTML fragment object with following properties:
 
-| Property       | Description                                                         |
-| :------------: | :------------------------------------------------------------------ |
-| `Title`        | Optional page title. The first heading in the Markdown content.     |
-| `HtmlFragment` | The HTML fragment string or array generated from the Markdown text. |
-| `RelativePath` | Passed through from the input object, provided it exists.           |
+| Property                 | Description                                                         |
+| :----------------------: | :------------------------------------------------------------------ |
+| `Title`                  | Optional page title. The first heading in the Markdown content.     |
+| `HtmlFragment`           | The HTML fragment string or array generated from the Markdown text. |
+| `RelativePath`           | Passed through from the input object, provided it exists.           |
+| `EffectiveConfiguration` | Passed through from the input object, provided it exists.           |
 
 # Notes
 

@@ -36,6 +36,9 @@ or sites.
 >       - [Svgbob](https://ivanceras.github.io/content/Svgbob.html): Text based, human readable
 >         diagrams. See the [example](../index.md#svgbob-plain-text-diagrams)
 >         and [Supported HTML Fragment Postprocessors](#supported-fragment-preprocessors)
+> * Cascading build configurations. Each subtree in Markdown source tree can
+>   have its dedicated build configuration. Among other things this makes it
+>   easy to configure the navitation bar in a directory specific way.
 
 # Long Description
 A collection of PowerShell commands to convert Markdown files to static
@@ -576,15 +579,33 @@ conversion process you should
 >     |     Custom options can be added to this json file as needed for special
 >     |     build processes.
 >     +---------------------------------------------------------------------+
+>     | `page_navigation_header`
+>     | :   Navigation specification for links which are to appear on every page right
+>     |     before the page heading navigation links.
+>     |
+>     |     Usually this specification is one of:
+>     |
+>     |     * `@{ '---' = ''}` -
+>     |        to add a separator line between the site navigation links from the
+>     |        page heading navigation links.
+>     |
+>     |     * `@{ 'Page Content' = ''}` -
+>     |        to add the label _Page Content_ separating the site navigation links from
+>     |        the page heading navigation links.
+>     |
+>     |     However, all link specifications supported by the parameter `NavitemSpecs`
+>     |     of the function [`New-SiteNavigation`](New-SiteNavigation.md) are supported for this parameter too
+>     |     provided hyperlinks are relative to the page.
+>     +---------------------------------------------------------------------+
 >     | `github_pages`
 >     | :   A boolean value to configure the project for publishing
 >     |     as [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages).
 >     |     When set to `$true` a `.nojekyll` file is generated in `site_dir`
 >     |     to turn off the
 >     |     [Jekyll](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll)
->     |     publishing process as publishing is already handled by project
+>     |     publishing process as publishing is already handled by the project
 >     |     build process. To conform with the GitHub Pages project structure
->     |     `site_dir` should be set to `docs`.
+>     |     `site_dir` should be also set to `docs`.
 >     +---------------------------------------------------------------------+
 >     | `svgbob`
 >     | :   Svg conversion options.
@@ -707,6 +728,45 @@ conversion process you should
 > source document relative to the site root for every occurence of
 > '{{my_placeholder}}'.
 
+## Subtree Customization
+
+> A `Build.json` configuration file can not only be at the project root
+> where it is used for global project configuration, but also at any level
+> in the Markdown directory tree:
+>
+> ~~~ bob
+> #                           <- project root
+> |- html
+> |- markdown                 <- authored Markdown content
+> |     |
+> |     '- SomeDirectory      <- initial content
+> |             |
+> |             |- Build.json <- Specific configuration for 'SomeDirectory'
+> |             '- *.md
+> |- Template                 <- template resources
+> |     |
+> |     '- ...
+> |
+> |- Build.json               <- project configuration
+> '- Build.ps1                <- build script
+> ~~~
+>
+> Subtree configurations cascade. That is, they take precedence to configurations
+> found higher up in the directory tree including the site configuration.
+> Subtree `Build.json` file can have most of the options of a site
+> configuration except these options:
+> * `Exclude`
+> * `HTML_template`
+> * `markdown_extensions`
+> * `github_pages`
+>
+> Any of the above options is ignored in subtree configurations.
+>
+> Unlike other options the option `site_navigation` does **not** superseed
+> higher-up configurations. Instead, the `site_navigation` specifications
+> are concatenated top-down, so that the site navigation at a particular
+> directory level contains **all** navigation links from all `Build.json`
+> files found above.
 # Keywords
 Markdown HTML static sites Conversion
 

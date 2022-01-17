@@ -69,6 +69,7 @@
 <button class='navitem'><a href='#conversion-template-customization'><span class='navitem2'>Conversion Template Customization</span></a></button>
 <button class='navitem'><a href='#static-site-project-customization'><span class='navitem2'>Static Site Project Customization</span></a></button>
 <button class='navitem'><a href='#defining-content-mapping-rules'><span class='navitem3'>Defining Content Mapping Rules</span></a></button>
+<button class='navitem'><a href='#subtree-customization'><span class='navitem2'>Subtree Customization</span></a></button>
 <button class='navitem'><a href='#keywords'><span class='navitem1'>Keywords</span></a></button>
 <button class='navitem'><a href='#other-markdown-site-generators'><span class='navitem1'>Other Markdown Site Generators</span></a></button>
 </nav>
@@ -115,6 +116,9 @@ and <a href="#supported-fragment-preprocessors">Supported HTML Fragment Postproc
 </dd>
 </dl>
 </li>
+<li>Cascading build configurations. Each subtree in Markdown source tree can
+have its dedicated build configuration. Among other things this makes it
+easy to configure the navitation bar in a directory specific way.</li>
 </ul>
 </blockquote>
 <h1 id="long-description">Long Description</h1>
@@ -297,7 +301,7 @@ supporting alpha bullet a. b. and roman bullet (i, ii...etc.)</td>
 <td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MathSpecs.md">Mathematics</a>
 LaTeX extension by enclosing <code>$$</code> for block and <code>$</code> for inline math.
 Resources for this extension are pre-installed and configured.
-See <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a> for customization details.                                             |</td>
+See <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a> for customization details.</td>
 </tr>
 <tr>
 <td style="text-align: center;">medialinks</td>
@@ -794,15 +798,38 @@ build processes.</li>
 <tr>
 <td>
 <dl>
+<dt><code>page_navigation_header</code></dt>
+<dd>Navigation specification for links which are to appear on every page right
+before the page heading navigation links.Usually this specification is one of:
+<ul>
+<li><code>@{ '---' = ''}</code> -
+to add a separator line between the site navigation links from the
+page heading navigation links.</li>
+</ul>
+<ul>
+<li><code>@{ 'Page Content' = ''}</code> -
+to add the label <em>Page Content</em> separating the site navigation links from
+the page heading navigation links.</li>
+</ul>
+However, all link specifications supported by the parameter <code>NavitemSpecs</code>
+of the function <a href="New-SiteNavigation.html"><code>New-SiteNavigation</code></a> are supported for this parameter too
+provided hyperlinks are relative to the page.
+</dd>
+</dl>
+</td>
+</tr>
+<tr>
+<td>
+<dl>
 <dt><code>github_pages</code></dt>
 <dd>A boolean value to configure the project for publishing
 as <a href="https://docs.github.com/en/pages/getting-started-with-github-pages">GitHub Pages</a>.
 When set to <code>$true</code> a <code>.nojekyll</code> file is generated in <code>site_dir</code>
 to turn off the
 <a href="https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll">Jekyll</a>
-publishing process as publishing is already handled by project
+publishing process as publishing is already handled by the project
 build process. To conform with the GitHub Pages project structure
-<code>site_dir</code> should be set to <code>docs</code>.</dd>
+<code>site_dir</code> should be also set to <code>docs</code>.</dd>
 </dl>
 </td>
 </tr>
@@ -942,6 +969,29 @@ strings which define the substitution value for the placeholder.</p>
 <p>This script block would substitute the path of the Markdown
 source document relative to the site root for every occurence of
 '{{my_placeholder}}'.</p>
+</blockquote>
+<h2 id="subtree-customization">Subtree Customization</h2>
+<blockquote>
+<p>A <code>Build.json</code> configuration file can not only be at the project root
+where it is used for global project configuration, but also at any level
+in the Markdown directory tree:</p>
+<pre><img src='about_MarkdownToHTML6.svg' alt='Diagram 6.' /></pre>
+<p>Subtree configurations cascade. That is, they take precedence to configurations
+found higher up in the directory tree including the site configuration.
+Subtree <code>Build.json</code> file can have most of the options of a site
+configuration except these options:</p>
+<ul>
+<li><code>Exclude</code></li>
+<li><code>HTML_template</code></li>
+<li><code>markdown_extensions</code></li>
+<li><code>github_pages</code></li>
+</ul>
+<p>Any of the above options is ignored in subtree configurations.</p>
+<p>Unlike other options the option <code>site_navigation</code> does <strong>not</strong> superseed
+higher-up configurations. Instead, the <code>site_navigation</code> specifications
+are concatenated top-down, so that the site navigation at a particular
+directory level contains <strong>all</strong> navigation links from all <code>Build.json</code>
+files found above.</p>
 </blockquote>
 <h1 id="keywords">Keywords</h1>
 <p>Markdown HTML static sites Conversion</p>

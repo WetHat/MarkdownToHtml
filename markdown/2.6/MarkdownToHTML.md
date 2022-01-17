@@ -40,7 +40,13 @@ See [version 2.0.0](../2.4.0/MarkdownToHTML.md#2.0.0) release notes for upgrade 
 
 ## 2.6.0 {#2.6.0}
 
-TODO
+* Cascading build configuration. `Build.json` configuration files can be added
+  at any level in the Markdown subtree to provide directory specific configuration.
+  Can be used to supperseed site configurations or build a directory specific
+  navigation bar. See [Subtree Configuratation](about_MarkdownToHTML.md#subtree-customization)
+
+* External components updated:
+  * svgbob
 
 ## 2.5.0 {#2.5.0}
 

@@ -75,7 +75,7 @@ Accept wildcard characters?| false
 Build configuration object. Usually obtained by reading a `Build.json` configuration
 file. See the [Static Site](about_MarkdownToHTML.md#static-site-project-customization)
 for details about configuration options and structure. This configuration is
-cascaded with the configurations from  `Build.json` files found at or above the
+cascaded with configurations from `Build.json` files found at or above the
 location of the Markdown file.
 
 ---

@@ -95,7 +95,11 @@ Svg conversion options. An object or hashtable with follwing properties or keys:
 | `stroke_width` | Stroke width for all lines (default: 2)      |
 
 When using conversion projects instantiated by [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md) these
-parameters are configured in `Build.json` parameter section `svgbob`.
+parameters are usually configured in `Build.json` in section `svgbob` and this
+parameter should be omitted for these configurations to take effect.
+
+**Note**: If this parameter is specified, it superseeds the
+configuration from `Build.json`.
 
 ---
 
