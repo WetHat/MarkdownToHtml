@@ -52,7 +52,8 @@ __webpack_require__.d(__webpack_exports__, {
  */
 var ParseError = // Error position based on passed-in Token or ParseNode.
 function ParseError(message, // The error message
-token) {
+token // An object providing position information
+) {
   this.position = void 0;
   var error = "KaTeX parse error: " + message;
   var start;
@@ -228,7 +229,136 @@ var protocolFromUrl = function protocolFromUrl(url) {
 
 
 
+// TODO: automatically generate documentation
+// TODO: check all properties on Settings exist
+// TODO: check the type of a property on Settings matches
+var SETTINGS_SCHEMA = {
+  displayMode: {
+    type: "boolean",
+    description: "Render math in display mode, which puts the math in " + "display style (so \\int and \\sum are large, for example), and " + "centers the math on the page on its own line.",
+    cli: "-d, --display-mode"
+  },
+  output: {
+    type: {
+      enum: ["htmlAndMathml", "html", "mathml"]
+    },
+    description: "Determines the markup language of the output.",
+    cli: "-F, --format <type>"
+  },
+  leqno: {
+    type: "boolean",
+    description: "Render display math in leqno style (left-justified tags)."
+  },
+  fleqn: {
+    type: "boolean",
+    description: "Render display math flush left."
+  },
+  throwOnError: {
+    type: "boolean",
+    default: true,
+    cli: "-t, --no-throw-on-error",
+    cliDescription: "Render errors (in the color given by --error-color) ins" + "tead of throwing a ParseError exception when encountering an error."
+  },
+  errorColor: {
+    type: "string",
+    default: "#cc0000",
+    cli: "-c, --error-color <color>",
+    cliDescription: "A color string given in the format 'rgb' or 'rrggbb' " + "(no #). This option determines the color of errors rendered by the " + "-t option.",
+    cliProcessor: function cliProcessor(color) {
+      return "#" + color;
+    }
+  },
+  macros: {
+    type: "object",
+    cli: "-m, --macro <def>",
+    cliDescription: "Define custom macro of the form '\\foo:expansion' (use " + "multiple -m arguments for multiple macros).",
+    cliDefault: [],
+    cliProcessor: function cliProcessor(def, defs) {
+      defs.push(def);
+      return defs;
+    }
+  },
+  minRuleThickness: {
+    type: "number",
+    description: "Specifies a minimum thickness, in ems, for fraction lines," + " `\\sqrt` top lines, `{array}` vertical lines, `\\hline`, " + "`\\hdashline`, `\\underline`, `\\overline`, and the borders of " + "`\\fbox`, `\\boxed`, and `\\fcolorbox`.",
+    processor: function processor(t) {
+      return Math.max(0, t);
+    },
+    cli: "--min-rule-thickness <size>",
+    cliProcessor: parseFloat
+  },
+  colorIsTextColor: {
+    type: "boolean",
+    description: "Makes \\color behave like LaTeX's 2-argument \\textcolor, " + "instead of LaTeX's one-argument \\color mode change.",
+    cli: "-b, --color-is-text-color"
+  },
+  strict: {
+    type: [{
+      enum: ["warn", "ignore", "error"]
+    }, "boolean", "function"],
+    description: "Turn on strict / LaTeX faithfulness mode, which throws an " + "error if the input uses features that are not supported by LaTeX.",
+    cli: "-S, --strict",
+    cliDefault: false
+  },
+  trust: {
+    type: ["boolean", "function"],
+    description: "Trust the input, enabling all HTML features such as \\url.",
+    cli: "-T, --trust"
+  },
+  maxSize: {
+    type: "number",
+    default: Infinity,
+    description: "If non-zero, all user-specified sizes, e.g. in " + "\\rule{500em}{500em}, will be capped to maxSize ems. Otherwise, " + "elements and spaces can be arbitrarily large",
+    processor: function processor(s) {
+      return Math.max(0, s);
+    },
+    cli: "-s, --max-size <n>",
+    cliProcessor: parseInt
+  },
+  maxExpand: {
+    type: "number",
+    default: 1000,
+    description: "Limit the number of macro expansions to the specified " + "number, to prevent e.g. infinite macro loops. If set to Infinity, " + "the macro expander will try to fully expand as in LaTeX.",
+    processor: function processor(n) {
+      return Math.max(0, n);
+    },
+    cli: "-e, --max-expand <n>",
+    cliProcessor: function cliProcessor(n) {
+      return n === "Infinity" ? Infinity : parseInt(n);
+    }
+  },
+  globalGroup: {
+    type: "boolean",
+    cli: false
+  }
+};
 
+function getDefaultValue(schema) {
+  if (schema.default) {
+    return schema.default;
+  }
+
+  var type = schema.type;
+  var defaultType = Array.isArray(type) ? type[0] : type;
+
+  if (typeof defaultType !== 'string') {
+    return defaultType.enum[0];
+  }
+
+  switch (defaultType) {
+    case 'boolean':
+      return false;
+
+    case 'string':
+      return '';
+
+    case 'number':
+      return 0;
+
+    case 'object':
+      return {};
+  }
+}
 /**
  * The main Settings object
  *
@@ -239,6 +369,8 @@ var protocolFromUrl = function protocolFromUrl(url) {
  *                 math (true), meaning that the math starts in \displaystyle
  *                 and is placed in a block with vertical margin.
  */
+
+
 var Settings = /*#__PURE__*/function () {
   function Settings(options) {
     this.displayMode = void 0;
@@ -257,20 +389,16 @@ var Settings = /*#__PURE__*/function () {
     this.globalGroup = void 0;
     // allow null options
     options = options || {};
-    this.displayMode = utils.deflt(options.displayMode, false);
-    this.output = utils.deflt(options.output, "htmlAndMathml");
-    this.leqno = utils.deflt(options.leqno, false);
-    this.fleqn = utils.deflt(options.fleqn, false);
-    this.throwOnError = utils.deflt(options.throwOnError, true);
-    this.errorColor = utils.deflt(options.errorColor, "#cc0000");
-    this.macros = options.macros || {};
-    this.minRuleThickness = Math.max(0, utils.deflt(options.minRuleThickness, 0));
-    this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);
-    this.strict = utils.deflt(options.strict, "warn");
-    this.trust = utils.deflt(options.trust, false);
-    this.maxSize = Math.max(0, utils.deflt(options.maxSize, Infinity));
-    this.maxExpand = Math.max(0, utils.deflt(options.maxExpand, 1000));
-    this.globalGroup = utils.deflt(options.globalGroup, false);
+
+    for (var prop in SETTINGS_SCHEMA) {
+      if (SETTINGS_SCHEMA.hasOwnProperty(prop)) {
+        // $FlowFixMe
+        var schema = SETTINGS_SCHEMA[prop]; // TODO: validate options
+        // $FlowFixMe
+
+        this[prop] = options[prop] !== undefined ? schema.processor ? schema.processor(options[prop]) : options[prop] : getDefaultValue(schema);
+      }
+    }
   }
   /**
    * Report nonstrict (non-LaTeX-compatible) input.
@@ -878,559 +1006,6 @@ var DocumentFragment = /*#__PURE__*/function () {
 
   return DocumentFragment;
 }();
-;// CONCATENATED MODULE: ./src/domTree.js
-/**
- * These objects store the data about the DOM nodes we create, as well as some
- * extra data. They can then be transformed into real DOM nodes with the
- * `toNode` function or HTML markup using `toMarkup`. They are useful for both
- * storing extra properties on the nodes, as well as providing a way to easily
- * work with the DOM.
- *
- * Similar functions for working with MathML nodes exist in mathMLTree.js.
- *
- * TODO: refactor `span` and `anchor` into common superclass when
- * target environments support class inheritance
- */
-
-
-
-
-
-/**
- * Create an HTML className based on a list of classes. In addition to joining
- * with spaces, we also remove empty classes.
- */
-var createClass = function createClass(classes) {
-  return classes.filter(function (cls) {
-    return cls;
-  }).join(" ");
-};
-
-var initNode = function initNode(classes, options, style) {
-  this.classes = classes || [];
-  this.attributes = {};
-  this.height = 0;
-  this.depth = 0;
-  this.maxFontSize = 0;
-  this.style = style || {};
-
-  if (options) {
-    if (options.style.isTight()) {
-      this.classes.push("mtight");
-    }
-
-    var color = options.getColor();
-
-    if (color) {
-      this.style.color = color;
-    }
-  }
-};
-/**
- * Convert into an HTML node
- */
-
-
-var _toNode = function toNode(tagName) {
-  var node = document.createElement(tagName); // Apply the class
-
-  node.className = createClass(this.classes); // Apply inline styles
-
-  for (var style in this.style) {
-    if (this.style.hasOwnProperty(style)) {
-      // $FlowFixMe Flow doesn't seem to understand span.style's type.
-      node.style[style] = this.style[style];
-    }
-  } // Apply attributes
-
-
-  for (var attr in this.attributes) {
-    if (this.attributes.hasOwnProperty(attr)) {
-      node.setAttribute(attr, this.attributes[attr]);
-    }
-  } // Append the children, also as HTML nodes
-
-
-  for (var i = 0; i < this.children.length; i++) {
-    node.appendChild(this.children[i].toNode());
-  }
-
-  return node;
-};
-/**
- * Convert into an HTML markup string
- */
-
-
-var _toMarkup = function toMarkup(tagName) {
-  var markup = "<" + tagName; // Add the class
-
-  if (this.classes.length) {
-    markup += " class=\"" + utils.escape(createClass(this.classes)) + "\"";
-  }
-
-  var styles = ""; // Add the styles, after hyphenation
-
-  for (var style in this.style) {
-    if (this.style.hasOwnProperty(style)) {
-      styles += utils.hyphenate(style) + ":" + this.style[style] + ";";
-    }
-  }
-
-  if (styles) {
-    markup += " style=\"" + utils.escape(styles) + "\"";
-  } // Add the attributes
-
-
-  for (var attr in this.attributes) {
-    if (this.attributes.hasOwnProperty(attr)) {
-      markup += " " + attr + "=\"" + utils.escape(this.attributes[attr]) + "\"";
-    }
-  }
-
-  markup += ">"; // Add the markup of the children, also as markup
-
-  for (var i = 0; i < this.children.length; i++) {
-    markup += this.children[i].toMarkup();
-  }
-
-  markup += "</" + tagName + ">";
-  return markup;
-}; // Making the type below exact with all optional fields doesn't work due to
-// - https://github.com/facebook/flow/issues/4582
-// - https://github.com/facebook/flow/issues/5688
-// However, since *all* fields are optional, $Shape<> works as suggested in 5688
-// above.
-// This type does not include all CSS properties. Additional properties should
-// be added as needed.
-
-
-/**
- * This node represents a span node, with a className, a list of children, and
- * an inline style. It also contains information about its height, depth, and
- * maxFontSize.
- *
- * Represents two types with different uses: SvgSpan to wrap an SVG and DomSpan
- * otherwise. This typesafety is important when HTML builders access a span's
- * children.
- */
-var Span = /*#__PURE__*/function () {
-  function Span(classes, children, options, style) {
-    this.children = void 0;
-    this.attributes = void 0;
-    this.classes = void 0;
-    this.height = void 0;
-    this.depth = void 0;
-    this.width = void 0;
-    this.maxFontSize = void 0;
-    this.style = void 0;
-    initNode.call(this, classes, options, style);
-    this.children = children || [];
-  }
-  /**
-   * Sets an arbitrary attribute on the span. Warning: use this wisely. Not
-   * all browsers support attributes the same, and having too many custom
-   * attributes is probably bad.
-   */
-
-
-  var _proto = Span.prototype;
-
-  _proto.setAttribute = function setAttribute(attribute, value) {
-    this.attributes[attribute] = value;
-  };
-
-  _proto.hasClass = function hasClass(className) {
-    return utils.contains(this.classes, className);
-  };
-
-  _proto.toNode = function toNode() {
-    return _toNode.call(this, "span");
-  };
-
-  _proto.toMarkup = function toMarkup() {
-    return _toMarkup.call(this, "span");
-  };
-
-  return Span;
-}();
-/**
- * This node represents an anchor (<a>) element with a hyperlink.  See `span`
- * for further details.
- */
-
-var Anchor = /*#__PURE__*/function () {
-  function Anchor(href, classes, children, options) {
-    this.children = void 0;
-    this.attributes = void 0;
-    this.classes = void 0;
-    this.height = void 0;
-    this.depth = void 0;
-    this.maxFontSize = void 0;
-    this.style = void 0;
-    initNode.call(this, classes, options);
-    this.children = children || [];
-    this.setAttribute('href', href);
-  }
-
-  var _proto2 = Anchor.prototype;
-
-  _proto2.setAttribute = function setAttribute(attribute, value) {
-    this.attributes[attribute] = value;
-  };
-
-  _proto2.hasClass = function hasClass(className) {
-    return utils.contains(this.classes, className);
-  };
-
-  _proto2.toNode = function toNode() {
-    return _toNode.call(this, "a");
-  };
-
-  _proto2.toMarkup = function toMarkup() {
-    return _toMarkup.call(this, "a");
-  };
-
-  return Anchor;
-}();
-/**
- * This node represents an image embed (<img>) element.
- */
-
-var Img = /*#__PURE__*/function () {
-  function Img(src, alt, style) {
-    this.src = void 0;
-    this.alt = void 0;
-    this.classes = void 0;
-    this.height = void 0;
-    this.depth = void 0;
-    this.maxFontSize = void 0;
-    this.style = void 0;
-    this.alt = alt;
-    this.src = src;
-    this.classes = ["mord"];
-    this.style = style;
-  }
-
-  var _proto3 = Img.prototype;
-
-  _proto3.hasClass = function hasClass(className) {
-    return utils.contains(this.classes, className);
-  };
-
-  _proto3.toNode = function toNode() {
-    var node = document.createElement("img");
-    node.src = this.src;
-    node.alt = this.alt;
-    node.className = "mord"; // Apply inline styles
-
-    for (var style in this.style) {
-      if (this.style.hasOwnProperty(style)) {
-        // $FlowFixMe
-        node.style[style] = this.style[style];
-      }
-    }
-
-    return node;
-  };
-
-  _proto3.toMarkup = function toMarkup() {
-    var markup = "<img  src='" + this.src + " 'alt='" + this.alt + "' "; // Add the styles, after hyphenation
-
-    var styles = "";
-
-    for (var style in this.style) {
-      if (this.style.hasOwnProperty(style)) {
-        styles += utils.hyphenate(style) + ":" + this.style[style] + ";";
-      }
-    }
-
-    if (styles) {
-      markup += " style=\"" + utils.escape(styles) + "\"";
-    }
-
-    markup += "'/>";
-    return markup;
-  };
-
-  return Img;
-}();
-var iCombinations = {
-  'î': "\u0131\u0302",
-  'ï': "\u0131\u0308",
-  'í': "\u0131\u0301",
-  // 'ī': '\u0131\u0304', // enable when we add Extended Latin
-  'ì': "\u0131\u0300"
-};
-/**
- * A symbol node contains information about a single symbol. It either renders
- * to a single text node, or a span with a single text node in it, depending on
- * whether it has CSS classes, styles, or needs italic correction.
- */
-
-var SymbolNode = /*#__PURE__*/function () {
-  function SymbolNode(text, height, depth, italic, skew, width, classes, style) {
-    this.text = void 0;
-    this.height = void 0;
-    this.depth = void 0;
-    this.italic = void 0;
-    this.skew = void 0;
-    this.width = void 0;
-    this.maxFontSize = void 0;
-    this.classes = void 0;
-    this.style = void 0;
-    this.text = text;
-    this.height = height || 0;
-    this.depth = depth || 0;
-    this.italic = italic || 0;
-    this.skew = skew || 0;
-    this.width = width || 0;
-    this.classes = classes || [];
-    this.style = style || {};
-    this.maxFontSize = 0; // Mark text from non-Latin scripts with specific classes so that we
-    // can specify which fonts to use.  This allows us to render these
-    // characters with a serif font in situations where the browser would
-    // either default to a sans serif or render a placeholder character.
-    // We use CSS class names like cjk_fallback, hangul_fallback and
-    // brahmic_fallback. See ./unicodeScripts.js for the set of possible
-    // script names
-
-    var script = scriptFromCodepoint(this.text.charCodeAt(0));
-
-    if (script) {
-      this.classes.push(script + "_fallback");
-    }
-
-    if (/[îïíì]/.test(this.text)) {
-      // add ī when we add Extended Latin
-      this.text = iCombinations[this.text];
-    }
-  }
-
-  var _proto4 = SymbolNode.prototype;
-
-  _proto4.hasClass = function hasClass(className) {
-    return utils.contains(this.classes, className);
-  }
-  /**
-   * Creates a text node or span from a symbol node. Note that a span is only
-   * created if it is needed.
-   */
-  ;
-
-  _proto4.toNode = function toNode() {
-    var node = document.createTextNode(this.text);
-    var span = null;
-
-    if (this.italic > 0) {
-      span = document.createElement("span");
-      span.style.marginRight = this.italic + "em";
-    }
-
-    if (this.classes.length > 0) {
-      span = span || document.createElement("span");
-      span.className = createClass(this.classes);
-    }
-
-    for (var style in this.style) {
-      if (this.style.hasOwnProperty(style)) {
-        span = span || document.createElement("span"); // $FlowFixMe Flow doesn't seem to understand span.style's type.
-
-        span.style[style] = this.style[style];
-      }
-    }
-
-    if (span) {
-      span.appendChild(node);
-      return span;
-    } else {
-      return node;
-    }
-  }
-  /**
-   * Creates markup for a symbol node.
-   */
-  ;
-
-  _proto4.toMarkup = function toMarkup() {
-    // TODO(alpert): More duplication than I'd like from
-    // span.prototype.toMarkup and symbolNode.prototype.toNode...
-    var needsSpan = false;
-    var markup = "<span";
-
-    if (this.classes.length) {
-      needsSpan = true;
-      markup += " class=\"";
-      markup += utils.escape(createClass(this.classes));
-      markup += "\"";
-    }
-
-    var styles = "";
-
-    if (this.italic > 0) {
-      styles += "margin-right:" + this.italic + "em;";
-    }
-
-    for (var style in this.style) {
-      if (this.style.hasOwnProperty(style)) {
-        styles += utils.hyphenate(style) + ":" + this.style[style] + ";";
-      }
-    }
-
-    if (styles) {
-      needsSpan = true;
-      markup += " style=\"" + utils.escape(styles) + "\"";
-    }
-
-    var escaped = utils.escape(this.text);
-
-    if (needsSpan) {
-      markup += ">";
-      markup += escaped;
-      markup += "</span>";
-      return markup;
-    } else {
-      return escaped;
-    }
-  };
-
-  return SymbolNode;
-}();
-/**
- * SVG nodes are used to render stretchy wide elements.
- */
-
-var SvgNode = /*#__PURE__*/function () {
-  function SvgNode(children, attributes) {
-    this.children = void 0;
-    this.attributes = void 0;
-    this.children = children || [];
-    this.attributes = attributes || {};
-  }
-
-  var _proto5 = SvgNode.prototype;
-
-  _proto5.toNode = function toNode() {
-    var svgNS = "http://www.w3.org/2000/svg";
-    var node = document.createElementNS(svgNS, "svg"); // Apply attributes
-
-    for (var attr in this.attributes) {
-      if (Object.prototype.hasOwnProperty.call(this.attributes, attr)) {
-        node.setAttribute(attr, this.attributes[attr]);
-      }
-    }
-
-    for (var i = 0; i < this.children.length; i++) {
-      node.appendChild(this.children[i].toNode());
-    }
-
-    return node;
-  };
-
-  _proto5.toMarkup = function toMarkup() {
-    var markup = "<svg"; // Apply attributes
-
-    for (var attr in this.attributes) {
-      if (Object.prototype.hasOwnProperty.call(this.attributes, attr)) {
-        markup += " " + attr + "='" + this.attributes[attr] + "'";
-      }
-    }
-
-    markup += ">";
-
-    for (var i = 0; i < this.children.length; i++) {
-      markup += this.children[i].toMarkup();
-    }
-
-    markup += "</svg>";
-    return markup;
-  };
-
-  return SvgNode;
-}();
-var PathNode = /*#__PURE__*/function () {
-  function PathNode(pathName, alternate) {
-    this.pathName = void 0;
-    this.alternate = void 0;
-    this.pathName = pathName;
-    this.alternate = alternate; // Used only for \sqrt, \phase, & tall delims
-  }
-
-  var _proto6 = PathNode.prototype;
-
-  _proto6.toNode = function toNode() {
-    var svgNS = "http://www.w3.org/2000/svg";
-    var node = document.createElementNS(svgNS, "path");
-
-    if (this.alternate) {
-      node.setAttribute("d", this.alternate);
-    } else {
-      node.setAttribute("d", path[this.pathName]);
-    }
-
-    return node;
-  };
-
-  _proto6.toMarkup = function toMarkup() {
-    if (this.alternate) {
-      return "<path d='" + this.alternate + "'/>";
-    } else {
-      return "<path d='" + path[this.pathName] + "'/>";
-    }
-  };
-
-  return PathNode;
-}();
-var LineNode = /*#__PURE__*/function () {
-  function LineNode(attributes) {
-    this.attributes = void 0;
-    this.attributes = attributes || {};
-  }
-
-  var _proto7 = LineNode.prototype;
-
-  _proto7.toNode = function toNode() {
-    var svgNS = "http://www.w3.org/2000/svg";
-    var node = document.createElementNS(svgNS, "line"); // Apply attributes
-
-    for (var attr in this.attributes) {
-      if (Object.prototype.hasOwnProperty.call(this.attributes, attr)) {
-        node.setAttribute(attr, this.attributes[attr]);
-      }
-    }
-
-    return node;
-  };
-
-  _proto7.toMarkup = function toMarkup() {
-    var markup = "<line";
-
-    for (var attr in this.attributes) {
-      if (Object.prototype.hasOwnProperty.call(this.attributes, attr)) {
-        markup += " " + attr + "='" + this.attributes[attr] + "'";
-      }
-    }
-
-    markup += "/>";
-    return markup;
-  };
-
-  return LineNode;
-}();
-function assertSymbolDomNode(group) {
-  if (group instanceof SymbolNode) {
-    return group;
-  } else {
-    throw new Error("Expected symbolNode but got " + String(group) + ".");
-  }
-}
-function assertSpan(group) {
-  if (group instanceof Span) {
-    return group;
-  } else {
-    throw new Error("Expected span<HtmlDomNode> but got " + String(group) + ".");
-  }
-}
 ;// CONCATENATED MODULE: ./src/fontMetricsData.js
 // This file is GENERATED by buildMetrics.sh. DO NOT MODIFY.
 /* harmony default export */ var fontMetricsData = ({
@@ -2016,6 +1591,7 @@ function assertSpan(group) {
     "8764": [-0.10889, 0.39111, 0, 0, 0.89444],
     "8768": [0.19444, 0.69444, 0, 0, 0.31944],
     "8771": [0.00222, 0.50222, 0, 0, 0.89444],
+    "8773": [0.027, 0.638, 0, 0, 0.894],
     "8776": [0.02444, 0.52444, 0, 0, 0.89444],
     "8781": [0.00222, 0.50222, 0, 0, 0.89444],
     "8801": [0.00222, 0.50222, 0, 0, 0.89444],
@@ -2472,7 +2048,7 @@ function assertSpan(group) {
     "8221": [0, 0.69444, 0, 0, 0.5],
     "8224": [0.19444, 0.69444, 0, 0, 0.44445],
     "8225": [0.19444, 0.69444, 0, 0, 0.44445],
-    "8230": [0, 0.12, 0, 0, 1.172],
+    "8230": [0, 0.123, 0, 0, 1.172],
     "8242": [0, 0.55556, 0, 0, 0.275],
     "8407": [0, 0.71444, 0.15382, 0, 0.5],
     "8463": [0, 0.68889, 0, 0, 0.54028],
@@ -2533,10 +2109,10 @@ function assertSpan(group) {
     "8764": [-0.13313, 0.36687, 0, 0, 0.77778],
     "8768": [0.19444, 0.69444, 0, 0, 0.27778],
     "8771": [-0.03625, 0.46375, 0, 0, 0.77778],
-    "8773": [-0.022, 0.589, 0, 0, 1.0],
+    "8773": [-0.022, 0.589, 0, 0, 0.778],
     "8776": [-0.01688, 0.48312, 0, 0, 0.77778],
     "8781": [-0.03625, 0.46375, 0, 0, 0.77778],
-    "8784": [-0.133, 0.67, 0, 0, 0.778],
+    "8784": [-0.133, 0.673, 0, 0, 0.778],
     "8801": [-0.03625, 0.46375, 0, 0, 0.77778],
     "8804": [0.13597, 0.63597, 0, 0, 0.77778],
     "8805": [0.13597, 0.63597, 0, 0, 0.77778],
@@ -2567,9 +2143,9 @@ function assertSpan(group) {
     "8901": [-0.05555, 0.44445, 0, 0, 0.27778],
     "8902": [-0.03472, 0.46528, 0, 0, 0.5],
     "8904": [0.005, 0.505, 0, 0, 0.9],
-    "8942": [0.03, 0.9, 0, 0, 0.278],
-    "8943": [-0.19, 0.31, 0, 0, 1.172],
-    "8945": [-0.1, 0.82, 0, 0, 1.282],
+    "8942": [0.03, 0.903, 0, 0, 0.278],
+    "8943": [-0.19, 0.313, 0, 0, 1.172],
+    "8945": [-0.1, 0.823, 0, 0, 1.282],
     "8968": [0.25, 0.75, 0, 0, 0.44445],
     "8969": [0.25, 0.75, 0, 0, 0.44445],
     "8970": [0.25, 0.75, 0, 0, 0.44445],
@@ -2577,7 +2153,7 @@ function assertSpan(group) {
     "8994": [-0.14236, 0.35764, 0, 0, 1.0],
     "8995": [-0.14236, 0.35764, 0, 0, 1.0],
     "9136": [0.244, 0.744, 0, 0, 0.412],
-    "9137": [0.244, 0.744, 0, 0, 0.412],
+    "9137": [0.244, 0.745, 0, 0, 0.412],
     "9651": [0.19444, 0.69444, 0, 0, 0.88889],
     "9657": [-0.03472, 0.46528, 0, 0, 0.5],
     "9661": [0.19444, 0.69444, 0, 0, 0.88889],
@@ -2593,7 +2169,7 @@ function assertSpan(group) {
     "10216": [0.25, 0.75, 0, 0, 0.38889],
     "10217": [0.25, 0.75, 0, 0, 0.38889],
     "10222": [0.244, 0.744, 0, 0, 0.412],
-    "10223": [0.244, 0.744, 0, 0, 0.412],
+    "10223": [0.244, 0.745, 0, 0, 0.412],
     "10229": [0.011, 0.511, 0, 0, 1.609],
     "10230": [0.011, 0.511, 0, 0, 1.638],
     "10231": [0.011, 0.511, 0, 0, 1.859],
@@ -3637,11 +3213,9 @@ var sigmasAndXis = {
 var extraCharacterMap = {
   // Latin-1
   'Å': 'A',
-  'Ç': 'C',
   'Ð': 'D',
   'Þ': 'o',
   'å': 'a',
-  'ç': 'c',
   'ð': 'd',
   'þ': 'o',
   // Cyrillic
@@ -3792,6 +3366,996 @@ function getGlobalMetrics(size) {
   }
 
   return fontMetricsBySizeIndex[sizeIndex];
+}
+;// CONCATENATED MODULE: ./src/Options.js
+/**
+ * This file contains information about the options that the Parser carries
+ * around with it while parsing. Data is held in an `Options` object, and when
+ * recursing, a new `Options` object can be created with the `.with*` and
+ * `.reset` functions.
+ */
+
+var sizeStyleMap = [// Each element contains [textsize, scriptsize, scriptscriptsize].
+// The size mappings are taken from TeX with \normalsize=10pt.
+[1, 1, 1], // size1: [5, 5, 5]              \tiny
+[2, 1, 1], // size2: [6, 5, 5]
+[3, 1, 1], // size3: [7, 5, 5]              \scriptsize
+[4, 2, 1], // size4: [8, 6, 5]              \footnotesize
+[5, 2, 1], // size5: [9, 6, 5]              \small
+[6, 3, 1], // size6: [10, 7, 5]             \normalsize
+[7, 4, 2], // size7: [12, 8, 6]             \large
+[8, 6, 3], // size8: [14.4, 10, 7]          \Large
+[9, 7, 6], // size9: [17.28, 12, 10]        \LARGE
+[10, 8, 7], // size10: [20.74, 14.4, 12]     \huge
+[11, 10, 9] // size11: [24.88, 20.74, 17.28] \HUGE
+];
+var sizeMultipliers = [// fontMetrics.js:getGlobalMetrics also uses size indexes, so if
+// you change size indexes, change that function.
+0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.44, 1.728, 2.074, 2.488];
+
+var sizeAtStyle = function sizeAtStyle(size, style) {
+  return style.size < 2 ? size : sizeStyleMap[size - 1][style.size - 1];
+}; // In these types, "" (empty string) means "no change".
+
+
+/**
+ * This is the main options class. It contains the current style, size, color,
+ * and font.
+ *
+ * Options objects should not be modified. To create a new Options with
+ * different properties, call a `.having*` method.
+ */
+var Options = /*#__PURE__*/function () {
+  // A font family applies to a group of fonts (i.e. SansSerif), while a font
+  // represents a specific font (i.e. SansSerif Bold).
+  // See: https://tex.stackexchange.com/questions/22350/difference-between-textrm-and-mathrm
+
+  /**
+   * The base size index.
+   */
+  function Options(data) {
+    this.style = void 0;
+    this.color = void 0;
+    this.size = void 0;
+    this.textSize = void 0;
+    this.phantom = void 0;
+    this.font = void 0;
+    this.fontFamily = void 0;
+    this.fontWeight = void 0;
+    this.fontShape = void 0;
+    this.sizeMultiplier = void 0;
+    this.maxSize = void 0;
+    this.minRuleThickness = void 0;
+    this._fontMetrics = void 0;
+    this.style = data.style;
+    this.color = data.color;
+    this.size = data.size || Options.BASESIZE;
+    this.textSize = data.textSize || this.size;
+    this.phantom = !!data.phantom;
+    this.font = data.font || "";
+    this.fontFamily = data.fontFamily || "";
+    this.fontWeight = data.fontWeight || '';
+    this.fontShape = data.fontShape || '';
+    this.sizeMultiplier = sizeMultipliers[this.size - 1];
+    this.maxSize = data.maxSize;
+    this.minRuleThickness = data.minRuleThickness;
+    this._fontMetrics = undefined;
+  }
+  /**
+   * Returns a new options object with the same properties as "this".  Properties
+   * from "extension" will be copied to the new options object.
+   */
+
+
+  var _proto = Options.prototype;
+
+  _proto.extend = function extend(extension) {
+    var data = {
+      style: this.style,
+      size: this.size,
+      textSize: this.textSize,
+      color: this.color,
+      phantom: this.phantom,
+      font: this.font,
+      fontFamily: this.fontFamily,
+      fontWeight: this.fontWeight,
+      fontShape: this.fontShape,
+      maxSize: this.maxSize,
+      minRuleThickness: this.minRuleThickness
+    };
+
+    for (var key in extension) {
+      if (extension.hasOwnProperty(key)) {
+        data[key] = extension[key];
+      }
+    }
+
+    return new Options(data);
+  }
+  /**
+   * Return an options object with the given style. If `this.style === style`,
+   * returns `this`.
+   */
+  ;
+
+  _proto.havingStyle = function havingStyle(style) {
+    if (this.style === style) {
+      return this;
+    } else {
+      return this.extend({
+        style: style,
+        size: sizeAtStyle(this.textSize, style)
+      });
+    }
+  }
+  /**
+   * Return an options object with a cramped version of the current style. If
+   * the current style is cramped, returns `this`.
+   */
+  ;
+
+  _proto.havingCrampedStyle = function havingCrampedStyle() {
+    return this.havingStyle(this.style.cramp());
+  }
+  /**
+   * Return an options object with the given size and in at least `\textstyle`.
+   * Returns `this` if appropriate.
+   */
+  ;
+
+  _proto.havingSize = function havingSize(size) {
+    if (this.size === size && this.textSize === size) {
+      return this;
+    } else {
+      return this.extend({
+        style: this.style.text(),
+        size: size,
+        textSize: size,
+        sizeMultiplier: sizeMultipliers[size - 1]
+      });
+    }
+  }
+  /**
+   * Like `this.havingSize(BASESIZE).havingStyle(style)`. If `style` is omitted,
+   * changes to at least `\textstyle`.
+   */
+  ;
+
+  _proto.havingBaseStyle = function havingBaseStyle(style) {
+    style = style || this.style.text();
+    var wantSize = sizeAtStyle(Options.BASESIZE, style);
+
+    if (this.size === wantSize && this.textSize === Options.BASESIZE && this.style === style) {
+      return this;
+    } else {
+      return this.extend({
+        style: style,
+        size: wantSize
+      });
+    }
+  }
+  /**
+   * Remove the effect of sizing changes such as \Huge.
+   * Keep the effect of the current style, such as \scriptstyle.
+   */
+  ;
+
+  _proto.havingBaseSizing = function havingBaseSizing() {
+    var size;
+
+    switch (this.style.id) {
+      case 4:
+      case 5:
+        size = 3; // normalsize in scriptstyle
+
+        break;
+
+      case 6:
+      case 7:
+        size = 1; // normalsize in scriptscriptstyle
+
+        break;
+
+      default:
+        size = 6;
+      // normalsize in textstyle or displaystyle
+    }
+
+    return this.extend({
+      style: this.style.text(),
+      size: size
+    });
+  }
+  /**
+   * Create a new options object with the given color.
+   */
+  ;
+
+  _proto.withColor = function withColor(color) {
+    return this.extend({
+      color: color
+    });
+  }
+  /**
+   * Create a new options object with "phantom" set to true.
+   */
+  ;
+
+  _proto.withPhantom = function withPhantom() {
+    return this.extend({
+      phantom: true
+    });
+  }
+  /**
+   * Creates a new options object with the given math font or old text font.
+   * @type {[type]}
+   */
+  ;
+
+  _proto.withFont = function withFont(font) {
+    return this.extend({
+      font: font
+    });
+  }
+  /**
+   * Create a new options objects with the given fontFamily.
+   */
+  ;
+
+  _proto.withTextFontFamily = function withTextFontFamily(fontFamily) {
+    return this.extend({
+      fontFamily: fontFamily,
+      font: ""
+    });
+  }
+  /**
+   * Creates a new options object with the given font weight
+   */
+  ;
+
+  _proto.withTextFontWeight = function withTextFontWeight(fontWeight) {
+    return this.extend({
+      fontWeight: fontWeight,
+      font: ""
+    });
+  }
+  /**
+   * Creates a new options object with the given font weight
+   */
+  ;
+
+  _proto.withTextFontShape = function withTextFontShape(fontShape) {
+    return this.extend({
+      fontShape: fontShape,
+      font: ""
+    });
+  }
+  /**
+   * Return the CSS sizing classes required to switch from enclosing options
+   * `oldOptions` to `this`. Returns an array of classes.
+   */
+  ;
+
+  _proto.sizingClasses = function sizingClasses(oldOptions) {
+    if (oldOptions.size !== this.size) {
+      return ["sizing", "reset-size" + oldOptions.size, "size" + this.size];
+    } else {
+      return [];
+    }
+  }
+  /**
+   * Return the CSS sizing classes required to switch to the base size. Like
+   * `this.havingSize(BASESIZE).sizingClasses(this)`.
+   */
+  ;
+
+  _proto.baseSizingClasses = function baseSizingClasses() {
+    if (this.size !== Options.BASESIZE) {
+      return ["sizing", "reset-size" + this.size, "size" + Options.BASESIZE];
+    } else {
+      return [];
+    }
+  }
+  /**
+   * Return the font metrics for this size.
+   */
+  ;
+
+  _proto.fontMetrics = function fontMetrics() {
+    if (!this._fontMetrics) {
+      this._fontMetrics = getGlobalMetrics(this.size);
+    }
+
+    return this._fontMetrics;
+  }
+  /**
+   * Gets the CSS color of the current options object
+   */
+  ;
+
+  _proto.getColor = function getColor() {
+    if (this.phantom) {
+      return "transparent";
+    } else {
+      return this.color;
+    }
+  };
+
+  return Options;
+}();
+
+Options.BASESIZE = 6;
+/* harmony default export */ var src_Options = (Options);
+;// CONCATENATED MODULE: ./src/units.js
+/**
+ * This file does conversion between units.  In particular, it provides
+ * calculateSize to convert other units into ems.
+ */
+
+ // This table gives the number of TeX pts in one of each *absolute* TeX unit.
+// Thus, multiplying a length by this number converts the length from units
+// into pts.  Dividing the result by ptPerEm gives the number of ems
+// *assuming* a font size of ptPerEm (normal size, normal style).
+
+var ptPerUnit = {
+  // https://en.wikibooks.org/wiki/LaTeX/Lengths and
+  // https://tex.stackexchange.com/a/8263
+  "pt": 1,
+  // TeX point
+  "mm": 7227 / 2540,
+  // millimeter
+  "cm": 7227 / 254,
+  // centimeter
+  "in": 72.27,
+  // inch
+  "bp": 803 / 800,
+  // big (PostScript) points
+  "pc": 12,
+  // pica
+  "dd": 1238 / 1157,
+  // didot
+  "cc": 14856 / 1157,
+  // cicero (12 didot)
+  "nd": 685 / 642,
+  // new didot
+  "nc": 1370 / 107,
+  // new cicero (12 new didot)
+  "sp": 1 / 65536,
+  // scaled point (TeX's internal smallest unit)
+  // https://tex.stackexchange.com/a/41371
+  "px": 803 / 800 // \pdfpxdimen defaults to 1 bp in pdfTeX and LuaTeX
+
+}; // Dictionary of relative units, for fast validity testing.
+
+var relativeUnit = {
+  "ex": true,
+  "em": true,
+  "mu": true
+};
+
+/**
+ * Determine whether the specified unit (either a string defining the unit
+ * or a "size" parse node containing a unit field) is valid.
+ */
+var validUnit = function validUnit(unit) {
+  if (typeof unit !== "string") {
+    unit = unit.unit;
+  }
+
+  return unit in ptPerUnit || unit in relativeUnit || unit === "ex";
+};
+/*
+ * Convert a "size" parse node (with numeric "number" and string "unit" fields,
+ * as parsed by functions.js argType "size") into a CSS em value for the
+ * current style/scale.  `options` gives the current options.
+ */
+
+var calculateSize = function calculateSize(sizeValue, options) {
+  var scale;
+
+  if (sizeValue.unit in ptPerUnit) {
+    // Absolute units
+    scale = ptPerUnit[sizeValue.unit] // Convert unit to pt
+    / options.fontMetrics().ptPerEm // Convert pt to CSS em
+    / options.sizeMultiplier; // Unscale to make absolute units
+  } else if (sizeValue.unit === "mu") {
+    // `mu` units scale with scriptstyle/scriptscriptstyle.
+    scale = options.fontMetrics().cssEmPerMu;
+  } else {
+    // Other relative units always refer to the *textstyle* font
+    // in the current size.
+    var unitOptions;
+
+    if (options.style.isTight()) {
+      // isTight() means current style is script/scriptscript.
+      unitOptions = options.havingStyle(options.style.text());
+    } else {
+      unitOptions = options;
+    } // TODO: In TeX these units are relative to the quad of the current
+    // *text* font, e.g. cmr10. KaTeX instead uses values from the
+    // comparably-sized *Computer Modern symbol* font. At 10pt, these
+    // match. At 7pt and 5pt, they differ: cmr7=1.138894, cmsy7=1.170641;
+    // cmr5=1.361133, cmsy5=1.472241. Consider $\scriptsize a\kern1emb$.
+    // TeX \showlists shows a kern of 1.13889 * fontsize;
+    // KaTeX shows a kern of 1.171 * fontsize.
+
+
+    if (sizeValue.unit === "ex") {
+      scale = unitOptions.fontMetrics().xHeight;
+    } else if (sizeValue.unit === "em") {
+      scale = unitOptions.fontMetrics().quad;
+    } else {
+      throw new src_ParseError("Invalid unit: '" + sizeValue.unit + "'");
+    }
+
+    if (unitOptions !== options) {
+      scale *= unitOptions.sizeMultiplier / options.sizeMultiplier;
+    }
+  }
+
+  return Math.min(sizeValue.number * scale, options.maxSize);
+};
+/**
+ * Round `n` to 4 decimal places, or to the nearest 1/10,000th em. See
+ * https://github.com/KaTeX/KaTeX/pull/2460.
+ */
+
+var makeEm = function makeEm(n) {
+  return +n.toFixed(4) + "em";
+};
+;// CONCATENATED MODULE: ./src/domTree.js
+/**
+ * These objects store the data about the DOM nodes we create, as well as some
+ * extra data. They can then be transformed into real DOM nodes with the
+ * `toNode` function or HTML markup using `toMarkup`. They are useful for both
+ * storing extra properties on the nodes, as well as providing a way to easily
+ * work with the DOM.
+ *
+ * Similar functions for working with MathML nodes exist in mathMLTree.js.
+ *
+ * TODO: refactor `span` and `anchor` into common superclass when
+ * target environments support class inheritance
+ */
+
+
+
+
+
+
+/**
+ * Create an HTML className based on a list of classes. In addition to joining
+ * with spaces, we also remove empty classes.
+ */
+var createClass = function createClass(classes) {
+  return classes.filter(function (cls) {
+    return cls;
+  }).join(" ");
+};
+
+var initNode = function initNode(classes, options, style) {
+  this.classes = classes || [];
+  this.attributes = {};
+  this.height = 0;
+  this.depth = 0;
+  this.maxFontSize = 0;
+  this.style = style || {};
+
+  if (options) {
+    if (options.style.isTight()) {
+      this.classes.push("mtight");
+    }
+
+    var color = options.getColor();
+
+    if (color) {
+      this.style.color = color;
+    }
+  }
+};
+/**
+ * Convert into an HTML node
+ */
+
+
+var _toNode = function toNode(tagName) {
+  var node = document.createElement(tagName); // Apply the class
+
+  node.className = createClass(this.classes); // Apply inline styles
+
+  for (var style in this.style) {
+    if (this.style.hasOwnProperty(style)) {
+      // $FlowFixMe Flow doesn't seem to understand span.style's type.
+      node.style[style] = this.style[style];
+    }
+  } // Apply attributes
+
+
+  for (var attr in this.attributes) {
+    if (this.attributes.hasOwnProperty(attr)) {
+      node.setAttribute(attr, this.attributes[attr]);
+    }
+  } // Append the children, also as HTML nodes
+
+
+  for (var i = 0; i < this.children.length; i++) {
+    node.appendChild(this.children[i].toNode());
+  }
+
+  return node;
+};
+/**
+ * Convert into an HTML markup string
+ */
+
+
+var _toMarkup = function toMarkup(tagName) {
+  var markup = "<" + tagName; // Add the class
+
+  if (this.classes.length) {
+    markup += " class=\"" + utils.escape(createClass(this.classes)) + "\"";
+  }
+
+  var styles = ""; // Add the styles, after hyphenation
+
+  for (var style in this.style) {
+    if (this.style.hasOwnProperty(style)) {
+      styles += utils.hyphenate(style) + ":" + this.style[style] + ";";
+    }
+  }
+
+  if (styles) {
+    markup += " style=\"" + utils.escape(styles) + "\"";
+  } // Add the attributes
+
+
+  for (var attr in this.attributes) {
+    if (this.attributes.hasOwnProperty(attr)) {
+      markup += " " + attr + "=\"" + utils.escape(this.attributes[attr]) + "\"";
+    }
+  }
+
+  markup += ">"; // Add the markup of the children, also as markup
+
+  for (var i = 0; i < this.children.length; i++) {
+    markup += this.children[i].toMarkup();
+  }
+
+  markup += "</" + tagName + ">";
+  return markup;
+}; // Making the type below exact with all optional fields doesn't work due to
+// - https://github.com/facebook/flow/issues/4582
+// - https://github.com/facebook/flow/issues/5688
+// However, since *all* fields are optional, $Shape<> works as suggested in 5688
+// above.
+// This type does not include all CSS properties. Additional properties should
+// be added as needed.
+
+
+/**
+ * This node represents a span node, with a className, a list of children, and
+ * an inline style. It also contains information about its height, depth, and
+ * maxFontSize.
+ *
+ * Represents two types with different uses: SvgSpan to wrap an SVG and DomSpan
+ * otherwise. This typesafety is important when HTML builders access a span's
+ * children.
+ */
+var Span = /*#__PURE__*/function () {
+  function Span(classes, children, options, style) {
+    this.children = void 0;
+    this.attributes = void 0;
+    this.classes = void 0;
+    this.height = void 0;
+    this.depth = void 0;
+    this.width = void 0;
+    this.maxFontSize = void 0;
+    this.style = void 0;
+    initNode.call(this, classes, options, style);
+    this.children = children || [];
+  }
+  /**
+   * Sets an arbitrary attribute on the span. Warning: use this wisely. Not
+   * all browsers support attributes the same, and having too many custom
+   * attributes is probably bad.
+   */
+
+
+  var _proto = Span.prototype;
+
+  _proto.setAttribute = function setAttribute(attribute, value) {
+    this.attributes[attribute] = value;
+  };
+
+  _proto.hasClass = function hasClass(className) {
+    return utils.contains(this.classes, className);
+  };
+
+  _proto.toNode = function toNode() {
+    return _toNode.call(this, "span");
+  };
+
+  _proto.toMarkup = function toMarkup() {
+    return _toMarkup.call(this, "span");
+  };
+
+  return Span;
+}();
+/**
+ * This node represents an anchor (<a>) element with a hyperlink.  See `span`
+ * for further details.
+ */
+
+var Anchor = /*#__PURE__*/function () {
+  function Anchor(href, classes, children, options) {
+    this.children = void 0;
+    this.attributes = void 0;
+    this.classes = void 0;
+    this.height = void 0;
+    this.depth = void 0;
+    this.maxFontSize = void 0;
+    this.style = void 0;
+    initNode.call(this, classes, options);
+    this.children = children || [];
+    this.setAttribute('href', href);
+  }
+
+  var _proto2 = Anchor.prototype;
+
+  _proto2.setAttribute = function setAttribute(attribute, value) {
+    this.attributes[attribute] = value;
+  };
+
+  _proto2.hasClass = function hasClass(className) {
+    return utils.contains(this.classes, className);
+  };
+
+  _proto2.toNode = function toNode() {
+    return _toNode.call(this, "a");
+  };
+
+  _proto2.toMarkup = function toMarkup() {
+    return _toMarkup.call(this, "a");
+  };
+
+  return Anchor;
+}();
+/**
+ * This node represents an image embed (<img>) element.
+ */
+
+var Img = /*#__PURE__*/function () {
+  function Img(src, alt, style) {
+    this.src = void 0;
+    this.alt = void 0;
+    this.classes = void 0;
+    this.height = void 0;
+    this.depth = void 0;
+    this.maxFontSize = void 0;
+    this.style = void 0;
+    this.alt = alt;
+    this.src = src;
+    this.classes = ["mord"];
+    this.style = style;
+  }
+
+  var _proto3 = Img.prototype;
+
+  _proto3.hasClass = function hasClass(className) {
+    return utils.contains(this.classes, className);
+  };
+
+  _proto3.toNode = function toNode() {
+    var node = document.createElement("img");
+    node.src = this.src;
+    node.alt = this.alt;
+    node.className = "mord"; // Apply inline styles
+
+    for (var style in this.style) {
+      if (this.style.hasOwnProperty(style)) {
+        // $FlowFixMe
+        node.style[style] = this.style[style];
+      }
+    }
+
+    return node;
+  };
+
+  _proto3.toMarkup = function toMarkup() {
+    var markup = "<img  src='" + this.src + " 'alt='" + this.alt + "' "; // Add the styles, after hyphenation
+
+    var styles = "";
+
+    for (var style in this.style) {
+      if (this.style.hasOwnProperty(style)) {
+        styles += utils.hyphenate(style) + ":" + this.style[style] + ";";
+      }
+    }
+
+    if (styles) {
+      markup += " style=\"" + utils.escape(styles) + "\"";
+    }
+
+    markup += "'/>";
+    return markup;
+  };
+
+  return Img;
+}();
+var iCombinations = {
+  'î': "\u0131\u0302",
+  'ï': "\u0131\u0308",
+  'í': "\u0131\u0301",
+  // 'ī': '\u0131\u0304', // enable when we add Extended Latin
+  'ì': "\u0131\u0300"
+};
+/**
+ * A symbol node contains information about a single symbol. It either renders
+ * to a single text node, or a span with a single text node in it, depending on
+ * whether it has CSS classes, styles, or needs italic correction.
+ */
+
+var SymbolNode = /*#__PURE__*/function () {
+  function SymbolNode(text, height, depth, italic, skew, width, classes, style) {
+    this.text = void 0;
+    this.height = void 0;
+    this.depth = void 0;
+    this.italic = void 0;
+    this.skew = void 0;
+    this.width = void 0;
+    this.maxFontSize = void 0;
+    this.classes = void 0;
+    this.style = void 0;
+    this.text = text;
+    this.height = height || 0;
+    this.depth = depth || 0;
+    this.italic = italic || 0;
+    this.skew = skew || 0;
+    this.width = width || 0;
+    this.classes = classes || [];
+    this.style = style || {};
+    this.maxFontSize = 0; // Mark text from non-Latin scripts with specific classes so that we
+    // can specify which fonts to use.  This allows us to render these
+    // characters with a serif font in situations where the browser would
+    // either default to a sans serif or render a placeholder character.
+    // We use CSS class names like cjk_fallback, hangul_fallback and
+    // brahmic_fallback. See ./unicodeScripts.js for the set of possible
+    // script names
+
+    var script = scriptFromCodepoint(this.text.charCodeAt(0));
+
+    if (script) {
+      this.classes.push(script + "_fallback");
+    }
+
+    if (/[îïíì]/.test(this.text)) {
+      // add ī when we add Extended Latin
+      this.text = iCombinations[this.text];
+    }
+  }
+
+  var _proto4 = SymbolNode.prototype;
+
+  _proto4.hasClass = function hasClass(className) {
+    return utils.contains(this.classes, className);
+  }
+  /**
+   * Creates a text node or span from a symbol node. Note that a span is only
+   * created if it is needed.
+   */
+  ;
+
+  _proto4.toNode = function toNode() {
+    var node = document.createTextNode(this.text);
+    var span = null;
+
+    if (this.italic > 0) {
+      span = document.createElement("span");
+      span.style.marginRight = makeEm(this.italic);
+    }
+
+    if (this.classes.length > 0) {
+      span = span || document.createElement("span");
+      span.className = createClass(this.classes);
+    }
+
+    for (var style in this.style) {
+      if (this.style.hasOwnProperty(style)) {
+        span = span || document.createElement("span"); // $FlowFixMe Flow doesn't seem to understand span.style's type.
+
+        span.style[style] = this.style[style];
+      }
+    }
+
+    if (span) {
+      span.appendChild(node);
+      return span;
+    } else {
+      return node;
+    }
+  }
+  /**
+   * Creates markup for a symbol node.
+   */
+  ;
+
+  _proto4.toMarkup = function toMarkup() {
+    // TODO(alpert): More duplication than I'd like from
+    // span.prototype.toMarkup and symbolNode.prototype.toNode...
+    var needsSpan = false;
+    var markup = "<span";
+
+    if (this.classes.length) {
+      needsSpan = true;
+      markup += " class=\"";
+      markup += utils.escape(createClass(this.classes));
+      markup += "\"";
+    }
+
+    var styles = "";
+
+    if (this.italic > 0) {
+      styles += "margin-right:" + this.italic + "em;";
+    }
+
+    for (var style in this.style) {
+      if (this.style.hasOwnProperty(style)) {
+        styles += utils.hyphenate(style) + ":" + this.style[style] + ";";
+      }
+    }
+
+    if (styles) {
+      needsSpan = true;
+      markup += " style=\"" + utils.escape(styles) + "\"";
+    }
+
+    var escaped = utils.escape(this.text);
+
+    if (needsSpan) {
+      markup += ">";
+      markup += escaped;
+      markup += "</span>";
+      return markup;
+    } else {
+      return escaped;
+    }
+  };
+
+  return SymbolNode;
+}();
+/**
+ * SVG nodes are used to render stretchy wide elements.
+ */
+
+var SvgNode = /*#__PURE__*/function () {
+  function SvgNode(children, attributes) {
+    this.children = void 0;
+    this.attributes = void 0;
+    this.children = children || [];
+    this.attributes = attributes || {};
+  }
+
+  var _proto5 = SvgNode.prototype;
+
+  _proto5.toNode = function toNode() {
+    var svgNS = "http://www.w3.org/2000/svg";
+    var node = document.createElementNS(svgNS, "svg"); // Apply attributes
+
+    for (var attr in this.attributes) {
+      if (Object.prototype.hasOwnProperty.call(this.attributes, attr)) {
+        node.setAttribute(attr, this.attributes[attr]);
+      }
+    }
+
+    for (var i = 0; i < this.children.length; i++) {
+      node.appendChild(this.children[i].toNode());
+    }
+
+    return node;
+  };
+
+  _proto5.toMarkup = function toMarkup() {
+    var markup = "<svg xmlns=\"http://www.w3.org/2000/svg\""; // Apply attributes
+
+    for (var attr in this.attributes) {
+      if (Object.prototype.hasOwnProperty.call(this.attributes, attr)) {
+        markup += " " + attr + "='" + this.attributes[attr] + "'";
+      }
+    }
+
+    markup += ">";
+
+    for (var i = 0; i < this.children.length; i++) {
+      markup += this.children[i].toMarkup();
+    }
+
+    markup += "</svg>";
+    return markup;
+  };
+
+  return SvgNode;
+}();
+var PathNode = /*#__PURE__*/function () {
+  function PathNode(pathName, alternate) {
+    this.pathName = void 0;
+    this.alternate = void 0;
+    this.pathName = pathName;
+    this.alternate = alternate; // Used only for \sqrt, \phase, & tall delims
+  }
+
+  var _proto6 = PathNode.prototype;
+
+  _proto6.toNode = function toNode() {
+    var svgNS = "http://www.w3.org/2000/svg";
+    var node = document.createElementNS(svgNS, "path");
+
+    if (this.alternate) {
+      node.setAttribute("d", this.alternate);
+    } else {
+      node.setAttribute("d", path[this.pathName]);
+    }
+
+    return node;
+  };
+
+  _proto6.toMarkup = function toMarkup() {
+    if (this.alternate) {
+      return "<path d='" + this.alternate + "'/>";
+    } else {
+      return "<path d='" + path[this.pathName] + "'/>";
+    }
+  };
+
+  return PathNode;
+}();
+var LineNode = /*#__PURE__*/function () {
+  function LineNode(attributes) {
+    this.attributes = void 0;
+    this.attributes = attributes || {};
+  }
+
+  var _proto7 = LineNode.prototype;
+
+  _proto7.toNode = function toNode() {
+    var svgNS = "http://www.w3.org/2000/svg";
+    var node = document.createElementNS(svgNS, "line"); // Apply attributes
+
+    for (var attr in this.attributes) {
+      if (Object.prototype.hasOwnProperty.call(this.attributes, attr)) {
+        node.setAttribute(attr, this.attributes[attr]);
+      }
+    }
+
+    return node;
+  };
+
+  _proto7.toMarkup = function toMarkup() {
+    var markup = "<line";
+
+    for (var attr in this.attributes) {
+      if (Object.prototype.hasOwnProperty.call(this.attributes, attr)) {
+        markup += " " + attr + "='" + this.attributes[attr] + "'";
+      }
+    }
+
+    markup += "/>";
+    return markup;
+  };
+
+  return LineNode;
+}();
+function assertSymbolDomNode(group) {
+  if (group instanceof SymbolNode) {
+    return group;
+  } else {
+    throw new Error("Expected symbolNode but got " + String(group) + ".");
+  }
+}
+function assertSpan(group) {
+  if (group instanceof Span) {
+    return group;
+  } else {
+    throw new Error("Expected span<HtmlDomNode> but got " + String(group) + ".");
+  }
 }
 ;// CONCATENATED MODULE: ./src/symbols.js
 /**
@@ -4297,9 +4861,9 @@ defineSymbol(math, main, mathord, "\u03D6", "\\varpi", true);
 defineSymbol(math, main, mathord, "\u03F1", "\\varrho", true);
 defineSymbol(math, main, mathord, "\u03C2", "\\varsigma", true);
 defineSymbol(math, main, mathord, "\u03C6", "\\varphi", true);
-defineSymbol(math, main, bin, "\u2217", "*");
+defineSymbol(math, main, bin, "\u2217", "*", true);
 defineSymbol(math, main, bin, "+", "+");
-defineSymbol(math, main, bin, "\u2212", "-");
+defineSymbol(math, main, bin, "\u2212", "-", true);
 defineSymbol(math, main, bin, "\u22C5", "\\cdot", true);
 defineSymbol(math, main, bin, "\u2218", "\\circ");
 defineSymbol(math, main, bin, "\xF7", "\\div", true);
@@ -4479,6 +5043,8 @@ defineSymbol(symbols_text, main, accent, "\u02C9", "\\="); // macron
 defineSymbol(symbols_text, main, accent, "\u02D8", "\\u"); // breve
 
 defineSymbol(symbols_text, main, accent, "\u02D9", "\\."); // dot above
+
+defineSymbol(symbols_text, main, accent, "\xB8", "\\c"); // cedilla
 
 defineSymbol(symbols_text, main, accent, "\u02DA", "\\r"); // ring above
 
@@ -4661,7 +5227,7 @@ for (var _i4 = 0; _i4 < 10; _i4++) {
 // TODO(edemaine): Fix this.
 
 
-var extraLatin = "\xC7\xD0\xDE\xE7\xFE";
+var extraLatin = "\xD0\xDE\xFE";
 
 for (var _i5 = 0; _i5 < extraLatin.length; _i5++) {
   var _ch5 = extraLatin.charAt(_i5);
@@ -4752,434 +5318,6 @@ var wideCharacterFont = function wideCharacterFont(wideChar, mode) {
     // We don't support any wide characters outside 1D400–1D7FF.
     throw new src_ParseError("Unsupported character: " + wideChar);
   }
-};
-;// CONCATENATED MODULE: ./src/Options.js
-/**
- * This file contains information about the options that the Parser carries
- * around with it while parsing. Data is held in an `Options` object, and when
- * recursing, a new `Options` object can be created with the `.with*` and
- * `.reset` functions.
- */
-
-var sizeStyleMap = [// Each element contains [textsize, scriptsize, scriptscriptsize].
-// The size mappings are taken from TeX with \normalsize=10pt.
-[1, 1, 1], // size1: [5, 5, 5]              \tiny
-[2, 1, 1], // size2: [6, 5, 5]
-[3, 1, 1], // size3: [7, 5, 5]              \scriptsize
-[4, 2, 1], // size4: [8, 6, 5]              \footnotesize
-[5, 2, 1], // size5: [9, 6, 5]              \small
-[6, 3, 1], // size6: [10, 7, 5]             \normalsize
-[7, 4, 2], // size7: [12, 8, 6]             \large
-[8, 6, 3], // size8: [14.4, 10, 7]          \Large
-[9, 7, 6], // size9: [17.28, 12, 10]        \LARGE
-[10, 8, 7], // size10: [20.74, 14.4, 12]     \huge
-[11, 10, 9] // size11: [24.88, 20.74, 17.28] \HUGE
-];
-var sizeMultipliers = [// fontMetrics.js:getGlobalMetrics also uses size indexes, so if
-// you change size indexes, change that function.
-0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.44, 1.728, 2.074, 2.488];
-
-var sizeAtStyle = function sizeAtStyle(size, style) {
-  return style.size < 2 ? size : sizeStyleMap[size - 1][style.size - 1];
-}; // In these types, "" (empty string) means "no change".
-
-
-/**
- * This is the main options class. It contains the current style, size, color,
- * and font.
- *
- * Options objects should not be modified. To create a new Options with
- * different properties, call a `.having*` method.
- */
-var Options = /*#__PURE__*/function () {
-  // A font family applies to a group of fonts (i.e. SansSerif), while a font
-  // represents a specific font (i.e. SansSerif Bold).
-  // See: https://tex.stackexchange.com/questions/22350/difference-between-textrm-and-mathrm
-
-  /**
-   * The base size index.
-   */
-  function Options(data) {
-    this.style = void 0;
-    this.color = void 0;
-    this.size = void 0;
-    this.textSize = void 0;
-    this.phantom = void 0;
-    this.font = void 0;
-    this.fontFamily = void 0;
-    this.fontWeight = void 0;
-    this.fontShape = void 0;
-    this.sizeMultiplier = void 0;
-    this.maxSize = void 0;
-    this.minRuleThickness = void 0;
-    this._fontMetrics = void 0;
-    this.style = data.style;
-    this.color = data.color;
-    this.size = data.size || Options.BASESIZE;
-    this.textSize = data.textSize || this.size;
-    this.phantom = !!data.phantom;
-    this.font = data.font || "";
-    this.fontFamily = data.fontFamily || "";
-    this.fontWeight = data.fontWeight || '';
-    this.fontShape = data.fontShape || '';
-    this.sizeMultiplier = sizeMultipliers[this.size - 1];
-    this.maxSize = data.maxSize;
-    this.minRuleThickness = data.minRuleThickness;
-    this._fontMetrics = undefined;
-  }
-  /**
-   * Returns a new options object with the same properties as "this".  Properties
-   * from "extension" will be copied to the new options object.
-   */
-
-
-  var _proto = Options.prototype;
-
-  _proto.extend = function extend(extension) {
-    var data = {
-      style: this.style,
-      size: this.size,
-      textSize: this.textSize,
-      color: this.color,
-      phantom: this.phantom,
-      font: this.font,
-      fontFamily: this.fontFamily,
-      fontWeight: this.fontWeight,
-      fontShape: this.fontShape,
-      maxSize: this.maxSize,
-      minRuleThickness: this.minRuleThickness
-    };
-
-    for (var key in extension) {
-      if (extension.hasOwnProperty(key)) {
-        data[key] = extension[key];
-      }
-    }
-
-    return new Options(data);
-  }
-  /**
-   * Return an options object with the given style. If `this.style === style`,
-   * returns `this`.
-   */
-  ;
-
-  _proto.havingStyle = function havingStyle(style) {
-    if (this.style === style) {
-      return this;
-    } else {
-      return this.extend({
-        style: style,
-        size: sizeAtStyle(this.textSize, style)
-      });
-    }
-  }
-  /**
-   * Return an options object with a cramped version of the current style. If
-   * the current style is cramped, returns `this`.
-   */
-  ;
-
-  _proto.havingCrampedStyle = function havingCrampedStyle() {
-    return this.havingStyle(this.style.cramp());
-  }
-  /**
-   * Return an options object with the given size and in at least `\textstyle`.
-   * Returns `this` if appropriate.
-   */
-  ;
-
-  _proto.havingSize = function havingSize(size) {
-    if (this.size === size && this.textSize === size) {
-      return this;
-    } else {
-      return this.extend({
-        style: this.style.text(),
-        size: size,
-        textSize: size,
-        sizeMultiplier: sizeMultipliers[size - 1]
-      });
-    }
-  }
-  /**
-   * Like `this.havingSize(BASESIZE).havingStyle(style)`. If `style` is omitted,
-   * changes to at least `\textstyle`.
-   */
-  ;
-
-  _proto.havingBaseStyle = function havingBaseStyle(style) {
-    style = style || this.style.text();
-    var wantSize = sizeAtStyle(Options.BASESIZE, style);
-
-    if (this.size === wantSize && this.textSize === Options.BASESIZE && this.style === style) {
-      return this;
-    } else {
-      return this.extend({
-        style: style,
-        size: wantSize
-      });
-    }
-  }
-  /**
-   * Remove the effect of sizing changes such as \Huge.
-   * Keep the effect of the current style, such as \scriptstyle.
-   */
-  ;
-
-  _proto.havingBaseSizing = function havingBaseSizing() {
-    var size;
-
-    switch (this.style.id) {
-      case 4:
-      case 5:
-        size = 3; // normalsize in scriptstyle
-
-        break;
-
-      case 6:
-      case 7:
-        size = 1; // normalsize in scriptscriptstyle
-
-        break;
-
-      default:
-        size = 6;
-      // normalsize in textstyle or displaystyle
-    }
-
-    return this.extend({
-      style: this.style.text(),
-      size: size
-    });
-  }
-  /**
-   * Create a new options object with the given color.
-   */
-  ;
-
-  _proto.withColor = function withColor(color) {
-    return this.extend({
-      color: color
-    });
-  }
-  /**
-   * Create a new options object with "phantom" set to true.
-   */
-  ;
-
-  _proto.withPhantom = function withPhantom() {
-    return this.extend({
-      phantom: true
-    });
-  }
-  /**
-   * Creates a new options object with the given math font or old text font.
-   * @type {[type]}
-   */
-  ;
-
-  _proto.withFont = function withFont(font) {
-    return this.extend({
-      font: font
-    });
-  }
-  /**
-   * Create a new options objects with the given fontFamily.
-   */
-  ;
-
-  _proto.withTextFontFamily = function withTextFontFamily(fontFamily) {
-    return this.extend({
-      fontFamily: fontFamily,
-      font: ""
-    });
-  }
-  /**
-   * Creates a new options object with the given font weight
-   */
-  ;
-
-  _proto.withTextFontWeight = function withTextFontWeight(fontWeight) {
-    return this.extend({
-      fontWeight: fontWeight,
-      font: ""
-    });
-  }
-  /**
-   * Creates a new options object with the given font weight
-   */
-  ;
-
-  _proto.withTextFontShape = function withTextFontShape(fontShape) {
-    return this.extend({
-      fontShape: fontShape,
-      font: ""
-    });
-  }
-  /**
-   * Return the CSS sizing classes required to switch from enclosing options
-   * `oldOptions` to `this`. Returns an array of classes.
-   */
-  ;
-
-  _proto.sizingClasses = function sizingClasses(oldOptions) {
-    if (oldOptions.size !== this.size) {
-      return ["sizing", "reset-size" + oldOptions.size, "size" + this.size];
-    } else {
-      return [];
-    }
-  }
-  /**
-   * Return the CSS sizing classes required to switch to the base size. Like
-   * `this.havingSize(BASESIZE).sizingClasses(this)`.
-   */
-  ;
-
-  _proto.baseSizingClasses = function baseSizingClasses() {
-    if (this.size !== Options.BASESIZE) {
-      return ["sizing", "reset-size" + this.size, "size" + Options.BASESIZE];
-    } else {
-      return [];
-    }
-  }
-  /**
-   * Return the font metrics for this size.
-   */
-  ;
-
-  _proto.fontMetrics = function fontMetrics() {
-    if (!this._fontMetrics) {
-      this._fontMetrics = getGlobalMetrics(this.size);
-    }
-
-    return this._fontMetrics;
-  }
-  /**
-   * Gets the CSS color of the current options object
-   */
-  ;
-
-  _proto.getColor = function getColor() {
-    if (this.phantom) {
-      return "transparent";
-    } else {
-      return this.color;
-    }
-  };
-
-  return Options;
-}();
-
-Options.BASESIZE = 6;
-/* harmony default export */ var src_Options = (Options);
-;// CONCATENATED MODULE: ./src/units.js
-/**
- * This file does conversion between units.  In particular, it provides
- * calculateSize to convert other units into ems.
- */
-
- // This table gives the number of TeX pts in one of each *absolute* TeX unit.
-// Thus, multiplying a length by this number converts the length from units
-// into pts.  Dividing the result by ptPerEm gives the number of ems
-// *assuming* a font size of ptPerEm (normal size, normal style).
-
-var ptPerUnit = {
-  // https://en.wikibooks.org/wiki/LaTeX/Lengths and
-  // https://tex.stackexchange.com/a/8263
-  "pt": 1,
-  // TeX point
-  "mm": 7227 / 2540,
-  // millimeter
-  "cm": 7227 / 254,
-  // centimeter
-  "in": 72.27,
-  // inch
-  "bp": 803 / 800,
-  // big (PostScript) points
-  "pc": 12,
-  // pica
-  "dd": 1238 / 1157,
-  // didot
-  "cc": 14856 / 1157,
-  // cicero (12 didot)
-  "nd": 685 / 642,
-  // new didot
-  "nc": 1370 / 107,
-  // new cicero (12 new didot)
-  "sp": 1 / 65536,
-  // scaled point (TeX's internal smallest unit)
-  // https://tex.stackexchange.com/a/41371
-  "px": 803 / 800 // \pdfpxdimen defaults to 1 bp in pdfTeX and LuaTeX
-
-}; // Dictionary of relative units, for fast validity testing.
-
-var relativeUnit = {
-  "ex": true,
-  "em": true,
-  "mu": true
-};
-
-/**
- * Determine whether the specified unit (either a string defining the unit
- * or a "size" parse node containing a unit field) is valid.
- */
-var validUnit = function validUnit(unit) {
-  if (typeof unit !== "string") {
-    unit = unit.unit;
-  }
-
-  return unit in ptPerUnit || unit in relativeUnit || unit === "ex";
-};
-/*
- * Convert a "size" parse node (with numeric "number" and string "unit" fields,
- * as parsed by functions.js argType "size") into a CSS em value for the
- * current style/scale.  `options` gives the current options.
- */
-
-var calculateSize = function calculateSize(sizeValue, options) {
-  var scale;
-
-  if (sizeValue.unit in ptPerUnit) {
-    // Absolute units
-    scale = ptPerUnit[sizeValue.unit] // Convert unit to pt
-    / options.fontMetrics().ptPerEm // Convert pt to CSS em
-    / options.sizeMultiplier; // Unscale to make absolute units
-  } else if (sizeValue.unit === "mu") {
-    // `mu` units scale with scriptstyle/scriptscriptstyle.
-    scale = options.fontMetrics().cssEmPerMu;
-  } else {
-    // Other relative units always refer to the *textstyle* font
-    // in the current size.
-    var unitOptions;
-
-    if (options.style.isTight()) {
-      // isTight() means current style is script/scriptscript.
-      unitOptions = options.havingStyle(options.style.text());
-    } else {
-      unitOptions = options;
-    } // TODO: In TeX these units are relative to the quad of the current
-    // *text* font, e.g. cmr10. KaTeX instead uses values from the
-    // comparably-sized *Computer Modern symbol* font. At 10pt, these
-    // match. At 7pt and 5pt, they differ: cmr7=1.138894, cmsy7=1.170641;
-    // cmr5=1.361133, cmsy5=1.472241. Consider $\scriptsize a\kern1emb$.
-    // TeX \showlists shows a kern of 1.13889 * fontsize;
-    // KaTeX shows a kern of 1.171 * fontsize.
-
-
-    if (sizeValue.unit === "ex") {
-      scale = unitOptions.fontMetrics().xHeight;
-    } else if (sizeValue.unit === "em") {
-      scale = unitOptions.fontMetrics().quad;
-    } else {
-      throw new src_ParseError("Invalid unit: '" + sizeValue.unit + "'");
-    }
-
-    if (unitOptions !== options) {
-      scale *= unitOptions.sizeMultiplier / options.sizeMultiplier;
-    }
-  }
-
-  return Math.min(sizeValue.number * scale, options.maxSize);
 };
 ;// CONCATENATED MODULE: ./src/buildCommon.js
 /* eslint no-console:0 */
@@ -5500,7 +5638,7 @@ var makeSvgSpan = function makeSvgSpan(classes, children, options, style) {
 var makeLineSpan = function makeLineSpan(className, options, thickness) {
   var line = makeSpan([className], [], options);
   line.height = Math.max(thickness || options.fontMetrics().defaultRuleThickness, options.minRuleThickness);
-  line.style.borderBottomWidth = line.height + "em";
+  line.style.borderBottomWidth = makeEm(line.height);
   line.maxFontSize = 1.0;
   return line;
 };
@@ -5640,7 +5778,7 @@ var makeVList = function makeVList(params, options) {
 
   pstrutSize += 2;
   var pstrut = makeSpan(["pstrut"], []);
-  pstrut.style.height = pstrutSize + "em"; // Create a new list of actual children at the correct offsets
+  pstrut.style.height = makeEm(pstrutSize); // Create a new list of actual children at the correct offsets
 
   var realChildren = [];
   var minPos = depth;
@@ -5657,7 +5795,7 @@ var makeVList = function makeVList(params, options) {
       var classes = _child.wrapperClasses || [];
       var style = _child.wrapperStyle || {};
       var childWrap = makeSpan(classes, [pstrut, _elem], undefined, style);
-      childWrap.style.top = -pstrutSize - currPos - _elem.depth + "em";
+      childWrap.style.top = makeEm(-pstrutSize - currPos - _elem.depth);
 
       if (_child.marginLeft) {
         childWrap.style.marginLeft = _child.marginLeft;
@@ -5679,7 +5817,7 @@ var makeVList = function makeVList(params, options) {
 
 
   var vlist = makeSpan(["vlist"], realChildren);
-  vlist.style.height = maxPos + "em"; // A second row is used if necessary to represent the vlist's depth.
+  vlist.style.height = makeEm(maxPos); // A second row is used if necessary to represent the vlist's depth.
 
   var rows;
 
@@ -5691,7 +5829,7 @@ var makeVList = function makeVList(params, options) {
     // So we put another empty span inside the depth strut span.
     var emptySpan = makeSpan([], []);
     var depthStrut = makeSpan(["vlist"], [emptySpan]);
-    depthStrut.style.height = -minPos + "em"; // Safari wants the first row to have inline content; otherwise it
+    depthStrut.style.height = makeEm(-minPos); // Safari wants the first row to have inline content; otherwise it
     // puts the bottom of the *second* row on the baseline.
 
     var topStrut = makeSpan(["vlist-s"], [new SymbolNode("\u200B")]);
@@ -5718,7 +5856,7 @@ var makeGlue = function makeGlue(measurement, options) {
   // Make an empty span for the space
   var rule = makeSpan(["mspace"], [], options);
   var size = calculateSize(measurement, options);
-  rule.style.marginRight = size + "em";
+  rule.style.marginRight = makeEm(size);
   return rule;
 }; // Takes font options, and returns the appropriate fontLookup name
 
@@ -5840,17 +5978,17 @@ var staticSvg = function staticSvg(value, options) {
       height = _svgData$value[2];
   var path = new PathNode(pathName);
   var svgNode = new SvgNode([path], {
-    "width": width + "em",
-    "height": height + "em",
+    "width": makeEm(width),
+    "height": makeEm(height),
     // Override CSS rule `.katex svg { width: 100% }`
-    "style": "width:" + width + "em",
+    "style": "width:" + makeEm(width),
     "viewBox": "0 0 " + 1000 * width + " " + 1000 * height,
     "preserveAspectRatio": "xMinYMin"
   });
   var span = makeSvgSpan(["overlay"], [svgNode], options);
   span.height = height;
-  span.style.height = height + "em";
-  span.style.width = width + "em";
+  span.style.height = makeEm(height);
+  span.style.width = makeEm(width);
   return span;
 };
 
@@ -6071,6 +6209,7 @@ var ordargument = function ordargument(arg) {
  * Then, the buildExpression, buildGroup, and various groupBuilders functions
  * are called, to produce a final HTML tree.
  */
+
 
 
 
@@ -6338,8 +6477,12 @@ function buildHTMLUnbreakable(children, options) {
   // falls at the depth of the expression.
 
   var strut = buildHTML_makeSpan(["strut"]);
-  strut.style.height = body.height + body.depth + "em";
-  strut.style.verticalAlign = -body.depth + "em";
+  strut.style.height = makeEm(body.height + body.depth);
+
+  if (body.depth) {
+    strut.style.verticalAlign = makeEm(-body.depth);
+  }
+
   body.children.unshift(strut);
   return body;
 }
@@ -6433,8 +6576,11 @@ function buildHTML(tree, options) {
 
   if (tagChild) {
     var strut = tagChild.children[0];
-    strut.style.height = htmlNode.height + htmlNode.depth + "em";
-    strut.style.verticalAlign = -htmlNode.depth + "em";
+    strut.style.height = makeEm(htmlNode.height + htmlNode.depth);
+
+    if (htmlNode.depth) {
+      strut.style.verticalAlign = makeEm(-htmlNode.depth);
+    }
   }
 
   return htmlNode;
@@ -6449,6 +6595,7 @@ function buildHTML(tree, options) {
  * The `toNode` and `toMarkup` functions work simlarly to how they do in
  * domTree.js, creating namespaced DOM nodes and HTML text markup respectively.
  */
+
 
 
 
@@ -6646,7 +6793,7 @@ var SpaceNode = /*#__PURE__*/function () {
       return document.createTextNode(this.character);
     } else {
       var node = document.createElementNS("http://www.w3.org/1998/Math/MathML", "mspace");
-      node.setAttribute("width", this.width + "em");
+      node.setAttribute("width", makeEm(this.width));
       return node;
     }
   }
@@ -6659,7 +6806,7 @@ var SpaceNode = /*#__PURE__*/function () {
     if (this.character) {
       return "<mtext>" + this.character + "</mtext>";
     } else {
-      return "<mspace width=\"" + this.width + "em\"/>";
+      return "<mspace width=\"" + makeEm(this.width) + "\"/>";
     }
   }
   /**
@@ -7008,6 +7155,7 @@ var buildHTMLTree = function buildHTMLTree(tree, expression, settings) {
 
 
 
+
 var stretchyCodePoint = {
   widehat: "^",
   widecheck: "ˇ",
@@ -7205,7 +7353,7 @@ var svgSpan = function svgSpan(group, options) {
       var path = new PathNode(pathName);
       var svgNode = new SvgNode([path], {
         "width": "100%",
-        "height": _height + "em",
+        "height": makeEm(_height),
         "viewBox": "0 0 " + viewBoxWidth + " " + viewBoxHeight,
         "preserveAspectRatio": "none"
       });
@@ -7247,7 +7395,7 @@ var svgSpan = function svgSpan(group, options) {
 
         var _svgNode = new SvgNode([_path], {
           "width": "400em",
-          "height": _height2 + "em",
+          "height": makeEm(_height2),
           "viewBox": "0 0 " + viewBoxWidth + " " + _viewBoxHeight,
           "preserveAspectRatio": aligns[i] + " slice"
         });
@@ -7261,7 +7409,7 @@ var svgSpan = function svgSpan(group, options) {
             height: _height2
           };
         } else {
-          _span.style.height = _height2 + "em";
+          _span.style.height = makeEm(_height2);
           spans.push(_span);
         }
       }
@@ -7283,10 +7431,10 @@ var svgSpan = function svgSpan(group, options) {
 
 
   span.height = height;
-  span.style.height = height + "em";
+  span.style.height = makeEm(height);
 
   if (minWidth > 0) {
-    span.style.minWidth = minWidth + "em";
+    span.style.minWidth = makeEm(minWidth);
   }
 
   return span;
@@ -7335,13 +7483,13 @@ var encloseSpan = function encloseSpan(inner, label, topPad, bottomPad, options)
 
     var svgNode = new SvgNode(lines, {
       "width": "100%",
-      "height": totalHeight + "em"
+      "height": makeEm(totalHeight)
     });
     img = buildCommon.makeSvgSpan([], [svgNode], options);
   }
 
   img.height = totalHeight;
-  img.style.height = totalHeight + "em";
+  img.style.height = makeEm(totalHeight);
   return img;
 };
 
@@ -7393,6 +7541,7 @@ function checkSymbolNodeType(node) {
   return null;
 }
 ;// CONCATENATED MODULE: ./src/functions/accent.js
+
 
 
 
@@ -7456,10 +7605,11 @@ var htmlBuilder = function htmlBuilder(grp, options) {
     // removed with getBaseElem might contain things like \color which
     // we can't get rid of.
     // TODO(emily): Find a better way to get the skew
-  } // calculate the amount of space between the body and the accent
+  }
 
+  var accentBelow = group.label === "\\c"; // calculate the amount of space between the body and the accent
 
-  var clearance = Math.min(body.height, options.fontMetrics().xHeight); // Build the accent
+  var clearance = accentBelow ? body.height + body.depth : Math.min(body.height, options.fontMetrics().xHeight); // Build the accent
 
   var accentBody;
 
@@ -7485,6 +7635,10 @@ var htmlBuilder = function htmlBuilder(grp, options) {
 
       accent.italic = 0;
       width = accent.width;
+
+      if (accentBelow) {
+        clearance += accent.depth;
+      }
     }
 
     accentBody = buildCommon.makeSpan(["accent-body"], [accent]); // "Full" accents expand the width of the resulting symbol to be
@@ -7508,7 +7662,7 @@ var htmlBuilder = function htmlBuilder(grp, options) {
       left -= width / 2;
     }
 
-    accentBody.style.left = left + "em"; // \textcircled uses the \bigcirc glyph, so it needs some
+    accentBody.style.left = makeEm(left); // \textcircled uses the \bigcirc glyph, so it needs some
     // vertical adjustment to match LaTeX.
 
     if (group.label === "\\textcircled") {
@@ -7540,8 +7694,8 @@ var htmlBuilder = function htmlBuilder(grp, options) {
         elem: accentBody,
         wrapperClasses: ["svg-align"],
         wrapperStyle: skew > 0 ? {
-          width: "calc(100% - " + 2 * skew + "em)",
-          marginLeft: 2 * skew + "em"
+          width: "calc(100% - " + makeEm(2 * skew) + ")",
+          marginLeft: makeEm(2 * skew)
         } : undefined
       }]
     }, options);
@@ -7600,7 +7754,7 @@ defineFunction({
 
 defineFunction({
   type: "accent",
-  names: ["\\'", "\\`", "\\^", "\\~", "\\=", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v", "\\textcircled"],
+  names: ["\\'", "\\`", "\\^", "\\~", "\\=", "\\u", "\\.", '\\"', "\\c", "\\r", "\\H", "\\v", "\\textcircled"],
   props: {
     numArgs: 1,
     allowedInText: true,
@@ -7823,6 +7977,7 @@ defineFunction({
   }
 });
 ;// CONCATENATED MODULE: ./src/environments/cd.js
+
 
 
 
@@ -8092,7 +8247,7 @@ defineFunction({
     var newOptions = options.havingStyle(options.style.sup());
     var label = buildCommon.wrapFragment(buildGroup(group.label, newOptions, options), options);
     label.classes.push("cd-label-" + group.side);
-    label.style.bottom = 0.8 - label.depth + "em"; // Zero out label height & depth, so vertical align of arrow is set
+    label.style.bottom = makeEm(0.8 - label.depth); // Zero out label height & depth, so vertical align of arrow is set
     // by the arrow height, not by the label.
 
     label.height = 0;
@@ -8169,15 +8324,25 @@ defineFunction({
     }
 
     var code = parseInt(number);
+    var text;
 
     if (isNaN(code)) {
-      throw new src_ParseError("\\@char has non-numeric argument " + number);
+      throw new src_ParseError("\\@char has non-numeric argument " + number); // If we drop IE support, the following code could be replaced with
+      // text = String.fromCodePoint(code)
+    } else if (code < 0 || code >= 0x10ffff) {
+      throw new src_ParseError("\\@char with invalid code point " + number);
+    } else if (code <= 0xffff) {
+      text = String.fromCharCode(code);
+    } else {
+      // Astral code point; split into surrogate halves
+      code -= 0x10000;
+      text = String.fromCharCode((code >> 10) + 0xd800, (code & 0x3ff) + 0xdc00);
     }
 
     return {
       type: "textord",
       mode: parser.mode,
-      text: String.fromCharCode(code)
+      text: text
     };
   }
 });
@@ -8293,7 +8458,7 @@ defineFunction({
       span.classes.push("newline");
 
       if (group.size) {
-        span.style.marginTop = calculateSize(group.size, options) + "em";
+        span.style.marginTop = makeEm(calculateSize(group.size, options));
       }
     }
 
@@ -8306,7 +8471,7 @@ defineFunction({
       node.setAttribute("linebreak", "newline");
 
       if (group.size) {
-        node.setAttribute("height", calculateSize(group.size, options) + "em");
+        node.setAttribute("height", makeEm(calculateSize(group.size, options)));
       }
     }
 
@@ -8572,6 +8737,7 @@ defineFunction({
 
 
 
+
 /**
  * Get the metrics for a given symbol and font, after transformation (i.e.
  * after following replacement from symbols.js)
@@ -8606,7 +8772,7 @@ var centerSpan = function centerSpan(span, options, style) {
   var newOptions = options.havingBaseStyle(style);
   var shift = (1 - options.sizeMultiplier / newOptions.sizeMultiplier) * options.fontMetrics().axisHeight;
   span.classes.push("delimcenter");
-  span.style.top = shift + "em";
+  span.style.top = makeEm(shift);
   span.height -= shift;
   span.depth += shift;
 };
@@ -8679,20 +8845,20 @@ var makeGlyphSpan = function makeGlyphSpan(symbol, font, mode) {
 
 var makeInner = function makeInner(ch, height, options) {
   // Create a span with inline SVG for the inner part of a tall stacked delimiter.
-  var width = fontMetricsData["Size4-Regular"][ch.charCodeAt(0)] ? fontMetricsData["Size4-Regular"][ch.charCodeAt(0)][4].toFixed(3) : fontMetricsData["Size1-Regular"][ch.charCodeAt(0)][4].toFixed(3);
+  var width = fontMetricsData["Size4-Regular"][ch.charCodeAt(0)] ? fontMetricsData["Size4-Regular"][ch.charCodeAt(0)][4] : fontMetricsData["Size1-Regular"][ch.charCodeAt(0)][4];
   var path = new PathNode("inner", innerPath(ch, Math.round(1000 * height)));
   var svgNode = new SvgNode([path], {
-    "width": width + "em",
-    "height": height + "em",
+    "width": makeEm(width),
+    "height": makeEm(height),
     // Override CSS rule `.katex svg { width: 100% }`
-    "style": "width:" + width + "em",
+    "style": "width:" + makeEm(width),
     "viewBox": "0 0 " + 1000 * width + " " + Math.round(1000 * height),
     "preserveAspectRatio": "xMinYMin"
   });
   var span = buildCommon.makeSvgSpan([], [svgNode], options);
   span.height = height;
-  span.style.height = height + "em";
-  span.style.width = width + "em";
+  span.style.height = makeEm(height);
+  span.style.width = makeEm(width);
   return {
     type: "elem",
     elem: span
@@ -8901,7 +9067,7 @@ var sqrtSvg = function sqrtSvg(sqrtName, height, viewBoxHeight, extraViniculum, 
   var svg = new SvgNode([pathNode], {
     // Note: 1000:1 ratio of viewBox to document em width.
     "width": "400em",
-    "height": height + "em",
+    "height": makeEm(height),
     "viewBox": "0 0 400000 " + viewBoxHeight,
     "preserveAspectRatio": "xMinYMin slice"
   });
@@ -8970,7 +9136,7 @@ var makeSqrtImage = function makeSqrtImage(height, options) {
   }
 
   span.height = texHeight;
-  span.style.height = spanHeight + "em";
+  span.style.height = makeEm(spanHeight);
   return {
     span: span,
     advanceWidth: advanceWidth,
@@ -9226,6 +9392,7 @@ var makeLeftRightDelim = function makeLeftRightDelim(delim, height, depth, optio
 
 
 
+
 // Extra data needed for the delimiter handler down below
 var delimiterSizes = {
   "\\bigl": {
@@ -9355,8 +9522,9 @@ defineFunction({
     }
 
     node.setAttribute("stretchy", "true");
-    node.setAttribute("minsize", delimiter.sizeToMaxHeight[group.size] + "em");
-    node.setAttribute("maxsize", delimiter.sizeToMaxHeight[group.size] + "em");
+    var size = makeEm(delimiter.sizeToMaxHeight[group.size]);
+    node.setAttribute("minsize", size);
+    node.setAttribute("maxsize", size);
     return node;
   }
 });
@@ -9615,19 +9783,19 @@ var enclose_htmlBuilder = function htmlBuilder(group, options) {
     scale = scale / newOptions.sizeMultiplier;
     var angleHeight = inner.height + inner.depth + lineWeight + clearance; // Reserve a left pad for the angle.
 
-    inner.style.paddingLeft = angleHeight / 2 + lineWeight + "em"; // Create an SVG
+    inner.style.paddingLeft = makeEm(angleHeight / 2 + lineWeight); // Create an SVG
 
     var viewBoxHeight = Math.floor(1000 * angleHeight * scale);
     var path = phasePath(viewBoxHeight);
     var svgNode = new SvgNode([new PathNode("phase", path)], {
       "width": "400em",
-      "height": viewBoxHeight / 1000 + "em",
+      "height": makeEm(viewBoxHeight / 1000),
       "viewBox": "0 0 400000 " + viewBoxHeight,
       "preserveAspectRatio": "xMinYMin slice"
     }); // Wrap it in a span with overflow: hidden.
 
     img = buildCommon.makeSvgSpan(["hide-tail"], [svgNode], options);
-    img.style.height = angleHeight + "em";
+    img.style.height = makeEm(angleHeight);
     imgShift = inner.depth + lineWeight + clearance;
   } else {
     // Add horizontal padding
@@ -9666,10 +9834,10 @@ var enclose_htmlBuilder = function htmlBuilder(group, options) {
 
     if (/fbox|boxed|fcolorbox/.test(label)) {
       img.style.borderStyle = "solid";
-      img.style.borderWidth = ruleThickness + "em";
+      img.style.borderWidth = makeEm(ruleThickness);
     } else if (label === "angl" && ruleThickness !== 0.049) {
-      img.style.borderTopWidth = ruleThickness + "em";
-      img.style.borderRightWidth = ruleThickness + "em";
+      img.style.borderTopWidth = makeEm(ruleThickness);
+      img.style.borderRightWidth = makeEm(ruleThickness);
     }
 
     imgShift = inner.depth + bottomPad;
@@ -9939,7 +10107,112 @@ function defineEnvironment(_ref) {
     _mathmlGroupBuilders[type] = mathmlBuilder;
   }
 }
+;// CONCATENATED MODULE: ./src/defineMacro.js
+
+
+/**
+ * All registered global/built-in macros.
+ * `macros.js` exports this same dictionary again and makes it public.
+ * `Parser.js` requires this dictionary via `macros.js`.
+ */
+var _macros = {}; // This function might one day accept an additional argument and do more things.
+
+function defineMacro(name, body) {
+  _macros[name] = body;
+}
+;// CONCATENATED MODULE: ./src/SourceLocation.js
+/**
+ * Lexing or parsing positional information for error reporting.
+ * This object is immutable.
+ */
+var SourceLocation = /*#__PURE__*/function () {
+  // The + prefix indicates that these fields aren't writeable
+  // Lexer holding the input string.
+  // Start offset, zero-based inclusive.
+  // End offset, zero-based exclusive.
+  function SourceLocation(lexer, start, end) {
+    this.lexer = void 0;
+    this.start = void 0;
+    this.end = void 0;
+    this.lexer = lexer;
+    this.start = start;
+    this.end = end;
+  }
+  /**
+   * Merges two `SourceLocation`s from location providers, given they are
+   * provided in order of appearance.
+   * - Returns the first one's location if only the first is provided.
+   * - Returns a merged range of the first and the last if both are provided
+   *   and their lexers match.
+   * - Otherwise, returns null.
+   */
+
+
+  SourceLocation.range = function range(first, second) {
+    if (!second) {
+      return first && first.loc;
+    } else if (!first || !first.loc || !second.loc || first.loc.lexer !== second.loc.lexer) {
+      return null;
+    } else {
+      return new SourceLocation(first.loc.lexer, first.loc.start, second.loc.end);
+    }
+  };
+
+  return SourceLocation;
+}();
+
+
+;// CONCATENATED MODULE: ./src/Token.js
+
+/**
+ * Interface required to break circular dependency between Token, Lexer, and
+ * ParseError.
+ */
+
+/**
+ * The resulting token returned from `lex`.
+ *
+ * It consists of the token text plus some position information.
+ * The position information is essentially a range in an input string,
+ * but instead of referencing the bare input string, we refer to the lexer.
+ * That way it is possible to attach extra metadata to the input string,
+ * like for example a file name or similar.
+ *
+ * The position information is optional, so it is OK to construct synthetic
+ * tokens if appropriate. Not providing available position information may
+ * lead to degraded error reporting, though.
+ */
+var Token = /*#__PURE__*/function () {
+  // don't expand the token
+  // used in \noexpand
+  function Token(text, // the text of this token
+  loc) {
+    this.text = void 0;
+    this.loc = void 0;
+    this.noexpand = void 0;
+    this.treatAsRelax = void 0;
+    this.text = text;
+    this.loc = loc;
+  }
+  /**
+   * Given a pair of tokens (this and endToken), compute a `Token` encompassing
+   * the whole input range enclosed by these two.
+   */
+
+
+  var _proto = Token.prototype;
+
+  _proto.range = function range(endToken, // last token of the range, inclusive
+  text // the text of the newly constructed token
+  ) {
+    return new Token(text, SourceLocation.range(this, endToken));
+  };
+
+  return Token;
+}();
 ;// CONCATENATED MODULE: ./src/environments/array.js
+
+
 
 
 
@@ -9978,7 +10251,19 @@ var validateAmsEnvironmentContext = function validateAmsEnvironmentContext(conte
   if (!settings.displayMode) {
     throw new src_ParseError("{" + context.envName + "} can be used only in" + " display mode.");
   }
-};
+}; // autoTag (an argument to parseArray) can be one of three values:
+// * undefined: Regular (not-top-level) array; no tags on each row
+// * true: Automatic equation numbering, overridable by \tag
+// * false: Tags allowed on each row, but no automatic numbering
+// This function *doesn't* work with the "split" environment name.
+
+
+function getAutoTag(name) {
+  if (name.indexOf("ed") === -1) {
+    return name.indexOf("*") === -1;
+  } // return undefined;
+
+}
 /**
  * Parse the body of the environment, with rows delimited by \\ and
  * columns delimited by &, and create a nested list in row-major order
@@ -9993,7 +10278,7 @@ function parseArray(parser, _ref, style) {
       cols = _ref.cols,
       arraystretch = _ref.arraystretch,
       colSeparationType = _ref.colSeparationType,
-      addEqnNum = _ref.addEqnNum,
+      autoTag = _ref.autoTag,
       singleRow = _ref.singleRow,
       emptySingleRow = _ref.emptySingleRow,
       maxNumCols = _ref.maxNumCols,
@@ -10027,7 +10312,29 @@ function parseArray(parser, _ref, style) {
   var row = [];
   var body = [row];
   var rowGaps = [];
-  var hLinesBeforeRow = []; // Test for \hline at the top of the array.
+  var hLinesBeforeRow = [];
+  var tags = autoTag != null ? [] : undefined; // amsmath uses \global\@eqnswtrue and \global\@eqnswfalse to represent
+  // whether this row should have an equation number.  Simulate this with
+  // a \@eqnsw macro set to 1 or 0.
+
+  function beginRow() {
+    if (autoTag) {
+      parser.gullet.macros.set("\\@eqnsw", "1", true);
+    }
+  }
+
+  function endRow() {
+    if (tags) {
+      if (parser.gullet.macros.get("\\df@tag")) {
+        tags.push(parser.subparse([new Token("\\df@tag")]));
+        parser.gullet.macros.set("\\df@tag", undefined, true);
+      } else {
+        tags.push(Boolean(autoTag) && parser.gullet.macros.get("\\@eqnsw") === "1");
+      }
+    }
+  }
+
+  beginRow(); // Test for \hline at the top of the array.
 
   hLinesBeforeRow.push(getHLines(parser));
 
@@ -10068,10 +10375,11 @@ function parseArray(parser, _ref, style) {
 
       parser.consume();
     } else if (next === "\\end") {
-      // Arrays terminate newlines with `\crcr` which consumes a `\cr` if
+      endRow(); // Arrays terminate newlines with `\crcr` which consumes a `\cr` if
       // the last line is empty.  However, AMS environments keep the
       // empty row if it's the only one.
       // NOTE: Currently, `cell` is the last item added into `row`.
+
       if (row.length === 1 && cell.type === "styling" && cell.body[0].body.length === 0 && (body.length > 1 || !emptySingleRow)) {
         body.pop();
       }
@@ -10093,11 +10401,13 @@ function parseArray(parser, _ref, style) {
         size = parser.parseSizeGroup(true);
       }
 
-      rowGaps.push(size ? size.value : null); // check for \hline(s) following the row separator
+      rowGaps.push(size ? size.value : null);
+      endRow(); // check for \hline(s) following the row separator
 
       hLinesBeforeRow.push(getHLines(parser));
       row = [];
       body.push(row);
+      beginRow();
     } else {
       throw new src_ParseError("Expected & or \\\\ or \\cr or \\end", parser.nextToken);
     }
@@ -10118,7 +10428,7 @@ function parseArray(parser, _ref, style) {
     hskipBeforeAndAfter: hskipBeforeAndAfter,
     hLinesBeforeRow: hLinesBeforeRow,
     colSeparationType: colSeparationType,
-    addEqnNum: addEqnNum,
+    tags: tags,
     leqno: leqno
   };
 } // Decides on a style for cells in an array according to whether the given
@@ -10256,20 +10566,35 @@ var array_htmlBuilder = function htmlBuilder(group, options) {
   var cols = [];
   var colSep;
   var colDescrNum;
-  var eqnNumSpans = [];
+  var tagSpans = [];
 
-  if (group.addEqnNum) {
-    // An environment with automatic equation numbers.
-    // Create node(s) that will trigger CSS counter increment.
+  if (group.tags && group.tags.some(function (tag) {
+    return tag;
+  })) {
+    // An environment with manual tags and/or automatic equation numbers.
+    // Create node(s), the latter of which trigger CSS counter increment.
     for (r = 0; r < nr; ++r) {
       var rw = body[r];
       var shift = rw.pos - offset;
-      var eqnTag = buildCommon.makeSpan(["eqn-num"], [], options);
-      eqnTag.depth = rw.depth;
-      eqnTag.height = rw.height;
-      eqnNumSpans.push({
+      var tag = group.tags[r];
+      var tagSpan = void 0;
+
+      if (tag === true) {
+        // automatic numbering
+        tagSpan = buildCommon.makeSpan(["eqn-num"], [], options);
+      } else if (tag === false) {
+        // \nonumber/\notag or starred environment
+        tagSpan = buildCommon.makeSpan([], [], options);
+      } else {
+        // manual \tag
+        tagSpan = buildCommon.makeSpan([], buildExpression(tag, options, true), options);
+      }
+
+      tagSpan.depth = rw.depth;
+      tagSpan.height = rw.height;
+      tagSpans.push({
         type: "elem",
-        elem: eqnTag,
+        elem: tagSpan,
         shift: shift
       });
     }
@@ -10286,18 +10611,24 @@ var array_htmlBuilder = function htmlBuilder(group, options) {
       // between them.
       if (!firstSeparator) {
         colSep = buildCommon.makeSpan(["arraycolsep"], []);
-        colSep.style.width = options.fontMetrics().doubleRuleSep + "em";
+        colSep.style.width = makeEm(options.fontMetrics().doubleRuleSep);
         cols.push(colSep);
       }
 
       if (colDescr.separator === "|" || colDescr.separator === ":") {
         var lineType = colDescr.separator === "|" ? "solid" : "dashed";
         var separator = buildCommon.makeSpan(["vertical-separator"], [], options);
-        separator.style.height = totalHeight + "em";
-        separator.style.borderRightWidth = ruleThickness + "em";
+        separator.style.height = makeEm(totalHeight);
+        separator.style.borderRightWidth = makeEm(ruleThickness);
         separator.style.borderRightStyle = lineType;
-        separator.style.margin = "0 -" + ruleThickness / 2 + "em";
-        separator.style.verticalAlign = -(totalHeight - offset) + "em";
+        separator.style.margin = "0 " + makeEm(-ruleThickness / 2);
+
+        var _shift = totalHeight - offset;
+
+        if (_shift) {
+          separator.style.verticalAlign = makeEm(-_shift);
+        }
+
         cols.push(separator);
       } else {
         throw new src_ParseError("Invalid separator type: " + colDescr.separator);
@@ -10319,7 +10650,7 @@ var array_htmlBuilder = function htmlBuilder(group, options) {
 
       if (sepwidth !== 0) {
         colSep = buildCommon.makeSpan(["arraycolsep"], []);
-        colSep.style.width = sepwidth + "em";
+        colSep.style.width = makeEm(sepwidth);
         cols.push(colSep);
       }
     }
@@ -10334,14 +10665,14 @@ var array_htmlBuilder = function htmlBuilder(group, options) {
         continue;
       }
 
-      var _shift = row.pos - offset;
+      var _shift2 = row.pos - offset;
 
       elem.depth = row.depth;
       elem.height = row.height;
       col.push({
         type: "elem",
         elem: elem,
-        shift: _shift
+        shift: _shift2
       });
     }
 
@@ -10357,7 +10688,7 @@ var array_htmlBuilder = function htmlBuilder(group, options) {
 
       if (sepwidth !== 0) {
         colSep = buildCommon.makeSpan(["arraycolsep"], []);
-        colSep.style.width = sepwidth + "em";
+        colSep.style.width = makeEm(sepwidth);
         cols.push(colSep);
       }
     }
@@ -10399,12 +10730,12 @@ var array_htmlBuilder = function htmlBuilder(group, options) {
     }, options);
   }
 
-  if (!group.addEqnNum) {
+  if (tagSpans.length === 0) {
     return buildCommon.makeSpan(["mord"], [body], options);
   } else {
     var eqnNumCol = buildCommon.makeVList({
       positionType: "individualShift",
-      children: eqnNumSpans
+      children: tagSpans
     }, options);
     eqnNumCol = buildCommon.makeSpan(["tag"], [eqnNumCol], options);
     return buildCommon.makeFragment([body, eqnNumCol]);
@@ -10430,7 +10761,7 @@ var array_mathmlBuilder = function mathmlBuilder(group, options) {
       row.push(new mathMLTree.MathNode("mtd", [buildMathML_buildGroup(rw[j], options)]));
     }
 
-    if (group.addEqnNum) {
+    if (group.tags && group.tags[i]) {
       row.unshift(glue);
       row.push(glue);
 
@@ -10457,7 +10788,7 @@ var array_mathmlBuilder = function mathmlBuilder(group, options) {
 
   var gap = group.arraystretch === 0.5 ? 0.1 // {smallmatrix}, {subarray}
   : 0.16 + group.arraystretch - 1 + (group.addJot ? 0.09 : 0);
-  table.setAttribute("rowspacing", gap.toFixed(4) + "em"); // MathML table lines go only between cells.
+  table.setAttribute("rowspacing", makeEm(gap)); // MathML table lines go only between cells.
   // To place a line on an edge we'll use <menclose>, if necessary.
 
   var menclose = "";
@@ -10565,13 +10896,14 @@ var alignedHandler = function alignedHandler(context, args) {
 
   var cols = [];
   var separationType = context.envName.indexOf("at") > -1 ? "alignat" : "align";
+  var isSplit = context.envName === "split";
   var res = parseArray(context.parser, {
     cols: cols,
     addJot: true,
-    addEqnNum: context.envName === "align" || context.envName === "alignat",
+    autoTag: isSplit ? undefined : getAutoTag(context.envName),
     emptySingleRow: true,
     colSeparationType: separationType,
-    maxNumCols: context.envName === "split" ? 2 : undefined,
+    maxNumCols: isSplit ? 2 : undefined,
     leqno: context.parser.settings.leqno
   }, "display"); // Determining number of columns.
   // 1. If the first argument is given, we use it as a number of columns,
@@ -10922,7 +11254,7 @@ defineEnvironment({
       }],
       addJot: true,
       colSeparationType: "gather",
-      addEqnNum: context.envName === "gather",
+      autoTag: getAutoTag(context.envName),
       emptySingleRow: true,
       leqno: context.parser.settings.leqno
     };
@@ -10953,7 +11285,7 @@ defineEnvironment({
   handler: function handler(context) {
     validateAmsEnvironmentContext(context);
     var res = {
-      addEqnNum: context.envName === "equation",
+      autoTag: getAutoTag(context.envName),
       emptySingleRow: true,
       singleRow: true,
       maxNumCols: 1,
@@ -10976,7 +11308,9 @@ defineEnvironment({
   },
   htmlBuilder: array_htmlBuilder,
   mathmlBuilder: array_mathmlBuilder
-}); // Catch \hline outside array environment
+});
+defineMacro("\\nonumber", "\\gdef\\@eqnsw{0}");
+defineMacro("\\notag", "\\nonumber"); // Catch \hline outside array environment
 
 defineFunction({
   type: "text",
@@ -11085,7 +11419,7 @@ function mclass_mathmlBuilder(group, options) {
   var inner = buildMathML_buildExpression(group.body, options);
 
   if (group.mclass === "minner") {
-    return mathMLTree.newDocumentFragment(inner);
+    node = new mathMLTree.MathNode("mpadded", inner);
   } else if (group.mclass === "mord") {
     if (group.isCharacterBox) {
       node = inner[0];
@@ -11113,6 +11447,10 @@ function mclass_mathmlBuilder(group, options) {
     } else if (group.mclass === "mopen" || group.mclass === "mclose") {
       node.attributes.lspace = "0em";
       node.attributes.rspace = "0em";
+    } else if (group.mclass === "minner") {
+      node.attributes.lspace = "0.0556em"; // 1 mu is the most likely option
+
+      node.attributes.width = "+0.1111em";
     } // MathML <mo> default space is 5/18 em, so <mrel> needs no action.
     // Ref: https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mo
 
@@ -11534,7 +11872,7 @@ var genfrac_mathmlBuilder = function mathmlBuilder(group, options) {
     node.setAttribute("linethickness", "0px");
   } else if (group.barSize) {
     var ruleWidth = calculateSize(group.barSize, options);
-    node.setAttribute("linethickness", ruleWidth + "em");
+    node.setAttribute("linethickness", makeEm(ruleWidth));
   }
 
   var style = adjustStyle(group.size, options.style);
@@ -12395,7 +12733,6 @@ defineFunction({
 
     if (group.totalheight.number > 0) {
       depth = calculateSize(group.totalheight, options) - height;
-      depth = Number(depth.toFixed(2));
     }
 
     var width = 0;
@@ -12405,15 +12742,15 @@ defineFunction({
     }
 
     var style = {
-      height: height + depth + "em"
+      height: makeEm(height + depth)
     };
 
     if (width > 0) {
-      style.width = width + "em";
+      style.width = makeEm(width);
     }
 
     if (depth > 0) {
-      style.verticalAlign = -depth + "em";
+      style.verticalAlign = makeEm(-depth);
     }
 
     var node = new Img(group.src, group.alt, style);
@@ -12429,15 +12766,14 @@ defineFunction({
 
     if (group.totalheight.number > 0) {
       depth = calculateSize(group.totalheight, options) - height;
-      depth = depth.toFixed(2);
-      node.setAttribute("valign", "-" + depth + "em");
+      node.setAttribute("valign", makeEm(-depth));
     }
 
-    node.setAttribute("height", height + depth + "em");
+    node.setAttribute("height", makeEm(height + depth));
 
     if (group.width.number > 0) {
       var width = calculateSize(group.width, options);
-      node.setAttribute("width", width + "em");
+      node.setAttribute("width", makeEm(width));
     }
 
     node.setAttribute("src", group.src);
@@ -12508,6 +12844,7 @@ defineFunction({
 
 
 
+
 defineFunction({
   type: "lap",
   names: ["\\mathllap", "\\mathrlap", "\\mathclap"],
@@ -12547,8 +12884,12 @@ defineFunction({
     // This code resolved issue #1153
 
     var strut = buildCommon.makeSpan(["strut"]);
-    strut.style.height = node.height + node.depth + "em";
-    strut.style.verticalAlign = -node.depth + "em";
+    strut.style.height = makeEm(node.height + node.depth);
+
+    if (node.depth) {
+      strut.style.verticalAlign = makeEm(-node.depth);
+    }
+
     node.children.unshift(strut); // Next, prevent vertical misplacement when next to something tall.
     // This code resolves issue #1234
 
@@ -12669,7 +13010,8 @@ defineFunction({
 
 
 
-// For an operator with limits, assemble the base, sup, and sub into a span.
+ // For an operator with limits, assemble the base, sup, and sub into a span.
+
 var assembleSupSub = function assembleSupSub(base, supGroup, subGroup, options, style, slant, baseShift) {
   base = buildCommon.makeSpan([], [base]);
   var subIsSingleCharacter = subGroup && utils.isCharacterBox(subGroup);
@@ -12709,7 +13051,7 @@ var assembleSupSub = function assembleSupSub(base, supGroup, subGroup, options, 
       }, {
         type: "elem",
         elem: sub.elem,
-        marginLeft: -slant + "em"
+        marginLeft: makeEm(-slant)
       }, {
         type: "kern",
         size: sub.kern
@@ -12722,7 +13064,7 @@ var assembleSupSub = function assembleSupSub(base, supGroup, subGroup, options, 
       }, {
         type: "elem",
         elem: sup.elem,
-        marginLeft: slant + "em"
+        marginLeft: makeEm(slant)
       }, {
         type: "kern",
         size: options.fontMetrics().bigOpSpacing5
@@ -12743,7 +13085,7 @@ var assembleSupSub = function assembleSupSub(base, supGroup, subGroup, options, 
       }, {
         type: "elem",
         elem: sub.elem,
-        marginLeft: -slant + "em"
+        marginLeft: makeEm(-slant)
       }, {
         type: "kern",
         size: sub.kern
@@ -12767,7 +13109,7 @@ var assembleSupSub = function assembleSupSub(base, supGroup, subGroup, options, 
       }, {
         type: "elem",
         elem: sup.elem,
-        marginLeft: slant + "em"
+        marginLeft: makeEm(slant)
       }, {
         type: "kern",
         size: options.fontMetrics().bigOpSpacing5
@@ -12786,7 +13128,7 @@ var assembleSupSub = function assembleSupSub(base, supGroup, subGroup, options, 
     // A negative margin-left was applied to the lower limit.
     // Avoid an overlap by placing a spacer on the left on the group.
     var spacer = buildCommon.makeSpan(["mspace"], [], options);
-    spacer.style.marginRight = slant + "em";
+    spacer.style.marginRight = makeEm(slant);
     parts.unshift(spacer);
   }
 
@@ -12794,6 +13136,7 @@ var assembleSupSub = function assembleSupSub(base, supGroup, subGroup, options, 
 };
 ;// CONCATENATED MODULE: ./src/functions/op.js
 // Limits, symbols
+
 
 
 
@@ -12917,7 +13260,7 @@ var op_htmlBuilder = function htmlBuilder(grp, options) {
   } else {
     if (baseShift) {
       base.style.position = "relative";
-      base.style.top = baseShift + "em";
+      base.style.top = makeEm(baseShift);
     }
 
     return base;
@@ -13103,918 +13446,6 @@ defineFunction({
   htmlBuilder: op_htmlBuilder,
   mathmlBuilder: op_mathmlBuilder
 });
-;// CONCATENATED MODULE: ./src/macros.js
-/**
- * Predefined macros for KaTeX.
- * This can be used to define some commands in terms of others.
- */
-
-
-
-
-
-
-var builtinMacros = {};
-/* harmony default export */ var macros = (builtinMacros); // This function might one day accept an additional argument and do more things.
-
-function defineMacro(name, body) {
-  builtinMacros[name] = body;
-} //////////////////////////////////////////////////////////////////////
-// macro tools
-
-defineMacro("\\noexpand", function (context) {
-  // The expansion is the token itself; but that token is interpreted
-  // as if its meaning were ‘\relax’ if it is a control sequence that
-  // would ordinarily be expanded by TeX’s expansion rules.
-  var t = context.popToken();
-
-  if (context.isExpandable(t.text)) {
-    t.noexpand = true;
-    t.treatAsRelax = true;
-  }
-
-  return {
-    tokens: [t],
-    numArgs: 0
-  };
-});
-defineMacro("\\expandafter", function (context) {
-  // TeX first reads the token that comes immediately after \expandafter,
-  // without expanding it; let’s call this token t. Then TeX reads the
-  // token that comes after t (and possibly more tokens, if that token
-  // has an argument), replacing it by its expansion. Finally TeX puts
-  // t back in front of that expansion.
-  var t = context.popToken();
-  context.expandOnce(true); // expand only an expandable token
-
-  return {
-    tokens: [t],
-    numArgs: 0
-  };
-}); // LaTeX's \@firstoftwo{#1}{#2} expands to #1, skipping #2
-// TeX source: \long\def\@firstoftwo#1#2{#1}
-
-defineMacro("\\@firstoftwo", function (context) {
-  var args = context.consumeArgs(2);
-  return {
-    tokens: args[0],
-    numArgs: 0
-  };
-}); // LaTeX's \@secondoftwo{#1}{#2} expands to #2, skipping #1
-// TeX source: \long\def\@secondoftwo#1#2{#2}
-
-defineMacro("\\@secondoftwo", function (context) {
-  var args = context.consumeArgs(2);
-  return {
-    tokens: args[1],
-    numArgs: 0
-  };
-}); // LaTeX's \@ifnextchar{#1}{#2}{#3} looks ahead to the next (unexpanded)
-// symbol that isn't a space, consuming any spaces but not consuming the
-// first nonspace character.  If that nonspace character matches #1, then
-// the macro expands to #2; otherwise, it expands to #3.
-
-defineMacro("\\@ifnextchar", function (context) {
-  var args = context.consumeArgs(3); // symbol, if, else
-
-  context.consumeSpaces();
-  var nextToken = context.future();
-
-  if (args[0].length === 1 && args[0][0].text === nextToken.text) {
-    return {
-      tokens: args[1],
-      numArgs: 0
-    };
-  } else {
-    return {
-      tokens: args[2],
-      numArgs: 0
-    };
-  }
-}); // LaTeX's \@ifstar{#1}{#2} looks ahead to the next (unexpanded) symbol.
-// If it is `*`, then it consumes the symbol, and the macro expands to #1;
-// otherwise, the macro expands to #2 (without consuming the symbol).
-// TeX source: \def\@ifstar#1{\@ifnextchar *{\@firstoftwo{#1}}}
-
-defineMacro("\\@ifstar", "\\@ifnextchar *{\\@firstoftwo{#1}}"); // LaTeX's \TextOrMath{#1}{#2} expands to #1 in text mode, #2 in math mode
-
-defineMacro("\\TextOrMath", function (context) {
-  var args = context.consumeArgs(2);
-
-  if (context.mode === 'text') {
-    return {
-      tokens: args[0],
-      numArgs: 0
-    };
-  } else {
-    return {
-      tokens: args[1],
-      numArgs: 0
-    };
-  }
-}); // Lookup table for parsing numbers in base 8 through 16
-
-var digitToNumber = {
-  "0": 0,
-  "1": 1,
-  "2": 2,
-  "3": 3,
-  "4": 4,
-  "5": 5,
-  "6": 6,
-  "7": 7,
-  "8": 8,
-  "9": 9,
-  "a": 10,
-  "A": 10,
-  "b": 11,
-  "B": 11,
-  "c": 12,
-  "C": 12,
-  "d": 13,
-  "D": 13,
-  "e": 14,
-  "E": 14,
-  "f": 15,
-  "F": 15
-}; // TeX \char makes a literal character (catcode 12) using the following forms:
-// (see The TeXBook, p. 43)
-//   \char123  -- decimal
-//   \char'123 -- octal
-//   \char"123 -- hex
-//   \char`x   -- character that can be written (i.e. isn't active)
-//   \char`\x  -- character that cannot be written (e.g. %)
-// These all refer to characters from the font, so we turn them into special
-// calls to a function \@char dealt with in the Parser.
-
-defineMacro("\\char", function (context) {
-  var token = context.popToken();
-  var base;
-  var number = '';
-
-  if (token.text === "'") {
-    base = 8;
-    token = context.popToken();
-  } else if (token.text === '"') {
-    base = 16;
-    token = context.popToken();
-  } else if (token.text === "`") {
-    token = context.popToken();
-
-    if (token.text[0] === "\\") {
-      number = token.text.charCodeAt(1);
-    } else if (token.text === "EOF") {
-      throw new src_ParseError("\\char` missing argument");
-    } else {
-      number = token.text.charCodeAt(0);
-    }
-  } else {
-    base = 10;
-  }
-
-  if (base) {
-    // Parse a number in the given base, starting with first `token`.
-    number = digitToNumber[token.text];
-
-    if (number == null || number >= base) {
-      throw new src_ParseError("Invalid base-" + base + " digit " + token.text);
-    }
-
-    var digit;
-
-    while ((digit = digitToNumber[context.future().text]) != null && digit < base) {
-      number *= base;
-      number += digit;
-      context.popToken();
-    }
-  }
-
-  return "\\@char{" + number + "}";
-}); // \newcommand{\macro}[args]{definition}
-// \renewcommand{\macro}[args]{definition}
-// TODO: Optional arguments: \newcommand{\macro}[args][default]{definition}
-
-var newcommand = function newcommand(context, existsOK, nonexistsOK) {
-  var arg = context.consumeArg().tokens;
-
-  if (arg.length !== 1) {
-    throw new src_ParseError("\\newcommand's first argument must be a macro name");
-  }
-
-  var name = arg[0].text;
-  var exists = context.isDefined(name);
-
-  if (exists && !existsOK) {
-    throw new src_ParseError("\\newcommand{" + name + "} attempting to redefine " + (name + "; use \\renewcommand"));
-  }
-
-  if (!exists && !nonexistsOK) {
-    throw new src_ParseError("\\renewcommand{" + name + "} when command " + name + " " + "does not yet exist; use \\newcommand");
-  }
-
-  var numArgs = 0;
-  arg = context.consumeArg().tokens;
-
-  if (arg.length === 1 && arg[0].text === "[") {
-    var argText = '';
-    var token = context.expandNextToken();
-
-    while (token.text !== "]" && token.text !== "EOF") {
-      // TODO: Should properly expand arg, e.g., ignore {}s
-      argText += token.text;
-      token = context.expandNextToken();
-    }
-
-    if (!argText.match(/^\s*[0-9]+\s*$/)) {
-      throw new src_ParseError("Invalid number of arguments: " + argText);
-    }
-
-    numArgs = parseInt(argText);
-    arg = context.consumeArg().tokens;
-  } // Final arg is the expansion of the macro
-
-
-  context.macros.set(name, {
-    tokens: arg,
-    numArgs: numArgs
-  });
-  return '';
-};
-
-defineMacro("\\newcommand", function (context) {
-  return newcommand(context, false, true);
-});
-defineMacro("\\renewcommand", function (context) {
-  return newcommand(context, true, false);
-});
-defineMacro("\\providecommand", function (context) {
-  return newcommand(context, true, true);
-}); // terminal (console) tools
-
-defineMacro("\\message", function (context) {
-  var arg = context.consumeArgs(1)[0]; // eslint-disable-next-line no-console
-
-  console.log(arg.reverse().map(function (token) {
-    return token.text;
-  }).join(""));
-  return '';
-});
-defineMacro("\\errmessage", function (context) {
-  var arg = context.consumeArgs(1)[0]; // eslint-disable-next-line no-console
-
-  console.error(arg.reverse().map(function (token) {
-    return token.text;
-  }).join(""));
-  return '';
-});
-defineMacro("\\show", function (context) {
-  var tok = context.popToken();
-  var name = tok.text; // eslint-disable-next-line no-console
-
-  console.log(tok, context.macros.get(name), src_functions[name], src_symbols.math[name], src_symbols.text[name]);
-  return '';
-}); //////////////////////////////////////////////////////////////////////
-// Grouping
-// \let\bgroup={ \let\egroup=}
-
-defineMacro("\\bgroup", "{");
-defineMacro("\\egroup", "}"); // Symbols from latex.ltx:
-// \def~{\nobreakspace{}}
-// \def\lq{`}
-// \def\rq{'}
-// \def \aa {\r a}
-// \def \AA {\r A}
-
-defineMacro("~", "\\nobreakspace");
-defineMacro("\\lq", "`");
-defineMacro("\\rq", "'");
-defineMacro("\\aa", "\\r a");
-defineMacro("\\AA", "\\r A"); // Copyright (C) and registered (R) symbols. Use raw symbol in MathML.
-// \DeclareTextCommandDefault{\textcopyright}{\textcircled{c}}
-// \DeclareTextCommandDefault{\textregistered}{\textcircled{%
-//      \check@mathfonts\fontsize\sf@size\z@\math@fontsfalse\selectfont R}}
-// \DeclareRobustCommand{\copyright}{%
-//    \ifmmode{\nfss@text{\textcopyright}}\else\textcopyright\fi}
-
-defineMacro("\\textcopyright", "\\html@mathml{\\textcircled{c}}{\\char`©}");
-defineMacro("\\copyright", "\\TextOrMath{\\textcopyright}{\\text{\\textcopyright}}");
-defineMacro("\\textregistered", "\\html@mathml{\\textcircled{\\scriptsize R}}{\\char`®}"); // Characters omitted from Unicode range 1D400–1D7FF
-
-defineMacro("\u212C", "\\mathscr{B}"); // script
-
-defineMacro("\u2130", "\\mathscr{E}");
-defineMacro("\u2131", "\\mathscr{F}");
-defineMacro("\u210B", "\\mathscr{H}");
-defineMacro("\u2110", "\\mathscr{I}");
-defineMacro("\u2112", "\\mathscr{L}");
-defineMacro("\u2133", "\\mathscr{M}");
-defineMacro("\u211B", "\\mathscr{R}");
-defineMacro("\u212D", "\\mathfrak{C}"); // Fraktur
-
-defineMacro("\u210C", "\\mathfrak{H}");
-defineMacro("\u2128", "\\mathfrak{Z}"); // Define \Bbbk with a macro that works in both HTML and MathML.
-
-defineMacro("\\Bbbk", "\\Bbb{k}"); // Unicode middle dot
-// The KaTeX fonts do not contain U+00B7. Instead, \cdotp displays
-// the dot at U+22C5 and gives it punct spacing.
-
-defineMacro("\xB7", "\\cdotp"); // \llap and \rlap render their contents in text mode
-
-defineMacro("\\llap", "\\mathllap{\\textrm{#1}}");
-defineMacro("\\rlap", "\\mathrlap{\\textrm{#1}}");
-defineMacro("\\clap", "\\mathclap{\\textrm{#1}}"); // \mathstrut from the TeXbook, p 360
-
-defineMacro("\\mathstrut", "\\vphantom{(}"); // \underbar from TeXbook p 353
-
-defineMacro("\\underbar", "\\underline{\\text{#1}}"); // \not is defined by base/fontmath.ltx via
-// \DeclareMathSymbol{\not}{\mathrel}{symbols}{"36}
-// It's thus treated like a \mathrel, but defined by a symbol that has zero
-// width but extends to the right.  We use \rlap to get that spacing.
-// For MathML we write U+0338 here. buildMathML.js will then do the overlay.
-
-defineMacro("\\not", '\\html@mathml{\\mathrel{\\mathrlap\\@not}}{\\char"338}'); // Negated symbols from base/fontmath.ltx:
-// \def\neq{\not=} \let\ne=\neq
-// \DeclareRobustCommand
-//   \notin{\mathrel{\m@th\mathpalette\c@ncel\in}}
-// \def\c@ncel#1#2{\m@th\ooalign{$\hfil#1\mkern1mu/\hfil$\crcr$#1#2$}}
-
-defineMacro("\\neq", "\\html@mathml{\\mathrel{\\not=}}{\\mathrel{\\char`≠}}");
-defineMacro("\\ne", "\\neq");
-defineMacro("\u2260", "\\neq");
-defineMacro("\\notin", "\\html@mathml{\\mathrel{{\\in}\\mathllap{/\\mskip1mu}}}" + "{\\mathrel{\\char`∉}}");
-defineMacro("\u2209", "\\notin"); // Unicode stacked relations
-
-defineMacro("\u2258", "\\html@mathml{" + "\\mathrel{=\\kern{-1em}\\raisebox{0.4em}{$\\scriptsize\\frown$}}" + "}{\\mathrel{\\char`\u2258}}");
-defineMacro("\u2259", "\\html@mathml{\\stackrel{\\tiny\\wedge}{=}}{\\mathrel{\\char`\u2258}}");
-defineMacro("\u225A", "\\html@mathml{\\stackrel{\\tiny\\vee}{=}}{\\mathrel{\\char`\u225A}}");
-defineMacro("\u225B", "\\html@mathml{\\stackrel{\\scriptsize\\star}{=}}" + "{\\mathrel{\\char`\u225B}}");
-defineMacro("\u225D", "\\html@mathml{\\stackrel{\\tiny\\mathrm{def}}{=}}" + "{\\mathrel{\\char`\u225D}}");
-defineMacro("\u225E", "\\html@mathml{\\stackrel{\\tiny\\mathrm{m}}{=}}" + "{\\mathrel{\\char`\u225E}}");
-defineMacro("\u225F", "\\html@mathml{\\stackrel{\\tiny?}{=}}{\\mathrel{\\char`\u225F}}"); // Misc Unicode
-
-defineMacro("\u27C2", "\\perp");
-defineMacro("\u203C", "\\mathclose{!\\mkern-0.8mu!}");
-defineMacro("\u220C", "\\notni");
-defineMacro("\u231C", "\\ulcorner");
-defineMacro("\u231D", "\\urcorner");
-defineMacro("\u231E", "\\llcorner");
-defineMacro("\u231F", "\\lrcorner");
-defineMacro("\xA9", "\\copyright");
-defineMacro("\xAE", "\\textregistered");
-defineMacro("\uFE0F", "\\textregistered"); // The KaTeX fonts have corners at codepoints that don't match Unicode.
-// For MathML purposes, use the Unicode code point.
-
-defineMacro("\\ulcorner", "\\html@mathml{\\@ulcorner}{\\mathop{\\char\"231c}}");
-defineMacro("\\urcorner", "\\html@mathml{\\@urcorner}{\\mathop{\\char\"231d}}");
-defineMacro("\\llcorner", "\\html@mathml{\\@llcorner}{\\mathop{\\char\"231e}}");
-defineMacro("\\lrcorner", "\\html@mathml{\\@lrcorner}{\\mathop{\\char\"231f}}"); //////////////////////////////////////////////////////////////////////
-// LaTeX_2ε
-// \vdots{\vbox{\baselineskip4\p@  \lineskiplimit\z@
-// \kern6\p@\hbox{.}\hbox{.}\hbox{.}}}
-// We'll call \varvdots, which gets a glyph from symbols.js.
-// The zero-width rule gets us an equivalent to the vertical 6pt kern.
-
-defineMacro("\\vdots", "\\mathord{\\varvdots\\rule{0pt}{15pt}}");
-defineMacro("\u22EE", "\\vdots"); //////////////////////////////////////////////////////////////////////
-// amsmath.sty
-// http://mirrors.concertpass.com/tex-archive/macros/latex/required/amsmath/amsmath.pdf
-// Italic Greek capital letters.  AMS defines these with \DeclareMathSymbol,
-// but they are equivalent to \mathit{\Letter}.
-
-defineMacro("\\varGamma", "\\mathit{\\Gamma}");
-defineMacro("\\varDelta", "\\mathit{\\Delta}");
-defineMacro("\\varTheta", "\\mathit{\\Theta}");
-defineMacro("\\varLambda", "\\mathit{\\Lambda}");
-defineMacro("\\varXi", "\\mathit{\\Xi}");
-defineMacro("\\varPi", "\\mathit{\\Pi}");
-defineMacro("\\varSigma", "\\mathit{\\Sigma}");
-defineMacro("\\varUpsilon", "\\mathit{\\Upsilon}");
-defineMacro("\\varPhi", "\\mathit{\\Phi}");
-defineMacro("\\varPsi", "\\mathit{\\Psi}");
-defineMacro("\\varOmega", "\\mathit{\\Omega}"); //\newcommand{\substack}[1]{\subarray{c}#1\endsubarray}
-
-defineMacro("\\substack", "\\begin{subarray}{c}#1\\end{subarray}"); // \renewcommand{\colon}{\nobreak\mskip2mu\mathpunct{}\nonscript
-// \mkern-\thinmuskip{:}\mskip6muplus1mu\relax}
-
-defineMacro("\\colon", "\\nobreak\\mskip2mu\\mathpunct{}" + "\\mathchoice{\\mkern-3mu}{\\mkern-3mu}{}{}{:}\\mskip6mu"); // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}}
-
-defineMacro("\\boxed", "\\fbox{$\\displaystyle{#1}$}"); // \def\iff{\DOTSB\;\Longleftrightarrow\;}
-// \def\implies{\DOTSB\;\Longrightarrow\;}
-// \def\impliedby{\DOTSB\;\Longleftarrow\;}
-
-defineMacro("\\iff", "\\DOTSB\\;\\Longleftrightarrow\\;");
-defineMacro("\\implies", "\\DOTSB\\;\\Longrightarrow\\;");
-defineMacro("\\impliedby", "\\DOTSB\\;\\Longleftarrow\\;"); // AMSMath's automatic \dots, based on \mdots@@ macro.
-
-var dotsByToken = {
-  ',': '\\dotsc',
-  '\\not': '\\dotsb',
-  // \keybin@ checks for the following:
-  '+': '\\dotsb',
-  '=': '\\dotsb',
-  '<': '\\dotsb',
-  '>': '\\dotsb',
-  '-': '\\dotsb',
-  '*': '\\dotsb',
-  ':': '\\dotsb',
-  // Symbols whose definition starts with \DOTSB:
-  '\\DOTSB': '\\dotsb',
-  '\\coprod': '\\dotsb',
-  '\\bigvee': '\\dotsb',
-  '\\bigwedge': '\\dotsb',
-  '\\biguplus': '\\dotsb',
-  '\\bigcap': '\\dotsb',
-  '\\bigcup': '\\dotsb',
-  '\\prod': '\\dotsb',
-  '\\sum': '\\dotsb',
-  '\\bigotimes': '\\dotsb',
-  '\\bigoplus': '\\dotsb',
-  '\\bigodot': '\\dotsb',
-  '\\bigsqcup': '\\dotsb',
-  '\\And': '\\dotsb',
-  '\\longrightarrow': '\\dotsb',
-  '\\Longrightarrow': '\\dotsb',
-  '\\longleftarrow': '\\dotsb',
-  '\\Longleftarrow': '\\dotsb',
-  '\\longleftrightarrow': '\\dotsb',
-  '\\Longleftrightarrow': '\\dotsb',
-  '\\mapsto': '\\dotsb',
-  '\\longmapsto': '\\dotsb',
-  '\\hookrightarrow': '\\dotsb',
-  '\\doteq': '\\dotsb',
-  // Symbols whose definition starts with \mathbin:
-  '\\mathbin': '\\dotsb',
-  // Symbols whose definition starts with \mathrel:
-  '\\mathrel': '\\dotsb',
-  '\\relbar': '\\dotsb',
-  '\\Relbar': '\\dotsb',
-  '\\xrightarrow': '\\dotsb',
-  '\\xleftarrow': '\\dotsb',
-  // Symbols whose definition starts with \DOTSI:
-  '\\DOTSI': '\\dotsi',
-  '\\int': '\\dotsi',
-  '\\oint': '\\dotsi',
-  '\\iint': '\\dotsi',
-  '\\iiint': '\\dotsi',
-  '\\iiiint': '\\dotsi',
-  '\\idotsint': '\\dotsi',
-  // Symbols whose definition starts with \DOTSX:
-  '\\DOTSX': '\\dotsx'
-};
-defineMacro("\\dots", function (context) {
-  // TODO: If used in text mode, should expand to \textellipsis.
-  // However, in KaTeX, \textellipsis and \ldots behave the same
-  // (in text mode), and it's unlikely we'd see any of the math commands
-  // that affect the behavior of \dots when in text mode.  So fine for now
-  // (until we support \ifmmode ... \else ... \fi).
-  var thedots = '\\dotso';
-  var next = context.expandAfterFuture().text;
-
-  if (next in dotsByToken) {
-    thedots = dotsByToken[next];
-  } else if (next.substr(0, 4) === '\\not') {
-    thedots = '\\dotsb';
-  } else if (next in src_symbols.math) {
-    if (utils.contains(['bin', 'rel'], src_symbols.math[next].group)) {
-      thedots = '\\dotsb';
-    }
-  }
-
-  return thedots;
-});
-var spaceAfterDots = {
-  // \rightdelim@ checks for the following:
-  ')': true,
-  ']': true,
-  '\\rbrack': true,
-  '\\}': true,
-  '\\rbrace': true,
-  '\\rangle': true,
-  '\\rceil': true,
-  '\\rfloor': true,
-  '\\rgroup': true,
-  '\\rmoustache': true,
-  '\\right': true,
-  '\\bigr': true,
-  '\\biggr': true,
-  '\\Bigr': true,
-  '\\Biggr': true,
-  // \extra@ also tests for the following:
-  '$': true,
-  // \extrap@ checks for the following:
-  ';': true,
-  '.': true,
-  ',': true
-};
-defineMacro("\\dotso", function (context) {
-  var next = context.future().text;
-
-  if (next in spaceAfterDots) {
-    return "\\ldots\\,";
-  } else {
-    return "\\ldots";
-  }
-});
-defineMacro("\\dotsc", function (context) {
-  var next = context.future().text; // \dotsc uses \extra@ but not \extrap@, instead specially checking for
-  // ';' and '.', but doesn't check for ','.
-
-  if (next in spaceAfterDots && next !== ',') {
-    return "\\ldots\\,";
-  } else {
-    return "\\ldots";
-  }
-});
-defineMacro("\\cdots", function (context) {
-  var next = context.future().text;
-
-  if (next in spaceAfterDots) {
-    return "\\@cdots\\,";
-  } else {
-    return "\\@cdots";
-  }
-});
-defineMacro("\\dotsb", "\\cdots");
-defineMacro("\\dotsm", "\\cdots");
-defineMacro("\\dotsi", "\\!\\cdots"); // amsmath doesn't actually define \dotsx, but \dots followed by a macro
-// starting with \DOTSX implies \dotso, and then \extra@ detects this case
-// and forces the added `\,`.
-
-defineMacro("\\dotsx", "\\ldots\\,"); // \let\DOTSI\relax
-// \let\DOTSB\relax
-// \let\DOTSX\relax
-
-defineMacro("\\DOTSI", "\\relax");
-defineMacro("\\DOTSB", "\\relax");
-defineMacro("\\DOTSX", "\\relax"); // Spacing, based on amsmath.sty's override of LaTeX defaults
-// \DeclareRobustCommand{\tmspace}[3]{%
-//   \ifmmode\mskip#1#2\else\kern#1#3\fi\relax}
-
-defineMacro("\\tmspace", "\\TextOrMath{\\kern#1#3}{\\mskip#1#2}\\relax"); // \renewcommand{\,}{\tmspace+\thinmuskip{.1667em}}
-// TODO: math mode should use \thinmuskip
-
-defineMacro("\\,", "\\tmspace+{3mu}{.1667em}"); // \let\thinspace\,
-
-defineMacro("\\thinspace", "\\,"); // \def\>{\mskip\medmuskip}
-// \renewcommand{\:}{\tmspace+\medmuskip{.2222em}}
-// TODO: \> and math mode of \: should use \medmuskip = 4mu plus 2mu minus 4mu
-
-defineMacro("\\>", "\\mskip{4mu}");
-defineMacro("\\:", "\\tmspace+{4mu}{.2222em}"); // \let\medspace\:
-
-defineMacro("\\medspace", "\\:"); // \renewcommand{\;}{\tmspace+\thickmuskip{.2777em}}
-// TODO: math mode should use \thickmuskip = 5mu plus 5mu
-
-defineMacro("\\;", "\\tmspace+{5mu}{.2777em}"); // \let\thickspace\;
-
-defineMacro("\\thickspace", "\\;"); // \renewcommand{\!}{\tmspace-\thinmuskip{.1667em}}
-// TODO: math mode should use \thinmuskip
-
-defineMacro("\\!", "\\tmspace-{3mu}{.1667em}"); // \let\negthinspace\!
-
-defineMacro("\\negthinspace", "\\!"); // \newcommand{\negmedspace}{\tmspace-\medmuskip{.2222em}}
-// TODO: math mode should use \medmuskip
-
-defineMacro("\\negmedspace", "\\tmspace-{4mu}{.2222em}"); // \newcommand{\negthickspace}{\tmspace-\thickmuskip{.2777em}}
-// TODO: math mode should use \thickmuskip
-
-defineMacro("\\negthickspace", "\\tmspace-{5mu}{.277em}"); // \def\enspace{\kern.5em }
-
-defineMacro("\\enspace", "\\kern.5em "); // \def\enskip{\hskip.5em\relax}
-
-defineMacro("\\enskip", "\\hskip.5em\\relax"); // \def\quad{\hskip1em\relax}
-
-defineMacro("\\quad", "\\hskip1em\\relax"); // \def\qquad{\hskip2em\relax}
-
-defineMacro("\\qquad", "\\hskip2em\\relax"); // \tag@in@display form of \tag
-
-defineMacro("\\tag", "\\@ifstar\\tag@literal\\tag@paren");
-defineMacro("\\tag@paren", "\\tag@literal{({#1})}");
-defineMacro("\\tag@literal", function (context) {
-  if (context.macros.get("\\df@tag")) {
-    throw new src_ParseError("Multiple \\tag");
-  }
-
-  return "\\gdef\\df@tag{\\text{#1}}";
-}); // \renewcommand{\bmod}{\nonscript\mskip-\medmuskip\mkern5mu\mathbin
-//   {\operator@font mod}\penalty900
-//   \mkern5mu\nonscript\mskip-\medmuskip}
-// \newcommand{\pod}[1]{\allowbreak
-//   \if@display\mkern18mu\else\mkern8mu\fi(#1)}
-// \renewcommand{\pmod}[1]{\pod{{\operator@font mod}\mkern6mu#1}}
-// \newcommand{\mod}[1]{\allowbreak\if@display\mkern18mu
-//   \else\mkern12mu\fi{\operator@font mod}\,\,#1}
-// TODO: math mode should use \medmuskip = 4mu plus 2mu minus 4mu
-
-defineMacro("\\bmod", "\\mathchoice{\\mskip1mu}{\\mskip1mu}{\\mskip5mu}{\\mskip5mu}" + "\\mathbin{\\rm mod}" + "\\mathchoice{\\mskip1mu}{\\mskip1mu}{\\mskip5mu}{\\mskip5mu}");
-defineMacro("\\pod", "\\allowbreak" + "\\mathchoice{\\mkern18mu}{\\mkern8mu}{\\mkern8mu}{\\mkern8mu}(#1)");
-defineMacro("\\pmod", "\\pod{{\\rm mod}\\mkern6mu#1}");
-defineMacro("\\mod", "\\allowbreak" + "\\mathchoice{\\mkern18mu}{\\mkern12mu}{\\mkern12mu}{\\mkern12mu}" + "{\\rm mod}\\,\\,#1"); // \pmb    --   A simulation of bold.
-// The version in ambsy.sty works by typesetting three copies of the argument
-// with small offsets. We use two copies. We omit the vertical offset because
-// of rendering problems that makeVList encounters in Safari.
-
-defineMacro("\\pmb", "\\html@mathml{" + "\\@binrel{#1}{\\mathrlap{#1}\\kern0.5px#1}}" + "{\\mathbf{#1}}"); //////////////////////////////////////////////////////////////////////
-// LaTeX source2e
-// \expandafter\let\expandafter\@normalcr
-//     \csname\expandafter\@gobble\string\\ \endcsname
-// \DeclareRobustCommand\newline{\@normalcr\relax}
-
-defineMacro("\\newline", "\\\\\\relax"); // \def\TeX{T\kern-.1667em\lower.5ex\hbox{E}\kern-.125emX\@}
-// TODO: Doesn't normally work in math mode because \@ fails.  KaTeX doesn't
-// support \@ yet, so that's omitted, and we add \text so that the result
-// doesn't look funny in math mode.
-
-defineMacro("\\TeX", "\\textrm{\\html@mathml{" + "T\\kern-.1667em\\raisebox{-.5ex}{E}\\kern-.125emX" + "}{TeX}}"); // \DeclareRobustCommand{\LaTeX}{L\kern-.36em%
-//         {\sbox\z@ T%
-//          \vbox to\ht\z@{\hbox{\check@mathfonts
-//                               \fontsize\sf@size\z@
-//                               \math@fontsfalse\selectfont
-//                               A}%
-//                         \vss}%
-//         }%
-//         \kern-.15em%
-//         \TeX}
-// This code aligns the top of the A with the T (from the perspective of TeX's
-// boxes, though visually the A appears to extend above slightly).
-// We compute the corresponding \raisebox when A is rendered in \normalsize
-// \scriptstyle, which has a scale factor of 0.7 (see Options.js).
-
-var latexRaiseA = fontMetricsData["Main-Regular"]["T".charCodeAt(0)][1] - 0.7 * fontMetricsData["Main-Regular"]["A".charCodeAt(0)][1] + "em";
-defineMacro("\\LaTeX", "\\textrm{\\html@mathml{" + ("L\\kern-.36em\\raisebox{" + latexRaiseA + "}{\\scriptstyle A}") + "\\kern-.15em\\TeX}{LaTeX}}"); // New KaTeX logo based on tweaking LaTeX logo
-
-defineMacro("\\KaTeX", "\\textrm{\\html@mathml{" + ("K\\kern-.17em\\raisebox{" + latexRaiseA + "}{\\scriptstyle A}") + "\\kern-.15em\\TeX}{KaTeX}}"); // \DeclareRobustCommand\hspace{\@ifstar\@hspacer\@hspace}
-// \def\@hspace#1{\hskip  #1\relax}
-// \def\@hspacer#1{\vrule \@width\z@\nobreak
-//                 \hskip #1\hskip \z@skip}
-
-defineMacro("\\hspace", "\\@ifstar\\@hspacer\\@hspace");
-defineMacro("\\@hspace", "\\hskip #1\\relax");
-defineMacro("\\@hspacer", "\\rule{0pt}{0pt}\\hskip #1\\relax"); //////////////////////////////////////////////////////////////////////
-// mathtools.sty
-//\providecommand\ordinarycolon{:}
-
-defineMacro("\\ordinarycolon", ":"); //\def\vcentcolon{\mathrel{\mathop\ordinarycolon}}
-//TODO(edemaine): Not yet centered. Fix via \raisebox or #726
-
-defineMacro("\\vcentcolon", "\\mathrel{\\mathop\\ordinarycolon}"); // \providecommand*\dblcolon{\vcentcolon\mathrel{\mkern-.9mu}\vcentcolon}
-
-defineMacro("\\dblcolon", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-.9mu}\\vcentcolon}}" + "{\\mathop{\\char\"2237}}"); // \providecommand*\coloneqq{\vcentcolon\mathrel{\mkern-1.2mu}=}
-
-defineMacro("\\coloneqq", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}=}}" + "{\\mathop{\\char\"2254}}"); // ≔
-// \providecommand*\Coloneqq{\dblcolon\mathrel{\mkern-1.2mu}=}
-
-defineMacro("\\Coloneqq", "\\html@mathml{" + "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}=}}" + "{\\mathop{\\char\"2237\\char\"3d}}"); // \providecommand*\coloneq{\vcentcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
-
-defineMacro("\\coloneq", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}\\mathrel{-}}}" + "{\\mathop{\\char\"3a\\char\"2212}}"); // \providecommand*\Coloneq{\dblcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
-
-defineMacro("\\Coloneq", "\\html@mathml{" + "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}\\mathrel{-}}}" + "{\\mathop{\\char\"2237\\char\"2212}}"); // \providecommand*\eqqcolon{=\mathrel{\mkern-1.2mu}\vcentcolon}
-
-defineMacro("\\eqqcolon", "\\html@mathml{" + "\\mathrel{=\\mathrel{\\mkern-1.2mu}\\vcentcolon}}" + "{\\mathop{\\char\"2255}}"); // ≕
-// \providecommand*\Eqqcolon{=\mathrel{\mkern-1.2mu}\dblcolon}
-
-defineMacro("\\Eqqcolon", "\\html@mathml{" + "\\mathrel{=\\mathrel{\\mkern-1.2mu}\\dblcolon}}" + "{\\mathop{\\char\"3d\\char\"2237}}"); // \providecommand*\eqcolon{\mathrel{-}\mathrel{\mkern-1.2mu}\vcentcolon}
-
-defineMacro("\\eqcolon", "\\html@mathml{" + "\\mathrel{\\mathrel{-}\\mathrel{\\mkern-1.2mu}\\vcentcolon}}" + "{\\mathop{\\char\"2239}}"); // \providecommand*\Eqcolon{\mathrel{-}\mathrel{\mkern-1.2mu}\dblcolon}
-
-defineMacro("\\Eqcolon", "\\html@mathml{" + "\\mathrel{\\mathrel{-}\\mathrel{\\mkern-1.2mu}\\dblcolon}}" + "{\\mathop{\\char\"2212\\char\"2237}}"); // \providecommand*\colonapprox{\vcentcolon\mathrel{\mkern-1.2mu}\approx}
-
-defineMacro("\\colonapprox", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}\\approx}}" + "{\\mathop{\\char\"3a\\char\"2248}}"); // \providecommand*\Colonapprox{\dblcolon\mathrel{\mkern-1.2mu}\approx}
-
-defineMacro("\\Colonapprox", "\\html@mathml{" + "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}\\approx}}" + "{\\mathop{\\char\"2237\\char\"2248}}"); // \providecommand*\colonsim{\vcentcolon\mathrel{\mkern-1.2mu}\sim}
-
-defineMacro("\\colonsim", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}\\sim}}" + "{\\mathop{\\char\"3a\\char\"223c}}"); // \providecommand*\Colonsim{\dblcolon\mathrel{\mkern-1.2mu}\sim}
-
-defineMacro("\\Colonsim", "\\html@mathml{" + "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}\\sim}}" + "{\\mathop{\\char\"2237\\char\"223c}}"); // Some Unicode characters are implemented with macros to mathtools functions.
-
-defineMacro("\u2237", "\\dblcolon"); // ::
-
-defineMacro("\u2239", "\\eqcolon"); // -:
-
-defineMacro("\u2254", "\\coloneqq"); // :=
-
-defineMacro("\u2255", "\\eqqcolon"); // =:
-
-defineMacro("\u2A74", "\\Coloneqq"); // ::=
-//////////////////////////////////////////////////////////////////////
-// colonequals.sty
-// Alternate names for mathtools's macros:
-
-defineMacro("\\ratio", "\\vcentcolon");
-defineMacro("\\coloncolon", "\\dblcolon");
-defineMacro("\\colonequals", "\\coloneqq");
-defineMacro("\\coloncolonequals", "\\Coloneqq");
-defineMacro("\\equalscolon", "\\eqqcolon");
-defineMacro("\\equalscoloncolon", "\\Eqqcolon");
-defineMacro("\\colonminus", "\\coloneq");
-defineMacro("\\coloncolonminus", "\\Coloneq");
-defineMacro("\\minuscolon", "\\eqcolon");
-defineMacro("\\minuscoloncolon", "\\Eqcolon"); // \colonapprox name is same in mathtools and colonequals.
-
-defineMacro("\\coloncolonapprox", "\\Colonapprox"); // \colonsim name is same in mathtools and colonequals.
-
-defineMacro("\\coloncolonsim", "\\Colonsim"); // Additional macros, implemented by analogy with mathtools definitions:
-
-defineMacro("\\simcolon", "\\mathrel{\\sim\\mathrel{\\mkern-1.2mu}\\vcentcolon}");
-defineMacro("\\simcoloncolon", "\\mathrel{\\sim\\mathrel{\\mkern-1.2mu}\\dblcolon}");
-defineMacro("\\approxcolon", "\\mathrel{\\approx\\mathrel{\\mkern-1.2mu}\\vcentcolon}");
-defineMacro("\\approxcoloncolon", "\\mathrel{\\approx\\mathrel{\\mkern-1.2mu}\\dblcolon}"); // Present in newtxmath, pxfonts and txfonts
-
-defineMacro("\\notni", "\\html@mathml{\\not\\ni}{\\mathrel{\\char`\u220C}}");
-defineMacro("\\limsup", "\\DOTSB\\operatorname*{lim\\,sup}");
-defineMacro("\\liminf", "\\DOTSB\\operatorname*{lim\\,inf}"); //////////////////////////////////////////////////////////////////////
-// From amsopn.sty
-
-defineMacro("\\injlim", "\\DOTSB\\operatorname*{inj\\,lim}");
-defineMacro("\\projlim", "\\DOTSB\\operatorname*{proj\\,lim}");
-defineMacro("\\varlimsup", "\\DOTSB\\operatorname*{\\overline{lim}}");
-defineMacro("\\varliminf", "\\DOTSB\\operatorname*{\\underline{lim}}");
-defineMacro("\\varinjlim", "\\DOTSB\\operatorname*{\\underrightarrow{lim}}");
-defineMacro("\\varprojlim", "\\DOTSB\\operatorname*{\\underleftarrow{lim}}"); //////////////////////////////////////////////////////////////////////
-// MathML alternates for KaTeX glyphs in the Unicode private area
-
-defineMacro("\\gvertneqq", "\\html@mathml{\\@gvertneqq}{\u2269}");
-defineMacro("\\lvertneqq", "\\html@mathml{\\@lvertneqq}{\u2268}");
-defineMacro("\\ngeqq", "\\html@mathml{\\@ngeqq}{\u2271}");
-defineMacro("\\ngeqslant", "\\html@mathml{\\@ngeqslant}{\u2271}");
-defineMacro("\\nleqq", "\\html@mathml{\\@nleqq}{\u2270}");
-defineMacro("\\nleqslant", "\\html@mathml{\\@nleqslant}{\u2270}");
-defineMacro("\\nshortmid", "\\html@mathml{\\@nshortmid}{∤}");
-defineMacro("\\nshortparallel", "\\html@mathml{\\@nshortparallel}{∦}");
-defineMacro("\\nsubseteqq", "\\html@mathml{\\@nsubseteqq}{\u2288}");
-defineMacro("\\nsupseteqq", "\\html@mathml{\\@nsupseteqq}{\u2289}");
-defineMacro("\\varsubsetneq", "\\html@mathml{\\@varsubsetneq}{⊊}");
-defineMacro("\\varsubsetneqq", "\\html@mathml{\\@varsubsetneqq}{⫋}");
-defineMacro("\\varsupsetneq", "\\html@mathml{\\@varsupsetneq}{⊋}");
-defineMacro("\\varsupsetneqq", "\\html@mathml{\\@varsupsetneqq}{⫌}");
-defineMacro("\\imath", "\\html@mathml{\\@imath}{\u0131}");
-defineMacro("\\jmath", "\\html@mathml{\\@jmath}{\u0237}"); //////////////////////////////////////////////////////////////////////
-// stmaryrd and semantic
-// The stmaryrd and semantic packages render the next four items by calling a
-// glyph. Those glyphs do not exist in the KaTeX fonts. Hence the macros.
-
-defineMacro("\\llbracket", "\\html@mathml{" + "\\mathopen{[\\mkern-3.2mu[}}" + "{\\mathopen{\\char`\u27E6}}");
-defineMacro("\\rrbracket", "\\html@mathml{" + "\\mathclose{]\\mkern-3.2mu]}}" + "{\\mathclose{\\char`\u27E7}}");
-defineMacro("\u27E6", "\\llbracket"); // blackboard bold [
-
-defineMacro("\u27E7", "\\rrbracket"); // blackboard bold ]
-
-defineMacro("\\lBrace", "\\html@mathml{" + "\\mathopen{\\{\\mkern-3.2mu[}}" + "{\\mathopen{\\char`\u2983}}");
-defineMacro("\\rBrace", "\\html@mathml{" + "\\mathclose{]\\mkern-3.2mu\\}}}" + "{\\mathclose{\\char`\u2984}}");
-defineMacro("\u2983", "\\lBrace"); // blackboard bold {
-
-defineMacro("\u2984", "\\rBrace"); // blackboard bold }
-// TODO: Create variable sized versions of the last two items. I believe that
-// will require new font glyphs.
-// The stmaryrd function `\minuso` provides a "Plimsoll" symbol that
-// superimposes the characters \circ and \mathminus. Used in chemistry.
-
-defineMacro("\\minuso", "\\mathbin{\\html@mathml{" + "{\\mathrlap{\\mathchoice{\\kern{0.145em}}{\\kern{0.145em}}" + "{\\kern{0.1015em}}{\\kern{0.0725em}}\\circ}{-}}}" + "{\\char`⦵}}");
-defineMacro("⦵", "\\minuso"); //////////////////////////////////////////////////////////////////////
-// texvc.sty
-// The texvc package contains macros available in mediawiki pages.
-// We omit the functions deprecated at
-// https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax
-// We also omit texvc's \O, which conflicts with \text{\O}
-
-defineMacro("\\darr", "\\downarrow");
-defineMacro("\\dArr", "\\Downarrow");
-defineMacro("\\Darr", "\\Downarrow");
-defineMacro("\\lang", "\\langle");
-defineMacro("\\rang", "\\rangle");
-defineMacro("\\uarr", "\\uparrow");
-defineMacro("\\uArr", "\\Uparrow");
-defineMacro("\\Uarr", "\\Uparrow");
-defineMacro("\\N", "\\mathbb{N}");
-defineMacro("\\R", "\\mathbb{R}");
-defineMacro("\\Z", "\\mathbb{Z}");
-defineMacro("\\alef", "\\aleph");
-defineMacro("\\alefsym", "\\aleph");
-defineMacro("\\Alpha", "\\mathrm{A}");
-defineMacro("\\Beta", "\\mathrm{B}");
-defineMacro("\\bull", "\\bullet");
-defineMacro("\\Chi", "\\mathrm{X}");
-defineMacro("\\clubs", "\\clubsuit");
-defineMacro("\\cnums", "\\mathbb{C}");
-defineMacro("\\Complex", "\\mathbb{C}");
-defineMacro("\\Dagger", "\\ddagger");
-defineMacro("\\diamonds", "\\diamondsuit");
-defineMacro("\\empty", "\\emptyset");
-defineMacro("\\Epsilon", "\\mathrm{E}");
-defineMacro("\\Eta", "\\mathrm{H}");
-defineMacro("\\exist", "\\exists");
-defineMacro("\\harr", "\\leftrightarrow");
-defineMacro("\\hArr", "\\Leftrightarrow");
-defineMacro("\\Harr", "\\Leftrightarrow");
-defineMacro("\\hearts", "\\heartsuit");
-defineMacro("\\image", "\\Im");
-defineMacro("\\infin", "\\infty");
-defineMacro("\\Iota", "\\mathrm{I}");
-defineMacro("\\isin", "\\in");
-defineMacro("\\Kappa", "\\mathrm{K}");
-defineMacro("\\larr", "\\leftarrow");
-defineMacro("\\lArr", "\\Leftarrow");
-defineMacro("\\Larr", "\\Leftarrow");
-defineMacro("\\lrarr", "\\leftrightarrow");
-defineMacro("\\lrArr", "\\Leftrightarrow");
-defineMacro("\\Lrarr", "\\Leftrightarrow");
-defineMacro("\\Mu", "\\mathrm{M}");
-defineMacro("\\natnums", "\\mathbb{N}");
-defineMacro("\\Nu", "\\mathrm{N}");
-defineMacro("\\Omicron", "\\mathrm{O}");
-defineMacro("\\plusmn", "\\pm");
-defineMacro("\\rarr", "\\rightarrow");
-defineMacro("\\rArr", "\\Rightarrow");
-defineMacro("\\Rarr", "\\Rightarrow");
-defineMacro("\\real", "\\Re");
-defineMacro("\\reals", "\\mathbb{R}");
-defineMacro("\\Reals", "\\mathbb{R}");
-defineMacro("\\Rho", "\\mathrm{P}");
-defineMacro("\\sdot", "\\cdot");
-defineMacro("\\sect", "\\S");
-defineMacro("\\spades", "\\spadesuit");
-defineMacro("\\sub", "\\subset");
-defineMacro("\\sube", "\\subseteq");
-defineMacro("\\supe", "\\supseteq");
-defineMacro("\\Tau", "\\mathrm{T}");
-defineMacro("\\thetasym", "\\vartheta"); // TODO: defineMacro("\\varcoppa", "\\\mbox{\\coppa}");
-
-defineMacro("\\weierp", "\\wp");
-defineMacro("\\Zeta", "\\mathrm{Z}"); //////////////////////////////////////////////////////////////////////
-// statmath.sty
-// https://ctan.math.illinois.edu/macros/latex/contrib/statmath/statmath.pdf
-
-defineMacro("\\argmin", "\\DOTSB\\operatorname*{arg\\,min}");
-defineMacro("\\argmax", "\\DOTSB\\operatorname*{arg\\,max}");
-defineMacro("\\plim", "\\DOTSB\\mathop{\\operatorname{plim}}\\limits"); //////////////////////////////////////////////////////////////////////
-// braket.sty
-// http://ctan.math.washington.edu/tex-archive/macros/latex/contrib/braket/braket.pdf
-
-defineMacro("\\bra", "\\mathinner{\\langle{#1}|}");
-defineMacro("\\ket", "\\mathinner{|{#1}\\rangle}");
-defineMacro("\\braket", "\\mathinner{\\langle{#1}\\rangle}");
-defineMacro("\\Bra", "\\left\\langle#1\\right|");
-defineMacro("\\Ket", "\\left|#1\\right\\rangle"); //////////////////////////////////////////////////////////////////////
-// actuarialangle.dtx
-
-defineMacro("\\angln", "{\\angl n}"); // Custom Khan Academy colors, should be moved to an optional package
-
-defineMacro("\\blue", "\\textcolor{##6495ed}{#1}");
-defineMacro("\\orange", "\\textcolor{##ffa500}{#1}");
-defineMacro("\\pink", "\\textcolor{##ff00af}{#1}");
-defineMacro("\\red", "\\textcolor{##df0030}{#1}");
-defineMacro("\\green", "\\textcolor{##28ae7b}{#1}");
-defineMacro("\\gray", "\\textcolor{gray}{#1}");
-defineMacro("\\purple", "\\textcolor{##9d38bd}{#1}");
-defineMacro("\\blueA", "\\textcolor{##ccfaff}{#1}");
-defineMacro("\\blueB", "\\textcolor{##80f6ff}{#1}");
-defineMacro("\\blueC", "\\textcolor{##63d9ea}{#1}");
-defineMacro("\\blueD", "\\textcolor{##11accd}{#1}");
-defineMacro("\\blueE", "\\textcolor{##0c7f99}{#1}");
-defineMacro("\\tealA", "\\textcolor{##94fff5}{#1}");
-defineMacro("\\tealB", "\\textcolor{##26edd5}{#1}");
-defineMacro("\\tealC", "\\textcolor{##01d1c1}{#1}");
-defineMacro("\\tealD", "\\textcolor{##01a995}{#1}");
-defineMacro("\\tealE", "\\textcolor{##208170}{#1}");
-defineMacro("\\greenA", "\\textcolor{##b6ffb0}{#1}");
-defineMacro("\\greenB", "\\textcolor{##8af281}{#1}");
-defineMacro("\\greenC", "\\textcolor{##74cf70}{#1}");
-defineMacro("\\greenD", "\\textcolor{##1fab54}{#1}");
-defineMacro("\\greenE", "\\textcolor{##0d923f}{#1}");
-defineMacro("\\goldA", "\\textcolor{##ffd0a9}{#1}");
-defineMacro("\\goldB", "\\textcolor{##ffbb71}{#1}");
-defineMacro("\\goldC", "\\textcolor{##ff9c39}{#1}");
-defineMacro("\\goldD", "\\textcolor{##e07d10}{#1}");
-defineMacro("\\goldE", "\\textcolor{##a75a05}{#1}");
-defineMacro("\\redA", "\\textcolor{##fca9a9}{#1}");
-defineMacro("\\redB", "\\textcolor{##ff8482}{#1}");
-defineMacro("\\redC", "\\textcolor{##f9685d}{#1}");
-defineMacro("\\redD", "\\textcolor{##e84d39}{#1}");
-defineMacro("\\redE", "\\textcolor{##bc2612}{#1}");
-defineMacro("\\maroonA", "\\textcolor{##ffbde0}{#1}");
-defineMacro("\\maroonB", "\\textcolor{##ff92c6}{#1}");
-defineMacro("\\maroonC", "\\textcolor{##ed5fa6}{#1}");
-defineMacro("\\maroonD", "\\textcolor{##ca337c}{#1}");
-defineMacro("\\maroonE", "\\textcolor{##9e034e}{#1}");
-defineMacro("\\purpleA", "\\textcolor{##ddd7ff}{#1}");
-defineMacro("\\purpleB", "\\textcolor{##c6b9fc}{#1}");
-defineMacro("\\purpleC", "\\textcolor{##aa87ff}{#1}");
-defineMacro("\\purpleD", "\\textcolor{##7854ab}{#1}");
-defineMacro("\\purpleE", "\\textcolor{##543b78}{#1}");
-defineMacro("\\mintA", "\\textcolor{##f5f9e8}{#1}");
-defineMacro("\\mintB", "\\textcolor{##edf2df}{#1}");
-defineMacro("\\mintC", "\\textcolor{##e0e5cc}{#1}");
-defineMacro("\\grayA", "\\textcolor{##f6f7f7}{#1}");
-defineMacro("\\grayB", "\\textcolor{##f0f1f2}{#1}");
-defineMacro("\\grayC", "\\textcolor{##e3e5e6}{#1}");
-defineMacro("\\grayD", "\\textcolor{##d6d8da}{#1}");
-defineMacro("\\grayE", "\\textcolor{##babec2}{#1}");
-defineMacro("\\grayF", "\\textcolor{##888d93}{#1}");
-defineMacro("\\grayG", "\\textcolor{##626569}{#1}");
-defineMacro("\\grayH", "\\textcolor{##3b3e40}{#1}");
-defineMacro("\\grayI", "\\textcolor{##21242c}{#1}");
-defineMacro("\\kaBlue", "\\textcolor{##314453}{#1}");
-defineMacro("\\kaGreen", "\\textcolor{##71B307}{#1}");
 ;// CONCATENATED MODULE: ./src/functions/operatorname.js
 
 
@@ -14406,6 +13837,23 @@ defineFunction({
     return node;
   }
 });
+;// CONCATENATED MODULE: ./src/functions/relax.js
+
+defineFunction({
+  type: "internal",
+  names: ["\\relax"],
+  props: {
+    numArgs: 0,
+    allowedInText: true
+  },
+  handler: function handler(_ref) {
+    var parser = _ref.parser;
+    return {
+      type: "internal",
+      mode: parser.mode
+    };
+  }
+});
 ;// CONCATENATED MODULE: ./src/functions/rule.js
 
 
@@ -14441,9 +13889,9 @@ defineFunction({
     var height = calculateSize(group.height, options);
     var shift = group.shift ? calculateSize(group.shift, options) : 0; // Style the rule to the right size
 
-    rule.style.borderRightWidth = width + "em";
-    rule.style.borderTopWidth = height + "em";
-    rule.style.bottom = shift + "em"; // Record the height and width
+    rule.style.borderRightWidth = makeEm(width);
+    rule.style.borderTopWidth = makeEm(height);
+    rule.style.bottom = makeEm(shift); // Record the height and width
 
     rule.width = width;
     rule.height = height + shift;
@@ -14461,22 +13909,23 @@ defineFunction({
     var color = options.color && options.getColor() || "black";
     var rule = new mathMLTree.MathNode("mspace");
     rule.setAttribute("mathbackground", color);
-    rule.setAttribute("width", width + "em");
-    rule.setAttribute("height", height + "em");
+    rule.setAttribute("width", makeEm(width));
+    rule.setAttribute("height", makeEm(height));
     var wrapper = new mathMLTree.MathNode("mpadded", [rule]);
 
     if (shift >= 0) {
-      wrapper.setAttribute("height", "+" + shift + "em");
+      wrapper.setAttribute("height", makeEm(shift));
     } else {
-      wrapper.setAttribute("height", shift + "em");
-      wrapper.setAttribute("depth", "+" + -shift + "em");
+      wrapper.setAttribute("height", makeEm(shift));
+      wrapper.setAttribute("depth", makeEm(-shift));
     }
 
-    wrapper.setAttribute("voffset", shift + "em");
+    wrapper.setAttribute("voffset", makeEm(shift));
     return wrapper;
   }
 });
 ;// CONCATENATED MODULE: ./src/functions/sizing.js
+
 
 
 
@@ -14543,7 +13992,7 @@ defineFunction({
     // that we're passing an options parameter we should be able to fix
     // this.
 
-    node.setAttribute("mathsize", newOptions.sizeMultiplier + "em");
+    node.setAttribute("mathsize", makeEm(newOptions.sizeMultiplier));
     return node;
   }
 });
@@ -14667,6 +14116,7 @@ defineFunction({
 
 
 
+
 defineFunction({
   type: "sqrt",
   names: ["\\sqrt"],
@@ -14725,7 +14175,7 @@ defineFunction({
 
 
     var imgShift = img.height - inner.height - lineClearance - ruleWidth;
-    inner.style.paddingLeft = advanceWidth + "em"; // Overlay the image and the argument.
+    inner.style.paddingLeft = makeEm(advanceWidth); // Overlay the image and the argument.
 
     var body = buildCommon.makeVList({
       positionType: "firstBaseline",
@@ -14853,6 +14303,7 @@ defineFunction({
 
 
 
+
 /**
  * Sometimes, groups perform special rules when they have superscripts or
  * subscripts attached to them. This function lets the `supsub` group know that
@@ -14944,7 +14395,7 @@ defineFunctionBuilders({
 
 
     var multiplier = options.sizeMultiplier;
-    var marginRight = 0.5 / metrics.ptPerEm / multiplier + "em";
+    var marginRight = makeEm(0.5 / metrics.ptPerEm / multiplier);
     var marginLeft = null;
 
     if (subm) {
@@ -14955,7 +14406,7 @@ defineFunctionBuilders({
 
       if (base instanceof SymbolNode || isOiint) {
         // $FlowFixMe
-        marginLeft = -base.italic + "em";
+        marginLeft = makeEm(-base.italic);
       }
     }
 
@@ -15546,95 +14997,7 @@ var functions = _functions;
 
 
 
-;// CONCATENATED MODULE: ./src/SourceLocation.js
-/**
- * Lexing or parsing positional information for error reporting.
- * This object is immutable.
- */
-var SourceLocation = /*#__PURE__*/function () {
-  // The + prefix indicates that these fields aren't writeable
-  // Lexer holding the input string.
-  // Start offset, zero-based inclusive.
-  // End offset, zero-based exclusive.
-  function SourceLocation(lexer, start, end) {
-    this.lexer = void 0;
-    this.start = void 0;
-    this.end = void 0;
-    this.lexer = lexer;
-    this.start = start;
-    this.end = end;
-  }
-  /**
-   * Merges two `SourceLocation`s from location providers, given they are
-   * provided in order of appearance.
-   * - Returns the first one's location if only the first is provided.
-   * - Returns a merged range of the first and the last if both are provided
-   *   and their lexers match.
-   * - Otherwise, returns null.
-   */
 
-
-  SourceLocation.range = function range(first, second) {
-    if (!second) {
-      return first && first.loc;
-    } else if (!first || !first.loc || !second.loc || first.loc.lexer !== second.loc.lexer) {
-      return null;
-    } else {
-      return new SourceLocation(first.loc.lexer, first.loc.start, second.loc.end);
-    }
-  };
-
-  return SourceLocation;
-}();
-
-
-;// CONCATENATED MODULE: ./src/Token.js
-
-/**
- * Interface required to break circular dependency between Token, Lexer, and
- * ParseError.
- */
-
-/**
- * The resulting token returned from `lex`.
- *
- * It consists of the token text plus some position information.
- * The position information is essentially a range in an input string,
- * but instead of referencing the bare input string, we refer to the lexer.
- * That way it is possible to attach extra metadata to the input string,
- * like for example a file name or similar.
- *
- * The position information is optional, so it is OK to construct synthetic
- * tokens if appropriate. Not providing available position information may
- * lead to degraded error reporting, though.
- */
-var Token = /*#__PURE__*/function () {
-  // don't expand the token
-  // used in \noexpand
-  function Token(text, // the text of this token
-  loc) {
-    this.text = void 0;
-    this.loc = void 0;
-    this.noexpand = void 0;
-    this.treatAsRelax = void 0;
-    this.text = text;
-    this.loc = loc;
-  }
-  /**
-   * Given a pair of tokens (this and endToken), compute a `Token` encompassing
-   * the whole input range enclosed by these two.
-   */
-
-
-  var _proto = Token.prototype;
-
-  _proto.range = function range(endToken, // last token of the range, inclusive
-  text) {
-    return new Token(text, SourceLocation.range(this, endToken));
-  };
-
-  return Token;
-}();
 ;// CONCATENATED MODULE: ./src/Lexer.js
 /**
  * The Lexer class handles tokenizing the input in various ways. Since our
@@ -15820,12 +15183,23 @@ var Namespace = /*#__PURE__*/function () {
 
     for (var undef in undefs) {
       if (undefs.hasOwnProperty(undef)) {
-        if (undefs[undef] === undefined) {
+        if (undefs[undef] == null) {
           delete this.current[undef];
         } else {
           this.current[undef] = undefs[undef];
         }
       }
+    }
+  }
+  /**
+   * Ends all currently nested groups (if any), restoring values before the
+   * groups began.  Useful in case of an error in the middle of parsing.
+   */
+  ;
+
+  _proto.endGroups = function endGroups() {
+    while (this.undefStack.length > 0) {
+      this.endGroup();
     }
   }
   /**
@@ -15859,6 +15233,7 @@ var Namespace = /*#__PURE__*/function () {
    * Local set() sets the current value and (when appropriate) adds an undo
    * operation to the undo stack.  Global set() may change the undo
    * operation at every level, so takes time linear in their number.
+   * A value of undefined means to delete existing definitions.
    */
   ;
 
@@ -15890,13 +15265,927 @@ var Namespace = /*#__PURE__*/function () {
       }
     }
 
-    this.current[name] = value;
+    if (value == null) {
+      delete this.current[name];
+    } else {
+      this.current[name] = value;
+    }
   };
 
   return Namespace;
 }();
 
 
+;// CONCATENATED MODULE: ./src/macros.js
+/**
+ * Predefined macros for KaTeX.
+ * This can be used to define some commands in terms of others.
+ */
+// Export global macros object from defineMacro
+
+var macros = _macros;
+/* harmony default export */ var src_macros = (macros);
+
+
+
+
+
+ //////////////////////////////////////////////////////////////////////
+// macro tools
+
+defineMacro("\\noexpand", function (context) {
+  // The expansion is the token itself; but that token is interpreted
+  // as if its meaning were ‘\relax’ if it is a control sequence that
+  // would ordinarily be expanded by TeX’s expansion rules.
+  var t = context.popToken();
+
+  if (context.isExpandable(t.text)) {
+    t.noexpand = true;
+    t.treatAsRelax = true;
+  }
+
+  return {
+    tokens: [t],
+    numArgs: 0
+  };
+});
+defineMacro("\\expandafter", function (context) {
+  // TeX first reads the token that comes immediately after \expandafter,
+  // without expanding it; let’s call this token t. Then TeX reads the
+  // token that comes after t (and possibly more tokens, if that token
+  // has an argument), replacing it by its expansion. Finally TeX puts
+  // t back in front of that expansion.
+  var t = context.popToken();
+  context.expandOnce(true); // expand only an expandable token
+
+  return {
+    tokens: [t],
+    numArgs: 0
+  };
+}); // LaTeX's \@firstoftwo{#1}{#2} expands to #1, skipping #2
+// TeX source: \long\def\@firstoftwo#1#2{#1}
+
+defineMacro("\\@firstoftwo", function (context) {
+  var args = context.consumeArgs(2);
+  return {
+    tokens: args[0],
+    numArgs: 0
+  };
+}); // LaTeX's \@secondoftwo{#1}{#2} expands to #2, skipping #1
+// TeX source: \long\def\@secondoftwo#1#2{#2}
+
+defineMacro("\\@secondoftwo", function (context) {
+  var args = context.consumeArgs(2);
+  return {
+    tokens: args[1],
+    numArgs: 0
+  };
+}); // LaTeX's \@ifnextchar{#1}{#2}{#3} looks ahead to the next (unexpanded)
+// symbol that isn't a space, consuming any spaces but not consuming the
+// first nonspace character.  If that nonspace character matches #1, then
+// the macro expands to #2; otherwise, it expands to #3.
+
+defineMacro("\\@ifnextchar", function (context) {
+  var args = context.consumeArgs(3); // symbol, if, else
+
+  context.consumeSpaces();
+  var nextToken = context.future();
+
+  if (args[0].length === 1 && args[0][0].text === nextToken.text) {
+    return {
+      tokens: args[1],
+      numArgs: 0
+    };
+  } else {
+    return {
+      tokens: args[2],
+      numArgs: 0
+    };
+  }
+}); // LaTeX's \@ifstar{#1}{#2} looks ahead to the next (unexpanded) symbol.
+// If it is `*`, then it consumes the symbol, and the macro expands to #1;
+// otherwise, the macro expands to #2 (without consuming the symbol).
+// TeX source: \def\@ifstar#1{\@ifnextchar *{\@firstoftwo{#1}}}
+
+defineMacro("\\@ifstar", "\\@ifnextchar *{\\@firstoftwo{#1}}"); // LaTeX's \TextOrMath{#1}{#2} expands to #1 in text mode, #2 in math mode
+
+defineMacro("\\TextOrMath", function (context) {
+  var args = context.consumeArgs(2);
+
+  if (context.mode === 'text') {
+    return {
+      tokens: args[0],
+      numArgs: 0
+    };
+  } else {
+    return {
+      tokens: args[1],
+      numArgs: 0
+    };
+  }
+}); // Lookup table for parsing numbers in base 8 through 16
+
+var digitToNumber = {
+  "0": 0,
+  "1": 1,
+  "2": 2,
+  "3": 3,
+  "4": 4,
+  "5": 5,
+  "6": 6,
+  "7": 7,
+  "8": 8,
+  "9": 9,
+  "a": 10,
+  "A": 10,
+  "b": 11,
+  "B": 11,
+  "c": 12,
+  "C": 12,
+  "d": 13,
+  "D": 13,
+  "e": 14,
+  "E": 14,
+  "f": 15,
+  "F": 15
+}; // TeX \char makes a literal character (catcode 12) using the following forms:
+// (see The TeXBook, p. 43)
+//   \char123  -- decimal
+//   \char'123 -- octal
+//   \char"123 -- hex
+//   \char`x   -- character that can be written (i.e. isn't active)
+//   \char`\x  -- character that cannot be written (e.g. %)
+// These all refer to characters from the font, so we turn them into special
+// calls to a function \@char dealt with in the Parser.
+
+defineMacro("\\char", function (context) {
+  var token = context.popToken();
+  var base;
+  var number = '';
+
+  if (token.text === "'") {
+    base = 8;
+    token = context.popToken();
+  } else if (token.text === '"') {
+    base = 16;
+    token = context.popToken();
+  } else if (token.text === "`") {
+    token = context.popToken();
+
+    if (token.text[0] === "\\") {
+      number = token.text.charCodeAt(1);
+    } else if (token.text === "EOF") {
+      throw new src_ParseError("\\char` missing argument");
+    } else {
+      number = token.text.charCodeAt(0);
+    }
+  } else {
+    base = 10;
+  }
+
+  if (base) {
+    // Parse a number in the given base, starting with first `token`.
+    number = digitToNumber[token.text];
+
+    if (number == null || number >= base) {
+      throw new src_ParseError("Invalid base-" + base + " digit " + token.text);
+    }
+
+    var digit;
+
+    while ((digit = digitToNumber[context.future().text]) != null && digit < base) {
+      number *= base;
+      number += digit;
+      context.popToken();
+    }
+  }
+
+  return "\\@char{" + number + "}";
+}); // \newcommand{\macro}[args]{definition}
+// \renewcommand{\macro}[args]{definition}
+// TODO: Optional arguments: \newcommand{\macro}[args][default]{definition}
+
+var newcommand = function newcommand(context, existsOK, nonexistsOK) {
+  var arg = context.consumeArg().tokens;
+
+  if (arg.length !== 1) {
+    throw new src_ParseError("\\newcommand's first argument must be a macro name");
+  }
+
+  var name = arg[0].text;
+  var exists = context.isDefined(name);
+
+  if (exists && !existsOK) {
+    throw new src_ParseError("\\newcommand{" + name + "} attempting to redefine " + (name + "; use \\renewcommand"));
+  }
+
+  if (!exists && !nonexistsOK) {
+    throw new src_ParseError("\\renewcommand{" + name + "} when command " + name + " " + "does not yet exist; use \\newcommand");
+  }
+
+  var numArgs = 0;
+  arg = context.consumeArg().tokens;
+
+  if (arg.length === 1 && arg[0].text === "[") {
+    var argText = '';
+    var token = context.expandNextToken();
+
+    while (token.text !== "]" && token.text !== "EOF") {
+      // TODO: Should properly expand arg, e.g., ignore {}s
+      argText += token.text;
+      token = context.expandNextToken();
+    }
+
+    if (!argText.match(/^\s*[0-9]+\s*$/)) {
+      throw new src_ParseError("Invalid number of arguments: " + argText);
+    }
+
+    numArgs = parseInt(argText);
+    arg = context.consumeArg().tokens;
+  } // Final arg is the expansion of the macro
+
+
+  context.macros.set(name, {
+    tokens: arg,
+    numArgs: numArgs
+  });
+  return '';
+};
+
+defineMacro("\\newcommand", function (context) {
+  return newcommand(context, false, true);
+});
+defineMacro("\\renewcommand", function (context) {
+  return newcommand(context, true, false);
+});
+defineMacro("\\providecommand", function (context) {
+  return newcommand(context, true, true);
+}); // terminal (console) tools
+
+defineMacro("\\message", function (context) {
+  var arg = context.consumeArgs(1)[0]; // eslint-disable-next-line no-console
+
+  console.log(arg.reverse().map(function (token) {
+    return token.text;
+  }).join(""));
+  return '';
+});
+defineMacro("\\errmessage", function (context) {
+  var arg = context.consumeArgs(1)[0]; // eslint-disable-next-line no-console
+
+  console.error(arg.reverse().map(function (token) {
+    return token.text;
+  }).join(""));
+  return '';
+});
+defineMacro("\\show", function (context) {
+  var tok = context.popToken();
+  var name = tok.text; // eslint-disable-next-line no-console
+
+  console.log(tok, context.macros.get(name), src_functions[name], src_symbols.math[name], src_symbols.text[name]);
+  return '';
+}); //////////////////////////////////////////////////////////////////////
+// Grouping
+// \let\bgroup={ \let\egroup=}
+
+defineMacro("\\bgroup", "{");
+defineMacro("\\egroup", "}"); // Symbols from latex.ltx:
+// \def~{\nobreakspace{}}
+// \def\lq{`}
+// \def\rq{'}
+// \def \aa {\r a}
+// \def \AA {\r A}
+
+defineMacro("~", "\\nobreakspace");
+defineMacro("\\lq", "`");
+defineMacro("\\rq", "'");
+defineMacro("\\aa", "\\r a");
+defineMacro("\\AA", "\\r A"); // Copyright (C) and registered (R) symbols. Use raw symbol in MathML.
+// \DeclareTextCommandDefault{\textcopyright}{\textcircled{c}}
+// \DeclareTextCommandDefault{\textregistered}{\textcircled{%
+//      \check@mathfonts\fontsize\sf@size\z@\math@fontsfalse\selectfont R}}
+// \DeclareRobustCommand{\copyright}{%
+//    \ifmmode{\nfss@text{\textcopyright}}\else\textcopyright\fi}
+
+defineMacro("\\textcopyright", "\\html@mathml{\\textcircled{c}}{\\char`©}");
+defineMacro("\\copyright", "\\TextOrMath{\\textcopyright}{\\text{\\textcopyright}}");
+defineMacro("\\textregistered", "\\html@mathml{\\textcircled{\\scriptsize R}}{\\char`®}"); // Characters omitted from Unicode range 1D400–1D7FF
+
+defineMacro("\u212C", "\\mathscr{B}"); // script
+
+defineMacro("\u2130", "\\mathscr{E}");
+defineMacro("\u2131", "\\mathscr{F}");
+defineMacro("\u210B", "\\mathscr{H}");
+defineMacro("\u2110", "\\mathscr{I}");
+defineMacro("\u2112", "\\mathscr{L}");
+defineMacro("\u2133", "\\mathscr{M}");
+defineMacro("\u211B", "\\mathscr{R}");
+defineMacro("\u212D", "\\mathfrak{C}"); // Fraktur
+
+defineMacro("\u210C", "\\mathfrak{H}");
+defineMacro("\u2128", "\\mathfrak{Z}"); // Define \Bbbk with a macro that works in both HTML and MathML.
+
+defineMacro("\\Bbbk", "\\Bbb{k}"); // Unicode middle dot
+// The KaTeX fonts do not contain U+00B7. Instead, \cdotp displays
+// the dot at U+22C5 and gives it punct spacing.
+
+defineMacro("\xB7", "\\cdotp"); // \llap and \rlap render their contents in text mode
+
+defineMacro("\\llap", "\\mathllap{\\textrm{#1}}");
+defineMacro("\\rlap", "\\mathrlap{\\textrm{#1}}");
+defineMacro("\\clap", "\\mathclap{\\textrm{#1}}"); // \mathstrut from the TeXbook, p 360
+
+defineMacro("\\mathstrut", "\\vphantom{(}"); // \underbar from TeXbook p 353
+
+defineMacro("\\underbar", "\\underline{\\text{#1}}"); // \not is defined by base/fontmath.ltx via
+// \DeclareMathSymbol{\not}{\mathrel}{symbols}{"36}
+// It's thus treated like a \mathrel, but defined by a symbol that has zero
+// width but extends to the right.  We use \rlap to get that spacing.
+// For MathML we write U+0338 here. buildMathML.js will then do the overlay.
+
+defineMacro("\\not", '\\html@mathml{\\mathrel{\\mathrlap\\@not}}{\\char"338}'); // Negated symbols from base/fontmath.ltx:
+// \def\neq{\not=} \let\ne=\neq
+// \DeclareRobustCommand
+//   \notin{\mathrel{\m@th\mathpalette\c@ncel\in}}
+// \def\c@ncel#1#2{\m@th\ooalign{$\hfil#1\mkern1mu/\hfil$\crcr$#1#2$}}
+
+defineMacro("\\neq", "\\html@mathml{\\mathrel{\\not=}}{\\mathrel{\\char`≠}}");
+defineMacro("\\ne", "\\neq");
+defineMacro("\u2260", "\\neq");
+defineMacro("\\notin", "\\html@mathml{\\mathrel{{\\in}\\mathllap{/\\mskip1mu}}}" + "{\\mathrel{\\char`∉}}");
+defineMacro("\u2209", "\\notin"); // Unicode stacked relations
+
+defineMacro("\u2258", "\\html@mathml{" + "\\mathrel{=\\kern{-1em}\\raisebox{0.4em}{$\\scriptsize\\frown$}}" + "}{\\mathrel{\\char`\u2258}}");
+defineMacro("\u2259", "\\html@mathml{\\stackrel{\\tiny\\wedge}{=}}{\\mathrel{\\char`\u2258}}");
+defineMacro("\u225A", "\\html@mathml{\\stackrel{\\tiny\\vee}{=}}{\\mathrel{\\char`\u225A}}");
+defineMacro("\u225B", "\\html@mathml{\\stackrel{\\scriptsize\\star}{=}}" + "{\\mathrel{\\char`\u225B}}");
+defineMacro("\u225D", "\\html@mathml{\\stackrel{\\tiny\\mathrm{def}}{=}}" + "{\\mathrel{\\char`\u225D}}");
+defineMacro("\u225E", "\\html@mathml{\\stackrel{\\tiny\\mathrm{m}}{=}}" + "{\\mathrel{\\char`\u225E}}");
+defineMacro("\u225F", "\\html@mathml{\\stackrel{\\tiny?}{=}}{\\mathrel{\\char`\u225F}}"); // Misc Unicode
+
+defineMacro("\u27C2", "\\perp");
+defineMacro("\u203C", "\\mathclose{!\\mkern-0.8mu!}");
+defineMacro("\u220C", "\\notni");
+defineMacro("\u231C", "\\ulcorner");
+defineMacro("\u231D", "\\urcorner");
+defineMacro("\u231E", "\\llcorner");
+defineMacro("\u231F", "\\lrcorner");
+defineMacro("\xA9", "\\copyright");
+defineMacro("\xAE", "\\textregistered");
+defineMacro("\uFE0F", "\\textregistered"); // The KaTeX fonts have corners at codepoints that don't match Unicode.
+// For MathML purposes, use the Unicode code point.
+
+defineMacro("\\ulcorner", "\\html@mathml{\\@ulcorner}{\\mathop{\\char\"231c}}");
+defineMacro("\\urcorner", "\\html@mathml{\\@urcorner}{\\mathop{\\char\"231d}}");
+defineMacro("\\llcorner", "\\html@mathml{\\@llcorner}{\\mathop{\\char\"231e}}");
+defineMacro("\\lrcorner", "\\html@mathml{\\@lrcorner}{\\mathop{\\char\"231f}}"); //////////////////////////////////////////////////////////////////////
+// LaTeX_2ε
+// \vdots{\vbox{\baselineskip4\p@  \lineskiplimit\z@
+// \kern6\p@\hbox{.}\hbox{.}\hbox{.}}}
+// We'll call \varvdots, which gets a glyph from symbols.js.
+// The zero-width rule gets us an equivalent to the vertical 6pt kern.
+
+defineMacro("\\vdots", "\\mathord{\\varvdots\\rule{0pt}{15pt}}");
+defineMacro("\u22EE", "\\vdots"); //////////////////////////////////////////////////////////////////////
+// amsmath.sty
+// http://mirrors.concertpass.com/tex-archive/macros/latex/required/amsmath/amsmath.pdf
+// Italic Greek capital letters.  AMS defines these with \DeclareMathSymbol,
+// but they are equivalent to \mathit{\Letter}.
+
+defineMacro("\\varGamma", "\\mathit{\\Gamma}");
+defineMacro("\\varDelta", "\\mathit{\\Delta}");
+defineMacro("\\varTheta", "\\mathit{\\Theta}");
+defineMacro("\\varLambda", "\\mathit{\\Lambda}");
+defineMacro("\\varXi", "\\mathit{\\Xi}");
+defineMacro("\\varPi", "\\mathit{\\Pi}");
+defineMacro("\\varSigma", "\\mathit{\\Sigma}");
+defineMacro("\\varUpsilon", "\\mathit{\\Upsilon}");
+defineMacro("\\varPhi", "\\mathit{\\Phi}");
+defineMacro("\\varPsi", "\\mathit{\\Psi}");
+defineMacro("\\varOmega", "\\mathit{\\Omega}"); //\newcommand{\substack}[1]{\subarray{c}#1\endsubarray}
+
+defineMacro("\\substack", "\\begin{subarray}{c}#1\\end{subarray}"); // \renewcommand{\colon}{\nobreak\mskip2mu\mathpunct{}\nonscript
+// \mkern-\thinmuskip{:}\mskip6muplus1mu\relax}
+
+defineMacro("\\colon", "\\nobreak\\mskip2mu\\mathpunct{}" + "\\mathchoice{\\mkern-3mu}{\\mkern-3mu}{}{}{:}\\mskip6mu\\relax"); // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}}
+
+defineMacro("\\boxed", "\\fbox{$\\displaystyle{#1}$}"); // \def\iff{\DOTSB\;\Longleftrightarrow\;}
+// \def\implies{\DOTSB\;\Longrightarrow\;}
+// \def\impliedby{\DOTSB\;\Longleftarrow\;}
+
+defineMacro("\\iff", "\\DOTSB\\;\\Longleftrightarrow\\;");
+defineMacro("\\implies", "\\DOTSB\\;\\Longrightarrow\\;");
+defineMacro("\\impliedby", "\\DOTSB\\;\\Longleftarrow\\;"); // AMSMath's automatic \dots, based on \mdots@@ macro.
+
+var dotsByToken = {
+  ',': '\\dotsc',
+  '\\not': '\\dotsb',
+  // \keybin@ checks for the following:
+  '+': '\\dotsb',
+  '=': '\\dotsb',
+  '<': '\\dotsb',
+  '>': '\\dotsb',
+  '-': '\\dotsb',
+  '*': '\\dotsb',
+  ':': '\\dotsb',
+  // Symbols whose definition starts with \DOTSB:
+  '\\DOTSB': '\\dotsb',
+  '\\coprod': '\\dotsb',
+  '\\bigvee': '\\dotsb',
+  '\\bigwedge': '\\dotsb',
+  '\\biguplus': '\\dotsb',
+  '\\bigcap': '\\dotsb',
+  '\\bigcup': '\\dotsb',
+  '\\prod': '\\dotsb',
+  '\\sum': '\\dotsb',
+  '\\bigotimes': '\\dotsb',
+  '\\bigoplus': '\\dotsb',
+  '\\bigodot': '\\dotsb',
+  '\\bigsqcup': '\\dotsb',
+  '\\And': '\\dotsb',
+  '\\longrightarrow': '\\dotsb',
+  '\\Longrightarrow': '\\dotsb',
+  '\\longleftarrow': '\\dotsb',
+  '\\Longleftarrow': '\\dotsb',
+  '\\longleftrightarrow': '\\dotsb',
+  '\\Longleftrightarrow': '\\dotsb',
+  '\\mapsto': '\\dotsb',
+  '\\longmapsto': '\\dotsb',
+  '\\hookrightarrow': '\\dotsb',
+  '\\doteq': '\\dotsb',
+  // Symbols whose definition starts with \mathbin:
+  '\\mathbin': '\\dotsb',
+  // Symbols whose definition starts with \mathrel:
+  '\\mathrel': '\\dotsb',
+  '\\relbar': '\\dotsb',
+  '\\Relbar': '\\dotsb',
+  '\\xrightarrow': '\\dotsb',
+  '\\xleftarrow': '\\dotsb',
+  // Symbols whose definition starts with \DOTSI:
+  '\\DOTSI': '\\dotsi',
+  '\\int': '\\dotsi',
+  '\\oint': '\\dotsi',
+  '\\iint': '\\dotsi',
+  '\\iiint': '\\dotsi',
+  '\\iiiint': '\\dotsi',
+  '\\idotsint': '\\dotsi',
+  // Symbols whose definition starts with \DOTSX:
+  '\\DOTSX': '\\dotsx'
+};
+defineMacro("\\dots", function (context) {
+  // TODO: If used in text mode, should expand to \textellipsis.
+  // However, in KaTeX, \textellipsis and \ldots behave the same
+  // (in text mode), and it's unlikely we'd see any of the math commands
+  // that affect the behavior of \dots when in text mode.  So fine for now
+  // (until we support \ifmmode ... \else ... \fi).
+  var thedots = '\\dotso';
+  var next = context.expandAfterFuture().text;
+
+  if (next in dotsByToken) {
+    thedots = dotsByToken[next];
+  } else if (next.substr(0, 4) === '\\not') {
+    thedots = '\\dotsb';
+  } else if (next in src_symbols.math) {
+    if (utils.contains(['bin', 'rel'], src_symbols.math[next].group)) {
+      thedots = '\\dotsb';
+    }
+  }
+
+  return thedots;
+});
+var spaceAfterDots = {
+  // \rightdelim@ checks for the following:
+  ')': true,
+  ']': true,
+  '\\rbrack': true,
+  '\\}': true,
+  '\\rbrace': true,
+  '\\rangle': true,
+  '\\rceil': true,
+  '\\rfloor': true,
+  '\\rgroup': true,
+  '\\rmoustache': true,
+  '\\right': true,
+  '\\bigr': true,
+  '\\biggr': true,
+  '\\Bigr': true,
+  '\\Biggr': true,
+  // \extra@ also tests for the following:
+  '$': true,
+  // \extrap@ checks for the following:
+  ';': true,
+  '.': true,
+  ',': true
+};
+defineMacro("\\dotso", function (context) {
+  var next = context.future().text;
+
+  if (next in spaceAfterDots) {
+    return "\\ldots\\,";
+  } else {
+    return "\\ldots";
+  }
+});
+defineMacro("\\dotsc", function (context) {
+  var next = context.future().text; // \dotsc uses \extra@ but not \extrap@, instead specially checking for
+  // ';' and '.', but doesn't check for ','.
+
+  if (next in spaceAfterDots && next !== ',') {
+    return "\\ldots\\,";
+  } else {
+    return "\\ldots";
+  }
+});
+defineMacro("\\cdots", function (context) {
+  var next = context.future().text;
+
+  if (next in spaceAfterDots) {
+    return "\\@cdots\\,";
+  } else {
+    return "\\@cdots";
+  }
+});
+defineMacro("\\dotsb", "\\cdots");
+defineMacro("\\dotsm", "\\cdots");
+defineMacro("\\dotsi", "\\!\\cdots"); // amsmath doesn't actually define \dotsx, but \dots followed by a macro
+// starting with \DOTSX implies \dotso, and then \extra@ detects this case
+// and forces the added `\,`.
+
+defineMacro("\\dotsx", "\\ldots\\,"); // \let\DOTSI\relax
+// \let\DOTSB\relax
+// \let\DOTSX\relax
+
+defineMacro("\\DOTSI", "\\relax");
+defineMacro("\\DOTSB", "\\relax");
+defineMacro("\\DOTSX", "\\relax"); // Spacing, based on amsmath.sty's override of LaTeX defaults
+// \DeclareRobustCommand{\tmspace}[3]{%
+//   \ifmmode\mskip#1#2\else\kern#1#3\fi\relax}
+
+defineMacro("\\tmspace", "\\TextOrMath{\\kern#1#3}{\\mskip#1#2}\\relax"); // \renewcommand{\,}{\tmspace+\thinmuskip{.1667em}}
+// TODO: math mode should use \thinmuskip
+
+defineMacro("\\,", "\\tmspace+{3mu}{.1667em}"); // \let\thinspace\,
+
+defineMacro("\\thinspace", "\\,"); // \def\>{\mskip\medmuskip}
+// \renewcommand{\:}{\tmspace+\medmuskip{.2222em}}
+// TODO: \> and math mode of \: should use \medmuskip = 4mu plus 2mu minus 4mu
+
+defineMacro("\\>", "\\mskip{4mu}");
+defineMacro("\\:", "\\tmspace+{4mu}{.2222em}"); // \let\medspace\:
+
+defineMacro("\\medspace", "\\:"); // \renewcommand{\;}{\tmspace+\thickmuskip{.2777em}}
+// TODO: math mode should use \thickmuskip = 5mu plus 5mu
+
+defineMacro("\\;", "\\tmspace+{5mu}{.2777em}"); // \let\thickspace\;
+
+defineMacro("\\thickspace", "\\;"); // \renewcommand{\!}{\tmspace-\thinmuskip{.1667em}}
+// TODO: math mode should use \thinmuskip
+
+defineMacro("\\!", "\\tmspace-{3mu}{.1667em}"); // \let\negthinspace\!
+
+defineMacro("\\negthinspace", "\\!"); // \newcommand{\negmedspace}{\tmspace-\medmuskip{.2222em}}
+// TODO: math mode should use \medmuskip
+
+defineMacro("\\negmedspace", "\\tmspace-{4mu}{.2222em}"); // \newcommand{\negthickspace}{\tmspace-\thickmuskip{.2777em}}
+// TODO: math mode should use \thickmuskip
+
+defineMacro("\\negthickspace", "\\tmspace-{5mu}{.277em}"); // \def\enspace{\kern.5em }
+
+defineMacro("\\enspace", "\\kern.5em "); // \def\enskip{\hskip.5em\relax}
+
+defineMacro("\\enskip", "\\hskip.5em\\relax"); // \def\quad{\hskip1em\relax}
+
+defineMacro("\\quad", "\\hskip1em\\relax"); // \def\qquad{\hskip2em\relax}
+
+defineMacro("\\qquad", "\\hskip2em\\relax"); // \tag@in@display form of \tag
+
+defineMacro("\\tag", "\\@ifstar\\tag@literal\\tag@paren");
+defineMacro("\\tag@paren", "\\tag@literal{({#1})}");
+defineMacro("\\tag@literal", function (context) {
+  if (context.macros.get("\\df@tag")) {
+    throw new src_ParseError("Multiple \\tag");
+  }
+
+  return "\\gdef\\df@tag{\\text{#1}}";
+}); // \renewcommand{\bmod}{\nonscript\mskip-\medmuskip\mkern5mu\mathbin
+//   {\operator@font mod}\penalty900
+//   \mkern5mu\nonscript\mskip-\medmuskip}
+// \newcommand{\pod}[1]{\allowbreak
+//   \if@display\mkern18mu\else\mkern8mu\fi(#1)}
+// \renewcommand{\pmod}[1]{\pod{{\operator@font mod}\mkern6mu#1}}
+// \newcommand{\mod}[1]{\allowbreak\if@display\mkern18mu
+//   \else\mkern12mu\fi{\operator@font mod}\,\,#1}
+// TODO: math mode should use \medmuskip = 4mu plus 2mu minus 4mu
+
+defineMacro("\\bmod", "\\mathchoice{\\mskip1mu}{\\mskip1mu}{\\mskip5mu}{\\mskip5mu}" + "\\mathbin{\\rm mod}" + "\\mathchoice{\\mskip1mu}{\\mskip1mu}{\\mskip5mu}{\\mskip5mu}");
+defineMacro("\\pod", "\\allowbreak" + "\\mathchoice{\\mkern18mu}{\\mkern8mu}{\\mkern8mu}{\\mkern8mu}(#1)");
+defineMacro("\\pmod", "\\pod{{\\rm mod}\\mkern6mu#1}");
+defineMacro("\\mod", "\\allowbreak" + "\\mathchoice{\\mkern18mu}{\\mkern12mu}{\\mkern12mu}{\\mkern12mu}" + "{\\rm mod}\\,\\,#1"); // \pmb    --   A simulation of bold.
+// The version in ambsy.sty works by typesetting three copies of the argument
+// with small offsets. We use two copies. We omit the vertical offset because
+// of rendering problems that makeVList encounters in Safari.
+
+defineMacro("\\pmb", "\\html@mathml{" + "\\@binrel{#1}{\\mathrlap{#1}\\kern0.5px#1}}" + "{\\mathbf{#1}}"); //////////////////////////////////////////////////////////////////////
+// LaTeX source2e
+// \expandafter\let\expandafter\@normalcr
+//     \csname\expandafter\@gobble\string\\ \endcsname
+// \DeclareRobustCommand\newline{\@normalcr\relax}
+
+defineMacro("\\newline", "\\\\\\relax"); // \def\TeX{T\kern-.1667em\lower.5ex\hbox{E}\kern-.125emX\@}
+// TODO: Doesn't normally work in math mode because \@ fails.  KaTeX doesn't
+// support \@ yet, so that's omitted, and we add \text so that the result
+// doesn't look funny in math mode.
+
+defineMacro("\\TeX", "\\textrm{\\html@mathml{" + "T\\kern-.1667em\\raisebox{-.5ex}{E}\\kern-.125emX" + "}{TeX}}"); // \DeclareRobustCommand{\LaTeX}{L\kern-.36em%
+//         {\sbox\z@ T%
+//          \vbox to\ht\z@{\hbox{\check@mathfonts
+//                               \fontsize\sf@size\z@
+//                               \math@fontsfalse\selectfont
+//                               A}%
+//                         \vss}%
+//         }%
+//         \kern-.15em%
+//         \TeX}
+// This code aligns the top of the A with the T (from the perspective of TeX's
+// boxes, though visually the A appears to extend above slightly).
+// We compute the corresponding \raisebox when A is rendered in \normalsize
+// \scriptstyle, which has a scale factor of 0.7 (see Options.js).
+
+var latexRaiseA = makeEm(fontMetricsData["Main-Regular"]["T".charCodeAt(0)][1] - 0.7 * fontMetricsData["Main-Regular"]["A".charCodeAt(0)][1]);
+defineMacro("\\LaTeX", "\\textrm{\\html@mathml{" + ("L\\kern-.36em\\raisebox{" + latexRaiseA + "}{\\scriptstyle A}") + "\\kern-.15em\\TeX}{LaTeX}}"); // New KaTeX logo based on tweaking LaTeX logo
+
+defineMacro("\\KaTeX", "\\textrm{\\html@mathml{" + ("K\\kern-.17em\\raisebox{" + latexRaiseA + "}{\\scriptstyle A}") + "\\kern-.15em\\TeX}{KaTeX}}"); // \DeclareRobustCommand\hspace{\@ifstar\@hspacer\@hspace}
+// \def\@hspace#1{\hskip  #1\relax}
+// \def\@hspacer#1{\vrule \@width\z@\nobreak
+//                 \hskip #1\hskip \z@skip}
+
+defineMacro("\\hspace", "\\@ifstar\\@hspacer\\@hspace");
+defineMacro("\\@hspace", "\\hskip #1\\relax");
+defineMacro("\\@hspacer", "\\rule{0pt}{0pt}\\hskip #1\\relax"); //////////////////////////////////////////////////////////////////////
+// mathtools.sty
+//\providecommand\ordinarycolon{:}
+
+defineMacro("\\ordinarycolon", ":"); //\def\vcentcolon{\mathrel{\mathop\ordinarycolon}}
+//TODO(edemaine): Not yet centered. Fix via \raisebox or #726
+
+defineMacro("\\vcentcolon", "\\mathrel{\\mathop\\ordinarycolon}"); // \providecommand*\dblcolon{\vcentcolon\mathrel{\mkern-.9mu}\vcentcolon}
+
+defineMacro("\\dblcolon", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-.9mu}\\vcentcolon}}" + "{\\mathop{\\char\"2237}}"); // \providecommand*\coloneqq{\vcentcolon\mathrel{\mkern-1.2mu}=}
+
+defineMacro("\\coloneqq", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}=}}" + "{\\mathop{\\char\"2254}}"); // ≔
+// \providecommand*\Coloneqq{\dblcolon\mathrel{\mkern-1.2mu}=}
+
+defineMacro("\\Coloneqq", "\\html@mathml{" + "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}=}}" + "{\\mathop{\\char\"2237\\char\"3d}}"); // \providecommand*\coloneq{\vcentcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
+
+defineMacro("\\coloneq", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}\\mathrel{-}}}" + "{\\mathop{\\char\"3a\\char\"2212}}"); // \providecommand*\Coloneq{\dblcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
+
+defineMacro("\\Coloneq", "\\html@mathml{" + "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}\\mathrel{-}}}" + "{\\mathop{\\char\"2237\\char\"2212}}"); // \providecommand*\eqqcolon{=\mathrel{\mkern-1.2mu}\vcentcolon}
+
+defineMacro("\\eqqcolon", "\\html@mathml{" + "\\mathrel{=\\mathrel{\\mkern-1.2mu}\\vcentcolon}}" + "{\\mathop{\\char\"2255}}"); // ≕
+// \providecommand*\Eqqcolon{=\mathrel{\mkern-1.2mu}\dblcolon}
+
+defineMacro("\\Eqqcolon", "\\html@mathml{" + "\\mathrel{=\\mathrel{\\mkern-1.2mu}\\dblcolon}}" + "{\\mathop{\\char\"3d\\char\"2237}}"); // \providecommand*\eqcolon{\mathrel{-}\mathrel{\mkern-1.2mu}\vcentcolon}
+
+defineMacro("\\eqcolon", "\\html@mathml{" + "\\mathrel{\\mathrel{-}\\mathrel{\\mkern-1.2mu}\\vcentcolon}}" + "{\\mathop{\\char\"2239}}"); // \providecommand*\Eqcolon{\mathrel{-}\mathrel{\mkern-1.2mu}\dblcolon}
+
+defineMacro("\\Eqcolon", "\\html@mathml{" + "\\mathrel{\\mathrel{-}\\mathrel{\\mkern-1.2mu}\\dblcolon}}" + "{\\mathop{\\char\"2212\\char\"2237}}"); // \providecommand*\colonapprox{\vcentcolon\mathrel{\mkern-1.2mu}\approx}
+
+defineMacro("\\colonapprox", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}\\approx}}" + "{\\mathop{\\char\"3a\\char\"2248}}"); // \providecommand*\Colonapprox{\dblcolon\mathrel{\mkern-1.2mu}\approx}
+
+defineMacro("\\Colonapprox", "\\html@mathml{" + "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}\\approx}}" + "{\\mathop{\\char\"2237\\char\"2248}}"); // \providecommand*\colonsim{\vcentcolon\mathrel{\mkern-1.2mu}\sim}
+
+defineMacro("\\colonsim", "\\html@mathml{" + "\\mathrel{\\vcentcolon\\mathrel{\\mkern-1.2mu}\\sim}}" + "{\\mathop{\\char\"3a\\char\"223c}}"); // \providecommand*\Colonsim{\dblcolon\mathrel{\mkern-1.2mu}\sim}
+
+defineMacro("\\Colonsim", "\\html@mathml{" + "\\mathrel{\\dblcolon\\mathrel{\\mkern-1.2mu}\\sim}}" + "{\\mathop{\\char\"2237\\char\"223c}}"); // Some Unicode characters are implemented with macros to mathtools functions.
+
+defineMacro("\u2237", "\\dblcolon"); // ::
+
+defineMacro("\u2239", "\\eqcolon"); // -:
+
+defineMacro("\u2254", "\\coloneqq"); // :=
+
+defineMacro("\u2255", "\\eqqcolon"); // =:
+
+defineMacro("\u2A74", "\\Coloneqq"); // ::=
+//////////////////////////////////////////////////////////////////////
+// colonequals.sty
+// Alternate names for mathtools's macros:
+
+defineMacro("\\ratio", "\\vcentcolon");
+defineMacro("\\coloncolon", "\\dblcolon");
+defineMacro("\\colonequals", "\\coloneqq");
+defineMacro("\\coloncolonequals", "\\Coloneqq");
+defineMacro("\\equalscolon", "\\eqqcolon");
+defineMacro("\\equalscoloncolon", "\\Eqqcolon");
+defineMacro("\\colonminus", "\\coloneq");
+defineMacro("\\coloncolonminus", "\\Coloneq");
+defineMacro("\\minuscolon", "\\eqcolon");
+defineMacro("\\minuscoloncolon", "\\Eqcolon"); // \colonapprox name is same in mathtools and colonequals.
+
+defineMacro("\\coloncolonapprox", "\\Colonapprox"); // \colonsim name is same in mathtools and colonequals.
+
+defineMacro("\\coloncolonsim", "\\Colonsim"); // Additional macros, implemented by analogy with mathtools definitions:
+
+defineMacro("\\simcolon", "\\mathrel{\\sim\\mathrel{\\mkern-1.2mu}\\vcentcolon}");
+defineMacro("\\simcoloncolon", "\\mathrel{\\sim\\mathrel{\\mkern-1.2mu}\\dblcolon}");
+defineMacro("\\approxcolon", "\\mathrel{\\approx\\mathrel{\\mkern-1.2mu}\\vcentcolon}");
+defineMacro("\\approxcoloncolon", "\\mathrel{\\approx\\mathrel{\\mkern-1.2mu}\\dblcolon}"); // Present in newtxmath, pxfonts and txfonts
+
+defineMacro("\\notni", "\\html@mathml{\\not\\ni}{\\mathrel{\\char`\u220C}}");
+defineMacro("\\limsup", "\\DOTSB\\operatorname*{lim\\,sup}");
+defineMacro("\\liminf", "\\DOTSB\\operatorname*{lim\\,inf}"); //////////////////////////////////////////////////////////////////////
+// From amsopn.sty
+
+defineMacro("\\injlim", "\\DOTSB\\operatorname*{inj\\,lim}");
+defineMacro("\\projlim", "\\DOTSB\\operatorname*{proj\\,lim}");
+defineMacro("\\varlimsup", "\\DOTSB\\operatorname*{\\overline{lim}}");
+defineMacro("\\varliminf", "\\DOTSB\\operatorname*{\\underline{lim}}");
+defineMacro("\\varinjlim", "\\DOTSB\\operatorname*{\\underrightarrow{lim}}");
+defineMacro("\\varprojlim", "\\DOTSB\\operatorname*{\\underleftarrow{lim}}"); //////////////////////////////////////////////////////////////////////
+// MathML alternates for KaTeX glyphs in the Unicode private area
+
+defineMacro("\\gvertneqq", "\\html@mathml{\\@gvertneqq}{\u2269}");
+defineMacro("\\lvertneqq", "\\html@mathml{\\@lvertneqq}{\u2268}");
+defineMacro("\\ngeqq", "\\html@mathml{\\@ngeqq}{\u2271}");
+defineMacro("\\ngeqslant", "\\html@mathml{\\@ngeqslant}{\u2271}");
+defineMacro("\\nleqq", "\\html@mathml{\\@nleqq}{\u2270}");
+defineMacro("\\nleqslant", "\\html@mathml{\\@nleqslant}{\u2270}");
+defineMacro("\\nshortmid", "\\html@mathml{\\@nshortmid}{∤}");
+defineMacro("\\nshortparallel", "\\html@mathml{\\@nshortparallel}{∦}");
+defineMacro("\\nsubseteqq", "\\html@mathml{\\@nsubseteqq}{\u2288}");
+defineMacro("\\nsupseteqq", "\\html@mathml{\\@nsupseteqq}{\u2289}");
+defineMacro("\\varsubsetneq", "\\html@mathml{\\@varsubsetneq}{⊊}");
+defineMacro("\\varsubsetneqq", "\\html@mathml{\\@varsubsetneqq}{⫋}");
+defineMacro("\\varsupsetneq", "\\html@mathml{\\@varsupsetneq}{⊋}");
+defineMacro("\\varsupsetneqq", "\\html@mathml{\\@varsupsetneqq}{⫌}");
+defineMacro("\\imath", "\\html@mathml{\\@imath}{\u0131}");
+defineMacro("\\jmath", "\\html@mathml{\\@jmath}{\u0237}"); //////////////////////////////////////////////////////////////////////
+// stmaryrd and semantic
+// The stmaryrd and semantic packages render the next four items by calling a
+// glyph. Those glyphs do not exist in the KaTeX fonts. Hence the macros.
+
+defineMacro("\\llbracket", "\\html@mathml{" + "\\mathopen{[\\mkern-3.2mu[}}" + "{\\mathopen{\\char`\u27E6}}");
+defineMacro("\\rrbracket", "\\html@mathml{" + "\\mathclose{]\\mkern-3.2mu]}}" + "{\\mathclose{\\char`\u27E7}}");
+defineMacro("\u27E6", "\\llbracket"); // blackboard bold [
+
+defineMacro("\u27E7", "\\rrbracket"); // blackboard bold ]
+
+defineMacro("\\lBrace", "\\html@mathml{" + "\\mathopen{\\{\\mkern-3.2mu[}}" + "{\\mathopen{\\char`\u2983}}");
+defineMacro("\\rBrace", "\\html@mathml{" + "\\mathclose{]\\mkern-3.2mu\\}}}" + "{\\mathclose{\\char`\u2984}}");
+defineMacro("\u2983", "\\lBrace"); // blackboard bold {
+
+defineMacro("\u2984", "\\rBrace"); // blackboard bold }
+// TODO: Create variable sized versions of the last two items. I believe that
+// will require new font glyphs.
+// The stmaryrd function `\minuso` provides a "Plimsoll" symbol that
+// superimposes the characters \circ and \mathminus. Used in chemistry.
+
+defineMacro("\\minuso", "\\mathbin{\\html@mathml{" + "{\\mathrlap{\\mathchoice{\\kern{0.145em}}{\\kern{0.145em}}" + "{\\kern{0.1015em}}{\\kern{0.0725em}}\\circ}{-}}}" + "{\\char`⦵}}");
+defineMacro("⦵", "\\minuso"); //////////////////////////////////////////////////////////////////////
+// texvc.sty
+// The texvc package contains macros available in mediawiki pages.
+// We omit the functions deprecated at
+// https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax
+// We also omit texvc's \O, which conflicts with \text{\O}
+
+defineMacro("\\darr", "\\downarrow");
+defineMacro("\\dArr", "\\Downarrow");
+defineMacro("\\Darr", "\\Downarrow");
+defineMacro("\\lang", "\\langle");
+defineMacro("\\rang", "\\rangle");
+defineMacro("\\uarr", "\\uparrow");
+defineMacro("\\uArr", "\\Uparrow");
+defineMacro("\\Uarr", "\\Uparrow");
+defineMacro("\\N", "\\mathbb{N}");
+defineMacro("\\R", "\\mathbb{R}");
+defineMacro("\\Z", "\\mathbb{Z}");
+defineMacro("\\alef", "\\aleph");
+defineMacro("\\alefsym", "\\aleph");
+defineMacro("\\Alpha", "\\mathrm{A}");
+defineMacro("\\Beta", "\\mathrm{B}");
+defineMacro("\\bull", "\\bullet");
+defineMacro("\\Chi", "\\mathrm{X}");
+defineMacro("\\clubs", "\\clubsuit");
+defineMacro("\\cnums", "\\mathbb{C}");
+defineMacro("\\Complex", "\\mathbb{C}");
+defineMacro("\\Dagger", "\\ddagger");
+defineMacro("\\diamonds", "\\diamondsuit");
+defineMacro("\\empty", "\\emptyset");
+defineMacro("\\Epsilon", "\\mathrm{E}");
+defineMacro("\\Eta", "\\mathrm{H}");
+defineMacro("\\exist", "\\exists");
+defineMacro("\\harr", "\\leftrightarrow");
+defineMacro("\\hArr", "\\Leftrightarrow");
+defineMacro("\\Harr", "\\Leftrightarrow");
+defineMacro("\\hearts", "\\heartsuit");
+defineMacro("\\image", "\\Im");
+defineMacro("\\infin", "\\infty");
+defineMacro("\\Iota", "\\mathrm{I}");
+defineMacro("\\isin", "\\in");
+defineMacro("\\Kappa", "\\mathrm{K}");
+defineMacro("\\larr", "\\leftarrow");
+defineMacro("\\lArr", "\\Leftarrow");
+defineMacro("\\Larr", "\\Leftarrow");
+defineMacro("\\lrarr", "\\leftrightarrow");
+defineMacro("\\lrArr", "\\Leftrightarrow");
+defineMacro("\\Lrarr", "\\Leftrightarrow");
+defineMacro("\\Mu", "\\mathrm{M}");
+defineMacro("\\natnums", "\\mathbb{N}");
+defineMacro("\\Nu", "\\mathrm{N}");
+defineMacro("\\Omicron", "\\mathrm{O}");
+defineMacro("\\plusmn", "\\pm");
+defineMacro("\\rarr", "\\rightarrow");
+defineMacro("\\rArr", "\\Rightarrow");
+defineMacro("\\Rarr", "\\Rightarrow");
+defineMacro("\\real", "\\Re");
+defineMacro("\\reals", "\\mathbb{R}");
+defineMacro("\\Reals", "\\mathbb{R}");
+defineMacro("\\Rho", "\\mathrm{P}");
+defineMacro("\\sdot", "\\cdot");
+defineMacro("\\sect", "\\S");
+defineMacro("\\spades", "\\spadesuit");
+defineMacro("\\sub", "\\subset");
+defineMacro("\\sube", "\\subseteq");
+defineMacro("\\supe", "\\supseteq");
+defineMacro("\\Tau", "\\mathrm{T}");
+defineMacro("\\thetasym", "\\vartheta"); // TODO: defineMacro("\\varcoppa", "\\\mbox{\\coppa}");
+
+defineMacro("\\weierp", "\\wp");
+defineMacro("\\Zeta", "\\mathrm{Z}"); //////////////////////////////////////////////////////////////////////
+// statmath.sty
+// https://ctan.math.illinois.edu/macros/latex/contrib/statmath/statmath.pdf
+
+defineMacro("\\argmin", "\\DOTSB\\operatorname*{arg\\,min}");
+defineMacro("\\argmax", "\\DOTSB\\operatorname*{arg\\,max}");
+defineMacro("\\plim", "\\DOTSB\\mathop{\\operatorname{plim}}\\limits"); //////////////////////////////////////////////////////////////////////
+// braket.sty
+// http://ctan.math.washington.edu/tex-archive/macros/latex/contrib/braket/braket.pdf
+
+defineMacro("\\bra", "\\mathinner{\\langle{#1}|}");
+defineMacro("\\ket", "\\mathinner{|{#1}\\rangle}");
+defineMacro("\\braket", "\\mathinner{\\langle{#1}\\rangle}");
+defineMacro("\\Bra", "\\left\\langle#1\\right|");
+defineMacro("\\Ket", "\\left|#1\\right\\rangle"); //////////////////////////////////////////////////////////////////////
+// actuarialangle.dtx
+
+defineMacro("\\angln", "{\\angl n}"); // Custom Khan Academy colors, should be moved to an optional package
+
+defineMacro("\\blue", "\\textcolor{##6495ed}{#1}");
+defineMacro("\\orange", "\\textcolor{##ffa500}{#1}");
+defineMacro("\\pink", "\\textcolor{##ff00af}{#1}");
+defineMacro("\\red", "\\textcolor{##df0030}{#1}");
+defineMacro("\\green", "\\textcolor{##28ae7b}{#1}");
+defineMacro("\\gray", "\\textcolor{gray}{#1}");
+defineMacro("\\purple", "\\textcolor{##9d38bd}{#1}");
+defineMacro("\\blueA", "\\textcolor{##ccfaff}{#1}");
+defineMacro("\\blueB", "\\textcolor{##80f6ff}{#1}");
+defineMacro("\\blueC", "\\textcolor{##63d9ea}{#1}");
+defineMacro("\\blueD", "\\textcolor{##11accd}{#1}");
+defineMacro("\\blueE", "\\textcolor{##0c7f99}{#1}");
+defineMacro("\\tealA", "\\textcolor{##94fff5}{#1}");
+defineMacro("\\tealB", "\\textcolor{##26edd5}{#1}");
+defineMacro("\\tealC", "\\textcolor{##01d1c1}{#1}");
+defineMacro("\\tealD", "\\textcolor{##01a995}{#1}");
+defineMacro("\\tealE", "\\textcolor{##208170}{#1}");
+defineMacro("\\greenA", "\\textcolor{##b6ffb0}{#1}");
+defineMacro("\\greenB", "\\textcolor{##8af281}{#1}");
+defineMacro("\\greenC", "\\textcolor{##74cf70}{#1}");
+defineMacro("\\greenD", "\\textcolor{##1fab54}{#1}");
+defineMacro("\\greenE", "\\textcolor{##0d923f}{#1}");
+defineMacro("\\goldA", "\\textcolor{##ffd0a9}{#1}");
+defineMacro("\\goldB", "\\textcolor{##ffbb71}{#1}");
+defineMacro("\\goldC", "\\textcolor{##ff9c39}{#1}");
+defineMacro("\\goldD", "\\textcolor{##e07d10}{#1}");
+defineMacro("\\goldE", "\\textcolor{##a75a05}{#1}");
+defineMacro("\\redA", "\\textcolor{##fca9a9}{#1}");
+defineMacro("\\redB", "\\textcolor{##ff8482}{#1}");
+defineMacro("\\redC", "\\textcolor{##f9685d}{#1}");
+defineMacro("\\redD", "\\textcolor{##e84d39}{#1}");
+defineMacro("\\redE", "\\textcolor{##bc2612}{#1}");
+defineMacro("\\maroonA", "\\textcolor{##ffbde0}{#1}");
+defineMacro("\\maroonB", "\\textcolor{##ff92c6}{#1}");
+defineMacro("\\maroonC", "\\textcolor{##ed5fa6}{#1}");
+defineMacro("\\maroonD", "\\textcolor{##ca337c}{#1}");
+defineMacro("\\maroonE", "\\textcolor{##9e034e}{#1}");
+defineMacro("\\purpleA", "\\textcolor{##ddd7ff}{#1}");
+defineMacro("\\purpleB", "\\textcolor{##c6b9fc}{#1}");
+defineMacro("\\purpleC", "\\textcolor{##aa87ff}{#1}");
+defineMacro("\\purpleD", "\\textcolor{##7854ab}{#1}");
+defineMacro("\\purpleE", "\\textcolor{##543b78}{#1}");
+defineMacro("\\mintA", "\\textcolor{##f5f9e8}{#1}");
+defineMacro("\\mintB", "\\textcolor{##edf2df}{#1}");
+defineMacro("\\mintC", "\\textcolor{##e0e5cc}{#1}");
+defineMacro("\\grayA", "\\textcolor{##f6f7f7}{#1}");
+defineMacro("\\grayB", "\\textcolor{##f0f1f2}{#1}");
+defineMacro("\\grayC", "\\textcolor{##e3e5e6}{#1}");
+defineMacro("\\grayD", "\\textcolor{##d6d8da}{#1}");
+defineMacro("\\grayE", "\\textcolor{##babec2}{#1}");
+defineMacro("\\grayF", "\\textcolor{##888d93}{#1}");
+defineMacro("\\grayG", "\\textcolor{##626569}{#1}");
+defineMacro("\\grayH", "\\textcolor{##3b3e40}{#1}");
+defineMacro("\\grayI", "\\textcolor{##21242c}{#1}");
+defineMacro("\\kaBlue", "\\textcolor{##314453}{#1}");
+defineMacro("\\kaGreen", "\\textcolor{##71B307}{#1}");
 ;// CONCATENATED MODULE: ./src/MacroExpander.js
 /**
  * This file contains the “gullet” where macros are expanded
@@ -15912,8 +16201,6 @@ var Namespace = /*#__PURE__*/function () {
 // List of commands that act like macros but aren't defined as a macro,
 // function, or symbol.  Used in `isDefined`.
 var implicitCommands = {
-  "\\relax": true,
-  // MacroExpander.js
   "^": true,
   // Parser.js
   "_": true,
@@ -15936,7 +16223,7 @@ var MacroExpander = /*#__PURE__*/function () {
     this.expansionCount = 0;
     this.feed(input); // Make new global namespace
 
-    this.macros = new Namespace(macros, settings.macros);
+    this.macros = new Namespace(src_macros, settings.macros);
     this.mode = mode;
     this.stack = []; // contains tokens in REVERSE order
   }
@@ -15974,6 +16261,15 @@ var MacroExpander = /*#__PURE__*/function () {
 
   _proto.endGroup = function endGroup() {
     this.macros.endGroup();
+  }
+  /**
+   * Ends all currently nested groups (if any), restoring values before the
+   * groups began.  Useful in case of an error in the middle of parsing.
+   */
+  ;
+
+  _proto.endGroups = function endGroups() {
+    this.macros.endGroups();
   }
   /**
    * Returns the topmost token on the stack, without expanding it.
@@ -16275,15 +16571,13 @@ var MacroExpander = /*#__PURE__*/function () {
       var expanded = this.expandOnce(); // expandOnce returns Token if and only if it's fully expanded.
 
       if (expanded instanceof Token) {
-        // \relax stops the expansion, but shouldn't get returned (a
-        // null return value couldn't get implemented as a function).
         // the token after \noexpand is interpreted as if its meaning
         // were ‘\relax’
-        if (expanded.text === "\\relax" || expanded.treatAsRelax) {
-          this.stack.pop();
-        } else {
-          return this.stack.pop(); // === expanded
+        if (expanded.treatAsRelax) {
+          expanded.text = "\\relax";
         }
+
+        return this.stack.pop(); // === expanded
       }
     } // Flow unable to figure out that this pathway is impossible.
     // https://github.com/facebook/flow/issues/4808
@@ -16482,6 +16776,9 @@ var unicodeAccents = {
   },
   "̋": {
     "text": "\\H"
+  },
+  "̧": {
+    "text": "\\c"
   }
 };
 var unicodeSymbols = {
@@ -16506,11 +16803,14 @@ var unicodeSymbols = {
   "ǻ": "ǻ",
   "ḃ": "ḃ",
   "ć": "ć",
+  "ḉ": "ḉ",
   "č": "č",
   "ĉ": "ĉ",
   "ċ": "ċ",
+  "ç": "ç",
   "ď": "ď",
   "ḋ": "ḋ",
+  "ḑ": "ḑ",
   "é": "é",
   "è": "è",
   "ë": "ë",
@@ -16519,12 +16819,14 @@ var unicodeSymbols = {
   "ḗ": "ḗ",
   "ḕ": "ḕ",
   "ĕ": "ĕ",
+  "ḝ": "ḝ",
   "ě": "ě",
   "ê": "ê",
   "ế": "ế",
   "ề": "ề",
   "ễ": "ễ",
   "ė": "ė",
+  "ȩ": "ȩ",
   "ḟ": "ḟ",
   "ǵ": "ǵ",
   "ḡ": "ḡ",
@@ -16532,10 +16834,12 @@ var unicodeSymbols = {
   "ǧ": "ǧ",
   "ĝ": "ĝ",
   "ġ": "ġ",
+  "ģ": "ģ",
   "ḧ": "ḧ",
   "ȟ": "ȟ",
   "ĥ": "ĥ",
   "ḣ": "ḣ",
+  "ḩ": "ḩ",
   "í": "í",
   "ì": "ì",
   "ï": "ï",
@@ -16549,8 +16853,10 @@ var unicodeSymbols = {
   "ĵ": "ĵ",
   "ḱ": "ḱ",
   "ǩ": "ǩ",
+  "ķ": "ķ",
   "ĺ": "ĺ",
   "ľ": "ľ",
+  "ļ": "ļ",
   "ḿ": "ḿ",
   "ṁ": "ṁ",
   "ń": "ń",
@@ -16558,6 +16864,7 @@ var unicodeSymbols = {
   "ñ": "ñ",
   "ň": "ň",
   "ṅ": "ṅ",
+  "ņ": "ņ",
   "ó": "ó",
   "ò": "ò",
   "ö": "ö",
@@ -16583,15 +16890,18 @@ var unicodeSymbols = {
   "ŕ": "ŕ",
   "ř": "ř",
   "ṙ": "ṙ",
+  "ŗ": "ŗ",
   "ś": "ś",
   "ṥ": "ṥ",
   "š": "š",
   "ṧ": "ṧ",
   "ŝ": "ŝ",
   "ṡ": "ṡ",
+  "ş": "ş",
   "ẗ": "ẗ",
   "ť": "ť",
   "ṫ": "ṫ",
+  "ţ": "ţ",
   "ú": "ú",
   "ù": "ù",
   "ü": "ü",
@@ -16650,11 +16960,14 @@ var unicodeSymbols = {
   "Ǻ": "Ǻ",
   "Ḃ": "Ḃ",
   "Ć": "Ć",
+  "Ḉ": "Ḉ",
   "Č": "Č",
   "Ĉ": "Ĉ",
   "Ċ": "Ċ",
+  "Ç": "Ç",
   "Ď": "Ď",
   "Ḋ": "Ḋ",
+  "Ḑ": "Ḑ",
   "É": "É",
   "È": "È",
   "Ë": "Ë",
@@ -16663,12 +16976,14 @@ var unicodeSymbols = {
   "Ḗ": "Ḗ",
   "Ḕ": "Ḕ",
   "Ĕ": "Ĕ",
+  "Ḝ": "Ḝ",
   "Ě": "Ě",
   "Ê": "Ê",
   "Ế": "Ế",
   "Ề": "Ề",
   "Ễ": "Ễ",
   "Ė": "Ė",
+  "Ȩ": "Ȩ",
   "Ḟ": "Ḟ",
   "Ǵ": "Ǵ",
   "Ḡ": "Ḡ",
@@ -16676,10 +16991,12 @@ var unicodeSymbols = {
   "Ǧ": "Ǧ",
   "Ĝ": "Ĝ",
   "Ġ": "Ġ",
+  "Ģ": "Ģ",
   "Ḧ": "Ḧ",
   "Ȟ": "Ȟ",
   "Ĥ": "Ĥ",
   "Ḣ": "Ḣ",
+  "Ḩ": "Ḩ",
   "Í": "Í",
   "Ì": "Ì",
   "Ï": "Ï",
@@ -16693,8 +17010,10 @@ var unicodeSymbols = {
   "Ĵ": "Ĵ",
   "Ḱ": "Ḱ",
   "Ǩ": "Ǩ",
+  "Ķ": "Ķ",
   "Ĺ": "Ĺ",
   "Ľ": "Ľ",
+  "Ļ": "Ļ",
   "Ḿ": "Ḿ",
   "Ṁ": "Ṁ",
   "Ń": "Ń",
@@ -16702,6 +17021,7 @@ var unicodeSymbols = {
   "Ñ": "Ñ",
   "Ň": "Ň",
   "Ṅ": "Ṅ",
+  "Ņ": "Ņ",
   "Ó": "Ó",
   "Ò": "Ò",
   "Ö": "Ö",
@@ -16727,14 +17047,17 @@ var unicodeSymbols = {
   "Ŕ": "Ŕ",
   "Ř": "Ř",
   "Ṙ": "Ṙ",
+  "Ŗ": "Ŗ",
   "Ś": "Ś",
   "Ṥ": "Ṥ",
   "Š": "Š",
   "Ṧ": "Ṧ",
   "Ŝ": "Ŝ",
   "Ṡ": "Ṡ",
+  "Ş": "Ş",
   "Ť": "Ť",
   "Ṫ": "Ṫ",
+  "Ţ": "Ţ",
   "Ú": "Ú",
   "Ù": "Ù",
   "Ü": "Ü",
@@ -16920,17 +17243,40 @@ var Parser = /*#__PURE__*/function () {
 
     if (this.settings.colorIsTextColor) {
       this.gullet.macros.set("\\color", "\\textcolor");
-    } // Try to parse the input
-
-
-    var parse = this.parseExpression(false); // If we succeeded, make sure there's an EOF at the end
-
-    this.expect("EOF"); // End the group namespace for the expression
-
-    if (!this.settings.globalGroup) {
-      this.gullet.endGroup();
     }
 
+    try {
+      // Try to parse the input
+      var parse = this.parseExpression(false); // If we succeeded, make sure there's an EOF at the end
+
+      this.expect("EOF"); // End the group namespace for the expression
+
+      if (!this.settings.globalGroup) {
+        this.gullet.endGroup();
+      }
+
+      return parse; // Close any leftover groups in case of a parse error.
+    } finally {
+      this.gullet.endGroups();
+    }
+  }
+  /**
+   * Fully parse a separate sequence of tokens as a separate job.
+   * Tokens should be specified in reverse order, as in a MacroDefinition.
+   */
+  ;
+
+  _proto.subparse = function subparse(tokens) {
+    // Save the next token from the current job.
+    var oldToken = this.nextToken;
+    this.consume(); // Run the new job, terminating it with an excess '}'
+
+    this.gullet.pushToken(new Token("}"));
+    this.gullet.pushTokens(tokens);
+    var parse = this.parseExpression(false);
+    this.expect("}"); // Restore the next token from the current job.
+
+    this.nextToken = oldToken;
     return parse;
   };
 
@@ -17054,7 +17400,8 @@ var Parser = /*#__PURE__*/function () {
    */
   ;
 
-  _proto.handleSupSubscript = function handleSupSubscript(name) {
+  _proto.handleSupSubscript = function handleSupSubscript(name // For error reporting.
+  ) {
     var symbolToken = this.fetch();
     var symbol = symbolToken.text;
     this.consume();
@@ -17211,7 +17558,8 @@ var Parser = /*#__PURE__*/function () {
    */
   ;
 
-  _proto.parseFunction = function parseFunction(breakOnTokenText, name) {
+  _proto.parseFunction = function parseFunction(breakOnTokenText, name // For determining its context
+  ) {
     var token = this.fetch();
     var func = token.text;
     var funcData = src_functions[func];
@@ -17413,7 +17761,8 @@ var Parser = /*#__PURE__*/function () {
    */
   ;
 
-  _proto.parseRegexGroup = function parseRegexGroup(regex, modeName) {
+  _proto.parseRegexGroup = function parseRegexGroup(regex, modeName // Used to describe the mode in error messages.
+  ) {
     var firstToken = this.fetch();
     var lastToken = firstToken;
     var str = "";
@@ -17818,7 +18167,7 @@ var Parser = /*#__PURE__*/function () {
           throw new src_ParseError("Unknown accent ' " + accent + "'", nucleus);
         }
 
-        var command = unicodeAccents[accent][this.mode];
+        var command = unicodeAccents[accent][this.mode] || unicodeAccents[accent].text;
 
         if (!command) {
           throw new src_ParseError("Accent " + accent + " unsupported in " + this.mode + " mode", nucleus);
@@ -17854,6 +18203,7 @@ Parser.endOfExpression = ["}", "\\endgroup", "\\end", "\\right", "&"];
 
 
 
+
 /**
  * Parses an expression using a Parser, then returns the parsed result.
  */
@@ -17876,12 +18226,11 @@ var parseTree = function parseTree(toParse, settings) {
       throw new src_ParseError("\\tag works only in display equations");
     }
 
-    parser.gullet.feed("\\df@tag");
     tree = [{
       type: "tag",
       mode: "text",
       body: tree,
-      tag: parser.parse()
+      tag: parser.subparse([new Token("\\df@tag")])
     }];
   }
 
@@ -18002,7 +18351,7 @@ var renderToHTMLTree = function renderToHTMLTree(expression, options) {
   /**
    * Current KaTeX version
    */
-  version: "0.13.11",
+  version: "0.15.2",
 
   /**
    * Renders the given LaTeX into an HTML+MathML combination, and adds
@@ -18020,6 +18369,11 @@ var renderToHTMLTree = function renderToHTMLTree(expression, options) {
    * KaTeX error, usually during parsing.
    */
   ParseError: src_ParseError,
+
+  /**
+   * The shema of Settings
+   */
+  SETTINGS_SCHEMA: SETTINGS_SCHEMA,
 
   /**
    * Parses the given LaTeX into KaTeX's internal parse tree structure,
@@ -18095,7 +18449,7 @@ var renderToHTMLTree = function renderToHTMLTree(expression, options) {
 
 
 /* harmony default export */ var katex_webpack = (katex);
-__webpack_exports__ = __webpack_exports__.default;
+__webpack_exports__ = __webpack_exports__["default"];
 /******/ 	return __webpack_exports__;
 /******/ })()
 ;
