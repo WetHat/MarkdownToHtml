@@ -12,17 +12,36 @@ import-module -Name '../MarkdownCodeDocs' -Force
 $version = (Get-Module MarkDownToHTML).Version
 Write-Information -MessageData "Version: $version" -InformationAction Continue
 # Only major and minor revisions generate new docs
-$version = "$($version.Major).$($version.Minor).0"
-
-$markdown = "markdown/$version"
-# Clear previously generated Markdown
-Remove-Item $markdown -Recurse -Force -ErrorAction:SilentlyContinue
-Publish-PSModuleMarkdown -moduleName 'MarkdownToHTML' -Destination $markdown
+$version = "$($version.Major).$($version.Minor)"
 
 # JSON configuration
 $SCRIPT:config = Get-Content (Join-Path $projectDir 'Build.json') | ConvertFrom-Json
 if (!$config) {
     throw 'No build configuration found!'
+}
+
+$markdown = Join-Path $SCRIPT:projectDir $config.markdown_dir
+$markdown_version = Join-Path $markdown $version
+
+# Clear previously generated Markdown
+Remove-Item $markdown_version -Recurse -Force -ErrorAction:SilentlyContinue -Exclude 'Build.json'
+# Generate new docs
+Publish-PSModuleMarkdown -moduleName 'MarkdownToHTML' -Destination $markdown_version
+
+# make / update  version specific config files
+[System.io.Fileinfo]$configTemplate = Join-Path $projectDir 'Build_template.json'
+
+Get-ChildItem "$markdown/[0-9]*" -Directory `
+| ForEach-Object {
+    [System.io.FileInfo]$cfg = Join-Path $_.FullName 'Build.json'
+    if (!$cfg.Exists -or ($cfg.LastWriteTime -lt $configTemplate.LastWriteTime)) {
+        Write-Information "Creating version specific configuration $($cfg.FullName)"
+        Get-Content $configTemplate `
+        | ForEach-Object {
+            $_.Replace("{{version}}", $version)
+        } > $cfg.FullName
+    } 
+       
 }
 
 # Location of the static HTML site to build
@@ -31,45 +50,36 @@ $SCRIPT:staticSite = Join-Path $projectDir $config.site_dir
 # Clean up the static HTML site before build
 Remove-Item $staticSite -Recurse -Force -ErrorAction:SilentlyContinue
 
-# Set-up the content mapping rules for replacing the template placeholders
+# Set-up the content mapping rules for replacing template placeholders
+# of the form {{name}}.
 $SCRIPT:contentMap = @{
 	# Add additional mappings here...
-	'{{footer}}' =  $config.Footer # Footer text from configuration
+	'{{footer}}' = {
+		param($fragment)
+		$fragment.EffectiveConfiguration.Footer # Fetch footer text from configuration
+	}
 	'{{nav}}'    = {
 		param($fragment) # the html fragment created from a markdown file
-		# determine the module version this fragment is for by inspecting
-		# its relative path
-		$parts = $fragment.RelativePath -split '/'
-		$docversion = if ($parts.length -gt 1) {
-		               $parts[0] # first dir is version
-		           } else {
-		               $version # default to latest version
-		           }
-
-		$navcfg = $config.navigation_bar # navigation bar configuration
-
+		$cfg = $fragment.EffectiveConfiguration
+		$navcfg = $cfg.navigation_bar # navigation bar configuration
 		# Create the navigation items configured in 'Build.json'
-		$config.site_navigation | ForEach-Object {
-		    $props = Get-Member -InputObject $_ -MemberType NoteProperty
-            $name = $props.Name
-            # build navspec for the correct version
-            @{ $name = $_.$name -Replace '{{version}}',$docversion}
-		  } `
-		| ConvertTo-NavigationItem -RelativePath $fragment.RelativePath `
-		                           -NavTemplate $navcfg.templates
+		New-SiteNavigation -NavitemSpecs $cfg.site_navigation `
+		                   -RelativePath $fragment.RelativePath `
+		                   -NavTemplate $navcfg.templates
 		# Create navigation items to headings on the local page.
-		# This requires the `autoidentifiers` extension to be enabled.
-		New-PageHeadingNavigation -NavitemSpecs $config.page_navigation `
-                                          -HtmlFragment $fragment `
+		# This requires the `autoidentifiers` extension to be enabled!
+		New-PageHeadingNavigation -NavitemSpecs $cfg.page_navigation_header `
+		                          -HTMLfragment $fragment `
 		                          -NavTemplate $navcfg.templates `
 		                          -HeadingLevels $navcfg.capture_page_headings
 	}
 }
 
+# Conversion pipeline
 $SCRIPT:markdown = Join-Path $projectDir $config.markdown_dir
-Find-MarkdownFiles $markdown -Exclude $config.Exclude `
+Find-MarkdownFiles $markdown -Exclude $config.Exclude -BuildConfiguration $config `
 | Convert-MarkdownToHTMLFragment -IncludeExtension $config.markdown_extensions -Split `
-| Convert-SvgbobToSvg -SiteDirectory $staticSite -Options $SCRIPT:config.svgbob `
+| Convert-SvgbobToSvg -SiteDirectory $staticSite `
 | Publish-StaticHTMLSite -Template (Join-Path $projectDir $config.HTML_Template) `
                          -ContentMap  $contentMap `
 						 -MediaDirectory $markdown `

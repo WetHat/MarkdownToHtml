@@ -103,10 +103,11 @@ Make sure to use the `-Online` switch for best reading experience.
 
 ## Latest Version
 
-> * **2.5**: [Documentation](2.5.0/MarkdownToHTML.md) - [Release Notes](2.5.0/MarkdownToHTML.md#release-notes).
+> * **2.6**: [Documentation](2.6/MarkdownToHTML.md) - [Release Notes](2.6/MarkdownToHTML.md#release-notes).
 
 ## Previous Versions
 
+> * **2.5**: [Documentation](2.5.0/MarkdownToHTML.md) - [Release Notes](2.5.0/MarkdownToHTML.md#release-notes).
 > * **2.4**: [Documentation](2.4.0/MarkdownToHTML.md) - [Release Notes](2.4.0/MarkdownToHTML.md#release-notes).
 > * **2.3**: [Documentation](2.3.1/MarkdownToHTML.md) - [Release Notes](2.3.1/MarkdownToHTML.md#release-notes).
 
