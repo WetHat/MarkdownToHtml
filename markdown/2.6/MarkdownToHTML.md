@@ -12,8 +12,8 @@ HTML sites in various ways.
 | [Markdig](https://github.com/lunet-io/markdig)  | 0.26.0 | Fast Markdown processor for .NET
 | [highlight.js](https://highlightjs.org/)        | 9.17.1 | Code syntax highlighter
 | [KaTeX](https://katex.org/)                     | 0.15.2 | Math typesetting
-| [Mermaid](http://mermaid-js.github.io/mermaid/) | 8.10.1 | Diagramming
-| [Svgbob](https://lib.rs/crates/svgbob_cli)      | 0.5.0  | Text based diagrammimg
+| [Mermaid](http://mermaid-js.github.io/mermaid/) | 8.13.9 | Diagramming
+| [Svgbob](https://lib.rs/crates/svgbob_cli)      | 0.6.2  | Text based diagramming
 
 # Known Incompatibilities
 
@@ -42,12 +42,14 @@ See [version 2.0.0](../2.4.0/MarkdownToHTML.md#2.0.0) release notes for upgrade 
 
 * Cascading build configuration. `Build.json` configuration files can be added
   at any level in the Markdown subtree to provide directory specific configuration.
-  Can be used to supperseed site configurations or build a directory specific
-  navigation bar. See [Subtree Configuration](about_MarkdownToHTML.md#subtree-customization)
+  Can be used to superseed site configurations or build a directory specific
+  navigation bars. See [Subtree Configuration](about_MarkdownToHTML.md#subtree-customization)
 
 * External components updated:
   * [KaTeX](https://katex.org/)
   * [Markdig](https://github.com/lunet-io/markdig)
+  * [Mermaid](http://mermaid-js.github.io/mermaid/)
+  * [Svgbob](https://lib.rs/crates/svgbob_cli)
 
 ## 2.5.0 {#2.5.0}
 

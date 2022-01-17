@@ -1,77 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="464" height="544">
-    <style>line, path, circle,rect,polygon {
-                          stroke: black;
-                          stroke-width: 2;
-                          stroke-opacity: 1;
-                          fill-opacity: 1;
-                          stroke-linecap: round;
-                          stroke-linejoin: miter;
-                        }
-
-                    text {
-                        /* This fix the spacing bug in svg text*/
-                        white-space: pre;
-                        fill: black;
-                        }
-                        rect.backdrop{
-                            stroke: none;
-                            fill: white;
-                        }
-                        .broken{
-                            stroke-dasharray: 8;
-                        }
-                        .filled{
-                            fill: black;
-                        }
-                        .bg_filled{
-                            fill: white;
-                        }
-                        .nofill{
-                            fill: white;
-                        }
-
-                        text {
-                         font-family: Monospace;
-                         font-size: 14px;
-                        }
-
-                        .end_marked_arrow{
-                            marker-end: url(#arrow);
-                         }
-                        .start_marked_arrow{
-                            marker-start: url(#arrow);
-                         }
-
-                        .end_marked_diamond{
-                            marker-end: url(#diamond);
-                         }
-                        .start_marked_diamond{
-                            marker-start: url(#diamond);
-                         }
-
-                        .end_marked_circle{
-                            marker-end: url(#circle);
-                         }
-                        .start_marked_circle{
-                            marker-start: url(#circle);
-                         }
-
-                        .end_marked_open_circle{
-                            marker-end: url(#open_circle);
-                         }
-                        .start_marked_open_circle{
-                            marker-start: url(#open_circle);
-                         }
-
-                        .end_marked_big_open_circle{
-                            marker-end: url(#big_open_circle);
-                         }
-                        .start_marked_big_open_circle{
-                            marker-start: url(#big_open_circle);
-                         }
-
-                         
-                        </style>
+    <style>
+        line, path, circle, rect, polygon{stroke:black;stroke-width:2;stroke-opacity:1;fill-opacity:1;stroke-linecap:round;stroke-linejoin:miter;}text{font-family:Monospace;font-size:14px;}rect.backdrop{stroke:none;fill:white;}.broken{stroke-dasharray:8;}.filled{fill:black;}.bg_filled{fill:white;}.nofill{fill:white;}.end_marked_arrow{marker-end:url(#arrow);}.start_marked_arrow{marker-start:url(#arrow);}.end_marked_diamond{marker-end:url(#diamond);}.start_marked_diamond{marker-start:url(#diamond);}.end_marked_circle{marker-end:url(#circle);}.start_marked_circle{marker-start:url(#circle);}.end_marked_open_circle{marker-end:url(#open_circle);}.start_marked_open_circle{marker-start:url(#open_circle);}.end_marked_big_open_circle{marker-end:url(#big_open_circle);}.start_marked_big_open_circle{marker-start:url(#big_open_circle);}
+        <!--separator-->
+        
+    </style>
     <defs>
         <marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <polygon points="0,0 0,4 4,2 0,0"></polygon>

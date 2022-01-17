@@ -344,13 +344,13 @@ conversion process you should
 > In both cases the template directories have following structure:
 >
 > ~~~ bob
->  .----.
-> ( root )                 <- template root directory
->  '-.--'
->    |- js                 <- javascripts "(*.js)"
->    |- katex              <- LateX math renderer
->    |- styles             <- stylesheets "(*.css)"
->    '- "md-template.html" <- Html page template
+>  . ------ .
+> ( template )               <- template root directory
+>  '---.----'
+>      |- js                 <- javascripts "(*.js)"
+>      |- katex              <- LateX math renderer
+>      |- styles             <- stylesheets "(*.css)"
+>      '- "md-template.html" <- Html page template
 > ~~~
 >
 > `md-template.html`
