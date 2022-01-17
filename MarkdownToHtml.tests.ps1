@@ -89,7 +89,7 @@ Describe 'ConversionProjects' {
             $config  = Get-Content $configPath -Encoding UTF8 | ConvertFrom-Json
 
 			# Debug
-		    $ResultPath = $ResultPath -replace 'TestDrive:/',"e:/temp/"
+		    #$ResultPath = $ResultPath -replace 'TestDrive:/',"e:/temp/ttt/"
 
             # Create a new Project
             New-StaticHTMLSiteProject -ProjectDirectory $ResultPath
