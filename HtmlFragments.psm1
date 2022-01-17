@@ -48,7 +48,11 @@ Svg conversion options. An object or hashtable with follwing properties or keys:
 | `stroke_width` | Stroke width for all lines (default: 2)      |
 
 When using conversion projects instantiated by `New-StaticHTMLSiteProject` these
-parameters are configured in `Build.json` parameter section `svgbob`.
+parameters are usually configured in `Build.json` in section `svgbob` and this
+parameter should be omitted for these configurations to take effect.
+
+**Note**: If this parameter is specified, it superseeds the
+configuration from `Build.json`.
 
 .INPUTS
 HTML fragment objects emitted by `Convert-MarkdownToHTMLFragment` with
@@ -277,10 +281,11 @@ The input object can have one of the following types:
 * A plain markdown string [`string`].
 * A markdown descriptor object which is a [`hashtable`] with following contents:
 
-  | Key            | Value Type | Description                                                   |
-  | :------------- | :--------- | :------------------------------------------------------------ |
-  | `Markdown`     | [`string`] | The markdown text.                                            |
-  | `RelativePath` | [`string`] | Relative path of the Markdown file below the input directory. |
+  | Key                      | Value Type         | Description                                                   |
+  | :----------------------- | :----------------- | :------------------------------------------------------------ |
+  | `Markdown`               | [`string`]         | The markdown text.                                            |
+  | `RelativePath`           | [`string`]         | Relative path of the Markdown file below the input directory. |
+  | `EffectiveConfiguration` | [`PSCustomObject`] | Optional: Build configuration in effect for this fragment     |
 
 .PARAMETER IncludeExtension
 Comma separated list of Markdown parsing extension names.
@@ -319,11 +324,12 @@ or a markdown descriptor `[hashtable]`.
 .OUTPUTS
 HTML fragment object with following properties:
 
-| Property       | Description                                                         |
-| :------------: | :------------------------------------------------------------------ |
-| `Title`        | Optional page title. The first heading in the Markdown content.     |
-| `HtmlFragment` | The HTML fragment string or array generated from the Markdown text. |
-| `RelativePath` | Passed through from the input object, provided it exists.           |
+| Property                 | Description                                                         |
+| :----------------------: | :------------------------------------------------------------------ |
+| `Title`                  | Optional page title. The first heading in the Markdown content.     |
+| `HtmlFragment`           | The HTML fragment string or array generated from the Markdown text. |
+| `RelativePath`           | Passed through from the input object, provided it exists.           |
+| `EffectiveConfiguration` | Passed through from the input object, provided it exists.           |
 
 .NOTES
 The conversion to HTML fragments also includes:
@@ -520,8 +526,8 @@ function Convert-MarkdownToHTMLFragment
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU6IFogUIIFTKWklK6v6fqLz/3
-# VaOgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUJjA4qWi70vTN/6vl1EqVWtlA
+# w6CgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -540,11 +546,11 @@ function Convert-MarkdownToHTMLFragment
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBSzm6adrMcEmXZI2HiEBa68yhfP
-# /TANBgkqhkiG9w0BAQEFAASCAQA/BMLf56i/6FWM0/9davrzwh8ePRTtA6TibYtn
-# fsixlHUiqteM5JF1rN7CHKtssrINGYKarA5b62iXUByslp8QrslR2D202vhocVcZ
-# H7BEQEHeMA9HY2xL1kSmXsAahq0TYAk9XTLLNPhHdW9UN4HFX4qO4zVq7Jcoo7nB
-# AgIB6+itDQbGplKTzv8nbFlWWluya0JqzTx/P2/JxRc1l8X9q6WVb1qxjxuhWpDE
-# h4HsJE+DftVEBIjNr+Kg6//TOxBLhiPpN1SoF4b9CnY5yYNna2qd3rl0/GEviuV+
-# 6ZnXs1m0Yct1JtFEPyQUnxlFbiBm3RZDM33eBG35AYDFXpWZ
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQN3aESlajxASsdHwnu87LqRiQd
+# YjANBgkqhkiG9w0BAQEFAASCAQAZoK4ebCldqXzhDCTgpcL2Bo9nCcHRcXgmoj9a
+# d/OAdnAs04VJzQ3g9b5SSJvamEBfzIAnqZPN/H3EYwbNvDgBNEDCwXo4mm7wUyJ5
+# TjsxYuzvdqugRJuyXeLbppTrQ7urD8G633Bmcddp/8nOKv+cZe2/xtlLStTso2JB
+# 3NuKSgESjdhkfgYzBIV05OLv9AJX1DCT3jdrQkbH9HcVSvQ3cdu07jAEW5nCGi4T
+# jvme+wggp7UGB4biklhA7FM7zr+WpGdfKeJHyxoCLdNN88kl4Wd6rwB1k0zvEKfC
+# bSK62z+XHhmsZVa3H+N7zqzTuItYvtjNRhmI14js+XWUuekF
 # SIG # End signature block

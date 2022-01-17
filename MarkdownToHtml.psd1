@@ -47,7 +47,7 @@ HTML sites in various ways.
 
 If you have have conversion projects which use the _mathematics_ extensions and
 were created with versions of this module older than 2.0.0 (i.e. 1.* or 0.*).
-See [version 2.0.0](MarkdownToHTML.md#2.0.0) release notes for upgrade instructions.
+See [version 2.0.0](../2.4.0/MarkdownToHTML.md#2.0.0) release notes for upgrade instructions.
 '@
 
 # Minimum version of the Windows PowerShell engine required by this module
@@ -146,6 +146,16 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
+## 2.6.0 {#2.6.0}
+
+* Cascading build configuration. `Build.json` configuration files can be added
+  at any level in the Markdown subtree to provide directory specific configuration.
+  Can be used to supperseed site configurations or build a directory specific
+  navigation bar. See [Subtree Configuratation](about_MarkdownToHTML.md#subtree-customization)
+
+* External components updated:
+  * svgbob
+
 ## 2.5.0 {#2.5.0}
 
 * [Markdig](https://github.com/lunet-io/markdig)  update to version 0.25.0
@@ -386,7 +396,7 @@ PrivateData = @{
 } # End of PrivateData hashtable
 
 # HelpInfo URI of this module
-HelpInfoURI = 'https://github.com/WetHat/MarkdownToHtml/blob/master/Documentation/MarkdownToHTML.md'
+HelpInfoURI = 'https://wethat.github.io/MarkdownToHtml/'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''

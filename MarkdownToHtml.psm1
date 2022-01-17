@@ -312,15 +312,24 @@ Find all Markdown file below a given directory.
 Recursively scans a directory and generates annotated `[System.IO.FileInfo]`
 objects for each Markdown file.
 
-The annotation is a `NoteProperty` named `RelativePath`. It contains the
-relative path of the Markdown file below the given directory.
+The annotations are of type `NoteProperty`. They are used in the downstream
+conversion process to determine the relative path of a markdown file (property
+`RelativePath`) and the build configuration in effect for the Markdown file
+(property `EffectiveConfiguration`).
 
 .PARAMETER Path
 Path to a directory containing Markdown files.
 
 .PARAMETER Exclude
-Omit the specified files. Enter comma separated list of path elements or
+Omit the specified files. A comma separated list of path elements or
 patterns, such as "D*.md". Wildcards are permitted.
+
+.PARAMETER BuildConfiguration
+Build configuration object. Usually obtained by reading a `Build.json` configuration
+file. See the [Static Site](about_MarkdownToHTML.md#static-site-project-customization)
+for details about configuration options and structure. This configuration is
+cascaded with configurations from `Build.json` files found at or above the
+location of the Markdown file.
 
 .INPUTS
 None
@@ -328,11 +337,19 @@ None
 .OUTPUTS
 An `[System.IO.FileInfo]` object for each Markdown file found below
 the given directory. The emitted
-`[System.IO.FileInfo]` objects are annotated with a `NoteProperty` named
-`RelativePath` which specifies the relative path of the Markdown file below the
-directory specified in the `Path` parameter. The `RelativePath` property is
-**mandatory** if `Publish-StaticHtmlSite` is used in the downstream conversion
-pipeline to generate HTML files in the correct locations.
+`[System.IO.FileInfo]` objects are annotated with properties of type `NoteProperty`:
+
+`RelativePath`
+:   Specifies the relative path of the Markdown file below the
+    directory specified in the `Path` parameter. The `RelativePath` property is
+    **mandatory** if `Publish-StaticHtmlSite` is used in the downstream conversion
+    pipeline to generate HTML files in the correct locations.
+
+`EffectiveConfiguration`
+:   An object similar to the one specified in parameter `-BuildConfiguration`.
+    Describes the build configuration in effect at the location of the Markdown
+    file. The effective configuration is determined by cascading all `Build.json`
+    files in at and above the location of the Markdown file.
 
 .EXAMPLE
 Find-MarkdownFiles -Path '...\Modules\MarkdownToHtml' | Select-Object -Property Mode,LastWriteTime,Length,Name,RelativePath | Format-Table
@@ -482,6 +499,7 @@ function Find-MarkdownFiles {
                                 $context = Split-Path $context -Parent
                                 $thisCfg = $effectiveBuildConfigs[$context]
                                 if ($thisCfg) {
+                                    # found an effective build configuration
                                     $effectiveCfg.site_navigation =  $thisCfg.site_navigation + $effectiveCfg.site_navigation
 
                                     Get-Member -InputObject $thisCfg `
@@ -1527,8 +1545,8 @@ function Update-ResourceLinks {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUwaYCMy0hamJkPfx5r6Gj5gdd
-# tuagggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUCcL2EBg4UEf1z9dCkifgyBJV
+# V/egggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1547,11 +1565,11 @@ function Update-ResourceLinks {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBStQYm7dZb60oJQDQdXPzcs9Xkw
-# XTANBgkqhkiG9w0BAQEFAASCAQBe4iDWaKcAmnGe0gCwcuVsYajuO4w13Evs+lKX
-# +p7FzLgFYGADcsqY+C7CHyALiLO9xpGR0MaxOhzahbwuE4wrk1KU47WOeUOQMAI7
-# rr7TFkw1b629BIuTtb8RqUDoTZnsN2A+aQXiM/fxfkHo+2cjvJFvw+RRfizzmRF7
-# Bz3CIO31W+LtLuHeXW62b7i8Ng8+oxftW8o1uVl2AbQ9QPqWT2+EURae2UV0s9rK
-# eH5OsQU2RS87YM72BZoYmb2OJysN8CN1610fv3PBtojG3fgw8F5xRKm6x7TBNQYk
-# zny87bx7/I5Py9HJNKvJbN1826fZoMeD+3QTMKqmHIVNXsI8
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRJd99J2e2/UR2wy3vQwoXya120
+# TTANBgkqhkiG9w0BAQEFAASCAQCF9vF1/nRK/9agaH9VaVpzA8otBCIs0UU0rsiU
+# KoPLu5bkjxjB9kWRGJCp9nnyuK1DVjYS4/8upkomNIqXqwOxjTwrC0TrsYkXQRgW
+# 63JMA13HhYxaDyisMKAFYydhQ8gZICWTHbN8kEpwnI9ykcm2fFe19jszyY3k+OGq
+# ThzbtYHmg/Oqlp7ODLxa6jrJcMUMnMoe4rmkePJ29Xe+xhyEweUhYvCV4a9VzAOc
+# M7w2H3qIDy/Z03dxG+Wyby32252GJ2Cw76wP4rwRb2kaBtaHKpQPzDPrjoJFEqTE
+# ClKm1SCx3nTM1T+muaWcYDisIo777Phr2FqzQY265RTQmAWE
 # SIG # End signature block
