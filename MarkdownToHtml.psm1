@@ -1412,7 +1412,7 @@ function New-PageHeadingNavigation {
         [parameter(Mandatory=$false,ValueFromPipeline=$false)]
         [object]$NavTemplate,
 
-        [ValidateNotNull()]
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
         [string]$HeadingLevels
     )
     # determine the values of missing parameters
@@ -1420,20 +1420,19 @@ function New-PageHeadingNavigation {
         if (!$NavTemplate -and ($navbar = $cfg.navigation_bar )) {
             $NavTemplate = $navbar.templates
         }
-        if (!$NavTemplate) {
-            $NavTemplate = $SCRIPT:defaultNavTemplate
-        }
-
         if (!$HeadingLevels -and $navbar -and $navbar.capture_page_headings) {
             $HeadingLevels = $navbar.capture_page_headings
         }
-        if (!$HeadingLevels) {
+    }
+    # provide defaults if needed
+    if (!$NavTemplate) {
+            $NavTemplate = $SCRIPT:defaultNavTemplate
+    }
+    if (!$HeadingLevels) {
             $HeadingLevels = "123" # capture levels 1 .. 3 by default
-        }
     }
 
-    # Emit the prefix page notation
-
+    # Emit the page header navbar items
 
     if ($NavitemSpecs -and $HTMLfragment.RelativePath) {
         New-SiteNavigation -NavitemSpecs $NavitemSpecs `
@@ -1444,6 +1443,7 @@ function New-PageHeadingNavigation {
         # fall back to string for backwards compatibility
         $HTMLfragment = $HTMLfragment.HTMLfragment
     }
+
     $HTMLfragment -split "`n" | ForEach-Object {
         $m = $hRE.Match($_)
         if ($m.Success -and $m.Groups.Count -eq 4) {
