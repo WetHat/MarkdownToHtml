@@ -22,7 +22,7 @@ if (!$config) {
 
 $markdown = Join-Path $SCRIPT:projectDir $config.markdown_dir
 $markdown_version = Join-Path $markdown $version
-
+$OutputEncoding = [System.Text.Encoding]::UTF8 # Send utf8 to external programs
 # Clear previously generated Markdown
 Remove-Item $markdown_version -Recurse -Force -ErrorAction:SilentlyContinue -Exclude 'Build.json'
 # Generate new docs
