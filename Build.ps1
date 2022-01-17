@@ -34,11 +34,12 @@ Publish-PSModuleMarkdown -moduleName 'MarkdownToHTML' -Destination $markdown_ver
 Get-ChildItem "$markdown/[0-9]*" -Directory `
 | ForEach-Object {
     [System.io.FileInfo]$cfg = Join-Path $_.FullName 'Build.json'
+    $ver = $_.Name
     if (!$cfg.Exists -or ($cfg.LastWriteTime -lt $configTemplate.LastWriteTime)) {
         Write-Information "Creating version specific configuration $($cfg.FullName)"
         Get-Content $configTemplate `
         | ForEach-Object {
-            $_.Replace("{{version}}", $version)
+            $_.Replace("{{version}}", $ver)
         } > $cfg.FullName
     } 
        

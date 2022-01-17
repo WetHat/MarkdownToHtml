@@ -16,7 +16,6 @@ Open Source project on GitHub at: [WetHat/MarkdownToHtml](https://github.com/Wet
 >     See the [example](#mermaid-diagrams).
 >   - [Svgbob](https://ivanceras.github.io/content/Svgbob.html) plain text,
 >     human readable diagrams. See the [example](#svgbob-plain-text-diagrams).
->     **New!**
 >   - [highlight.js](https://highlightjs.org/) code syntax highlighting.
 >     See the [example](#code-syntax-highlighting).
 >   - [KaTeX](https://katex.org/) math typesetting.
@@ -24,6 +23,10 @@ Open Source project on GitHub at: [WetHat/MarkdownToHtml](https://github.com/Wet
 > * Based on [Markdig](https://github.com/lunet-io/markdig),
 >   a fast, powerful, [CommonMark](http://commonmark.org/) compliant Markdown
 >   processor for .NET with more than 20 configurable extensions.
+> * Cascading build configurations. Each subtree in Markdown source tree can now
+>   have its dedicated build configuration. Among other things this makes it
+>   easy to configure the navitation bar in a directory specific way.
+>   **New!**
 
 # Installation and Update
 

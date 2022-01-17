@@ -14,8 +14,10 @@ Find all Markdown file below a given directory.
 Recursively scans a directory and generates annotated `[System.IO.FileInfo]`
 objects for each Markdown file.
 
-The annotation is a `NoteProperty` named `RelativePath`. It contains the
-relative path of the Markdown file below the given directory.
+The annotations are of type `NoteProperty`. They are used in the downstream
+conversion process to determine the relative path of a markdown file (property
+`RelativePath`) and the build configuration in effect for the Markdown file
+(property `EffectiveConfiguration`).
 
 
 
@@ -50,7 +52,7 @@ Accept wildcard characters?| true
 
 <blockquote>
 
-Omit the specified files. Enter comma separated list of path elements or
+Omit the specified files. A comma separated list of path elements or
 patterns, such as "D*.md". Wildcards are permitted.
 
 ---
@@ -70,7 +72,11 @@ Accept wildcard characters?| false
 
 <blockquote>
 
-
+Build configuration object. Usually obtained by reading a `Build.json` configuration
+file. See the [Static Site](about_MarkdownToHTML.md#static-site-project-customization)
+for details about configuration options and structure. This configuration is
+cascaded with the configurations from  `Build.json` files found at or above the
+location of the Markdown file.
 
 ---
 
@@ -95,11 +101,19 @@ None
 # Outputs
 An `[System.IO.FileInfo]` object for each Markdown file found below
 the given directory. The emitted
-`[System.IO.FileInfo]` objects are annotated with a `NoteProperty` named
-`RelativePath` which specifies the relative path of the Markdown file below the
-directory specified in the `Path` parameter. The `RelativePath` property is
-**mandatory** if `Publish-StaticHtmlSite` is used in the downstream conversion
-pipeline to generate HTML files in the correct locations.
+`[System.IO.FileInfo]` objects are annotated with properties of type `NoteProperty`:
+
+`RelativePath`
+:   Specifies the relative path of the Markdown file below the
+    directory specified in the `Path` parameter. The `RelativePath` property is
+    **mandatory** if `Publish-StaticHtmlSite` is used in the downstream conversion
+    pipeline to generate HTML files in the correct locations.
+
+`EffectiveConfiguration`
+:   An object similar to the one specified in parameter `-BuildConfiguration`.
+    Describes the build configuration in effect at the location of the Markdown
+    file. The effective configuration is determined by cascading all `Build.json`
+    files in at and above the location of the Markdown file.
 
 # Examples
 

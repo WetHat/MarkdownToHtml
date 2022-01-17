@@ -19,7 +19,7 @@ HTML sites in various ways.
 
 If you have have conversion projects which use the _mathematics_ extensions and
 were created with versions of this module older than 2.0.0 (i.e. 1.* or 0.*).
-See [version 2.0.0](MarkdownToHTML.md#2.0.0) release notes for upgrade instructions.
+See [version 2.0.0](../2.4.0/MarkdownToHTML.md#2.0.0) release notes for upgrade instructions.
 
 # Exported Functions
 
@@ -37,6 +37,10 @@ See [version 2.0.0](MarkdownToHTML.md#2.0.0) release notes for upgrade instructi
 * [Update-ResourceLinks](Update-ResourceLinks.md)
 
 # Release Notes
+
+## 2.6.0 {#2.6.0}
+
+TODO
 
 ## 2.5.0 {#2.5.0}
 
