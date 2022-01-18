@@ -6,7 +6,6 @@
     "HTML_template": "Template",
 
     "Exclude": [
-        "Build.json"
     ],
 
     "markdown_extensions": [
