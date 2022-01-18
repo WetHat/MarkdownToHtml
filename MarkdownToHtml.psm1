@@ -1285,8 +1285,8 @@ Usually this specification is something like:
 :   to add a separator line between the site navigation links from the
     page heading navigation links.
 
-`@{ 'Page Content' = ''}`
-:   to add the label _Page Content_ separating the site navigation links from
+`@{ 'Page Contents' = ''}`
+:   to add the label _Page Contents_ separating the site navigation links from
     the page heading navigation links.
 
 However, all link specifications supported by the `NavitemSpecs`
@@ -1545,8 +1545,8 @@ function Update-ResourceLinks {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUPQ4VCQrLr1VyjtKY/5Srrw+r
-# ol2gggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUN+SoIj9eBg6aIt/OFcipdess
+# poygggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1565,11 +1565,11 @@ function Update-ResourceLinks {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQ0VpYGQIOh4v8f0Fl019LUVrRb
-# iTANBgkqhkiG9w0BAQEFAASCAQB8R5mfy93ZgPXXDzpLqMxJuLKPJ14RskEax7cI
-# w216gxXWc/VI+yvWaM7hF3CGn1XEwbvVahI25wv0Tt+FCle2WHcJ9fX8ehjOq6RB
-# YI3K07wI1HVOYXEC2254i97zxzY/Z0x+LKXrx4tdT6HyfSXSM4IegG9l93xT4YJN
-# ewBujJrtlICj38hwjskN3RjKJy12iEd5tXOG9gv/MZep0ldJ1CwLttDcMYO3CkRv
-# Fne5aOUe1g0GCA3bUH2/GQ+SjsJzAm1AchjFu026Vq2pPgatZgWKx+DUs7VAIG1Q
-# vthIjeCpS7gTLGERmzXSSlU/V6vcaAE159wHw3NIfr90pdEh
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRB1BUs763VDf9L8KiVNGvMhPff
+# MjANBgkqhkiG9w0BAQEFAASCAQAdgrBbVdXOnlBMzcS1khojWnhSFKzA0vet2y3X
+# 1E2LRhVT2l6n/EKtMg+v72vfBhajspPip3q1Zhq2TVHw5dX01+xNDMCiVL4d7Ksl
+# ZeYofkLCWHzdyzHVaep+ja369G5B9+hhR5CBgZAV7zcecuQzfJ5P0x2l9IP8VN5d
+# RwrumGD4XEBReqw/Nz9hBm8tPjgrq9zdB5j/Npk7WzSc8KG1LMljPxDqK3LUQrlG
+# M0Ylb9IsZPSoJURFhhwlMeidxq8W2S3/QY2zbzoIsyjJ6Z1zJ9Wbh3gn7IL6TD18
+# 0Xowop/3s2Z45wvJrtvvNxCRinpn9er+V90P61FW9usLiFqz
 # SIG # End signature block

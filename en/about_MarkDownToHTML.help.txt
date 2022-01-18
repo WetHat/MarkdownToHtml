@@ -589,8 +589,8 @@ CUSTOMIZATION
     >     |        to add a separator line between the site navigation links from the
     >     |        page heading navigation links.
     >     |
-    >     |     * `@{ 'Page Content' = ''}` -
-    >     |        to add the label _Page Content_ separating the site navigation links from
+    >     |     * `@{ 'Page Contents' = ''}` -
+    >     |        to add the label _Page Contents_ separating the site navigation links from
     >     |        the page heading navigation links.
     >     |
     >     |     However, all link specifications supported by the parameter `NavitemSpecs`
