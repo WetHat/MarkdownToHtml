@@ -40,7 +40,7 @@ Get-ChildItem "$markdown/[0-9]*" -Directory `
         Get-Content $configTemplate `
         | ForEach-Object {
             $_.Replace("{{version}}", $ver)
-        } > $cfg.FullName
+        } | Out-File $cfg.FullName -Encoding utf8
     } 
        
 }
