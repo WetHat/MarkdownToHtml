@@ -8,6 +8,8 @@
     "Exclude": [
     ],
 
+    "github_pages": false,
+
     "markdown_extensions": [
         "common",
         "definitionlists",
@@ -39,8 +41,6 @@
         { "---": "" }
     ],
 
-    "github_pages": false,
-
     "svgbob": {
         "background": "white",
         "fill_color": "black",
@@ -49,4 +49,4 @@
         "scale": 1,
         "stroke_width": 2
     }
-  }
+}
