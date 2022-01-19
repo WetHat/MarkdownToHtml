@@ -299,7 +299,7 @@ function Publish-StaticHtmlSite {
     END {
         if ($MediaDirectory) {
           # copy all assets to the site directory
-          Copy-Item -Path "$MediaDirectory/*" -Recurse -Exclude '*.md','*.markdown' -Destination $SiteDirectory -Force
+          Copy-Item -Path "$MediaDirectory/*" -Recurse -Exclude '*.md','*.markdown','Build.json' -Destination $SiteDirectory -Force
         }
     }
 }
@@ -440,7 +440,7 @@ function Find-MarkdownFiles {
                                    -MemberType NoteProperty `
                                    -Name 'Joined' `
                                    -Value $true
-                        $effectiveBuildConfigs = @{'' = $BuildConfiguration} # location specific build configurations
+                        $effectiveBuildConfigs = @{'..' = $BuildConfiguration} # default build configurations
                         # collect and load all Build.json files.
                         Write-Verbose "Scanning $($topItem) for Build.json configuration files..."
                         Get-ChildItem -LiteralPath $topItem -Recurse -File -Filter 'Build.json' `
@@ -457,7 +457,7 @@ function Find-MarkdownFiles {
                             # Relative path to this config file. This information
                             # is used later to shorten the relative URLs as much as
                             # possible.
-                            $navRoot = $_.DirectoryName.Substring($basepath.Length + 1)
+                            $navRoot = $_.DirectoryName.Substring($basepath.Length).TrimStart('\')
                             # set the relative root path for the additional site navigation specs
                             foreach ($navspec in $thisConfig.site_navigation) {
                                 Add-Member -InputObject $navspec `
@@ -465,10 +465,9 @@ function Find-MarkdownFiles {
                                            -Name 'NavRoot' `
                                            -Value $navRoot
                             }
-                            # record this configuration
                             $effectiveBuildConfigs[$navRoot] = $thisConfig }
                     }
-                    # these configuration options are ignored in local
+                    # these configuration options are ignored in subtree
                     # Build.json files.
                     $bannedProperties = @('site_navigation'
                                           'Exclude'
@@ -495,8 +494,13 @@ function Find-MarkdownFiles {
                         if (!$effectiveCfg.Joined) {
                             # walk up the directory tree joining all configurations
 
-                            while ($context.Length -gt 0) {
-                                $context = Split-Path $context -Parent
+                            while (!$context.Equals('..')) {
+                                $context = if ([string]::Empty.Equals($context)) {
+                                                '..' # default configuration at last
+                                            } else {
+                                                Split-Path $context -Parent
+                                            }
+
                                 $thisCfg = $effectiveBuildConfigs[$context]
                                 if ($thisCfg) {
                                     # found an effective build configuration
@@ -1545,8 +1549,8 @@ function Update-ResourceLinks {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUN+SoIj9eBg6aIt/OFcipdess
-# poygggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUa180M4DvEcdhjTuzLbvbbw4Y
+# MeegggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1565,11 +1569,11 @@ function Update-ResourceLinks {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRB1BUs763VDf9L8KiVNGvMhPff
-# MjANBgkqhkiG9w0BAQEFAASCAQAdgrBbVdXOnlBMzcS1khojWnhSFKzA0vet2y3X
-# 1E2LRhVT2l6n/EKtMg+v72vfBhajspPip3q1Zhq2TVHw5dX01+xNDMCiVL4d7Ksl
-# ZeYofkLCWHzdyzHVaep+ja369G5B9+hhR5CBgZAV7zcecuQzfJ5P0x2l9IP8VN5d
-# RwrumGD4XEBReqw/Nz9hBm8tPjgrq9zdB5j/Npk7WzSc8KG1LMljPxDqK3LUQrlG
-# M0Ylb9IsZPSoJURFhhwlMeidxq8W2S3/QY2zbzoIsyjJ6Z1zJ9Wbh3gn7IL6TD18
-# 0Xowop/3s2Z45wvJrtvvNxCRinpn9er+V90P61FW9usLiFqz
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTjdGwtx/RhRRmuFwzZx9+lONyz
+# ODANBgkqhkiG9w0BAQEFAASCAQAdA2X1MbAa9UuWuNi/3TsiS/gpgboesguZ3fPn
+# v4c4evDelgzA2ENYrywUMnq/omIeyspO/4jUcL1XjhPt/XkGddBBFE8WAoWODou1
+# 1THdjeEh8imO2UCdREgxXVxL2Nk9o1Azp1XmTm68+K6NRf6RqCnTVw5/nshm3eDs
+# vfk46bMALvBaTbmRCVOJ4dRobl+sWigfNMzbDLcHXKFNtaCEPpbrhI9bPOPzEZV8
+# f+IGsohIo5sCXBLGalevM1ASPhfkaybGQeDQVc0sJYGJnUhyG+A97RLVDTQ7lQHz
+# JdS8zIqitO6zLGoqVnV6tgOv+c3M0hpmTl3Kzfxr7Ei9ZtyQ
 # SIG # End signature block
