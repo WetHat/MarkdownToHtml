@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.6.0'
+ModuleVersion = '2.6.1'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'
@@ -146,6 +146,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
+## 2.6.1 {#2.6.1}
+
+* Fixed: `Build.json` files directly under `markdown_dir` did not work.
+
 ## 2.6.0 {#2.6.0}
 
 * Cascading build configuration. `Build.json` configuration files can be added
