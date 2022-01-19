@@ -65,8 +65,8 @@ Usually this specification is something like:
 :   to add a separator line between the site navigation links from the
     page heading navigation links.
 
-`@{ 'Page Content' = ''}`
-:   to add the label _Page Content_ separating the site navigation links from
+`@{ 'Page Contents' = ''}`
+:   to add the label _Page Contents_ separating the site navigation links from
     the page heading navigation links.
 
 However, all link specifications supported by the `NavitemSpecs`
@@ -268,4 +268,4 @@ the contents of the navigation bar (placeholder `{{nav}}`).
 
 ---
 
-<cite>Module: MarkDownToHTML; Version: 2.6.0; (c) 2018-2022 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkDownToHTML; Version: 2.6.1; (c) 2018-2022 WetHat Lab. All rights reserved.</cite>

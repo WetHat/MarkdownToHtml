@@ -92,4 +92,4 @@ The new conversion template directory `[System.IO.DirectoryInfo]`.
 
 ---
 
-<cite>Module: MarkDownToHTML; Version: 2.6.0; (c) 2018-2022 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkDownToHTML; Version: 2.6.1; (c) 2018-2022 WetHat Lab. All rights reserved.</cite>

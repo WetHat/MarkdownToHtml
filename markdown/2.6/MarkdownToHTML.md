@@ -1,4 +1,4 @@
-﻿# Module MarkDownToHTML 2.6.0 {.title}
+﻿# Module MarkDownToHTML 2.6.1 {.title}
 
 **Tags**: Markdown, HTML, Converter, Markdown, HTML, Converter
 
@@ -37,6 +37,11 @@ See [version 2.0.0](../2.4.0/MarkdownToHTML.md#2.0.0) release notes for upgrade 
 * [Update-ResourceLinks](Update-ResourceLinks.md)
 
 # Release Notes
+
+## 2.6.1 {#2.6.1}
+
+* Fixed: `Build.json` files directly under `markdown_dir` did not work.
+* `Build.json` no longer coped to `site_dir`
 
 ## 2.6.0 {#2.6.0}
 
@@ -289,4 +294,4 @@ See [version 2.0.0](../2.4.0/MarkdownToHTML.md#2.0.0) release notes for upgrade 
 
 ---
 
-<cite>Module: MarkDownToHTML; Version: 2.6.0; (c) 2018-2022 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkDownToHTML; Version: 2.6.1; (c) 2018-2022 WetHat Lab. All rights reserved.</cite>
