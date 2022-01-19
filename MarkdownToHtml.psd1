@@ -150,6 +150,7 @@ PrivateData = @{
 
 * Fixed: `Build.json` files directly under `markdown_dir` did not work.
 * `Build.json` no longer coped to `site_dir`
+* Misc. cosmetic fixes
 
 ## 2.6.0 {#2.6.0}
 
