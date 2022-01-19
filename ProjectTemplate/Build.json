@@ -8,8 +8,6 @@
     "Exclude": [
     ],
 
-    "github_pages": false,
-
     "markdown_extensions": [
         "common",
         "definitionlists",
@@ -18,6 +16,8 @@
         "pipetables",
         "autoidentifiers"
     ],
+
+    "github_pages": false,
 
     "footer": "Template project Created by PowerShell Module <a href='https://github.com/WetHat/MarkdownToHtml'>MarkdownToHTML</a>.",
 
