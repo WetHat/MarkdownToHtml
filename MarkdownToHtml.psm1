@@ -1092,12 +1092,15 @@ function ConvertTo-NavigationItem {
                 while ($fromPathSegments[$unique] -eq $toPathSegments[$unique] -and $unique -lt $n) {
                     $unique++
                 }
-                $RelativePath = $fromPathSegments[$unique..$($fromPathSegments.Count-1)] -join '/'
+                $relpath = $fromPathSegments[$unique..$($fromPathSegments.Count-1)] -join '/'
+            } else {
+                $relpath = $RelativePath.Replace('\','/')
             }
+
             Expand-HtmlTemplate -InputObject $navitem -ContentMap @{
                 '{{navurl}}'  = $link
                 '{{navtext}}' = $name
-            } |  Update-ResourceLinks -RelativePath $RelativePath
+            } |  Update-ResourceLinks -RelativePath $relpath
 	    }
     }
 }
