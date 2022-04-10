@@ -503,7 +503,7 @@ function Convert-MarkdownToHTMLFragment
         $htmlDescriptor = @{'HtmlFragment' = $fragment }
         $match = [regex]::Match($md,'^[#\s]*([^\r\n\{]+)')
         if ($match.Success) {
-            $htmlDescriptor.Title = $match.Groups[1].Value
+            $htmlDescriptor.Title = $match.Groups[1].Value # first heading
         } elseif ($InputObject.BaseName) {
             $htmlDescriptor.Title = $InputObject.BaseName
         }
