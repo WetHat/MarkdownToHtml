@@ -396,47 +396,48 @@ CUSTOMIZATION
     >     `md-template.html`:
     >
     >     +:-----------------:+-------------------------------------------------------------------------------+
-    >     | File              | Description
+    >     | File              | Description                                                                   |
     >     +===================+===============================================================================+
-    >     |`highlight.pack.js`| Syntax Highlighting. Following languages are
-    >     |                   | preconfigured:
-    >     |                   | - Bash
-    >     |                   | - C#
-    >     |                   | - C++
-    >     |                   | - Clojure
-    >     |                   | - CMake
-    >     |                   | - CSS
-    >     |                   | - Diff
-    >     |                   | - DOS .bat
-    >     |                   | - F#
-    >     |                   | - Groovy
-    >     |                   | - HTML/XML
-    >     |                   | - HTTP
-    >     |                   | - Java
-    >     |                   | - JavaScript
-    >     |                   | - JSON
-    >     |                   | - Lisp
-    >     |                   | - Makefile
-    >     |                   | - Markdown
-    >     |                   | - Maxima
-    >     |                   | - Perl
-    >     |                   | - Python
-    >     |                   | - PowerShell
-    >     |                   | - SQL
-    >     |                   | - YAML
-    >     |                   | To obtain syntax highlighting for languages which
-    >     |                   | are not provided by the factory configuration,
-    >     |                   | visit the
-    >     |                   | [Getting highlight.js](https://highlightjs.org/download/)
-    >     |                   | web-page and download a customized version of `highlight.js`
-    >     |                   | for the languages you need. This extension is by
-    >     |                   | loaded in the factory template `md-template.html`.
+    >     |`highlight.pack.js`| Syntax Highlighting. Following languages are preconfigured:                   |
+    >     |                   |                                                                               |
+    >     |                   | - Bash                                                                        |
+    >     |                   | - C#                                                                          |
+    >     |                   | - C++                                                                         |
+    >     |                   | - Clojure                                                                     |
+    >     |                   | - CMake                                                                       |
+    >     |                   | - CSS                                                                         |
+    >     |                   | - Diff                                                                        |
+    >     |                   | - DOS .bat                                                                    |
+    >     |                   | - F#                                                                          |
+    >     |                   | - Groovy                                                                      |
+    >     |                   | - HTML/XML                                                                    |
+    >     |                   | - HTTP                                                                        |
+    >     |                   | - Java                                                                        |
+    >     |                   | - JavaScript                                                                  |
+    >     |                   | - JSON                                                                        |
+    >     |                   | - Lisp                                                                        |
+    >     |                   | - Makefile                                                                    |
+    >     |                   | - Markdown                                                                    |
+    >     |                   | - Maxima                                                                      |
+    >     |                   | - Perl                                                                        |
+    >     |                   | - Python                                                                      |
+    >     |                   | - PowerShell                                                                  |
+    >     |                   | - SQL                                                                         |
+    >     |                   | - YAML                                                                        |
+    >     |                   |                                                                               |
+    >     |                   | To obtain syntax highlighting for languages which                             |
+    >     |                   | are not provided by the factory configuration,                                |
+    >     |                   | visit the                                                                     |
+    >     |                   | [Getting highlight.js](https://highlightjs.org/download/)                     |
+    >     |                   | web-page and download a customized version of `highlight.js`                  |
+    >     |                   | for the languages you need. This extension is by                              |
+    >     |                   | loaded in the factory template `md-template.html`.                            |
     >     +-------------------+-------------------------------------------------------------------------------+
-    >     | `mermaid.min.js`  | Rendering extension for
-    >     |                   | [Mermaid](http://mermaid-js.github.io/mermaid/)
-    >     |                   | diagramms. This extension is by loaded in the
-    >     |                   | factory template `md-template.html`. This extension requires
-    >     |                   | the `diagrams` Markdown extension.
+    >     | `mermaid.min.js`  | Rendering extension for                                                       |
+    >     |                   | [Mermaid](http://mermaid-js.github.io/mermaid/)                               |
+    >     |                   | diagramms. This extension is by loaded in the                                 |
+    >     |                   | factory template `md-template.html`. This extension requires                  |
+    >     |                   | the `diagrams` Markdown extension.                                            |
     >     +-------------------+-------------------------------------------------------------------------------+
     >
     > The `katex` directory
@@ -475,27 +476,27 @@ CUSTOMIZATION
     >
     > The Project Configuration File (`Build.json`):
     > :   Many aspects of a site project can be configured by editing
-    >     `Build.json`:
+    >     one or more of the following `Build.json` options:
     >     +---------------------------------------------------------------------+
     >     | `Build.json` Options
     >     +=====================================================================+
     >     | `site_dir`
     >     | :   The location of the generated static HTML site.
     >     |     Usually a path relative to the project `root` directory.
-    >     +---------------------------------------------------------------------+
+    >     |
     >     | `markdown_dir`
     >     | :   The location of Markdown sources and assets. Usually
     >     |     a path relative to the project `root`.
-    >     +---------------------------------------------------------------------+
+    >     |
     >     | `HTML_template`
     >     | :   The location of the HTML templates. Usually a path
     >     |     relative to the project `root`.
-    >     +---------------------------------------------------------------------+
+    >     |
     >     | `Exclude`
     >     | :   A list of patterns to match files in `"markdown_dir`
     >     |     which should be excluded from the build process.
     >     |     See `Find-MarkdownFiles` for more information.
-    >     +---------------------------------------------------------------------+
+    >     |
     >     | `markdown_extensions`
     >     | :   A list of markdown extension to use for the
     >     |     conversion process. See
@@ -508,95 +509,109 @@ CUSTOMIZATION
     >     |     * "diagrams",
     >     |     * "pipetables",
     >     |     * "autoidentifiers"
-    >     +---------------------------------------------------------------------+
+    >     |
     >     | `footer`
     >     | :   A HTML fragment to be added to each generated HTML
     >     |     page as footer.
-    >     +---------------------------------------------------------------------+
+    >     |
     >     | `navigation_bar`
     >     | :   HTML fragments to specify appearance and content of
     >     |     items in the navigation bar.
-    >     |     +--------------------------------------------------------------+
-    >     |     | `navigation_bar` Options
-    >     |     +==============================================================+
-    >     |     | `capture_page_headings`
-    >     |     | :   A string of numbers from 1 to 6 to
-    >     |     |     indicating which headings of the current page are to be automatically
-    >     |     |     appended to the navigation bar. If this option is
-    >     |     |     the empty string no page headings will be appended.
-    >     |     +--------------------------------------------------------------+
-    >     |     | `templates`
-    >     |     | :   HTML fragments specifying the appearance of items
-    >     |     |     in the navigation bar. These fragments contain placeholders which
-    >     |     |     are replaced with content from the `site_navigation` specification
-    >     |     |     in `Build.json` or navigation links to headings found on the page.
-    >     |     |     Following placeholders can be used in these HTML templates:
-    >     |     |     - `{{navurl}}`: Hyperlink to as specified in the
-    >     |     |       `site_navigation` option or a link to a page heading.
-    >     |     |     - `{{navtext}}`: The link's descriptive text.
-    >     |     |     - `{{level}}`: The heading level of links to page headings.
-    >     |     |
-    >     |     |     Following navigation bar item templates are available:
-    >     |     |     - `navitem`: A navigation link item template. Default:
+    >     |     +-----------------------------------------------------------------------+
+    >     |     | `navigation_bar` Options                                              |
+    >     |     +=======================================================================+
+    >     |     | `capture_page_headings`                                               |
+    >     |     | :   A string of numbers from 1 to 6 to                                |
+    >     |     |     indicating which headings of the current page are to be           |
+    >     |     |     automatically appended to the navigation bar. If this option is   |
+    >     |     |     the empty string no page headings will be appended.               |
+    >     |     |                                                                       |
+    >     |     | `templates`                                                           |
+    >     |     | :   HTML fragments specifying the appearance of items                 |
+    >     |     |     in the navigation bar. These fragments contain placeholders which |
+    >     |     |     are replaced with content from the `site_navigation` specification|
+    >     |     |     in `Build.json` or navigation links to headings found on the page.|
+    >     |     |     Following placeholders can be used in these HTML templates:       |
+    >     |     |     - `{{navurl}}`: Hyperlink to as specified in the                  |
+    >     |     |       `site_navigation` option or a link to a page heading.           |
+    >     |     |     - `{{navtext}}`: The link's descriptive text.                     |
+    >     |     |     - `{{level}}`: The heading level of links to page headings.       |
+    >     |     |                                                                       |
+    >     |     |     Following navigation bar item templates are available:            |
+    >     |     |     - `navitem`: A navigation link item template. Default:            |
     >     |     |       ~~~ html
     >     |     |       <button class='navitem'>
     >     |     |           <a href='{{navurl}}'>{{navtext}}</a>
     >     |     |       </button>
     >     |     |       ~~~
-    >     |     |     - `navlabel`: Template for a navigation bar label
-    >     |     |       (without link). Default:
+    >     |     |     - `navlabel`: Template for a navigation bar label                 |
+    >     |     |       (without link). Default:                                        |
     >     |     |       ~~~ html
     >     |     |       <div class='navlabel'>{{navtext}}</div>
     >     |     |       ~~~
-    >     |     |     - `navseparator`:  A separator between navigation bar
-    >     |     |       sections. Default:
+    >     |     |     - `navseparator`:  A separator between navigation bar             |
+    >     |     |       sections. Default:                                              |
     >     |     |       ~~~ html
     >     |     |       <hr/>
     >     |     |       ~~~
-    >     |     |     - `navheading`: Specification for the text of links to page
-    >     |     |       headings. Default:
+    >     |     |     - `navheading`: Specification for the text of links to page       |
+    >     |     |       headings. Default:                                              |
     >     |     |       ~~~ html
     >     |     |       <span class='navitem{{level}}'>{{navtext}}</span>
     >     |     |       ~~~
-    >     |     +--------------------------------------------------------------+
+    >     |     +-----------------------------------------------------------------------+
     >     |
-    >     +---------------------------------------------------------------------+
     >     | `site_navigation`
     >     | :   The static contents of the navigation bar. If enabled the
     >     |     automatically generated links to page headings will be appended to
     >     |     the static links in the site build process. The site navigation is
     >     |     configured as a list of key-value items. Possible formats are:
-    >     |     - `{ "link text": "hyperlink" }` - A navigation link whose
-    >     |        appearance is configured by option `navitem`. Hyperlinks can
-    >     |        be absolute absolute or relative to the site root. If the link
-    >     |        target is a file from `markdown_dir` the markdown file
-    >     |        extension `*.md` must be used. The file extension will be
-    >     |        converted to `*.html` during project build.
-    >     |     - `{ "label text": "" }` - A navigation bar label without hyperlink.
-    >     |        The label appearance os configured with option `navlabel`.
-    >     |     - `{ "---": "" }` - Separator line in the navigation bar.
-    >     |       Configured with option `navseparator`.
+    >     |
+    >     |     `{ "link text": "hyperlink" }`
+    >     |      :   A navigation link whose
+    >     |          appearance is configured by option `navitem`. Hyperlinks to
+    >     |          local files or directories are relative to `markdown_dir`,
+    >     |          unless the `Build.json` is **not** in the project root, but
+    >     |          a below `markdown_dir`. In that case links must be relative
+    >     |          to that `Build.json` file. See also
+    >     |          [Subtree Customization](#subtree-customization).
+    >     |          </br></br>
+    >     |          If a link target is a Markdown file below `markdown_dir`,
+    >     |          the markdown file extension `*.md` must be used. The file
+    >     |          extension will be converted to `*.html` during project build.
+    >     |          </br></br>
+    >     |          If a link target is a directory below `markdown_dir` it will
+    >     |          be expanded to a collection of links to all Markdown files in
+    >     |          that directory.
+    >     |
+    >     |     `{ "label text": "" }`
+    >     |     :   A navigation bar label without hyperlink.
+    >     |         The label appearance os configured with option `navlabel`.
+    >     |
+    >     |     `{ "---": "" }`
+    >     |     :   Separator line in the navigation bar.
+    >     |         Configured with option `navseparator`.
+    >     |
     >     |     Custom options can be added to this json file as needed for special
     >     |     build processes.
-    >     +---------------------------------------------------------------------+
-    >     | `page_navigation_header`
-    >     | :   Navigation specification for links which are to appear on every page right
-    >     |     before the page heading navigation links.
     >     |
+    >     | `page_navigation_header`
+    >     | :   Navigation specification for links which are to appear on every page
+    >     |     right before the page heading navigation links.
     >     |     Usually this specification is one of:
     >     |
-    >     |     * `@{ '---' = ''}` -
-    >     |        to add a separator line between the site navigation links from the
-    >     |        page heading navigation links.
+    >     |     `@{ '---' = ''}` -
+    >     |     :   to add a separator line between the site navigation links from
+    >     |         the page heading navigation links.
     >     |
-    >     |     * `@{ 'Page Contents' = ''}` -
-    >     |        to add the label _Page Contents_ separating the site navigation links from
-    >     |        the page heading navigation links.
+    >     |     `@{ 'Page Contents' = ''}`
+    >     |     :   to add the label _Page Contents_ separating the site navigation
+    >     |         links fromthe page heading navigation links.
     >     |
-    >     |     However, all link specifications supported by the parameter `NavitemSpecs`
-    >     |     of the function `New-SiteNavigation` are supported for this parameter too
-    >     |     provided hyperlinks are relative to the page.
-    >     +---------------------------------------------------------------------+
+    >     |     However, all link specifications supported by the parameter
+    >     |     `NavitemSpecs`of the function `New-SiteNavigation` are supported
+    >     |     for this parameter tooprovided hyperlinks are relative to the page.
+    >     |
     >     | `github_pages`
     >     | :   A boolean value to configure the project for publishing
     >     |     as [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages).
@@ -606,31 +621,30 @@ CUSTOMIZATION
     >     |     publishing process as publishing is already handled by the project
     >     |     build process. To conform with the GitHub Pages project structure
     >     |     `site_dir` should be also set to `docs`.
-    >     +---------------------------------------------------------------------+
+    >     |
     >     | `svgbob`
     >     | :   Svg conversion options.
     >     |     +--------------------------------------------------------------+
-    >     |     | `svgbob` Options
+    >     |     | `svgbob` Options                                             |
     >     |     +==============================================================+
-    >     |     | `background`
-    >     |     | :   Diagram background color (default: white).
+    >     |     | `background`                                                 |
+    >     |     | :   Diagram background color (default: white).               |
+    >     |     |                                                              |
+    >     |     | `fill_color`                                                 |
+    >     |     | :   Fill color for solid shapes (default: black).            |
+    >     |     |                                                              |
+    >     |     | `font_family`                                                |
+    >     |     | :   Text font (default: monospace).                          |
+    >     |     |                                                              |
+    >     |     | `font_size`                                                  |
+    >     |     | :   Text font size. Default is 14.                           |
+    >     |     |                                                              |
+    >     |     | `scale`                                                      |
+    >     |     | :   Diagram scale. Default is 1.                             |
+    >     |     |                                                              |
+    >     |     | `stroke_width`                                               |
+    >     |     | :   Stroke width for all lines. Default is 2.                |
     >     |     +--------------------------------------------------------------+
-    >     |     | `fill_color`
-    >     |     | :   Fill color for solid shapes (default: black).
-    >     |     +--------------------------------------------------------------+
-    >     |     | `font_family`
-    >     |     | :   Text font (default: monospace).
-    >     |     +--------------------------------------------------------------+
-    >     |     | `font_size`
-    >     |     | :   Text font size. Default is 14.
-    >     |     +--------------------------------------------------------------+
-    >     |     | `scale`
-    >     |     | :   Diagram scale. Default is 1.
-    >     |     +--------------------------------------------------------------+
-    >     |     | `stroke_width`
-    >     |     | :   Stroke width for all lines. Default is 2.
-    >     |     +--------------------------------------------------------------+
-    >     |
     >     +---------------------------------------------------------------------+
     >
     > The Project Build Script (`Build.ps1`)
