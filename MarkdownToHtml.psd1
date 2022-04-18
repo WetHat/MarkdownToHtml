@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.6.1'
+ModuleVersion = '2.7.0'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'
@@ -84,7 +84,10 @@ RequiredAssemblies = @('Markdig.dll')
 # FormatsToProcess = @()
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-NestedModules = @('HtmlFragments.psm1')
+NestedModules = @(
+                    'SiteNavigation.psm1'
+                    'HtmlFragments.psm1'
+                 )
 
 # Functions to export from this module
 FunctionsToExport = @(
@@ -93,6 +96,7 @@ FunctionsToExport = @(
                         'Convert-SvgbobToSvg'
                         'ConvertTo-NavigationItem'
                         'Expand-HtmlTemplate'
+                        'Expand-DirectoryNavigation'
                         'Find-MarkdownFiles'
                         'New-PageHeadingNavigation'
                         'New-SiteNavigation'
@@ -118,6 +122,7 @@ ModuleList = @()
 FileList = @(
 	            'MarkdownToHtml.psm1'
                 'HtmlFragments.psm1'
+                'SiteNavigation.psm1'
 	            'Markdig.dll'
                 'svgbob.exe'
                 'System.Memory.dll'
@@ -133,6 +138,7 @@ PrivateData = @{
                     'Markdown'
                     'HTML'
 			        'Converter'
+                    'StaticHTMLSites'
                 )
 
         # A URL to the license for this module.
