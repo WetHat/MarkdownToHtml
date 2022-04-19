@@ -913,6 +913,7 @@ Error objects having the following properties:
 | `File`   | Path to file containing the proken link.                              |
 | `Line`   | Line number or config option containing the error.                    |
 | `Link`   | The broken link or navigation specification (for `Build.jdon files`). |
+| `Error`  | Description of the error                                              |
 
 .EXAMPLE
 Test-LocalSiteLinks -Path E:\lab\...\markdown
@@ -922,32 +923,22 @@ files found under the `E:\lab\...\markdown` directory tree.
 
 The broken links report looks similar to this:
 ~~~
-File                            Line Link
-----                            ---- ----
-E:\lab\...anced\Saved Search.md   32 ../Tagging%20Pages/Tagging%20Pages.md
-E:\lab\...anced\Saved Search.md   33 Finding%20Notes.md#Dia-5
-E:\lab\...anced\Saved Search.md   35 Finding%20Notes.md#Dia-2
-E:\lab\...anced\Saved Search.md   38 ../Update.md
-E:\lab\...anced\Saved Search.md   39 ../Tagging%20Pages/Tagging%20Pages.md#Dia-5
-E:\lab\...anced\Saved Search.md   40 ../Tagging%20Pages/Tagging%20Pages.md
-E:\lab\...anced\Saved Search.md   48 ../Update.md
-E:\lab\...anced\Saved Search.md   49 ../Tagging%20Pages/Tagging%20Pages.md#Dia-5
-E:\lab\...anced\Saved Search.md   50 ../Tagging%20Pages/Tagging%20Pages.md
-E:\lab\...anced\Saved Search.md   55 Finding%20Notes.md#Dia-14
-E:\lab\...abs\Preferences.md       9 ../../Tagging%20Pages/Tagging%20Pages.png
-E:\lab\...abs\Preferences.md      52 ../Tagging%20Pages/images/TaggedPage.png
-E:\lab\...abs\Preferences.md      56 ../Tagging%20Pages/Tagging%20Pages.md
-E:\lab\...abs\Preferences.md      59 ../Update.md
-E:\lab\...abs\Preferences.md      60 ../Tagging%20Pages/Tagging%20Pages.md#Dia-5
-E:\lab\...abs\Preferences.md      61 ../Tagging%20Pages/Tagging%20Pages.md
-E:\lab\...abs\Preferences.md      79 ../Update.md
-E:\lab\...ges\Tagging Pages.md    35 ../Search/SavedSearch.md
-E:\lab\...ges\Tagging Pages.md    37 ../Settings/Preferences-Tab.md
-E:\lab\...ges\Tagging Pages.md    71 ../Settings/Preferences-Tab.md
-E:\lab\...ges\Tagging Pages.md   117 ../Settings/Preferences-Tab..md
-E:\lab\...ges\Tagging Pages.md   137 ../Settings/Preferences-Tab.md
-E:\lab\...ges\Tagging Pages.md   156 ../Settings/Preferences-Tab.md
+File                                              Line Link                      Error
+----                                              ---- ----                      -----
+E:\lab\...\Settings\Manage Settings.md               5 images/RibbonSetting1.png File not found
+E:\lab\...\Settings\Manage Settings.md              14 Tabs/About Tab.md         Malformed url
+E:\lab\...\Settings\Build.json         site_navigation {"Options": "Tabs1"}     File not found
 ~~~
+
+The output above shows the theww types of error that are currently recognized:
+1. The file `RibbonSetting1.png` is not found in the `images` directory next
+   to file `Manage Settings.md`
+2. The link `Tabs/About Tab.md` is malformed because urls cannot contain spaces.
+   The link needs to be URL encoded. The correct way ro write this url is:
+   `Tabs/About%20Tab.md`
+3. A navigation specification with label `Options` in the `site_navigation`
+   section of the reported `Build.json` file points to the non-existing
+   file or directory `Tabs1`
 
 .EXAMPLE
 Test-LocalSiteLinks -Path E:\lab\...\markdown | Out-GridView
@@ -988,6 +979,13 @@ function Test-LocalSiteLinks {
                         $parts = [System.Web.HttpUtility]::UrlDecode($u.OriginalString) -split '#'
                         $target = Join-Path $_.DirectoryName $parts[0]
                         if (-not (Test-Path $target)) {
+                            $error = 'File not found'
+                        } elseif ($u.OriginalString.Contains(' ')) {
+                            $error = 'Malformed url'
+                        } else {
+                            $error  = [string]::Empty
+                        }
+                        if (-not [string]::IsNullOrEmpty($error)) {
                             $reportObject = New-Object PSCustomObject
                             Add-Member -InputObject $reportObject `
                                        -Name 'File' `
@@ -1001,6 +999,10 @@ function Test-LocalSiteLinks {
                                        -Name 'Link' `
                                        -MemberType NoteProperty `
                                        -Value $u.OriginalString
+                            Add-Member -InputObject $reportObject `
+                                       -Name 'Error' `
+                                       -MemberType NoteProperty `
+                                       -Value $error
                             $reportObject
                         }
                    }
@@ -1023,7 +1025,7 @@ function Test-LocalSiteLinks {
                             Add-Member -InputObject $reportObject `
                                        -Name 'File' `
                                        -MemberType NoteProperty `
-                                       -Value $jn.FullName
+                                       -Value $json.FullName
                             Add-Member -InputObject $reportObject `
                                        -Name 'Line' `
                                        -MemberType NoteProperty `
@@ -1031,7 +1033,11 @@ function Test-LocalSiteLinks {
                             Add-Member -InputObject $reportObject `
                                        -Name 'Link' `
                                        -MemberType NoteProperty `
-                                       -Value $_
+                                       -Value "{`"$name`": `"$($u.OriginalString)`"}"
+                            Add-Member -InputObject $reportObject `
+                                       -Name 'Error' `
+                                       -MemberType NoteProperty `
+                                       -Value 'File not found'
                             $reportObject
                         }
                }
@@ -1043,8 +1049,8 @@ function Test-LocalSiteLinks {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUgeCMNZfORsyxWoksIH88nYQp
-# j5ygggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUAci0GwkKtTkcWAuww3ISO0OW
+# 4IigggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1063,11 +1069,11 @@ function Test-LocalSiteLinks {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTDLL3Bc8Y/rTzFOdOJLM+XhAPT
-# bDANBgkqhkiG9w0BAQEFAASCAQBjEQbqml5eAq75XY7x7PRfrisfMxrWwocTgpWQ
-# xDbsidX1lE6hghmoCLYdZXZcXJW79+WvkMRGlhDW2Bvm9t3DoYUszAfCk9ge87mL
-# aHMN6QmCSSwBJlfjxrMAQf9Nx40f7/Ljn2iEWsmTpdHx4FXwmhGLEdiPFUOFcib5
-# NzKVLQndLTwxlo6mqlLhE+1lpIBEdXNbqmVSAUFMb5MVd306AkhtcZiVYjNjwVq9
-# 8dsfmLZhR+lNd18d//zLxLoB0JI5aMqgr2ilou6XtpA4ehOyRm/gMurF1LHk6yIr
-# fnn/Y9tnBbCS33T0WyyIlhQVxAzqH2jtdjlHj4hRCfoFW9lx
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTDihc9oB05LtZNC9jVCDUWmODd
+# 5DANBgkqhkiG9w0BAQEFAASCAQAL8kmlJij2mAZHBAb7JKwUXwLGjxO/gCwxHQaw
+# +V0JKzc8sPwWedsrjiBDDR+eSVotaaV6pUTA2s1gsyNj1ptTfMVtQfqzVCuyB2cc
+# WzdsydLyVX3ehdsURMzrLL4raSmTV1I6Gjzv9VjVCjR7opplwYWxCpU/m7WfOth5
+# NOn6pKg7kv3kb85NiVacCjj6aCPOIQtQnGsv+ZC0K2d0KxBzn3mqBVlpiBYpVcBL
+# JMN0TRGalQ1rirwsy0D+jYCHDEp4w9B8urDByot37XXMhtHR/tzyAI1E2/e4rAA5
+# EzGlvwBAxWyNcMFkiPmUCxiUF93H6JSrBtC8R5psigbnsX2x
 # SIG # End signature block
