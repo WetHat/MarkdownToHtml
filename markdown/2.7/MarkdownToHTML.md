@@ -35,6 +35,7 @@ See [version 2.0.0](../2.4.0/MarkdownToHTML.md#2.0.0) release notes for upgrade 
 * [New-SiteNavigation](New-SiteNavigation.md)
 * [New-StaticHTMLSiteProject](New-StaticHTMLSiteProject.md)
 * [Publish-StaticHtmlSite](Publish-StaticHtmlSite.md)
+* [Test-LocalSiteLinks](Test-LocalSiteLinks.md)
 * [Update-ResourceLinks](Update-ResourceLinks.md)
 
 # Release Notes
@@ -106,7 +107,7 @@ See [version 2.0.0](../2.4.0/MarkdownToHTML.md#2.0.0) release notes for upgrade 
   The default post-processing function [`Convert-SvgbobToSvg`](Convert-SvgbobToSvg.md)
   converts [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
   ASCII art diagrams to svg images. See the
-  [feature showcase](../index.html#svgbob-plain-text-diagrams)
+  [feature showcase](../index.md#svgbob-plain-text-diagrams)
   for an example.
 
   This new feature is backwards compatible with existing static site projects.
