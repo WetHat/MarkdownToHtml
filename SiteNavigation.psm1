@@ -619,10 +619,9 @@ function Expand-DirectoryNavigation {
         # get the name of the navigation link
         $name = Get-NavSpecKey -NavSpec $NavSpec
         $link = $NavSpec.$name
-        [System.Uri]$u = $link
-        if ($link -and -not $u.IsAbsoluteUri) {
-            [System.IO.DirectoryInfo]$target = Join-Path $LiteralPath $link
-            if ($target.Exists) {
+        if ($link) {
+            $target = Join-Path $LiteralPath $link
+            if ([System.IO.Directory]::Exists($target)) {
                 # target is indeed a director - expand
                 # first emit a label
                 @{ $name = ''}
@@ -797,8 +796,8 @@ function New-SiteNavigation {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUikb+vUmX5WgC7ew1SKRN2K47
-# jz6gggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUGlreekMxk0yCl5ArRGpt/27Q
+# BoqgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -817,11 +816,11 @@ function New-SiteNavigation {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQ7ISwq+P/KrMD5uG5nxJgzuaqw
-# xDANBgkqhkiG9w0BAQEFAASCAQBgRpl+cGaROb9Li8L8TgyraT2uK7RL89P7m6rX
-# 9KrqTX+LggzN+m/MuVWLcxnm4qd+223K/S+0Ag4AG8OolLU9DOWaEj9LVU4mw2IR
-# u8uUhHX1SGX8HHVYKEfxHmrHDrJWDZO/lQp9kYFbY+RmrRczr0vzK1jZDCljbY8F
-# K7H+kJdkJpsEcyR60Ka58X50QbTKeX1uBr0zJMXDz7yAjroCOf0UCmcfTXHMHvz3
-# B5R8mSvakPPR3k6HBaWQU5wGhDApS7liaT5B3nneTZUr+Z1KJFI39SbgDfyQlxUr
-# Ic/sK8tD6m4yNhff06ai1k8GXW9bwkeovm7Mhvi6ewMWM7Wi
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTRJ8ceivmxd7Vlt6sZNLohRn7k
+# 7DANBgkqhkiG9w0BAQEFAASCAQBLSFYKLKqx8bYgvnC23E2I46osZIO6V+tyEmkt
+# KOUMXqL/6rxYB6ZPfGvVPLgX8ZZEK/SxDzmZzYneu20p84Ef+QKdolTabWq5ntqc
+# 3W/7Y+W8dwwKrXaad7wACRV9KtBRKeiSlJnz6PRckKhDjCpCMu1v1u51wHYItPRW
+# qcLpeY/nQsJHd092YpiQMK7o8ITO06V9dEIc1tjlVMHY0j2b2zZdAgCETrrck7pR
+# kaehLk22ytoxfgdcvQwi3wFHt4EfaQu1Lx1ENl8O3BwqRDJp//G6djRKyDjbiqP7
+# gV3IDoy7TL3Yr/lO/810fqX31EfEmG/0DyjyqCkO+RG59Z2f
 # SIG # End signature block
