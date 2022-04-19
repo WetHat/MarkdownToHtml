@@ -220,7 +220,7 @@ PrivateData = @{
   The default post-processing function `Convert-SvgbobToSvg`
   converts [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
   ASCII art diagrams to svg images. See the
-  [feature showcase](../index.html#svgbob-plain-text-diagrams)
+  [feature showcase](../index.md#svgbob-plain-text-diagrams)
   for an example.
 
   This new feature is backwards compatible with existing static site projects.
