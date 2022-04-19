@@ -225,6 +225,19 @@ function New-PageHeadingNavigation {
     } | ConvertTo-NavigationItem -NavTemplate $NavTemplate
 }
 
+function Get-NavSpecKey {
+    param(
+        [parameter(Mandatory=$false,ValueFromPipeline=$false)]
+        [ValidateNotNull()]
+        [object]$NavSpec
+    )
+    if ($NavSpec -is [hashtable]) {
+        $NavSpec.Keys | Where-Object {!$_.Equals('NavRoot')}
+    } else { # json object
+        (Get-Member -InputObject $NavSpec -MemberType NoteProperty | Where-Object {!$_.Name.Equals('NavRoot')}).Name
+    }
+}
+
 <#
 .SYNOPSIS
 Convert a navigation specification to a single item in a navigation bar of pages
@@ -455,13 +468,9 @@ function ConvertTo-NavigationItem {
     PROCESS {
 	    # create page specific navigation links by making the path relative to
         # the current location specified by `RelativePath`
-        $name = if ($NavSpec -is [hashtable]) {
-                    $NavSpec.Keys | Where-Object {!$_.Equals('NavRoot')}
-                } else { # json object
-                    (Get-Member -InputObject $NavSpec -MemberType NoteProperty | Where-Object {!$_.Name.Equals('NavRoot')}).Name
-                }
-
+        $name = Get-NavSpecKey -NavSpec $NavSpec
         $link = $NavSpec.$name
+
 	    if ([string]::IsNullOrWhiteSpace($link)) {
 		    if ($name.StartsWith('---')) { # separator line
                 [string]$navseparator = $NavTemplate.navseparator
@@ -608,11 +617,7 @@ function Expand-DirectoryNavigation {
 
     PROCESS {
         # get the name of the navigation link
-        $name = if ($NavSpec -is [hashtable]) {
-                    $NavSpec.Keys | Where-Object {!$_.Equals('NavRoot')}
-                } else { # json object
-                    (Get-Member -InputObject $NavSpec -MemberType NoteProperty | Where-Object {!$_.Name.Equals('NavRoot')}).Name
-                }
+        $name = Get-NavSpecKey -NavSpec $NavSpec
         $link = $NavSpec.$name
 
         if ($link) {
@@ -792,8 +797,8 @@ function New-SiteNavigation {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUXezVQMVHmWwVca5iA4uzC/gh
-# EZmgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUFsMZMbODJOSP7IIwwqx+vuL7
+# bsSgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -812,11 +817,11 @@ function New-SiteNavigation {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQNFdbAd5m5LYpYArLbob+A/Psj
-# tDANBgkqhkiG9w0BAQEFAASCAQBYSJ3hdFE1RU2x3JYbT/eiCtQ3aLxAy1kPlG+y
-# EnB9NVWHit68T+pOVBq+BOes12dFR1yawFyt15y4EBNLLQw55j8UJmXjrB8zZu/R
-# SLq4q448MKF/kkM8qBleBRFVWpgPCWCUeWlVEAZICGFGPj2T0GAnVSGcVBh5+shS
-# 7elWKpDfPapcY9/qQ36tBhCqRo5iVmlmAP0jVmJ6wM0JgCgONrvIa/yu7rOeiwQi
-# 7w97+hqoqB6YwyDKIn6Br4HhkWprnuXPabm6CDDN6cNia3Glok7vBhTPfN6vVbKu
-# qCSTG5ZQcbbUw8di8fiuQF3Rdtl9iGS4k4Dm4jk057s5aek2
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQJobqi1J+v8XDNVFSYUSIWkUgy
+# BzANBgkqhkiG9w0BAQEFAASCAQAu0QqZFSDFxhEsdh4jOcYfwONW5/L4vc+ryIyT
+# suqC9g7T0hGYHtnWiYF3N0Md5B6f6NFrk1ebB6+FltRfElmWigkspENrtEGdXD3I
+# cCeq2XC5yTY/+uB1T86mxKgvsulTSMA7kCzHqZRaOSp7vVvF3xEPDvAaguTdmGt4
+# qwS8VrDqRol53RS6nH7iMkvXUyIxta2ag5b/NOK7z/M6XcYfKNIU5hKcvsn2PcY3
+# F1pUSVURhUWEIzxBSZM3bZrY4JRtU2PHdt30sJsxAlbw9XEXSxqtbYwEtCKhL0V+
+# pGjzTI0KdqMuKoXNxjyR+AXlNeCejK69OwuE0YllF1uTSw1t
 # SIG # End signature block
