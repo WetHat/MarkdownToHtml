@@ -103,6 +103,7 @@ FunctionsToExport = @(
                         'New-StaticHTMLSiteProject'
                         'New-HTMLTemplate'
                         'Publish-StaticHtmlSite'
+                        'Test-LocalSiteLinks'
                         'Update-ResourceLinks'
 	                 )
 
