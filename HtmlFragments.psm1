@@ -124,7 +124,7 @@ The svg conversion is performed by the external utility
 installed from [lib.rs](https://lib.rs/crates/svgbob_cli).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6/Convert-SvgbobToSvg.html
+https://wethat.github.io/MarkdownToHtml/2.7/Convert-SvgbobToSvg.html
 .LINK
 [Svgbob](https://ivanceras.github.io/content/Svgbob.html)
 #>
@@ -409,7 +409,7 @@ Reads the content of Markdown file `Example.md` and returns a Html fragment obje
     RelativePath       Convert-MarkdownToHTML.md
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6/Convert-MarkdownToHTMLFragment.html
+https://wethat.github.io/MarkdownToHtml/2.7/Convert-MarkdownToHTMLFragment.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK

@@ -148,7 +148,7 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6/New-PageHeadingNavigation.html
+https://wethat.github.io/MarkdownToHtml/2.7/New-PageHeadingNavigation.html
 .LINK
 `Convert-MarkdownToHTMLFragment`
 .LINK
@@ -434,7 +434,7 @@ This function is typically used in the build script `Build.ps1` to define
 the contents of the navigation bar (placeholder `{{nav}}`).
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6/ConvertTo-NavigationItem.html
+https://wethat.github.io/MarkdownToHtml/2.7/ConvertTo-NavigationItem.html
 .LINK
 `New-StaticHTMLSiteProject`
 .LINK
@@ -767,7 +767,7 @@ Output:
 Note how the relative path parameter was used to update the links.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6/New-SiteNavigation.html
+https://wethat.github.io/MarkdownToHtml/2.7/New-SiteNavigation.html
 #>
 function New-SiteNavigation {
     [OutputType([string])]

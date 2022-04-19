@@ -65,7 +65,7 @@ this HTML fragment is generated:
 ~~~
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6/Expand-HtmlTemplate.html
+https://wethat.github.io/MarkdownToHtml/2.7/Expand-HtmlTemplate.html
 #>
 function Expand-HtmlTemplate {
     [OutputType([string])]
@@ -206,7 +206,7 @@ The generated Html file objects are returned like so:
     ...          ...            ...            ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6/Publish-StaticHtmlSite.html
+https://wethat.github.io/MarkdownToHtml/2.7/Publish-StaticHtmlSite.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -365,7 +365,7 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
     ...                   ...   ...                        ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6/Find-MarkdownFiles.html
+https://wethat.github.io/MarkdownToHtml/2.7/Find-MarkdownFiles.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -631,7 +631,7 @@ Convert all Markdown files in `E:\MyMarkdownFiles` using
 The generated HTML files are saved to the directory `E:\MyHTMLFiles`.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6/Convert-MarkdownToHTML.html
+https://wethat.github.io/MarkdownToHtml/2.7/Convert-MarkdownToHTML.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -706,7 +706,7 @@ This function does not read from the pipe.
 The new conversion template directory `[System.IO.DirectoryInfo]`.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6/New-HTMLTemplate.html
+https://wethat.github.io/MarkdownToHtml/2.7/New-HTMLTemplate.html
 .LINK
 `New-StaticHTMLSiteProject`
 
@@ -770,7 +770,7 @@ Create a new conversion project names 'MyProject' in the current directory. The
 project is ready for build.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6/New-StaticHTMLSiteProject.html
+https://wethat.github.io/MarkdownToHtml/2.7/New-StaticHTMLSiteProject.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -858,7 +858,7 @@ Outut:
 ~~~
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.6/Update-ResourceLinks.html
+https://wethat.github.io/MarkdownToHtml/2.7/Update-ResourceLinks.html
 .LINK
 `Publish-StaticHtmlSite`
 #>
