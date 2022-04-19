@@ -1,0 +1,6 @@
+﻿{
+  "site_navigation": [
+        { "Module v2.7 Manifest": "MarkdownToHTML.md"},
+        { "About MarkdownToHtml v2.7": "about_MarkdownToHTML.md" }
+    ]
+}
