@@ -305,7 +305,7 @@ See <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a> for custom
 </tr>
 <tr>
 <td style="text-align: center;">medialinks</td>
-<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md">Media support</a>
+<td>[Media support](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/MediaSpecs.md
 for media urls (youtube, vimeo, mp4...etc.).</td>
 </tr>
 <tr>
@@ -342,7 +342,7 @@ to generate tables from markup.</td>
 </tr>
 <tr>
 <td style="text-align: center;">smartypants</td>
-<td><a href="https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/SmartyPantsSpecs.md">SmartyPants</a>
+<td>[SmartyPants](https://github.com/lunet-io/markdig/blob/master/src/Markdig.Tests/Specs/SmartyPantsSpecs.md
 quotes.</td>
 </tr>
 <tr>
@@ -411,18 +411,29 @@ PS&gt; ./Build.ps1
 <p>The build script <code>Build.ps1</code> generates a <code>html/README.html</code> file which is
 showcases some features and provides further tips  on authoring the static site.</p>
 <p>A typical authoring workflow for the static HTML site looks like this:</p>
+<div class="mermaid">graph TD
+    init[1. Intialize Project] --> edit[2. Create / Edit Markdown Content]
+    edit --> check{3. Check Links}
+    check -->|OK| build[4. Build Project]
+    check -->|Fail| edit
+    build --> publish[5. Publish]
+    publish --> edit
+</div>
 <ol>
+<li>Create a new static site project using <a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a> and
+edit the project configuration <code>Build.json</code>. See section
+<a href="#static-site-project-customization">Customizing Static HTML Site Projects</a>
+for customization options.</li>
 <li>Create or edit Markdown files (<code>*.md</code>) in the <code>markdown</code> directory of
-the project. All resources linked to by Markdown content such as images
+the project (configured in <code>Build.json</code> option <code>markdown_dir</code>). All
+resources linked to by Markdown content such as images
 or videos should also added be to this directory. Make sure to use only
 <strong>relative</strong> links to other markdown or media files.</li>
+<li>Check project for broken links with <a href="Test-LocalSiteLinks.html"><code>Test-LocalSiteLinks</code></a>.</li>
 <li>Build the site by executing the build script <code>Build.ps1</code>.</li>
-<li>Locate the site's home page in the build output directory (<code>html</code>)
-and open it in the browser.</li>
+<li>Publish the site. If this is a GitHub pages project, commit and push
+the project.</li>
 </ol>
-<p>See section
-<a href="#static-site-project-customization">Customizing Static HTML Site Projects</a>
-for customization options.</p>
 </blockquote>
 <h1 id="customization">Customization</h1>
 <p>For many cases the module provides reasonable default templates so that
@@ -522,79 +533,25 @@ See <a href="#defining-content-mapping-rules">Defining Content Mapping Rules</a>
 <dt>The <code>js</code> directory</dt>
 <dd>
 <p>Contains JavaScript resources to support rendering extensions.
-JavaScript files can be added or removed as needed.</p>
+Custom JavaScript files can be added or removed as needed.</p>
 <p>Following rendering extensions are pre-installed and loaded by
 <code>md-template.html</code>:</p>
-<table>
-<col style="width:19.39%" />
-<col style="width:80.61%" />
-<thead>
-<tr>
-<th style="text-align: center;">File</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>highlight.pack.js</code></td>
-<td><p>Syntax Highlighting. Following languages are preconfigured:</p>
-<ul>
-<li>Bash</li>
-<li>C#</li>
-<li>C</li>
-<li>C++</li>
-<li>Clojure</li>
-<li>Clojure REPL</li>
-<li>CMake</li>
-<li>CSS</li>
-<li>Diff</li>
-<li>DOS .bat</li>
-<li>F#</li>
-<li>Groovy</li>
-<li>Go</li>
-<li>HTML/XML</li>
-<li>HTTP</li>
-<li>Java</li>
-<li>JavaScript</li>
-<li>JSON</li>
-<li>Julia</li>
-<li>Julia REPL</li>
-<li>LaTex</li>
-<li>Lisp</li>
-<li>Makefile</li>
-<li>Markdown</li>
-<li>Maxima</li>
-<li>Perl</li>
-<li>Plain Text</li>
-<li>PowerShell</li>
-<li>Python</li>
-<li>Python REPL</li>
-<li>R</li>
-<li>Rust</li>
-<li>SQL</li>
-<li>TOML, INI</li>
-<li>Visual Basic.net</li>
-<li>YAML</li>
-</ul>
-<p>To obtain syntax highlighting for languages which
-are not provided by the factory configuration,
-visit the
+<dl>
+<dt><code>highlight.min.js</code></dt>
+<dd>Syntax highlighting. See <a href="MarkdownToHtml.html#factory-configuration">Factory Configuration</a>
+for a list of pre-installed highlighting languages.
+To configure syntax highlighting for
+<a href="https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md">other supported languages</a>
+which are not part of the factory configuration, visit
 <a href="https://highlightjs.org/download/">Getting highlight.js</a>
-web-page and download a customized version of <code>highlight.js</code>
-for the languages you need. This extension is by
-loaded in the factory template <code>md-template.html</code>.</p>
-</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>mermaid.min.js</code></td>
-<td>Rendering extension for
+to configure and download a customized version of <code>highlight.min.js</code>.</dd>
+<dt><code>mermaid.min.js</code></dt>
+<dd>Rendering extension for
 <a href="http://mermaid-js.github.io/mermaid/">Mermaid</a>
-diagramms. This extension is by loaded in the
+diagrams. This extension is loaded in the
 factory template <code>md-template.html</code>. This extension requires
-the <code>diagrams</code> Markdown extension.</td>
-</tr>
-</tbody>
-</table>
+the <code>diagrams</code> <a href="#supported-markdown-extensions">Markdown extension</a>.</dd>
+</dl>
 </dd>
 <dt>The <code>katex</code> directory</dt>
 <dd>Contains the support files for LaTeX math typesetting. It
@@ -602,10 +559,17 @@ can be removed if this functionality is not needed.
 This extension is by loaded in the factory template <code>md-template.html</code>
 and requires the <code>mathematics</code> Markdown extension.</dd>
 <dt>The <code>styles</code> directory</dt>
-<dd>Contains style sheets. The file <code>md-styles.css</code> contains the default
-styles and can be customized as needed. The other style sheets support
-code syntax highlighting themes. Additional <code>*.css</code> files
-can be added as needed.</dd>
+<dd>
+<p>Contains style sheets.</p>
+<dl>
+<dt><code>md-styles.css</code></dt>
+<dd>The default styles. Can be customized as needed.</dd>
+<dt><code>agate.min.css</code>, <code>far.min.css</code>, <code>tomorrow-night-blue.min.css</code>,...</dt>
+<dd>Code syntax highlighting themes. Additional styles
+can be downloaded from <a href="https://highlightjs.org/download/">highlight.js</a></dd>
+</dl>
+<p>Additional <code>*.css</code> files can be added as needed.</p>
+</dd>
 </dl>
 </blockquote>
 <h2 id="static-site-project-customization">Static Site Project Customization</h2>

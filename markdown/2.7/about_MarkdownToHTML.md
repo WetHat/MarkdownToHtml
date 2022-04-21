@@ -307,18 +307,30 @@ text to HTML. The most common uses cases are outlined below.
 > showcases some features and provides further tips  on authoring the static site.
 >
 > A typical authoring workflow for the static HTML site looks like this:
-> 1. Create or edit Markdown files (`*.md`) in the `markdown` directory of
->    the project. All resources linked to by Markdown content such as images
+>
+> ~~~ mermaid
+> graph TD
+>     init[1. Intialize Project] --> edit[2. Create / Edit Markdown Content]
+>     edit --> check{3. Check Links}
+>     check -->|OK| build[4. Build Project]
+>     check -->|Fail| edit
+>     build --> publish[5. Publish]
+>     publish --> edit
+> ~~~
+>
+> 1. Create a new static site project using [`New-StaticHTMLSiteProject`](New-StaticHTMLSiteProject.md) and
+>    edit the project configuration `Build.json`. See section
+>    [Customizing Static HTML Site Projects](#static-site-project-customization)
+>    for customization options.
+> 2. Create or edit Markdown files (`*.md`) in the `markdown` directory of
+>    the project (configured in `Build.json` option `markdown_dir`). All
+>    resources linked to by Markdown content such as images
 >    or videos should also added be to this directory. Make sure to use only
 >    **relative** links to other markdown or media files.
-> 2. Build the site by executing the build script `Build.ps1`.
-> 3. Locate the site's home page in the build output directory (`html`)
->    and open it in the browser.
->
-> See section
-> [Customizing Static HTML Site Projects](#static-site-project-customization)
-> for customization options.
-
+> 3. Check project for broken links with [`Test-LocalSiteLinks`](Test-LocalSiteLinks.md).
+> 4. Build the site by executing the build script `Build.ps1`.
+> 5. Publish the site. If this is a GitHub pages project, commit and push
+>    the project.
 
 # Customization
 
@@ -390,67 +402,26 @@ conversion process you should
 >
 > The `js` directory
 > :   Contains JavaScript resources to support rendering extensions.
->     JavaScript files can be added or removed as needed.
+>     Custom JavaScript files can be added or removed as needed.
 >
 >     Following rendering extensions are pre-installed and loaded by
 >     `md-template.html`:
 >
->     +:-----------------:+-------------------------------------------------------------------------------+
->     | File              | Description                                                                   |
->     +===================+===============================================================================+
->     |`highlight.pack.js`| Syntax Highlighting. Following languages are preconfigured:                   |
->     |                   |                                                                               |
->     |                   | - Bash                                                                        |
->     |                   | - C#                                                                          |
->     |                   | - C                                                                           |
->     |                   | - C++                                                                         |
->     |                   | - Clojure                                                                     |
->     |                   | - Clojure REPL                                                                |
->     |                   | - CMake                                                                       |
->     |                   | - CSS                                                                         |
->     |                   | - Diff                                                                        |
->     |                   | - DOS .bat                                                                    |
->     |                   | - F#                                                                          |
->     |                   | - Groovy                                                                      |
->     |                   | - Go                                                                          |
->     |                   | - HTML/XML                                                                    |
->     |                   | - HTTP                                                                        |
->     |                   | - Java                                                                        |
->     |                   | - JavaScript                                                                  |
->     |                   | - JSON                                                                        |
->     |                   | - Julia                                                                       |
->     |                   | - Julia REPL                                                                  |
->     |                   | - LaTex                                                                       |
->     |                   | - Lisp                                                                        |
->     |                   | - Makefile                                                                    |
->     |                   | - Markdown                                                                    |
->     |                   | - Maxima                                                                      |
->     |                   | - Perl                                                                        |
->     |                   | - Plain Text                                                                  |
->     |                   | - PowerShell                                                                  |
->     |                   | - Python                                                                      |
->     |                   | - Python REPL                                                                 |
->     |                   | - R                                                                           |
->     |                   | - Rust                                                                        |
->     |                   | - SQL                                                                         |
->     |                   | - TOML, INI                                                                   |
->     |                   | - Visual Basic.net                                                            |
->     |                   | - YAML                                                                        |
->     |                   |                                                                               |
->     |                   | To obtain syntax highlighting for languages which                             |
->     |                   | are not provided by the factory configuration,                                |
->     |                   | visit the                                                                     |
->     |                   | [Getting highlight.js](https://highlightjs.org/download/)                     |
->     |                   | web-page and download a customized version of `highlight.js`                  |
->     |                   | for the languages you need. This extension is by                              |
->     |                   | loaded in the factory template `md-template.html`.                            |
->     +-------------------+-------------------------------------------------------------------------------+
->     | `mermaid.min.js`  | Rendering extension for                                                       |
->     |                   | [Mermaid](http://mermaid-js.github.io/mermaid/)                               |
->     |                   | diagramms. This extension is by loaded in the                                 |
->     |                   | factory template `md-template.html`. This extension requires                  |
->     |                   | the `diagrams` Markdown extension.                                            |
->     +-------------------+-------------------------------------------------------------------------------+
+>     `highlight.min.js`
+>     :   Syntax highlighting. See [Factory Configuration](MarkdownToHtml.md#factory-configuration)
+>         for a list of pre-installed highlighting languages.
+>         To configure syntax highlighting for
+>         [other supported languages](https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md)
+>         which are not part of the factory configuration, visit
+>         [Getting highlight.js](https://highlightjs.org/download/)
+>         to configure and download a customized version of `highlight.min.js`.
+>
+>     `mermaid.min.js`
+>     :   Rendering extension for
+>         [Mermaid](http://mermaid-js.github.io/mermaid/)
+>         diagrams. This extension is loaded in the
+>         factory template `md-template.html`. This extension requires
+>         the `diagrams` [Markdown extension](#supported-markdown-extensions).
 >
 > The `katex` directory
 > :   Contains the support files for LaTeX math typesetting. It
@@ -459,10 +430,16 @@ conversion process you should
 >     and requires the `mathematics` Markdown extension.
 >
 > The `styles` directory
-> :   Contains style sheets. The file `md-styles.css` contains the default
->     styles and can be customized as needed. The other style sheets support
->     code syntax highlighting themes. Additional `*.css` files
->     can be added as needed.
+> :   Contains style sheets.
+>
+>     `md-styles.css`
+>     :   The default styles. Can be customized as needed.
+>
+>     `agate.min.css`, `far.min.css`, `tomorrow-night-blue.min.css`,...
+>     :   Code syntax highlighting themes. Additional styles
+>         can be downloaded from [highlight.js](https://highlightjs.org/download/)
+>
+>     Additional `*.css` files can be added as needed.
 
 ## Static Site Project Customization
 

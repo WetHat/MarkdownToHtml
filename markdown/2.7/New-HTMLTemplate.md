@@ -60,6 +60,33 @@ This function does not read from the pipe.
 # Outputs
 The new conversion template directory `[System.IO.DirectoryInfo]`.
 
+# Notes
+
+<blockquote>
+
+## Updating Custom Conversion Templates
+
+Updates to the MarkdownToHtml module usually come with an updated factory
+template. Unless you want to take advantage of the new template resources or there
+is a [known incompatibility](MarkDownToHtml.md#known-incompatibilities),
+**no action** is needed.
+
+:point_up: A convenient way to upgrade a custom template is to perform the steps
+below:
+1. Use `New-HTMLTemplate` to create a temporary custom template:
+   ~~~powershell
+   PS> New-HTMLTemplate -Destination 'TempTemplate'
+   ~~~
+2. Replace all resources in the custom template you want to update
+   with the resources from `TempTemplate`. Do **not** overwite
+   template files you migh have customized. Candidates are
+   `Template/md-template.html` and `Template\styles\md-styles.css`
+3. Merge changes to `Template/md-template.html` and
+   `Template\styles\md-styles.css` using your favorite merge tool.
+
+</blockquote>
+
+
 # Examples
 
 

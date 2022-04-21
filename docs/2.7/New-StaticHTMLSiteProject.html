@@ -63,6 +63,8 @@
 <button class='navitem'><a href='#projectdirectory-string'><span class='navitem2'>-ProjectDirectory &lt;String&gt;</span></a></button>
 <button class='navitem'><a href='#inputs'><span class='navitem1'>Inputs</span></a></button>
 <button class='navitem'><a href='#outputs'><span class='navitem1'>Outputs</span></a></button>
+<button class='navitem'><a href='#notes'><span class='navitem1'>Notes</span></a></button>
+<button class='navitem'><a href='#upgrading-static-site-projects'><span class='navitem2'>Upgrading Static Site Projects</span></a></button>
 <button class='navitem'><a href='#examples'><span class='navitem1'>Examples</span></a></button>
 <button class='navitem'><a href='#example-1'><span class='navitem2'>EXAMPLE 1</span></a></button>
 <button class='navitem'><a href='#related-links'><span class='navitem1'>Related Links</span></a></button>
@@ -127,6 +129,35 @@ for details about the project directory structure and site customization.</p>
 <p>None</p>
 <h1 id="outputs">Outputs</h1>
 <p>The new project directory object <code>[System.IO.DirectoryInfo]</code></p>
+<h1 id="notes">Notes</h1>
+<blockquote>
+<h2 id="upgrading-static-site-projects">Upgrading Static Site Projects</h2>
+<p>Upgrades to the MarkdownToHtml module usually come with an updated factory
+template and sometimes also with an updated project build scripts (<code>Build.ps1</code>) and
+project configurations (<code>Build.json</code>).</p>
+<p>Unless you want to take advantage of the new template resources and build files
+or there is a <a href="MarkDownToHtml.html#known-incompatibilities">Known Incompatibility</a>,
+no action is needed.</p>
+<p>☝️ A convenient way to upgrade an existing static site project is described below:</p>
+<ol>
+<li>Use <code>New-StaticHTMLSiteProject</code> to create a temporary static site project:
+<pre><code class="language-powershell">PS&gt; New-HTMLTemplate -Destination 'TempProject'
+</code></pre>
+</li>
+<li>Replace all resources in <code>Template</code> directory of tje static site project you
+want to update with the resources from <code>TempProject\Template</code>. Do <strong>not</strong> overwite
+template files you migh have customized. Candidates are
+<code>Template\md-template.html</code> and <code>Template\styles\md-styles.css</code></li>
+<li>Merge changes to following files using your favorite merge tool:
+<ul>
+<li><code>TempProject\Template\md-template.html</code></li>
+<li><code>TempProject\Template\styles\md-styles.css</code></li>
+<li><code>TempProject\Build.json</code></li>
+<li><code>TempProject\Build.ps1</code></li>
+</ul>
+</li>
+</ol>
+</blockquote>
 <h1 id="examples">Examples</h1>
 <h2 id="example-1">EXAMPLE 1</h2>
 <blockquote>
@@ -140,6 +171,7 @@ project is ready for build.</p>
 <li><a href="https://wethat.github.io/MarkdownToHtml/2.7/New-StaticHTMLSiteProject.html">https://wethat.github.io/MarkdownToHtml/2.7/New-StaticHTMLSiteProject.html</a></li>
 <li><a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a></li>
 <li><a href="about_MarkdownToHTML.html#static-site-project-customization">Project Customization</a></li>
+<li><a href="MarkdownToHTML.html#factory-configuration">Factory Configuration</a></li>
 </ul>
 <hr />
 <p><cite>Module: MarkDownToHTML; Version: 2.7.0; (c) 2018-2022 WetHat Lab. All rights reserved.</cite></p>

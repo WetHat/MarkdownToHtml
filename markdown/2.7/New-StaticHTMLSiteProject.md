@@ -63,6 +63,39 @@ None
 # Outputs
 The new project directory object `[System.IO.DirectoryInfo]`
 
+# Notes
+
+<blockquote>
+
+## Upgrading Static Site Projects
+
+Upgrades to the MarkdownToHtml module usually come with an updated factory
+template and sometimes also with an updated project build scripts (`Build.ps1`) and
+project configurations (`Build.json`).
+
+Unless you want to take advantage of the new template resources and build files
+or there is a [Known Incompatibility](MarkDownToHtml.md#known-incompatibilities),
+no action is needed.
+
+:point_up: A convenient way to upgrade an existing static site project is described below:
+
+1. Use `New-StaticHTMLSiteProject` to create a temporary static site project:
+   ~~~powershell
+   PS> New-HTMLTemplate -Destination 'TempProject'
+   ~~~
+2. Replace all resources in `Template` directory of tje static site project you
+   want to update with the resources from `TempProject\Template`. Do **not** overwite
+   template files you migh have customized. Candidates are
+   `Template\md-template.html` and `Template\styles\md-styles.css`
+3. Merge changes to following files using your favorite merge tool:
+   * `TempProject\Template\md-template.html`
+   * `TempProject\Template\styles\md-styles.css`
+   * `TempProject\Build.json`
+   * `TempProject\Build.ps1`
+
+</blockquote>
+
+
 # Examples
 
 
@@ -93,7 +126,8 @@ The new project directory object `[System.IO.DirectoryInfo]`
 
 * [https://wethat.github.io/MarkdownToHtml/2.7/New-StaticHTMLSiteProject.html](https://wethat.github.io/MarkdownToHtml/2.7/New-StaticHTMLSiteProject.html) 
 * [`New-HTMLTemplate`](New-HTMLTemplate.md) 
-* [Project Customization](about_MarkdownToHTML.md#static-site-project-customization)
+* [Project Customization](about_MarkdownToHTML.md#static-site-project-customization) 
+* [Factory Configuration](MarkdownToHTML.md#factory-configuration)
 
 ---
 
