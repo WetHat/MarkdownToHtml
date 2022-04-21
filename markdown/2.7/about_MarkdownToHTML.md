@@ -402,27 +402,39 @@ conversion process you should
 >     |                   |                                                                               |
 >     |                   | - Bash                                                                        |
 >     |                   | - C#                                                                          |
+>     |                   | - C                                                                           |
 >     |                   | - C++                                                                         |
 >     |                   | - Clojure                                                                     |
+>     |                   | - Clojure REPL                                                                |
 >     |                   | - CMake                                                                       |
 >     |                   | - CSS                                                                         |
 >     |                   | - Diff                                                                        |
 >     |                   | - DOS .bat                                                                    |
 >     |                   | - F#                                                                          |
 >     |                   | - Groovy                                                                      |
+>     |                   | - Go                                                                          |
 >     |                   | - HTML/XML                                                                    |
 >     |                   | - HTTP                                                                        |
 >     |                   | - Java                                                                        |
 >     |                   | - JavaScript                                                                  |
 >     |                   | - JSON                                                                        |
+>     |                   | - Julia                                                                       |
+>     |                   | - Julia REPL                                                                  |
+>     |                   | - LaTex                                                                       |
 >     |                   | - Lisp                                                                        |
 >     |                   | - Makefile                                                                    |
 >     |                   | - Markdown                                                                    |
 >     |                   | - Maxima                                                                      |
 >     |                   | - Perl                                                                        |
->     |                   | - Python                                                                      |
+>     |                   | - Plain Text                                                                  |
 >     |                   | - PowerShell                                                                  |
+>     |                   | - Python                                                                      |
+>     |                   | - Python REPL                                                                 |
+>     |                   | - R                                                                           |
+>     |                   | - Rust                                                                        |
 >     |                   | - SQL                                                                         |
+>     |                   | - TOML, INI                                                                   |
+>     |                   | - Visual Basic.net                                                            |
 >     |                   | - YAML                                                                        |
 >     |                   |                                                                               |
 >     |                   | To obtain syntax highlighting for languages which                             |

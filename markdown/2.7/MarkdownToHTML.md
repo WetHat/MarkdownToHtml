@@ -9,10 +9,10 @@ HTML sites in various ways.
 
 | Component                                       |Version | Description
 |-------------------------------------------------|--------|-----------------------------------
-| [Markdig](https://github.com/lunet-io/markdig)  | 0.26.0 | Fast Markdown processor for .NET
-| [highlight.js](https://highlightjs.org/)        | 9.17.1 | Code syntax highlighter
-| [KaTeX](https://katex.org/)                     | 0.15.2 | Math typesetting
-| [Mermaid](http://mermaid-js.github.io/mermaid/) | 8.13.9 | Diagramming
+| [Markdig](https://github.com/lunet-io/markdig)  | 0.28.1 | Fast Markdown processor for .NET
+| [highlight.js](https://highlightjs.org/)        | 11.5.1 | Code syntax highlighter
+| [KaTeX](https://katex.org/)                     | 0.15.3 | Math typesetting
+| [Mermaid](http://mermaid-js.github.io/mermaid/) | 9.0.0  | Diagramming
 | [Svgbob](https://lib.rs/crates/svgbob_cli)      | 0.6.2  | Text based diagramming
 
 # Known Incompatibilities
@@ -39,6 +39,12 @@ See [version 2.0.0](../2.4.0/MarkdownToHTML.md#2.0.0) release notes for upgrade 
 * [Update-ResourceLinks](Update-ResourceLinks.md)
 
 # Release Notes
+
+## 2.7.0
+
+**New Features**
+
+**Bugfixes**
 
 ## 2.6.1 {#2.6.1}
 

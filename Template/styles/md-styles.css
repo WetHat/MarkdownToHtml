@@ -91,7 +91,7 @@ nav {
         padding-bottom: 0.5em;
         margin-top: 0.5em;
         margin-bottom: 0.5em
-  }
+    }
 }
 
 .navlabel {
@@ -145,7 +145,7 @@ nav {
 /* display full link text on hover*/
 .navitem:hover .navitem1 {
     font-weight: bold;
-    display: block;  
+    display: block;
 }
 
 .navitem:hover .navitem2,

@@ -65,6 +65,7 @@ Error objects having the following properties:
 | `File`   | Path to file containing the proken link.                              |
 | `Line`   | Line number or config option containing the error.                    |
 | `Link`   | The broken link or navigation specification (for `Build.jdon files`). |
+| `Error`  | Description of the error                                              |
 
 # Examples
 
@@ -81,32 +82,22 @@ Error objects having the following properties:
 > 
 > The broken links report looks similar to this:
 > ~~~
-> File                            Line Link
-> ----                            ---- ----
-> E:\lab\...anced\Saved Search.md   32 ../Tagging%20Pages/Tagging%20Pages.md
-> E:\lab\...anced\Saved Search.md   33 Finding%20Notes.md#Dia-5
-> E:\lab\...anced\Saved Search.md   35 Finding%20Notes.md#Dia-2
-> E:\lab\...anced\Saved Search.md   38 ../Update.md
-> E:\lab\...anced\Saved Search.md   39 ../Tagging%20Pages/Tagging%20Pages.md#Dia-5
-> E:\lab\...anced\Saved Search.md   40 ../Tagging%20Pages/Tagging%20Pages.md
-> E:\lab\...anced\Saved Search.md   48 ../Update.md
-> E:\lab\...anced\Saved Search.md   49 ../Tagging%20Pages/Tagging%20Pages.md#Dia-5
-> E:\lab\...anced\Saved Search.md   50 ../Tagging%20Pages/Tagging%20Pages.md
-> E:\lab\...anced\Saved Search.md   55 Finding%20Notes.md#Dia-14
-> E:\lab\...abs\Preferences.md       9 ../../Tagging%20Pages/Tagging%20Pages.png
-> E:\lab\...abs\Preferences.md      52 ../Tagging%20Pages/images/TaggedPage.png
-> E:\lab\...abs\Preferences.md      56 ../Tagging%20Pages/Tagging%20Pages.md
-> E:\lab\...abs\Preferences.md      59 ../Update.md
-> E:\lab\...abs\Preferences.md      60 ../Tagging%20Pages/Tagging%20Pages.md#Dia-5
-> E:\lab\...abs\Preferences.md      61 ../Tagging%20Pages/Tagging%20Pages.md
-> E:\lab\...abs\Preferences.md      79 ../Update.md
-> E:\lab\...ges\Tagging Pages.md    35 ../Search/SavedSearch.md
-> E:\lab\...ges\Tagging Pages.md    37 ../Settings/Preferences-Tab.md
-> E:\lab\...ges\Tagging Pages.md    71 ../Settings/Preferences-Tab.md
-> E:\lab\...ges\Tagging Pages.md   117 ../Settings/Preferences-Tab..md
-> E:\lab\...ges\Tagging Pages.md   137 ../Settings/Preferences-Tab.md
-> E:\lab\...ges\Tagging Pages.md   156 ../Settings/Preferences-Tab.md
+> File                                              Line Link                      Error
+> ----                                              ---- ----                      -----
+> E:\lab\...\Settings\Manage Settings.md               5 images/RibbonSetting1.png File not found
+> E:\lab\...\Settings\Manage Settings.md              14 Tabs/About Tab.md         Malformed url
+> E:\lab\...\Settings\Build.json         site_navigation {"Options": "Tabs1"}     File not found
 > ~~~
+> 
+> The output above shows the theww types of error that are currently recognized:
+> 1. The file `RibbonSetting1.png` is not found in the `images` directory next
+>    to file `Manage Settings.md`
+> 2. The link `Tabs/About Tab.md` is malformed because urls cannot contain spaces.
+>    The link needs to be URL encoded. The correct way ro write this url is:
+>    `Tabs/About%20Tab.md`
+> 3. A navigation specification with label `Options` in the `site_navigation`
+>    section of the reported `Build.json` file points to the non-existing
+>    file or directory `Tabs1`
 > 
 > 
 > 

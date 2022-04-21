@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="264" height="64">
+    <style>
+        line, path, circle, rect, polygon{stroke:black;stroke-width:2;stroke-opacity:1;fill-opacity:1;stroke-linecap:round;stroke-linejoin:miter;}text{font-family:Monospace;font-size:14px;}rect.backdrop{stroke:none;fill:white;}.broken{stroke-dasharray:8;}.filled{fill:black;}.bg_filled{fill:white;}.nofill{fill:white;}.end_marked_arrow{marker-end:url(#arrow);}.start_marked_arrow{marker-start:url(#arrow);}.end_marked_diamond{marker-end:url(#diamond);}.start_marked_diamond{marker-start:url(#diamond);}.end_marked_circle{marker-end:url(#circle);}.start_marked_circle{marker-start:url(#circle);}.end_marked_open_circle{marker-end:url(#open_circle);}.start_marked_open_circle{marker-start:url(#open_circle);}.end_marked_big_open_circle{marker-end:url(#big_open_circle);}.start_marked_big_open_circle{marker-start:url(#big_open_circle);}
+        <!--separator-->
+        
+    </style>
+    <defs>
+        <marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 0,4 4,2 0,0"></polygon>
+        </marker>
+        <marker id="diamond" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,2 2,0 4,2 2,4 0,2"></polygon>
+        </marker>
+        <marker id="circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <circle cx="4" cy="4" r="2" class="filled"></circle>
+        </marker>
+        <marker id="open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <circle cx="4" cy="4" r="2" class="bg_filled"></circle>
+        </marker>
+        <marker id="big_open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <circle cx="4" cy="4" r="3" class="bg_filled"></circle>
+        </marker>
+    </defs>
+    <rect class="backdrop" x="0" y="0" width="264" height="64"></rect>
+    <circle cx="4" cy="24" r="3" class="nofill"></circle>
+    <text x="58" y="28" >elem</text>
+    <text x="138" y="28" >;</text>
+    <text x="194" y="28" >n</text>
+    <circle cx="252" cy="24" r="3" class="nofill"></circle>
+    <g>
+        <line x1="44" y1="8" x2="100" y2="8" class="solid"></line>
+        <line x1="44" y1="8" x2="44" y2="40" class="solid"></line>
+        <line x1="100" y1="8" x2="100" y2="40" class="solid"></line>
+        <line x1="8" y1="24" x2="44" y2="24" class="solid"></line>
+        <line x1="100" y1="24" x2="120" y2="24" class="solid"></line>
+        <line x1="44" y1="40" x2="100" y2="40" class="solid"></line>
+    </g>
+    <g>
+        <path d="M 136,8 A 8,8 0,0,0 130,12" class="nofill"></path>
+        <line x1="130" y1="12" x2="128" y2="16" class="solid"></line>
+        <line x1="136" y1="8" x2="144" y2="8" class="solid"></line>
+        <path d="M 144,8 A 8,8 0,0,1 150,12" class="nofill"></path>
+        <line x1="150" y1="12" x2="152" y2="16" class="solid"></line>
+        <path d="M 128,16 A 16,16 0,0,0 128,32" class="nofill"></path>
+        <path d="M 152,16 A 16,16 0,0,1 152,32" class="nofill"></path>
+        <line x1="128" y1="32" x2="130" y2="36" class="solid"></line>
+        <path d="M 130,36 A 8,8 0,0,0 136,40" class="nofill"></path>
+        <line x1="136" y1="40" x2="144" y2="40" class="solid"></line>
+        <line x1="152" y1="32" x2="150" y2="36" class="solid"></line>
+        <path d="M 150,36 A 8,8 0,0,1 144,40" class="nofill"></path>
+    </g>
+    <g>
+        <line x1="180" y1="8" x2="212" y2="8" class="solid"></line>
+        <line x1="180" y1="8" x2="180" y2="40" class="solid"></line>
+        <line x1="212" y1="8" x2="212" y2="40" class="solid"></line>
+        <line x1="160" y1="24" x2="180" y2="24" class="solid"></line>
+        <line x1="212" y1="24" x2="248" y2="24" class="solid"></line>
+        <line x1="180" y1="40" x2="212" y2="40" class="solid"></line>
+    </g>
+</svg>
