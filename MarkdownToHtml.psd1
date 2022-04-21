@@ -40,7 +40,7 @@ HTML sites in various ways.
 | [Markdig](https://github.com/lunet-io/markdig)  | 0.28.1 | Fast Markdown processor for .NET
 | [highlight.js](https://highlightjs.org/)        | 11.5.1 | Code syntax highlighter
 | [KaTeX](https://katex.org/)                     | 0.15.2 | Math typesetting
-| [Mermaid](http://mermaid-js.github.io/mermaid/) | 8.13.9 | Diagramming
+| [Mermaid](http://mermaid-js.github.io/mermaid/) | 9.0.0  | Diagramming
 | [Svgbob](https://lib.rs/crates/svgbob_cli)      | 0.6.2  | Text based diagramming
 
 # Known Incompatibilities
