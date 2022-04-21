@@ -390,55 +390,26 @@ CUSTOMIZATION
     >
     > The `js` directory
     > :   Contains JavaScript resources to support rendering extensions.
-    >     JavaScript files can be added or removed as needed.
+    >     Custom JavaScript files can be added or removed as needed.
     >
     >     Following rendering extensions are pre-installed and loaded by
     >     `md-template.html`:
     >
-    >     +:-----------------:+-------------------------------------------------------------------------------+
-    >     | File              | Description                                                                   |
-    >     +===================+===============================================================================+
-    >     |`highlight.pack.js`| Syntax Highlighting. Following languages are preconfigured:                   |
-    >     |                   |                                                                               |
-    >     |                   | - Bash                                                                        |
-    >     |                   | - C#                                                                          |
-    >     |                   | - C++                                                                         |
-    >     |                   | - Clojure                                                                     |
-    >     |                   | - CMake                                                                       |
-    >     |                   | - CSS                                                                         |
-    >     |                   | - Diff                                                                        |
-    >     |                   | - DOS .bat                                                                    |
-    >     |                   | - F#                                                                          |
-    >     |                   | - Groovy                                                                      |
-    >     |                   | - HTML/XML                                                                    |
-    >     |                   | - HTTP                                                                        |
-    >     |                   | - Java                                                                        |
-    >     |                   | - JavaScript                                                                  |
-    >     |                   | - JSON                                                                        |
-    >     |                   | - Lisp                                                                        |
-    >     |                   | - Makefile                                                                    |
-    >     |                   | - Markdown                                                                    |
-    >     |                   | - Maxima                                                                      |
-    >     |                   | - Perl                                                                        |
-    >     |                   | - Python                                                                      |
-    >     |                   | - PowerShell                                                                  |
-    >     |                   | - SQL                                                                         |
-    >     |                   | - YAML                                                                        |
-    >     |                   |                                                                               |
-    >     |                   | To obtain syntax highlighting for languages which                             |
-    >     |                   | are not provided by the factory configuration,                                |
-    >     |                   | visit the                                                                     |
-    >     |                   | [Getting highlight.js](https://highlightjs.org/download/)                     |
-    >     |                   | web-page and download a customized version of `highlight.js`                  |
-    >     |                   | for the languages you need. This extension is by                              |
-    >     |                   | loaded in the factory template `md-template.html`.                            |
-    >     +-------------------+-------------------------------------------------------------------------------+
-    >     | `mermaid.min.js`  | Rendering extension for                                                       |
-    >     |                   | [Mermaid](http://mermaid-js.github.io/mermaid/)                               |
-    >     |                   | diagramms. This extension is by loaded in the                                 |
-    >     |                   | factory template `md-template.html`. This extension requires                  |
-    >     |                   | the `diagrams` Markdown extension.                                            |
-    >     +-------------------+-------------------------------------------------------------------------------+
+    >     `highlight.min.js`
+    >     :   Syntax highlighting. See [Factory Configuration](MarkdownToHtml.md#factory-configuration)
+    >         for a list of pre-installed highlighting languages.
+    >         To configure syntax highlighting for
+    >         [other supported languages](https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md)
+    >         which are not part of the factory configuration, visit
+    >         [Getting highlight.js](https://highlightjs.org/download/)
+    >         to configure and download a customized version of `highlight.min.js`.
+    >
+    >     `mermaid.min.js`
+    >     :   Rendering extension for
+    >         [Mermaid](http://mermaid-js.github.io/mermaid/)
+    >         diagrams. This extension is loaded in the
+    >         factory template `md-template.html`. This extension requires
+    >         the `diagrams` [Markdown extension](#supported-markdown-extensions).
     >
     > The `katex` directory
     > :   Contains the support files for LaTeX math typesetting. It
@@ -447,10 +418,16 @@ CUSTOMIZATION
     >     and requires the `mathematics` Markdown extension.
     >
     > The `styles` directory
-    > :   Contains style sheets. The file `md-styles.css` contains the default
-    >     styles and can be customized as needed. The other style sheets support
-    >     code syntax highlighting themes. Additional `*.css` files
-    >     can be added as needed.
+    > :   Contains style sheets.
+    >
+    >     `md-styles.css`
+    >     :   The default styles. Can be customized as needed.
+    >
+    >     `agate.min.css`, `far.min.css`, `tomorrow-night-blue.min.css`,...
+    >     :   Code syntax highlighting themes. Additional styles
+    >         can be downloaded from [highlight.js](https://highlightjs.org/download/)
+    >
+    >     Additional `*.css` files can be added as needed.
 
     ## Static Site Project Customization
 
