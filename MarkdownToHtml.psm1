@@ -963,6 +963,7 @@ function Test-LocalSiteLinks {
         [ValidateNotNullorEmpty()]
         [string]$Path
     )
+    $mdlinkRE = New-Object regex '\]\(([^()]+)\)'
 
     foreach ($siteDir in Get-Item -Path $Path) {
         # Inspect links in Markdown files
@@ -971,10 +972,9 @@ function Test-LocalSiteLinks {
             [string[]]$content = Get-Content $_
             for ($i = 0; $i -lt $content.Length; $i++) {
                 $line = $content[$i]
-                while (($m = [Regex]::Match($line,'\]\(([^()]+)\)')).Success) {
+                foreach ($m in  $mdlinkRE.Matches($line)) {
                    $group = $m.Groups[1]
                    [System.Uri]$u = $group.Value
-                   $line = $line.Substring($group.Index + $group.Length + 1)
                    if (-not $u.IsAbsoluteUri) {
                         $parts = [System.Web.HttpUtility]::UrlDecode($u.OriginalString) -split '#'
                         $target = Join-Path $_.DirectoryName $parts[0]
@@ -1049,8 +1049,8 @@ function Test-LocalSiteLinks {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUAci0GwkKtTkcWAuww3ISO0OW
-# 4IigggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUlCfPJizBelg50x5ixkTmu5GD
+# KnGgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1069,11 +1069,11 @@ function Test-LocalSiteLinks {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTDihc9oB05LtZNC9jVCDUWmODd
-# 5DANBgkqhkiG9w0BAQEFAASCAQAL8kmlJij2mAZHBAb7JKwUXwLGjxO/gCwxHQaw
-# +V0JKzc8sPwWedsrjiBDDR+eSVotaaV6pUTA2s1gsyNj1ptTfMVtQfqzVCuyB2cc
-# WzdsydLyVX3ehdsURMzrLL4raSmTV1I6Gjzv9VjVCjR7opplwYWxCpU/m7WfOth5
-# NOn6pKg7kv3kb85NiVacCjj6aCPOIQtQnGsv+ZC0K2d0KxBzn3mqBVlpiBYpVcBL
-# JMN0TRGalQ1rirwsy0D+jYCHDEp4w9B8urDByot37XXMhtHR/tzyAI1E2/e4rAA5
-# EzGlvwBAxWyNcMFkiPmUCxiUF93H6JSrBtC8R5psigbnsX2x
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQKXiEyfD3jiOI7qp+IrGbQfmzv
+# ZjANBgkqhkiG9w0BAQEFAASCAQCLqLYAmZHwxy1vlaBA2Zzd+x6ZATKg9qL2MHP5
+# lMKDCeP1Ux08X3YLMRT+FhJMflglk3uf1mPhlDhc2rtsUxWE/vAdrCKtotEH12a5
+# 1bmBApT5n0pAESIXmR7GWegzEVKQm43Ax6iHwXJXciKbgs58GQcu6rVc0I1h3lrR
+# CWwX39J9g8kAuyqu33QjqwfUzIDLxR/7fmI8GCHs8gRSnI1WtAdasbYllbABv9iZ
+# TgXC2n4gbYD6tNTmf/Lj1zs8ciGpd++/HvBOqCQ+o/58Sr40YmUf7JnSdw9cJ8vv
+# UU1/dRUP3wO5YueF91cOuGWhH49vd3kNZ7j6oWC0KfyhrhrQ
 # SIG # End signature block
