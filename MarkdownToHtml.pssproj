@@ -4,19 +4,19 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9ab570fe-b7d3-403c-a38f-713a6a5c0b7c}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>MyApplication</RootNamespace>
-    <AssemblyName>MyApplication</AssemblyName>
+    <RootNamespace>MarkdownToHtml</RootNamespace>
+    <AssemblyName>MarkdownToHtml</AssemblyName>
     <Name>MarkdownToHtml</Name>
     <ProjectHome />
     <PreBuildScript>
     </PreBuildScript>
     <PostBuildScript>$pathBak = $env:PSModulePath
-$env:PSModulePath+=[char]0x3b + 'C:\Program Files\WindowsPowerShell\Modules' 
-$env:PSModulePath = "$pwd/.." + [char]0x3b + $env:PSModulePath 
+$env:PSModulePath+=[char]0x3b + 'C:\Program Files\WindowsPowerShell\Modules'
+$env:PSModulePath = "$pwd/.." + [char]0x3b + $env:PSModulePath
 import-module pester
 import-module MarkDownToHTML -force
 
-Invoke-Pester -Path './MarkdownToHtml.tests.ps1' 
+Invoke-Pester -Path './MarkdownToHtml.tests.ps1'
 
 $env:PSModulePath = $pathBak
 
@@ -63,6 +63,10 @@ Protect-whPoshModule $pwd -Store Root
     <Folder Include="TestData\" />
     <Folder Include="Template\styles\" />
     <Folder Include="Template\" />
+    <Folder Include="Template.assets\" />
+    <Folder Include="Template.assets\js\" />
+    <Folder Include="Template.assets\katex\" />
+    <Folder Include="Template.assets\styles\" />
     <Folder Include="TestData\markdown\" />
     <Folder Include="TestData\markdown\Dir\" />
     <Folder Include="TestData\markdown\Dir\SubDir\" />
@@ -111,6 +115,32 @@ Protect-whPoshModule $pwd -Store Root
     <Content Include="TestData\markdown\SiteContent2\SubFolder\mermaid.md" />
     <Content Include="TestData\ProjectConfigs\Build1.json" />
     <Content Include="TestData\ProjectConfigs\Build2.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Markdig, Version=0.26.0.0, Culture=neutral, PublicKeyToken=null">
+      <Name>Markdig</Name>
+      <AssemblyName>Markdig.dll</AssemblyName>
+      <HintPath>Markdig.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <Name>System.Memory</Name>
+      <AssemblyName>System.Memory.dll</AssemblyName>
+      <HintPath>System.Memory.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Name>System.Numerics.Vectors</Name>
+      <AssemblyName>System.Numerics.Vectors.dll</AssemblyName>
+      <HintPath>System.Numerics.Vectors.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Name>System.Runtime.CompilerServices.Unsafe</Name>
+      <AssemblyName>System.Runtime.CompilerServices.Unsafe.dll</AssemblyName>
+      <HintPath>System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
