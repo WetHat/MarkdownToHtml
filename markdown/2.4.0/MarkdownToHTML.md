@@ -278,6 +278,6 @@ Handle partially HTML encoded code blocks
 
 Initial Release
 
----
+- - -
 
 <cite>Module: MarkDownToHTML; Version: 2.4.0; (c) 2018-2021 WetHat Lab. All rights reserved.</cite>
