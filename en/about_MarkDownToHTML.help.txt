@@ -307,18 +307,30 @@ USAGE
     > showcases some features and provides further tips  on authoring the static site.
     >
     > A typical authoring workflow for the static HTML site looks like this:
-    > 1. Create or edit Markdown files (`*.md`) in the `markdown` directory of
-    >    the project. All resources linked to by Markdown content such as images
+    >
+    > ~~~ mermaid
+    > graph TD
+    >     init[1. Intialize Project] --> edit[2. Create / Edit Markdown Content]
+    >     edit --> check{3. Check Links}
+    >     check -->|OK| build[4. Build Project]
+    >     check -->|Fail| edit
+    >     build --> publish[5. Publish]
+    >     publish --> edit
+    > ~~~
+    >
+    > 1. Create a new static site project using `New-StaticHTMLSiteProject` and
+    >    edit the project configuration `Build.json`. See section
+    >    [Customizing Static HTML Site Projects](#static-site-project-customization)
+    >    for customization options.
+    > 2. Create or edit Markdown files (`*.md`) in the `markdown` directory of
+    >    the project (configured in `Build.json` option `markdown_dir`). All
+    >    resources linked to by Markdown content such as images
     >    or videos should also added be to this directory. Make sure to use only
     >    **relative** links to other markdown or media files.
-    > 2. Build the site by executing the build script `Build.ps1`.
-    > 3. Locate the site's home page in the build output directory (`html`)
-    >    and open it in the browser.
-    >
-    > See section
-    > [Customizing Static HTML Site Projects](#static-site-project-customization)
-    > for customization options.
-
+    > 3. Check project for broken links with `Test-LocalSiteLinks`.
+    > 4. Build the site by executing the build script `Build.ps1`.
+    > 5. Publish the site. If this is a GitHub pages project, commit and push
+    >    the project.
 
 CUSTOMIZATION
 
