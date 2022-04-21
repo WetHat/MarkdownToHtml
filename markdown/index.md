@@ -23,10 +23,12 @@ Open Source project on GitHub at: [WetHat/MarkdownToHtml](https://github.com/Wet
 > * Based on [Markdig](https://github.com/lunet-io/markdig),
 >   a fast, powerful, [CommonMark](http://commonmark.org/) compliant Markdown
 >   processor for .NET with more than 20 configurable extensions.
-> * Cascading build configurations. Each subtree in Markdown source tree can now
->   have its dedicated build configuration. Among other things this makes it
+> * :sparkles: Cascading build configurations. In addition to the top-level `Build.json`
+>   project configuration, the _Markdown_ source tree configured in `markdown_dir`
+>   can now have dedicated build configurations (`Build.json`). Among other things this makes it
 >   easy to configure the navitation bar in a directory specific way.
->   **New!**
+> * :sparkles: A test function (`Test-LocalSiteLinks`) to report broken relative links
+>   in markdown source directorytree.
 
 # Installation and Update
 
@@ -62,12 +64,13 @@ An installable package of this module is hosted on the
 > Unless you are having issues with any of the pre-installed _JavaScript_
 > libraries no action is required.
 >
-> When updating to a new major revision there may be incompatibilities which
-> affect existing custom templates and static site projects.
+> :warning: When updating to a new major revision there may be incompatibilities which
+> affects existing custom templates and static site projects.
 > Make sure to read the upgrade instructions in the release notes.
+>
 > However, you still may want to upgrade existing custom templates and
 > static site projects to take advantage of new functionality.
-> Check out the [release notes](#latest-version) in the module's manifest for details.
+> Check out the [release notes](#latest-version) for details.
 
 # Quickstart
 

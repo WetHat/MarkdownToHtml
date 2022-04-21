@@ -102,10 +102,12 @@ See the <a href="#latex-math">example</a>.</li>
 <li>Based on <a href="https://github.com/lunet-io/markdig">Markdig</a>,
 a fast, powerful, <a href="http://commonmark.org/">CommonMark</a> compliant Markdown
 processor for .NET with more than 20 configurable extensions.</li>
-<li>Cascading build configurations. Each subtree in Markdown source tree can now
-have its dedicated build configuration. Among other things this makes it
-easy to configure the navitation bar in a directory specific way.
-<strong>New!</strong></li>
+<li>✨ Cascading build configurations. In addition to the top-level <code>Build.json</code>
+project configuration, the <em>Markdown</em> source tree configured in <code>markdown_dir</code>
+can now have dedicated build configurations (<code>Build.json</code>). Among other things this makes it
+easy to configure the navitation bar in a directory specific way.</li>
+<li>✨ A test function (<code>Test-LocalSiteLinks</code>) to report broken relative links
+in markdown source directorytree.</li>
 </ul>
 </blockquote>
 <h1 id="installation-and-update">Installation and Update</h1>
@@ -130,12 +132,12 @@ an admin PowerShell:</p>
 <strong>same</strong> major revision, all conversion or site projects are still fully functional.
 Unless you are having issues with any of the pre-installed <em>JavaScript</em>
 libraries no action is required.</p>
-<p>When updating to a new major revision there may be incompatibilities which
-affect existing custom templates and static site projects.
-Make sure to read the upgrade instructions in the release notes.
-However, you still may want to upgrade existing custom templates and
+<p>⚠️ When updating to a new major revision there may be incompatibilities which
+affects existing custom templates and static site projects.
+Make sure to read the upgrade instructions in the release notes.</p>
+<p>However, you still may want to upgrade existing custom templates and
 static site projects to take advantage of new functionality.
-Check out the <a href="#latest-version">release notes</a> in the module's manifest for details.</p>
+Check out the <a href="#latest-version">release notes</a> for details.</p>
 </blockquote>
 <h1 id="quickstart">Quickstart</h1>
 <ol>
