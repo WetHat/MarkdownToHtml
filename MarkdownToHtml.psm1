@@ -705,6 +705,27 @@ This function does not read from the pipe.
 .OUTPUTS
 The new conversion template directory `[System.IO.DirectoryInfo]`.
 
+.NOTES
+## Updating Custom Conversion Templates
+
+Updates to the MarkdownToHtml module usually come with an updated factory
+template. Unless you want to take advantage of the new template resources or there
+is a [known incompatibility](MarkDownToHtml.md#known-incompatibilities),
+**no action** is needed.
+
+:point_up: A convenient way to upgrade a custom template is to perform the steps
+below:
+1. Use `New-HTMLTemplate` to create a temporary custom template:
+   ~~~powershell
+   PS> New-HTMLTemplate -Destination 'TempTemplate'
+   ~~~
+2. Replace all resources in the custom template you want to update
+   with the resources from `TempTemplate`. Do **not** overwite
+   template files you migh have customized. Candidates are
+   `Template/md-template.html` and `Template\styles\md-styles.css`
+3. Merge changes to `Template/md-template.html` and
+   `Template\styles\md-styles.css` using your favorite merge tool.
+
 .LINK
 https://wethat.github.io/MarkdownToHtml/2.7/New-HTMLTemplate.html
 .LINK
@@ -768,6 +789,33 @@ New-StaticHTMLSiteProject -ProjectDirectory MyProject
 
 Create a new conversion project names 'MyProject' in the current directory. The
 project is ready for build.
+
+.NOTES
+## Upgrading Static Site Projects
+
+Upgrades to the MarkdownToHtml module usually come with an updated factory
+template and sometimes also with an updated project build scripts (`Build.ps1`) and
+project configurations (`Build.json`).
+
+Unless you want to take advantage of the new template resources and build files
+or there is a [Known Incompatibility](MarkDownToHtml.md#known-incompatibilities),
+no action is needed.
+
+:point_up: A convenient way to upgrade an existing static site project is described below:
+
+1. Use `New-StaticHTMLSiteProject` to create a temporary static site project:
+   ~~~powershell
+   PS> New-HTMLTemplate -Destination 'TempProject'
+   ~~~
+2. Replace all resources in `Template` directory of tje static site project you
+   want to update with the resources from `TempProject\Template`. Do **not** overwite
+   template files you migh have customized. Candidates are
+   `Template\md-template.html` and `Template\styles\md-styles.css`
+3. Merge changes to following files using your favorite merge tool:
+   * `TempProject\Template\md-template.html`
+   * `TempProject\Template\styles\md-styles.css`
+   * `TempProject\Build.json`
+   * `TempProject\Build.ps1`
 
 .LINK
 https://wethat.github.io/MarkdownToHtml/2.7/New-StaticHTMLSiteProject.html
@@ -1051,8 +1099,8 @@ function Test-LocalSiteLinks {
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUr5FMO4EjmpBCawj8+SBkt/iO
-# hCqgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUBXu1Qu6Cg2LRrfxJnbJ2rS9w
+# rHqgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -1071,11 +1119,11 @@ function Test-LocalSiteLinks {
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQB+FYSKZsMBRAsASSjyKWW4Cz9
-# wjANBgkqhkiG9w0BAQEFAASCAQAEjf8yZj7HC848TPwv4eJAHRmRGAAhrX/WsNBv
-# LpmwqJo5og3B08bj4htVpfJq+VdiDAPfAJMd65YDwbvUzI5kZtqDJ60SHhv8J7KC
-# dijocaXi9LyRnRhPTbUFzHcOb8yYUeBGC1jpR/84T9d2R4FEwOvGv31X9fEwGtyM
-# tSCRJwwAMnEgizsdFguask26IFtn9A9X7q6SQlKKVlpysYfh7sWyahpipRh0jkaC
-# Yv23kHvf9lpLYAHA7z/BmfkTHuNpNSWzUsUwRKZ181S02MPnSzcCb5cZBE7IVVhH
-# l6OBAuulbOuLcWJzd6Xln2WUXazRCi2VAv9gew0cUZpf5k72
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBRaI7CmUUeCEGLHHHfmGKmUYNld
+# 8jANBgkqhkiG9w0BAQEFAASCAQAojAs5/5qH035DrdFhC8xD96q2M5ELtfEh1Frf
+# oP7DOut4/lOrMw/GWwxtDzZ9tZkXBeUHgrjL33hNv/oaYaO47CCsimP5MkVhjGkr
+# 7km7vZrrwWr+w94DpmB36KxvDfBjWaDzS8KGcfgc2I9r4s84TK7WotMFnP5WNjuj
+# dG7FYIsqsQvLEzA/hc28+KbfGSzxr/SVDgygAuUbri4h9kTQ1cs6AWbCOFptnLxc
+# ry2TQ5fft21DDCy6zuR60/DtvSB2L3N8t/Oi8BMbCaheyZucT2wcpsqu95OYnBQN
+# DKIH7QHcAuUACWYloISJGRxbc2Y2bSqQv7PsWUwRtDHpTNdI
 # SIG # End signature block
