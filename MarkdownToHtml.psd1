@@ -46,44 +46,44 @@ HTML sites in various ways.
 Code Syntax Highlighting (highlight.js)
 :   Pre-configured code syntax highlighting languages in this package:
 
-    | Language         | Fenced Code Block Alias                               |
-    | ---------------: | : --------------------------------------------------- |
-    | Bash             | bash, sh, zsh                                         |
-    | C#               | csharp, cs                                            |
-    | C                | c, h                                                  |
-    | C++              | cpp, hpp, cc, hh, c++, h++, cxx, hxx                  |
-    | Clojure          | clojure, clj                                          |
-    | Clojure REPL     | clojure-repl                                          |
-    | CMake            | cmake, cmake.in                                       |
-    | CSS              | css                                                   |
-    | Diff             | diff, patch                                           |
-    | DOS .bat         | dos, bat, cmd                                         |
-    | F#               | fsharp, fs                                            |
-    | Groovy           | groovy                                                |
-    | Go               | go, golang                                            |
-    | HTML/XML         | xml, html, xhtml, rss, atom, xjb, xsd, xsl, plist, svg|
-    | HTTP             | http, https                                           |
-    | Java             | java, jsp                                             |
-    | JavaScript       | javascript, js, jsx                                   |
-    | JSON             | json                                                  |
-    | Julia            | julia                                                 |
-    | Julia REPL       | julia-repl                                            |
-    | LaTex            | tex                                                   |
-    | Lisp             | lisp                                                  |
-    | Makefile         | makefile, mk, mak, make                               |
-    | Markdown         | markdown, md, mkdown, mkd                             |
-    | Maxima           | maxima                                                |
-    | Perl             | perl, pl, pm                                          |
-    | Plain Text       | plaintext, txt, text                                  |
-    | PowerShell       | powershell, ps, ps1                                   |
-    | Python           | python, py, gyp                                       |
-    | Python REPL      | python-repl, pycon                                    |
-    | R                | r                                                     |
-    | Rust             | rust, rs                                              |
-    | SQL              | sql                                                   |
-    | TOML, INI        | ini, toml                                             |
-    | Visual Basic.net | vbnet, vb                                             |
-    | YAML             | yml, yaml                                             |
+    | Language         | Fenced Code Block Alias
+    | ---------------: | : ---------------------------------------------------
+    | Bash             | bash, sh, zsh
+    | C#               | csharp, cs
+    | C                | c, h
+    | C++              | cpp, hpp, cc, hh, c++, h++, cxx, hxx
+    | Clojure          | clojure, clj
+    | Clojure REPL     | clojure-repl
+    | CMake            | cmake, cmake.in
+    | CSS              | css
+    | Diff             | diff, patch
+    | DOS .bat         | dos, bat, cmd
+    | F#               | fsharp, fs
+    | Groovy           | groovy
+    | Go               | go, golang
+    | HTML/XML         | xml, html, xhtml, rss, atom, xjb, xsd, xsl, plist, svg
+    | HTTP             | http, https
+    | Java             | java, jsp
+    | JavaScript       | javascript, js, jsx
+    | JSON             | json
+    | Julia            | julia
+    | Julia REPL       | julia-repl
+    | LaTex            | tex
+    | Lisp             | lisp
+    | Makefile         | makefile, mk, mak, make
+    | Markdown         | markdown, md, mkdown, mkd
+    | Maxima           | maxima
+    | Perl             | perl, pl, pm
+    | Plain Text       | plaintext, txt, text
+    | PowerShell       | powershell, ps, ps1
+    | Python           | python, py, gyp
+    | Python REPL      | python-repl, pycon
+    | R                | r
+    | Rust             | rust, rs
+    | SQL              | sql
+    | TOML, INI        | ini, toml
+    | Visual Basic.net | vbnet, vb
+    | YAML             | yml, yaml
 
     See also [Customization](about_MarkdownToHTML.md#customization) for more
     information.
