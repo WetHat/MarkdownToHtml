@@ -136,12 +136,6 @@ This is a [Rust](https://www.rust-lang.org/)
 [crate](https://doc.rust-lang.org/rust-by-example/crates.html) which can be
 installed from [lib.rs](https://lib.rs/crates/svgbob_cli).
 
-:warning: `svgbob_cli.exe` requires the
-[Microsoft Visual C++ Redistributable for Visual Studio 
-2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
-Refer to [System Requirements](MarkdownToHtml.md#system-requirements) for
-installation instructions.
-
 </blockquote>
 
 
