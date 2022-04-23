@@ -199,6 +199,7 @@ FileList = @(
                 'System.Memory.dll'
                 'System.Runtime.CompilerServices.Unsafe.dll'
                 'System.Numerics.Vectors.dll'
+                'vcruntime140.dll'
             )
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess
