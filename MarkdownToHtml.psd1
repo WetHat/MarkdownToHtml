@@ -43,27 +43,6 @@ HTML sites in various ways.
 | [Mermaid](http://mermaid-js.github.io/mermaid/) | 9.0.0  | Diagramming
 | [Svgbob](https://lib.rs/crates/svgbob_cli)      | 0.6.6  | Text based diagramming
 
-# System Requirements
-
-Visual C++ Redistributable for Visual Studio 2015
-:   [Svgbob](https://ivanceras.github.io/content/Svgbob.html) text based, human readable
-    diagrams require the
-    [Visual C++ Redistributable for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145)
-    to be installed on the system.
-
-    The most convenient way to install this redistributable is to use the
-    [Chocolatey](https://chocolatey.org/) package manager for Windows.
-    The required installation package is located at
-    [Microsoft Visual C++ Redistributable for Visual Studio 2015-2022](https://community.chocolatey.org/packages/vcredist140).
-    To install this package (assuming chocolatey is already on the system):
-    1. Open a PowerShell command prompt as administrator
-    2. Execute this command:
-       ~~~powershell
-       PS> choco install vcredist140
-       ~~~
-
-# Factory Configuration
-
 Code Syntax Highlighting (highlight.js)
 :   Pre-configured code syntax highlighting languages in this package:
 

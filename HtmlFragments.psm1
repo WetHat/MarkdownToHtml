@@ -123,11 +123,6 @@ This is a [Rust](https://www.rust-lang.org/)
 [crate](https://doc.rust-lang.org/rust-by-example/crates.html) which can be
 installed from [lib.rs](https://lib.rs/crates/svgbob_cli).
 
-:warning: `svgbob_cli.exe` requires the
-[Microsoft Visual C++ Redistributable for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
-Refer to [System Requirements](MarkdownToHtml.md#system-requirements) for
-installation instructions.
-
 .LINK
 https://wethat.github.io/MarkdownToHtml/2.7/Convert-SvgbobToSvg.html
 .LINK
@@ -531,8 +526,8 @@ function Convert-MarkdownToHTMLFragment
 # SIG # Begin signature block
 # MIIFYAYJKoZIhvcNAQcCoIIFUTCCBU0CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUpTH3keFwQ5XE8wt1rO4Ypw32
-# 1rWgggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU1x0FY9OYOltBg3r7GlLhdB0r
+# VzugggMAMIIC/DCCAeSgAwIBAgIQaejvMGXYIKhALoN4OCBcKjANBgkqhkiG9w0B
 # AQUFADAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMCAXDTIwMDUwMzA4MTMwNFoYDzIw
 # NTAwNTAzMDgyMzA0WjAVMRMwEQYDVQQDDApXZXRIYXQgTGFiMIIBIjANBgkqhkiG
 # 9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNo5GzE4BkP8HagZLFT7h189+EPxP0pmiSC5
@@ -551,11 +546,11 @@ function Convert-MarkdownToHTMLFragment
 # iUjry3dVMYIByjCCAcYCAQEwKTAVMRMwEQYDVQQDDApXZXRIYXQgTGFiAhBp6O8w
 # ZdggqEAug3g4IFwqMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgACh
 # AoAAMBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAM
-# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBTdz1oLFs+tEy1N9oU9kr8adEt5
-# ZDANBgkqhkiG9w0BAQEFAASCAQA9++3jTQ+nJbv/d4wcVpFBkTwN8dLiCYEQzjmf
-# pfKkRHq+pErQx0M8uXLxemVYhHWN3dytiWiSatlRlFoAZKHWnyD1t8USuHjaGsdQ
-# G/ym89mnLkZrtZQsS3WqXRwg52ODdB4wHhbbYLzsAmaN9YurMt+wRc4qcGnH60lH
-# P7ff2MjLDT+OgfeMVc5PQA+A+TOh0FLaoBaTnwcHa9f5DhmJwKEab56pL6PxJKD/
-# wslKYZoK695YaEmCWzvL7a4lckaZBU7oyRcVY4OIpkqNqXwT+xIsPRBRk7eZ0oP2
-# pewJ9mEVD4uZZ9L9/Ll19ay/F/x61Zi7jhmoyrDk9DilxQGL
+# BgorBgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBSbpQy+3iSZ2r5yxqmP7xKoH7KZ
+# KzANBgkqhkiG9w0BAQEFAASCAQCEME4VEd/nInPHakNR8kGw4fKRHLpG/sCpihjn
+# BDg/mbQd3IRJTRUUSMFGI93HVFPjnGAN6p7ytUFuCKQuWRqPzyWO5qyIwJl6T3Tf
+# 3gYI96Lm//LNRbWKSkqEKyfqii3zud+NvkP0EtJYxYM/a3NK1QLiaAQkEHHY16P1
+# bO3nLOmO1t9c5zb63ZaK6mrrW894jEqXlHQ4mPsKlvcuPYMcIAYlUTUObWHSi2Rc
+# z1/9hmPSg6rKabplSpVFWhfx+QoTiOnHPcmd0A5bgzC8an8wsdumAzWBd+MzWzcR
+# AJ+VqHBueVLsPX9HrrGk+54EPb+ctd/uCOB87i0VCorUU4HO
 # SIG # End signature block
