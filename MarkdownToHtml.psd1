@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.7.0'
+ModuleVersion = '2.7.1'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'
@@ -121,7 +121,10 @@ PowerShellVersion = '5.1'
 # RequiredModules = @()
 
 # Assemblies that must be loaded prior to importing this module
-RequiredAssemblies = @('Markdig.dll')
+RequiredAssemblies = @(
+                        'Markdig.dll'
+                        'System.Web'
+                      )
 
 # Script files (.ps1) that are run in the caller's environment prior to importing this module.
 # ScriptsToProcess = @()
@@ -203,10 +206,8 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @'
-Release notes for this release are at:
-[Latest MarkdownToHtml Release](https://github.com/WetHat/MarkdownToHtml/releases/tag/2.7.0).
-A complete list of current and historical releases is available on GitHub at:
-[Releases](https://github.com/WetHat/MarkdownToHtml/releases/).
+Release notes for this and previous releases are on GitHub at:
+[MarkdownToHtml Releases](https://github.com/WetHat/MarkdownToHtml/releases).
 
 ## Upgrading Custom Templates and Static Site Projects.
 
