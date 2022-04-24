@@ -1,4 +1,4 @@
-﻿# Module MarkDownToHTML 2.7.0 {.title}
+﻿# Module MarkDownToHTML 2.7.1 {.title}
 
 **Tags**: Markdown, HTML, Converter, StaticHTMLSites, Markdown, HTML, Converter, StaticHTMLSites
 
@@ -18,44 +18,44 @@ HTML sites in various ways.
 Code Syntax Highlighting (highlight.js)
 :   Pre-configured code syntax highlighting languages in this package:
 
-    | Language         | Fenced Code Block Alias                               |
-    | ---------------: | : --------------------------------------------------- |
-    | Bash             | bash, sh, zsh                                         |
-    | C#               | csharp, cs                                            |
-    | C                | c, h                                                  |
-    | C++              | cpp, hpp, cc, hh, c++, h++, cxx, hxx                  |
-    | Clojure          | clojure, clj                                          |
-    | Clojure REPL     | clojure-repl                                          |
-    | CMake            | cmake, cmake.in                                       |
-    | CSS              | css                                                   |
-    | Diff             | diff, patch                                           |
-    | DOS .bat         | dos, bat, cmd                                         |
-    | F#               | fsharp, fs                                            |
-    | Groovy           | groovy                                                |
-    | Go               | go, golang                                            |
-    | HTML/XML         | xml, html, xhtml, rss, atom, xjb, xsd, xsl, plist, svg|
-    | HTTP             | http, https                                           |
-    | Java             | java, jsp                                             |
-    | JavaScript       | javascript, js, jsx                                   |
-    | JSON             | json                                                  |
-    | Julia            | julia                                                 |
-    | Julia REPL       | julia-repl                                            |
-    | LaTex            | tex                                                   |
-    | Lisp             | lisp                                                  |
-    | Makefile         | makefile, mk, mak, make                               |
-    | Markdown         | markdown, md, mkdown, mkd                             |
-    | Maxima           | maxima                                                |
-    | Perl             | perl, pl, pm                                          |
-    | Plain Text       | plaintext, txt, text                                  |
-    | PowerShell       | powershell, ps, ps1                                   |
-    | Python           | python, py, gyp                                       |
-    | Python REPL      | python-repl, pycon                                    |
-    | R                | r                                                     |
-    | Rust             | rust, rs                                              |
-    | SQL              | sql                                                   |
-    | TOML, INI        | ini, toml                                             |
-    | Visual Basic.net | vbnet, vb                                             |
-    | YAML             | yml, yaml                                             |
+    | Language         | Fenced Code Block Alias
+    | ---------------: | : ---------------------------------------------------
+    | Bash             | bash, sh, zsh
+    | C#               | csharp, cs
+    | C                | c, h
+    | C++              | cpp, hpp, cc, hh, c++, h++, cxx, hxx
+    | Clojure          | clojure, clj
+    | Clojure REPL     | clojure-repl
+    | CMake            | cmake, cmake.in
+    | CSS              | css
+    | Diff             | diff, patch
+    | DOS .bat         | dos, bat, cmd
+    | F#               | fsharp, fs
+    | Groovy           | groovy
+    | Go               | go, golang
+    | HTML/XML         | xml, html, xhtml, rss, atom, xjb, xsd, xsl, plist, svg
+    | HTTP             | http, https
+    | Java             | java, jsp
+    | JavaScript       | javascript, js, jsx
+    | JSON             | json
+    | Julia            | julia
+    | Julia REPL       | julia-repl
+    | LaTex            | tex
+    | Lisp             | lisp
+    | Makefile         | makefile, mk, mak, make
+    | Markdown         | markdown, md, mkdown, mkd
+    | Maxima           | maxima
+    | Perl             | perl, pl, pm
+    | Plain Text       | plaintext, txt, text
+    | PowerShell       | powershell, ps, ps1
+    | Python           | python, py, gyp
+    | Python REPL      | python-repl, pycon
+    | R                | r
+    | Rust             | rust, rs
+    | SQL              | sql
+    | TOML, INI        | ini, toml
+    | Visual Basic.net | vbnet, vb
+    | YAML             | yml, yaml
 
     See also [Customization](about_MarkdownToHTML.md#customization) for more
     information.
@@ -89,10 +89,8 @@ Markdown Extensions
 
 # Release Notes
 
-Release notes for this release are at:
-[Latest MarkdownToHtml Release](https://github.com/WetHat/MarkdownToHtml/releases/tag/2.7.0).
-A complete list of current and historical releases is available on GitHub at:
-[Releases](https://github.com/WetHat/MarkdownToHtml/releases/).
+Release notes for this and previous releases are on GitHub at:
+[MarkdownToHtml Releases](https://github.com/WetHat/MarkdownToHtml/releases).
 
 ## Upgrading Custom Templates and Static Site Projects.
 
@@ -151,4 +149,4 @@ for static site upgrades.
 
 ---
 
-<cite>Module: MarkDownToHTML; Version: 2.7.0; (c) 2018-2022 WetHat Lab. All rights reserved.</cite>
+<cite>Module: MarkDownToHTML; Version: 2.7.1; (c) 2018-2022 WetHat Lab. All rights reserved.</cite>
