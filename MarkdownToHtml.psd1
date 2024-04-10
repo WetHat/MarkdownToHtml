@@ -11,7 +11,7 @@
 RootModule = 'MarkdownToHtml.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.7.1'
+ModuleVersion = '2.8.0'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop'
@@ -37,7 +37,7 @@ HTML sites in various ways.
 
 | Component                                       |Version | Description
 |-------------------------------------------------|--------|-----------------------------------
-| [Markdig](https://github.com/lunet-io/markdig)  | 0.28.1 | Fast Markdown processor for .NET
+| [Markdig](https://github.com/lunet-io/markdig)  | 0.37.0 | Fast Markdown processor for .NET
 | [highlight.js](https://highlightjs.org/)        | 11.5.1 | Code syntax highlighter
 | [KaTeX](https://katex.org/)                     | 0.15.3 | Math typesetting
 | [Mermaid](http://mermaid-js.github.io/mermaid/) | 9.0.0  | Diagramming
