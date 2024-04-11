@@ -38,7 +38,7 @@ HTML sites in various ways.
 | Component                                       |Version | Description
 |-------------------------------------------------|--------|-----------------------------------
 | [Markdig](https://github.com/lunet-io/markdig)  | 0.37.0 | Fast Markdown processor for .NET
-| [highlight.js](https://highlightjs.org/)        | 11.5.1 | Code syntax highlighter
+| [highlight.js](https://highlightjs.org/)        | 11.9.0 | Code syntax highlighter
 | [KaTeX](https://katex.org/)                     | 0.15.3 | Math typesetting
 | [Mermaid](http://mermaid-js.github.io/mermaid/) | 9.0.0  | Diagramming
 | [Svgbob](https://lib.rs/crates/svgbob_cli)      | 0.6.6  | Text based diagramming
@@ -46,43 +46,72 @@ HTML sites in various ways.
 Code Syntax Highlighting (highlight.js)
 :   Pre-configured code syntax highlighting languages in this package:
 
-    | Language         | Fenced Code Block Alias
+    | Language         | Fenced Code Block Aliases
     | ---------------: | : ---------------------------------------------------
-    | Bash             | bash, sh, zsh
-    | C#               | csharp, cs
+    | AsciiDoc         | asciidoc, adoc
+    | Apache           | apache, apacheconf
+    | autoit           | autoit
+    | Bash             | bash, sh
+    | C#               | csharp, cs, c#
     | C                | c, h
-    | C++              | cpp, hpp, cc, hh, c++, h++, cxx, hxx
-    | Clojure          | clojure, clj
+    | C++              | cc, c++, h++, hpp, hh, hxx, cxx
+    | Clojure          | clojure, clj, edn
     | Clojure REPL     | clojure-repl
     | CMake            | cmake, cmake.in
     | CSS              | css
     | Diff             | diff, patch
     | DOS .bat         | dos, bat, cmd
-    | F#               | fsharp, fs
-    | Groovy           | groovy
+    | Erlang           |
+    | Erlang REPL      | erlang-repl
+    | Excel            | excel, xlsx, xls
+    | F#               | fsharp, fs. f#
+    | Fortran          | fortran, f90, f95
     | Go               | go, golang
-    | HTML/XML         | xml, html, xhtml, rss, atom, xjb, xsd, xsl, plist, svg
+    | Graphql          | graphql, gql
+    | Groovy           | groovy
     | HTTP             | http, https
+    | INI, TOML        | ini, toml
     | Java             | java, jsp
-    | JavaScript       | javascript, js, jsx
+    | JavaScript       | javascript, js, jsx, mjs, cjs
     | JSON             | json
-    | Julia            | julia
+    | Julia            | julia, jldoctest
     | Julia REPL       | julia-repl
-    | LaTex            | tex
+    | Kotlin           | kotlin, kt, kts
+    | LaTeX            | latex, tex
+    | less             | less
     | Lisp             | lisp
+    | Lua              | lua
     | Makefile         | makefile, mk, mak, make
     | Markdown         | markdown, md, mkdown, mkd
+    | Mathematica      | mathematica, mma, wl
     | Maxima           | maxima
+    | nginx            | nginx, nginxconf
+    | Node REPL        | node-repl
     | Perl             | perl, pl, pm
+    | PHP              | php
     | Plain Text       | plaintext, txt, text
-    | PowerShell       | powershell, ps, ps1
-    | Python           | python, py, gyp
+    | PowerShell       | powershell, pwsh, ps, ps1
+    | Prolog           | prolog
+    | Properties       | properties
+    | Python           | python, py, gyp, ipython
     | Python REPL      | python-repl, pycon
     | R                | r
     | Rust             | rust, rs
+    | Scala            | scala
+    | Scheme           | scheme, scm
+    | scss             | scss
+    | shell            | shell, console, shellsession
+    | smalltalk        | smalltalk, st
     | SQL              | sql
-    | TOML, INI        | ini, toml
+    | tcl              | tcl, tk
+    | Typescript       | typescript, ts, tsx, mts, cts
     | Visual Basic.net | vbnet, vb
+    | vbscript         | vbscript, vbs
+    | vbscript-html    | vbscript-html
+    | vim              | vim
+    | x86asm           | x86asm
+    | XML/HTML         | xml, html, xhtml, rss, atom, xjb, xsd, xsl, plist, wsf, svg
+    | Xquery           | xquery, xpath, xq, xqm
     | YAML             | yml, yaml
 
     See also [Customization](about_MarkdownToHTML.md#customization) for more

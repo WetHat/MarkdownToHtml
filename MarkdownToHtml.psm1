@@ -708,7 +708,7 @@ The new conversion template directory `[System.IO.DirectoryInfo]`.
 
 Updates to the MarkdownToHtml module usually come with an updated factory
 template. Unless you want to take advantage of the new template resources or there
-is a [known incompatibility](MarkDownToHtml.md#known-incompatibilities),
+is a [known incompatibility](MarkDownToHTML.md#known-incompatibilities),
 **no action** is needed.
 
 :point_up: A convenient way to upgrade a custom template is to perform the steps
@@ -796,7 +796,7 @@ template and sometimes also with an updated project build scripts (`Build.ps1`) 
 project configurations (`Build.json`).
 
 Unless you want to take advantage of the new template resources and build files
-or there is a [Known Incompatibility](MarkDownToHtml.md#known-incompatibilities),
+or there is a [Known Incompatibility](MarkDownToHTML.md#known-incompatibilities),
 no action is needed.
 
 :point_up: A convenient way to upgrade an existing static site project is described below:
