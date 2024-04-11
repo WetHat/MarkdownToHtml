@@ -41,7 +41,7 @@ HTML sites in various ways.
 | [highlight.js](https://highlightjs.org/)        | 11.9.0 | Code syntax highlighter
 | [KaTeX](https://katex.org/)                     | 0.15.3 | Math typesetting
 | [Mermaid](http://mermaid-js.github.io/mermaid/) | 9.0.0  | Diagramming
-| [Svgbob](https://lib.rs/crates/svgbob_cli)      | 0.6.6  | Text based diagramming
+| [Svgbob](https://lib.rs/crates/svgbob_cli)      | 0.7.2  | Text based diagramming
 
 Code Syntax Highlighting (highlight.js)
 :   Pre-configured code syntax highlighting languages in this package:
