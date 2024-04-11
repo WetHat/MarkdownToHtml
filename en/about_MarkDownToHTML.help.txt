@@ -408,7 +408,7 @@ CUSTOMIZATION
     >     `md-template.html`:
     >
     >     `highlight.min.js`
-    >     :   Syntax highlighting. See [Factory Configuration](MarkdownToHtml.md#factory-configuration)
+    >     :   Syntax highlighting. See [Factory Configuration](MarkdownToHTML.md#factory-configuration)
     >         for a list of pre-installed highlighting languages.
     >         To configure syntax highlighting for
     >         [other supported languages](https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md)
