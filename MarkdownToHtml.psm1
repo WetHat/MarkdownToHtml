@@ -65,7 +65,7 @@ this HTML fragment is generated:
 ~~~
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.7/Expand-HtmlTemplate.html
+https://wethat.github.io/MarkdownToHtml/2.8/Expand-HtmlTemplate.html
 #>
 function Expand-HtmlTemplate {
     [OutputType([string])]
@@ -206,7 +206,7 @@ The generated Html file objects are returned like so:
     ...          ...            ...            ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.7/Publish-StaticHtmlSite.html
+https://wethat.github.io/MarkdownToHtml/2.8/Publish-StaticHtmlSite.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -365,7 +365,7 @@ Returns following annotated Markdown file objects of type `[System.IO.FileInfo]`
     ...                   ...   ...                        ...
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.7/Find-MarkdownFiles.html
+https://wethat.github.io/MarkdownToHtml/2.8/Find-MarkdownFiles.html
 .LINK
 `Convert-MarkdownToHTML`
 .LINK
@@ -631,7 +631,7 @@ Convert all Markdown files in `E:\MyMarkdownFiles` using
 The generated HTML files are saved to the directory `E:\MyHTMLFiles`.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.7/Convert-MarkdownToHTML.html
+https://wethat.github.io/MarkdownToHtml/2.8/Convert-MarkdownToHTML.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -725,7 +725,7 @@ below:
    `Template\styles\md-styles.css` using your favorite merge tool.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.7/New-HTMLTemplate.html
+https://wethat.github.io/MarkdownToHtml/2.8/New-HTMLTemplate.html
 .LINK
 `New-StaticHTMLSiteProject`
 
@@ -816,7 +816,7 @@ no action is needed.
    * `TempProject\Build.ps1`
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.7/New-StaticHTMLSiteProject.html
+https://wethat.github.io/MarkdownToHtml/2.8/New-StaticHTMLSiteProject.html
 .LINK
 `New-HTMLTemplate`
 .LINK
@@ -906,7 +906,7 @@ Outut:
 ~~~
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.7/Update-ResourceLinks.html
+https://wethat.github.io/MarkdownToHtml/2.8/Update-ResourceLinks.html
 .LINK
 `Publish-StaticHtmlSite`
 #>
@@ -996,7 +996,7 @@ files found under the `E:\lab\...\markdown` directory tree and opens a
 dialog window to display the errors.
 
 .LINK
-https://wethat.github.io/MarkdownToHtml/2.7/Test-LocalSiteLinks.html
+https://wethat.github.io/MarkdownToHtml/2.8/Test-LocalSiteLinks.html
 .LINK
 [Static Site Project Customization](about_MarkdownToHTML.md#static-site-project-customization)
 .LINK
