@@ -6,7 +6,7 @@
 
 # Syntax
 ```PowerShell
- Update-ResourceLinks [-InputObject] <String> [-RelativePath] <String>  [<CommonParameters>] 
+ Update-ResourceLinks -InputObject <String> [-RelativePath <String>]  [<CommonParameters>] 
 ```
 
 
@@ -24,7 +24,7 @@ site to compute valid resource links and update the template.
 
 
 # Parameters
- ## InputObject `<String>`
+ ## -InputObject `<String>`
   >An html fragment containing root-relative resource links.
 >
 > Parameter Property         | Value
@@ -35,7 +35,7 @@ site to compute valid resource links and update the template.
 > Accept pipeline input?     | true (ByValue)
 > Accept wildcard characters?| false
  - - -
- ## RelativePath `<String>`
+ ## -RelativePath `<String>`
   >The path to a Markdown (`*.md`) or HTML (`*.html`) file relative to its root
  >directory. That file's relative path
  >is used to adjust the links of in the given navigation bar item,

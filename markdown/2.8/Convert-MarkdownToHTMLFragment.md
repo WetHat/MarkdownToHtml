@@ -5,7 +5,7 @@
 
 # Syntax
 ```PowerShell
- Convert-MarkdownToHTMLFragment [-InputObject] <Object> [-IncludeExtension] <String[]> [-ExcludeExtension] <String[]> [-Split] <object>  [<CommonParameters>] 
+ Convert-MarkdownToHTMLFragment -InputObject <Object> [-IncludeExtension <String[]>] [-ExcludeExtension <String[]>] [-Split <object>]  [<CommonParameters>] 
 ```
 
 
@@ -19,7 +19,7 @@ Converts Markdown text to HTML fragments using configured
 
 
 # Parameters
- ## InputObject `<Object>`
+ ## -InputObject `<Object>`
   >The input object can have one of the following types:
  >* An annotated `[System.IO.FileInfo]` object as emitted by [`Find-MarkdownFiles`](Find-MarkdownFiles.md).
  >* A plain markdown string [`string`].
@@ -39,7 +39,7 @@ Converts Markdown text to HTML fragments using configured
 > Accept pipeline input?     | true (ByValue)
 > Accept wildcard characters?| false
  - - -
- ## IncludeExtension `<String[]>`
+ ## -IncludeExtension `<String[]>`
   >Comma separated list of Markdown parsing extension names.
  >See [Markdown extensions](about_MarkdownToHTML.md#supported-markdown-extensions)
  >for an annotated list of supported extensions.
@@ -52,7 +52,7 @@ Converts Markdown text to HTML fragments using configured
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## ExcludeExtension `<String[]>`
+ ## -ExcludeExtension `<String[]>`
   >Comma separated list of Markdown parsing extensions to exclude.
  >Mostly used when the the 'advanced' parsing option is included and
  >certain individual options need to be removed.
@@ -65,7 +65,7 @@ Converts Markdown text to HTML fragments using configured
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## Split `<SwitchParameter>`
+ ## -Split `<SwitchParameter>`
   >Split the Html fragment into an Array where each tag is in a separate slot.
  >This somewhat simplifies Html fragment post-processing.
  >

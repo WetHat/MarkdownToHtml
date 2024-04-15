@@ -61,9 +61,9 @@
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
 <button class='navitem'><a href='#description'><span class='navitem1'>Description</span></a></button>
 <button class='navitem'><a href='#parameters'><span class='navitem1'>Parameters</span></a></button>
-<button class='navitem'><a href='#navitemspecs-object'><span class='navitem2'>NavitemSpecs <code>&lt;Object[]&gt;</code></span></a></button>
-<button class='navitem'><a href='#relativepath-string'><span class='navitem2'>RelativePath <code>&lt;String&gt;</code></span></a></button>
-<button class='navitem'><a href='#navtemplate-object'><span class='navitem2'>NavTemplate <code>&lt;Object&gt;</code></span></a></button>
+<button class='navitem'><a href='#navitemspecs-object'><span class='navitem2'>-NavitemSpecs <code>&lt;Object[]&gt;</code></span></a></button>
+<button class='navitem'><a href='#relativepath-string'><span class='navitem2'>-RelativePath <code>&lt;String&gt;</code></span></a></button>
+<button class='navitem'><a href='#navtemplate-object'><span class='navitem2'>-NavTemplate <code>&lt;Object&gt;</code></span></a></button>
 <button class='navitem'><a href='#inputs'><span class='navitem1'>Inputs</span></a></button>
 <button class='navitem'><a href='#outputs'><span class='navitem1'>Outputs</span></a></button>
 <button class='navitem'><a href='#examples'><span class='navitem1'>Examples</span></a></button>
@@ -79,7 +79,7 @@
 redering templates</p>
 </blockquote>
 <h1 id="syntax">Syntax</h1>
-<pre><code class="language-PowerShell"> New-SiteNavigation [-NavitemSpecs] &lt;Object[]&gt; [-RelativePath] &lt;String&gt; [-NavTemplate] &lt;Object&gt;  [&lt;CommonParameters&gt;] 
+<pre><code class="language-PowerShell"> New-SiteNavigation -NavitemSpecs &lt;Object[]&gt; [-RelativePath &lt;String&gt;] [-NavTemplate &lt;Object&gt;]  [&lt;CommonParameters&gt;] 
 </code></pre>
 <h1 id="description">Description</h1>
 <p>A navigation bar section for a HTML page is built by:</p>
@@ -90,7 +90,7 @@ content</li>
 and expanding the template using data from the item specification</li>
 </ul>
 <h1 id="parameters">Parameters</h1>
-<h2 id="navitemspecs-object">NavitemSpecs <code>&lt;Object[]&gt;</code></h2>
+<h2 id="navitemspecs-object">-NavitemSpecs <code>&lt;Object[]&gt;</code></h2>
 <blockquote>
 <p>An array where each item is an object or dictionary with exactly one NoteProperty`
 or key representing a single key-value pair. This parameter provides the data
@@ -169,7 +169,7 @@ HTML templates.</p>
 </table>
 </blockquote>
 <hr />
-<h2 id="relativepath-string">RelativePath <code>&lt;String&gt;</code></h2>
+<h2 id="relativepath-string">-RelativePath <code>&lt;String&gt;</code></h2>
 <blockquote>
 <p>The path to a Markdown (<code>*.md</code>) or HTML (<code>*.html</code>) file relative to its
 corresponding root configured in <code>Build.json</code>. For Markdown files the
@@ -210,7 +210,7 @@ being assembled.</p>
 </table>
 </blockquote>
 <hr />
-<h2 id="navtemplate-object">NavTemplate <code>&lt;Object&gt;</code></h2>
+<h2 id="navtemplate-object">-NavTemplate <code>&lt;Object&gt;</code></h2>
 <blockquote>
 <p>An optional dictionary of named HTML templates.</p>
 <table>

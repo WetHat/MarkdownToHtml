@@ -5,7 +5,7 @@
 
 # Syntax
 ```PowerShell
- Convert-MarkdownToHTML [-Path] <String> [-Template] <String> [-IncludeExtension] <String[]> [-ExcludeExtension] <String[]> [-MediaDirectory] <String> [-SiteDirectory] <String>  [<CommonParameters>] 
+ Convert-MarkdownToHTML -Path <String> [-Template <String>] [-IncludeExtension <String[]>] [-ExcludeExtension <String[]>] [-MediaDirectory <String>] -SiteDirectory <String>  [<CommonParameters>] 
 ```
 
 
@@ -23,7 +23,7 @@ of them to a standalone html document using:
 
 
 # Parameters
- ## Path `<String>`
+ ## -Path `<String>`
   >Path to Markdown files or directories containing Markdown files.
 >
 > Parameter Property         | Value
@@ -34,7 +34,7 @@ of them to a standalone html document using:
 > Accept pipeline input?     | false
 > Accept wildcard characters?| true
  - - -
- ## Template `<String>`
+ ## -Template `<String>`
   >Optional directory containing the html template file `md-template.html` and its resources.
  >If no template directory is specified, the factory-installed default template is used.
  >For information about creating custom templates see [`New-HTMLTemplate`](New-HTMLTemplate.md).
@@ -47,7 +47,7 @@ of them to a standalone html document using:
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## IncludeExtension `<String[]>`
+ ## -IncludeExtension `<String[]>`
   >Comma separated list of Markdown parsing extensions to use.
  >See [about_MarkdownToHTML](MarkdownToHTML.md#markdown-extensions) for an
  >annotated list of supported extensions.
@@ -60,7 +60,7 @@ of them to a standalone html document using:
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## ExcludeExtension `<String[]>`
+ ## -ExcludeExtension `<String[]>`
   >Comma separated list of Markdown parsing extensions to exclude.
  >Mostly used when the the 'advanced' parsing option is included and
  >certain individual options need to be removed,
@@ -73,7 +73,7 @@ of them to a standalone html document using:
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## MediaDirectory `<String>`
+ ## -MediaDirectory `<String>`
   >An optional directory containing additional media for the Html site
  >such as images, videos etc. Defaults to the directory given in `-Path`
 >
@@ -85,7 +85,7 @@ of them to a standalone html document using:
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## SiteDirectory `<String>`
+ ## -SiteDirectory `<String>`
   >Directory for the generated HTML files. The Html files will be placed
  >in the same relative location below this directory as related Markdown document
  >has below the Markdown source directory.

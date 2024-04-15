@@ -5,7 +5,7 @@
 
 # Syntax
 ```PowerShell
- Find-MarkdownFiles [-Path] <String> [-Exclude] <String[]> [-BuildConfiguration] <PSObject>  [<CommonParameters>] 
+ Find-MarkdownFiles -Path <String> [-Exclude <String[]>] [-BuildConfiguration <PSObject>]  [<CommonParameters>] 
 ```
 
 
@@ -24,7 +24,7 @@ conversion process to determine the relative path of a markdown file (property
 
 
 # Parameters
- ## Path `<String>`
+ ## -Path `<String>`
   >Path to a directory containing Markdown files.
 >
 > Parameter Property         | Value
@@ -35,7 +35,7 @@ conversion process to determine the relative path of a markdown file (property
 > Accept pipeline input?     | false
 > Accept wildcard characters?| true
  - - -
- ## Exclude `<String[]>`
+ ## -Exclude `<String[]>`
   >Omit the specified files. A comma separated list of path elements or
  >patterns, such as "D*.md". Wildcards are permitted.
 >
@@ -47,7 +47,7 @@ conversion process to determine the relative path of a markdown file (property
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## BuildConfiguration `<PSObject>`
+ ## -BuildConfiguration `<PSObject>`
   >Build configuration object. Usually obtained by reading a `Build.json` configuration
  >file. See the [Static Site](about_MarkdownToHTML.md#static-site-project-customization)
  >for details about configuration options and structure. This configuration is

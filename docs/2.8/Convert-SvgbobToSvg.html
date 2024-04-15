@@ -61,9 +61,9 @@
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
 <button class='navitem'><a href='#description'><span class='navitem1'>Description</span></a></button>
 <button class='navitem'><a href='#parameters'><span class='navitem1'>Parameters</span></a></button>
-<button class='navitem'><a href='#inputobject-hashtable'><span class='navitem2'>InputObject <code>&lt;Hashtable&gt;</code></span></a></button>
-<button class='navitem'><a href='#sitedirectory-string'><span class='navitem2'>SiteDirectory <code>&lt;String&gt;</code></span></a></button>
-<button class='navitem'><a href='#options-object'><span class='navitem2'>Options <code>&lt;Object&gt;</code></span></a></button>
+<button class='navitem'><a href='#inputobject-hashtable'><span class='navitem2'>-InputObject <code>&lt;Hashtable&gt;</code></span></a></button>
+<button class='navitem'><a href='#sitedirectory-string'><span class='navitem2'>-SiteDirectory <code>&lt;String&gt;</code></span></a></button>
+<button class='navitem'><a href='#options-object'><span class='navitem2'>-Options <code>&lt;Object&gt;</code></span></a></button>
 <button class='navitem'><a href='#inputs'><span class='navitem1'>Inputs</span></a></button>
 <button class='navitem'><a href='#outputs'><span class='navitem1'>Outputs</span></a></button>
 <button class='navitem'><a href='#notes'><span class='navitem1'>Notes</span></a></button>
@@ -79,7 +79,7 @@
 <p>Convert fenced svgbob code blocks to svg images.</p>
 </blockquote>
 <h1 id="syntax">Syntax</h1>
-<pre><code class="language-PowerShell"> Convert-SvgbobToSvg [-InputObject] &lt;Hashtable&gt; [-SiteDirectory] &lt;String&gt; [-Options] &lt;Object&gt;  [&lt;CommonParameters&gt;] 
+<pre><code class="language-PowerShell"> Convert-SvgbobToSvg -InputObject &lt;Hashtable&gt; -SiteDirectory &lt;String&gt; [-Options &lt;Object&gt;]  [&lt;CommonParameters&gt;] 
 </code></pre>
 <h1 id="description">Description</h1>
 <p>Scans the input data (lines of Markdown text) for svgbob fenced code blocks
@@ -97,7 +97,7 @@ For example:</p>
 currently being assembled and named after that HTML file with an unique
 index appended.</p>
 <h1 id="parameters">Parameters</h1>
-<h2 id="inputobject-hashtable">InputObject <code>&lt;Hashtable&gt;</code></h2>
+<h2 id="inputobject-hashtable">-InputObject <code>&lt;Hashtable&gt;</code></h2>
 <blockquote>
 <table>
 <thead>
@@ -131,7 +131,7 @@ index appended.</p>
 </table>
 </blockquote>
 <hr />
-<h2 id="sitedirectory-string">SiteDirectory <code>&lt;String&gt;</code></h2>
+<h2 id="sitedirectory-string">-SiteDirectory <code>&lt;String&gt;</code></h2>
 <blockquote>
 <p>Location of the static HTML site. The Svg file will be generated relative to this
 path.</p>
@@ -167,7 +167,7 @@ path.</p>
 </table>
 </blockquote>
 <hr />
-<h2 id="options-object">Options <code>&lt;Object&gt;</code></h2>
+<h2 id="options-object">-Options <code>&lt;Object&gt;</code></h2>
 <blockquote>
 <p>Svg conversion options. An object or hashtable with follwing properties or keys:</p>
 <table>

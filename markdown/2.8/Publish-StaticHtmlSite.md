@@ -5,7 +5,7 @@
 
 # Syntax
 ```PowerShell
- Publish-StaticHtmlSite [-InputObject] <Object> [-Template] <String> [-ContentMap] <Hashtable> [-MediaDirectory] <String> [-SiteDirectory] <String>  [<CommonParameters>] 
+ Publish-StaticHtmlSite -InputObject <Object> [-Template <String>] [-ContentMap <Hashtable>] [-MediaDirectory <String>] -SiteDirectory <String>  [<CommonParameters>] 
 ```
 
 
@@ -28,7 +28,7 @@ See [`New-HtmlTemplate`](New-HtmlTemplate.md) for details.
 
 
 # Parameters
- ## InputObject `<Object>`
+ ## -InputObject `<Object>`
   >An object representing an Html fragment. Ideally this is an output object
  >returned by [`Convert-MarkdownToHTMLFragment`](Convert-MarkdownToHTMLFragment.md), but any object will
  >work provided following properties are present:
@@ -56,7 +56,7 @@ See [`New-HtmlTemplate`](New-HtmlTemplate.md) for details.
 > Accept pipeline input?     | true (ByValue)
 > Accept wildcard characters?| false
  - - -
- ## Template `<String>`
+ ## -Template `<String>`
   >Optional directory containing the html template file `md-template.html` and its
  >resources which will be used to convert the Html fragments into standalone Html
  >documents. If no template directory is specified, a default factory-installed
@@ -73,7 +73,7 @@ See [`New-HtmlTemplate`](New-HtmlTemplate.md) for details.
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## ContentMap `<Hashtable>`
+ ## -ContentMap `<Hashtable>`
   >Placeholder substitution mapping as described in
  >[Template Customization](about_MarkdownToHTML.md#conversion-template-customization).
  >
@@ -105,7 +105,7 @@ See [`New-HtmlTemplate`](New-HtmlTemplate.md) for details.
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## MediaDirectory `<String>`
+ ## -MediaDirectory `<String>`
   >An optional directory containing additional media for the HTML site
  >such as images, videos etc.
 >
@@ -117,7 +117,7 @@ See [`New-HtmlTemplate`](New-HtmlTemplate.md) for details.
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## SiteDirectory `<String>`
+ ## -SiteDirectory `<String>`
   >Directory for the generated HTML files. The Html files will be placed
  >in the same relative location below this directory as related Markdown document
  >has below the input directory. If the site directory does not exist it will be created.

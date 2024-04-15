@@ -61,8 +61,8 @@
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
 <button class='navitem'><a href='#description'><span class='navitem1'>Description</span></a></button>
 <button class='navitem'><a href='#parameters'><span class='navitem1'>Parameters</span></a></button>
-<button class='navitem'><a href='#inputobject-string'><span class='navitem2'>InputObject <code>&lt;String&gt;</code></span></a></button>
-<button class='navitem'><a href='#contentmap-hashtable'><span class='navitem2'>ContentMap <code>&lt;Hashtable&gt;</code></span></a></button>
+<button class='navitem'><a href='#inputobject-string'><span class='navitem2'>-InputObject <code>&lt;String&gt;</code></span></a></button>
+<button class='navitem'><a href='#contentmap-hashtable'><span class='navitem2'>-ContentMap <code>&lt;Hashtable&gt;</code></span></a></button>
 <button class='navitem'><a href='#inputs'><span class='navitem1'>Inputs</span></a></button>
 <button class='navitem'><a href='#outputs'><span class='navitem1'>Outputs</span></a></button>
 <button class='navitem'><a href='#examples'><span class='navitem1'>Examples</span></a></button>
@@ -77,14 +77,14 @@
 <p>Simple template expansion based on a content substitution dictionary.</p>
 </blockquote>
 <h1 id="syntax">Syntax</h1>
-<pre><code class="language-PowerShell"> Expand-HtmlTemplate [-InputObject] &lt;String&gt; [-ContentMap] &lt;Hashtable&gt;  [&lt;CommonParameters&gt;] 
+<pre><code class="language-PowerShell"> Expand-HtmlTemplate -InputObject &lt;String&gt; -ContentMap &lt;Hashtable&gt;  [&lt;CommonParameters&gt;] 
 </code></pre>
 <h1 id="description">Description</h1>
 <p>Locates placeholders in the input string abd replaced them
 with values found for the placeholders in the given dictionary. The placeholder
 expansion is non-recursive.</p>
 <h1 id="parameters">Parameters</h1>
-<h2 id="inputobject-string">InputObject <code>&lt;String&gt;</code></h2>
+<h2 id="inputobject-string">-InputObject <code>&lt;String&gt;</code></h2>
 <blockquote>
 <p>An string representing an Html fragment.</p>
 <table>
@@ -119,7 +119,7 @@ expansion is non-recursive.</p>
 </table>
 </blockquote>
 <hr />
-<h2 id="contentmap-hashtable">ContentMap <code>&lt;Hashtable&gt;</code></h2>
+<h2 id="contentmap-hashtable">-ContentMap <code>&lt;Hashtable&gt;</code></h2>
 <blockquote>
 <p>A dictionary whose keys define placeholders and whose values define the
 replacements.</p>

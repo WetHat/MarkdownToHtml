@@ -5,7 +5,7 @@
 
 # Syntax
 ```PowerShell
- Convert-SvgbobToSvg [-InputObject] <Hashtable> [-SiteDirectory] <String> [-Options] <Object>  [<CommonParameters>] 
+ Convert-SvgbobToSvg -InputObject <Hashtable> -SiteDirectory <String> [-Options <Object>]  [<CommonParameters>] 
 ```
 
 
@@ -35,7 +35,7 @@ index appended.
 
 
 # Parameters
- ## InputObject `<Hashtable>`
+ ## -InputObject `<Hashtable>`
  
 >
 > Parameter Property         | Value
@@ -46,7 +46,7 @@ index appended.
 > Accept pipeline input?     | true (ByValue)
 > Accept wildcard characters?| false
  - - -
- ## SiteDirectory `<String>`
+ ## -SiteDirectory `<String>`
   >Location of the static HTML site. The Svg file will be generated relative to this
  >path.
 >
@@ -58,7 +58,7 @@ index appended.
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## Options `<Object>`
+ ## -Options `<Object>`
   >Svg conversion options. An object or hashtable with follwing properties or keys:
  >
  >| Property       | Description                                  |

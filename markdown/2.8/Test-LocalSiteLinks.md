@@ -6,7 +6,7 @@
 
 # Syntax
 ```PowerShell
- Test-LocalSiteLinks [-Path] <String>  [<CommonParameters>] 
+ Test-LocalSiteLinks -Path <String>  [<CommonParameters>] 
 ```
 
 
@@ -22,7 +22,7 @@ primary use.
 
 
 # Parameters
- ## Path `<String>`
+ ## -Path `<String>`
   >Path to the root of a directory tree containing Markdown sources.
  >Typically this is the sources directory configured in `Build.json` by
  >`markdown_dir`. See

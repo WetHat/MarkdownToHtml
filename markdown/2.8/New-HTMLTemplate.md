@@ -6,7 +6,7 @@
 
 # Syntax
 ```PowerShell
- New-HTMLTemplate [-Destination] <String>  [<CommonParameters>] 
+ New-HTMLTemplate -Destination <String>  [<CommonParameters>] 
 ```
 
 
@@ -25,7 +25,7 @@ for ways to customize the template.
 
 
 # Parameters
- ## Destination `<String>`
+ ## -Destination `<String>`
   >Location of the new conversion template directory. The template directory
  >should be empty or non-existent.
 >

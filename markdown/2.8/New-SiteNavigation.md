@@ -6,7 +6,7 @@
 
 # Syntax
 ```PowerShell
- New-SiteNavigation [-NavitemSpecs] <Object[]> [-RelativePath] <String> [-NavTemplate] <Object>  [<CommonParameters>] 
+ New-SiteNavigation -NavitemSpecs <Object[]> [-RelativePath <String>] [-NavTemplate <Object>]  [<CommonParameters>] 
 ```
 
 
@@ -23,7 +23,7 @@ A navigation bar section for a HTML page is built by:
 
 
 # Parameters
- ## NavitemSpecs `<Object[]>`
+ ## -NavitemSpecs `<Object[]>`
   >An array where each item is an object or dictionary with exactly one NoteProperty`
  >or key representing a single key-value pair. This parameter provides the data
  >for **one** item in the navigation bar.
@@ -56,7 +56,7 @@ A navigation bar section for a HTML page is built by:
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## RelativePath `<String>`
+ ## -RelativePath `<String>`
   >The path to a Markdown (`*.md`) or HTML (`*.html`) file relative to its
  >corresponding root configured in `Build.json`. For Markdown files the
  >root is configured by parameter `"markdown_dir"` for HTML files it is
@@ -74,7 +74,7 @@ A navigation bar section for a HTML page is built by:
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## NavTemplate `<Object>`
+ ## -NavTemplate `<Object>`
   >An optional dictionary of named HTML templates.
  >
  >+ :--------: + :----------: + ----------------------------------------

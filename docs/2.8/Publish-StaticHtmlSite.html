@@ -61,11 +61,11 @@
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
 <button class='navitem'><a href='#description'><span class='navitem1'>Description</span></a></button>
 <button class='navitem'><a href='#parameters'><span class='navitem1'>Parameters</span></a></button>
-<button class='navitem'><a href='#inputobject-object'><span class='navitem2'>InputObject <code>&lt;Object&gt;</code></span></a></button>
-<button class='navitem'><a href='#template-string'><span class='navitem2'>Template <code>&lt;String&gt;</code></span></a></button>
-<button class='navitem'><a href='#contentmap-hashtable'><span class='navitem2'>ContentMap <code>&lt;Hashtable&gt;</code></span></a></button>
-<button class='navitem'><a href='#mediadirectory-string'><span class='navitem2'>MediaDirectory <code>&lt;String&gt;</code></span></a></button>
-<button class='navitem'><a href='#sitedirectory-string'><span class='navitem2'>SiteDirectory <code>&lt;String&gt;</code></span></a></button>
+<button class='navitem'><a href='#inputobject-object'><span class='navitem2'>-InputObject <code>&lt;Object&gt;</code></span></a></button>
+<button class='navitem'><a href='#template-string'><span class='navitem2'>-Template <code>&lt;String&gt;</code></span></a></button>
+<button class='navitem'><a href='#contentmap-hashtable'><span class='navitem2'>-ContentMap <code>&lt;Hashtable&gt;</code></span></a></button>
+<button class='navitem'><a href='#mediadirectory-string'><span class='navitem2'>-MediaDirectory <code>&lt;String&gt;</code></span></a></button>
+<button class='navitem'><a href='#sitedirectory-string'><span class='navitem2'>-SiteDirectory <code>&lt;String&gt;</code></span></a></button>
 <button class='navitem'><a href='#inputs'><span class='navitem1'>Inputs</span></a></button>
 <button class='navitem'><a href='#outputs'><span class='navitem1'>Outputs</span></a></button>
 <button class='navitem'><a href='#examples'><span class='navitem1'>Examples</span></a></button>
@@ -80,7 +80,7 @@
 <p>Create a static HTML site from HTML fragment objects.</p>
 </blockquote>
 <h1 id="syntax">Syntax</h1>
-<pre><code class="language-PowerShell"> Publish-StaticHtmlSite [-InputObject] &lt;Object&gt; [-Template] &lt;String&gt; [-ContentMap] &lt;Hashtable&gt; [-MediaDirectory] &lt;String&gt; [-SiteDirectory] &lt;String&gt;  [&lt;CommonParameters&gt;] 
+<pre><code class="language-PowerShell"> Publish-StaticHtmlSite -InputObject &lt;Object&gt; [-Template &lt;String&gt;] [-ContentMap &lt;Hashtable&gt;] [-MediaDirectory &lt;String&gt;] -SiteDirectory &lt;String&gt;  [&lt;CommonParameters&gt;] 
 </code></pre>
 <h1 id="description">Description</h1>
 <p>Html fragment objects piped into this function (or passed via the <code>InputObject</code>
@@ -95,7 +95,7 @@ stylesheets and JavaScript resources to render Markdown extensions for:</p>
 </ul>
 <p>See <a href="New-HtmlTemplate.html"><code>New-HtmlTemplate</code></a> for details.</p>
 <h1 id="parameters">Parameters</h1>
-<h2 id="inputobject-object">InputObject <code>&lt;Object&gt;</code></h2>
+<h2 id="inputobject-object">-InputObject <code>&lt;Object&gt;</code></h2>
 <blockquote>
 <p>An object representing an Html fragment. Ideally this is an output object
 returned by <a href="Convert-MarkdownToHTMLFragment.html"><code>Convert-MarkdownToHTMLFragment</code></a>, but any object will
@@ -150,7 +150,7 @@ the HTML document.</dd>
 </table>
 </blockquote>
 <hr />
-<h2 id="template-string">Template <code>&lt;String&gt;</code></h2>
+<h2 id="template-string">-Template <code>&lt;String&gt;</code></h2>
 <blockquote>
 <p>Optional directory containing the html template file <code>md-template.html</code> and its
 resources which will be used to convert the Html fragments into standalone Html
@@ -191,7 +191,7 @@ for customization options.</p>
 </table>
 </blockquote>
 <hr />
-<h2 id="contentmap-hashtable">ContentMap <code>&lt;Hashtable&gt;</code></h2>
+<h2 id="contentmap-hashtable">-ContentMap <code>&lt;Hashtable&gt;</code></h2>
 <blockquote>
 <p>Placeholder substitution mapping as described in
 <a href="about_MarkdownToHTML.html#conversion-template-customization">Template Customization</a>.</p>
@@ -284,7 +284,7 @@ See
 </table>
 </blockquote>
 <hr />
-<h2 id="mediadirectory-string">MediaDirectory <code>&lt;String&gt;</code></h2>
+<h2 id="mediadirectory-string">-MediaDirectory <code>&lt;String&gt;</code></h2>
 <blockquote>
 <p>An optional directory containing additional media for the HTML site
 such as images, videos etc.</p>
@@ -320,7 +320,7 @@ such as images, videos etc.</p>
 </table>
 </blockquote>
 <hr />
-<h2 id="sitedirectory-string">SiteDirectory <code>&lt;String&gt;</code></h2>
+<h2 id="sitedirectory-string">-SiteDirectory <code>&lt;String&gt;</code></h2>
 <blockquote>
 <p>Directory for the generated HTML files. The Html files will be placed
 in the same relative location below this directory as related Markdown document

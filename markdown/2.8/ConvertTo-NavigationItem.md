@@ -6,7 +6,7 @@
 
 # Syntax
 ```PowerShell
- ConvertTo-NavigationItem [-NavSpec] <Object> [-RelativePath] <String> [-NavTemplate] <Object>  [<CommonParameters>] 
+ ConvertTo-NavigationItem [-NavSpec <Object>] [-RelativePath <String>] [-NavTemplate <Object>]  [<CommonParameters>] 
 ```
 
 
@@ -23,7 +23,7 @@ Converts the specification for a single item in the navigation bar by
 
 
 # Parameters
- ## NavSpec `<Object>`
+ ## -NavSpec `<Object>`
   >An object or dictionary with exactly one `NoteProperty` or key representing
  >a single key-value pair. This parameter provides the data for one item in
  >the navigation bar.
@@ -62,7 +62,7 @@ Converts the specification for a single item in the navigation bar by
 > Accept pipeline input?     | true (ByValue)
 > Accept wildcard characters?| false
  - - -
- ## RelativePath `<String>`
+ ## -RelativePath `<String>`
   >The path to a Markdown (`*.md`) or HTML (`*.html`) file relative to its
  >corresponding root configured in `Build.json`. For Markdown files the
  >root is configured by parameter `"markdown_dir"` for html files it is
@@ -80,7 +80,7 @@ Converts the specification for a single item in the navigation bar by
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## NavTemplate `<Object>`
+ ## -NavTemplate `<Object>`
   >An optional dictionary of named HTML templates.
  >
  >+ :--------: + :----------: + ----------------------------------------

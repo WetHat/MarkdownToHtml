@@ -61,8 +61,8 @@
 <button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
 <button class='navitem'><a href='#description'><span class='navitem1'>Description</span></a></button>
 <button class='navitem'><a href='#parameters'><span class='navitem1'>Parameters</span></a></button>
-<button class='navitem'><a href='#inputobject-string'><span class='navitem2'>InputObject <code>&lt;String&gt;</code></span></a></button>
-<button class='navitem'><a href='#relativepath-string'><span class='navitem2'>RelativePath <code>&lt;String&gt;</code></span></a></button>
+<button class='navitem'><a href='#inputobject-string'><span class='navitem2'>-InputObject <code>&lt;String&gt;</code></span></a></button>
+<button class='navitem'><a href='#relativepath-string'><span class='navitem2'>-RelativePath <code>&lt;String&gt;</code></span></a></button>
 <button class='navitem'><a href='#inputs'><span class='navitem1'>Inputs</span></a></button>
 <button class='navitem'><a href='#outputs'><span class='navitem1'>Outputs</span></a></button>
 <button class='navitem'><a href='#examples'><span class='navitem1'>Examples</span></a></button>
@@ -78,7 +78,7 @@
 valid for other site locations.</p>
 </blockquote>
 <h1 id="syntax">Syntax</h1>
-<pre><code class="language-PowerShell"> Update-ResourceLinks [-InputObject] &lt;String&gt; [-RelativePath] &lt;String&gt;  [&lt;CommonParameters&gt;] 
+<pre><code class="language-PowerShell"> Update-ResourceLinks -InputObject &lt;String&gt; [-RelativePath &lt;String&gt;]  [&lt;CommonParameters&gt;] 
 </code></pre>
 <h1 id="description">Description</h1>
 <p>HTML templates use links which are relative to the HTML site root directory
@@ -88,7 +88,7 @@ the resource links in the template may not be valid for the location of that
 HTML file. This command uses the relative position of the new HTML file in the
 site to compute valid resource links and update the template.</p>
 <h1 id="parameters">Parameters</h1>
-<h2 id="inputobject-string">InputObject <code>&lt;String&gt;</code></h2>
+<h2 id="inputobject-string">-InputObject <code>&lt;String&gt;</code></h2>
 <blockquote>
 <p>An html fragment containing root-relative resource links.</p>
 <table>
@@ -123,7 +123,7 @@ site to compute valid resource links and update the template.</p>
 </table>
 </blockquote>
 <hr />
-<h2 id="relativepath-string">RelativePath <code>&lt;String&gt;</code></h2>
+<h2 id="relativepath-string">-RelativePath <code>&lt;String&gt;</code></h2>
 <blockquote>
 <p>The path to a Markdown (<code>*.md</code>) or HTML (<code>*.html</code>) file relative to its root
 directory. That file's relative path

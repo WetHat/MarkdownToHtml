@@ -5,7 +5,7 @@
 
 # Syntax
 ```PowerShell
- Expand-DirectoryNavigation [-LiteralPath] <String> [-NavSpec] <Object>  [<CommonParameters>] 
+ Expand-DirectoryNavigation -LiteralPath <String> -NavSpec <Object>  [<CommonParameters>] 
 ```
 
 
@@ -19,7 +19,7 @@ and inserts links to all directly contained markdown files.
 
 
 # Parameters
- ## LiteralPath `<String>`
+ ## -LiteralPath `<String>`
   >Absolute path to the directory the navigation itens are relative to. Usually
  >this is the path to the directory containing the `Build.json` file the navigation
  >items are from or the directory configured by `markdown_dir` if the navigation
@@ -33,7 +33,7 @@ and inserts links to all directly contained markdown files.
 > Accept pipeline input?     | false
 > Accept wildcard characters?| false
  - - -
- ## NavSpec `<Object>`
+ ## -NavSpec `<Object>`
   >The specification of a single navigation item as specified in
  >[`ConvertTo-NavigationItem`](ConvertTo-NavigationItem.md).
 >

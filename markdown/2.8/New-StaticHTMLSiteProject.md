@@ -5,7 +5,7 @@
 
 # Syntax
 ```PowerShell
- New-StaticHTMLSiteProject [-ProjectDirectory] <String>  [<CommonParameters>] 
+ New-StaticHTMLSiteProject -ProjectDirectory <String>  [<CommonParameters>] 
 ```
 
 
@@ -29,7 +29,7 @@ for details about the project directory structure and site customization.
 
 
 # Parameters
- ## ProjectDirectory `<String>`
+ ## -ProjectDirectory `<String>`
   >The location of the new Markdown to HTML site conversion project.
 >
 > Parameter Property         | Value

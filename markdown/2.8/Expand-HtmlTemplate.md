@@ -5,7 +5,7 @@
 
 # Syntax
 ```PowerShell
- Expand-HtmlTemplate [-InputObject] <String> [-ContentMap] <Hashtable>  [<CommonParameters>] 
+ Expand-HtmlTemplate -InputObject <String> -ContentMap <Hashtable>  [<CommonParameters>] 
 ```
 
 
@@ -20,7 +20,7 @@ expansion is non-recursive.
 
 
 # Parameters
- ## InputObject `<String>`
+ ## -InputObject `<String>`
   >An string representing an Html fragment.
 >
 > Parameter Property         | Value
@@ -31,7 +31,7 @@ expansion is non-recursive.
 > Accept pipeline input?     | true (ByValue)
 > Accept wildcard characters?| false
  - - -
- ## ContentMap `<Hashtable>`
+ ## -ContentMap `<Hashtable>`
   >A dictionary whose keys define placeholders and whose values define the
  >replacements.
 >
