@@ -21,15 +21,22 @@ Invoke-Pester -Path './MarkdownToHtml.tests.ps1'
 $env:PSModulePath = $pathBak
 
 import-module 'WetHatLab'
-Protect-whPoshModule $pwd -Store Root
+Protect-whPoshModule $pwd -Store My
 </PostBuildScript>
     <PackageEntryPoint>MarkdownToHtml.tests.ps1</PackageEntryPoint>
-    <DotNetVersion>net472</DotNetVersion>
+    <DotNetVersion>net462</DotNetVersion>
     <PackageType>Console</PackageType>
     <DebugArguments>'ConversionProjects'</DebugArguments>
     <StartupFile>
     </StartupFile>
     <PowerShellVersion>Windows PowerShell</PowerShellVersion>
+    <PackageAsExecutable>False</PackageAsExecutable>
+    <Bundle>False</Bundle>
+    <Obfuscate>False</Obfuscate>
+    <HideConsoleWindow>False</HideConsoleWindow>
+    <RequireElevation>False</RequireElevation>
+    <PackageModules>False</PackageModules>
+    <HighDPISupport>False</HighDPISupport>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
