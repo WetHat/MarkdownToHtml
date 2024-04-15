@@ -1,0 +1,366 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Convert-MarkdownToHTML</title>
+    <link rel="stylesheet" type="text/css" href="../styles/md-styles.css" />
+
+    <!-- Code syntax highlighting configuration -->
+    <!-- Comment this to deactivate syntax highlighting. -->
+    <link rel="stylesheet" type="text/css" href="../styles/vs.min.css" />
+    <!-- Alternative highlighting styles -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/agate.min.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/far.min.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/tomorrow-night-blue.min.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/vs2015.min.css" /> -->
+    <script src="../js/highlight.min.js"></script>
+    <script>
+        hljs.configure({ languages: [] });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <!-- -->
+    <!-- mermaid diagram generator configuration -->
+    <!-- Comment this to deactivate the diagramming extension ('diagrams'). -->
+    <script src="../js/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true });</script>
+    <!-- -->
+    <!-- KaTeX LaTeX Math typesetting configuration -->
+    <!-- Comment this to deactivate the LaTeX math extension ('mathematics'). -->
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <script defer src="../katex/katex.min.js"></script>
+    <script>
+        // <![CDATA[
+        window.onload = function () {
+            var tex = document.getElementsByClassName("math");
+            Array.prototype.forEach.call(tex, function (el) {
+                katex.render(el.textContent, el, {
+                    displayMode: (el.nodeName == "DIV"),
+                    macros: {
+                        "\\(": "",
+                        "\\)": "",
+                        "\\[": "",
+                        "\\]": ""
+                    }
+                })
+            });
+        };
+              // ]]>
+    </script>
+    <!-- add page icon link -->
+    <link rel="icon" href="../PageIcon.png" type="image/x-icon" />
+</head>
+<body>
+    <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
+<div class='navlabel'>MarkdownToHtml</div>
+<button class='navitem'><a href='../index.html'>Home</a></button>
+<button class='navitem'><a href='MarkdownToHTML.html'>Module v2.8 Manifest</a></button>
+<button class='navitem'><a href='about_MarkdownToHTML.html'>About MarkdownToHtml v2.8</a></button>
+<div class='navlabel'>On this Page</div>
+<button class='navitem'><a href='#convert-markdowntohtml'><span class='navitem1'>Convert-MarkdownToHTML</span></a></button>
+<button class='navitem'><a href='#synopsis'><span class='navitem2'>🔖 Synopsis</span></a></button>
+<button class='navitem'><a href='#syntax'><span class='navitem1'>Syntax</span></a></button>
+<button class='navitem'><a href='#description'><span class='navitem1'>Description</span></a></button>
+<button class='navitem'><a href='#parameters'><span class='navitem1'>Parameters</span></a></button>
+<button class='navitem'><a href='#path-string'><span class='navitem2'>Path <code>&lt;String&gt;</code></span></a></button>
+<button class='navitem'><a href='#template-string'><span class='navitem2'>Template <code>&lt;String&gt;</code></span></a></button>
+<button class='navitem'><a href='#includeextension-string'><span class='navitem2'>IncludeExtension <code>&lt;String[]&gt;</code></span></a></button>
+<button class='navitem'><a href='#excludeextension-string'><span class='navitem2'>ExcludeExtension <code>&lt;String[]&gt;</code></span></a></button>
+<button class='navitem'><a href='#mediadirectory-string'><span class='navitem2'>MediaDirectory <code>&lt;String&gt;</code></span></a></button>
+<button class='navitem'><a href='#sitedirectory-string'><span class='navitem2'>SiteDirectory <code>&lt;String&gt;</code></span></a></button>
+<button class='navitem'><a href='#inputs'><span class='navitem1'>Inputs</span></a></button>
+<button class='navitem'><a href='#outputs'><span class='navitem1'>Outputs</span></a></button>
+<button class='navitem'><a href='#examples'><span class='navitem1'>Examples</span></a></button>
+<button class='navitem'><a href='#example-1'><span class='navitem2'>EXAMPLE 1</span></a></button>
+<button class='navitem'><a href='#example-2'><span class='navitem2'>EXAMPLE 2</span></a></button>
+<button class='navitem'><a href='#example-3'><span class='navitem2'>EXAMPLE 3</span></a></button>
+<button class='navitem'><a href='#example-4'><span class='navitem2'>EXAMPLE 4</span></a></button>
+<button class='navitem'><a href='#related-links'><span class='navitem1'>Related Links</span></a></button>
+</nav>
+    <main>
+        <article>
+            <h1 id="convert-markdowntohtml">Convert-MarkdownToHTML</h1>
+<blockquote>
+<h2 id="synopsis">🔖 Synopsis</h2>
+<p>Convert Markdown files to static HTML files.</p>
+</blockquote>
+<h1 id="syntax">Syntax</h1>
+<pre><code class="language-PowerShell"> Convert-MarkdownToHTML [-Path] &lt;String&gt; [-Template] &lt;String&gt; [-IncludeExtension] &lt;String[]&gt; [-ExcludeExtension] &lt;String[]&gt; [-MediaDirectory] &lt;String&gt; [-SiteDirectory] &lt;String&gt;  [&lt;CommonParameters&gt;] 
+</code></pre>
+<h1 id="description">Description</h1>
+<p>This function reads all Markdown files from a source folder and converts each
+of them to a standalone html document using:</p>
+<ul>
+<li>configurable <a href="about_MarkdownToHTML.html#supported-markdown-extensions">Markdown extensions</a></li>
+<li>a customizable or default HTML template. See <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a> about
+the creation of custom templates.</li>
+</ul>
+<h1 id="parameters">Parameters</h1>
+<h2 id="path-string">Path <code>&lt;String&gt;</code></h2>
+<blockquote>
+<p>Path to Markdown files or directories containing Markdown files.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Parameter Property</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">Required?</td>
+<td style="text-align: left;">true</td>
+</tr>
+<tr>
+<td style="text-align: right;">Position?</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr>
+<td style="text-align: right;">Default value</td>
+<td style="text-align: left;">``</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept pipeline input?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept wildcard characters?</td>
+<td style="text-align: left;">true</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<hr />
+<h2 id="template-string">Template <code>&lt;String&gt;</code></h2>
+<blockquote>
+<p>Optional directory containing the html template file <code>md-template.html</code> and its resources.
+If no template directory is specified, the factory-installed default template is used.
+For information about creating custom templates see <a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Parameter Property</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">Required?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Position?</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr>
+<td style="text-align: right;">Default value</td>
+<td style="text-align: left;"><code>(Join-Path $SCRIPT:moduleDir.FullName 'Template')</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept pipeline input?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept wildcard characters?</td>
+<td style="text-align: left;">false</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<hr />
+<h2 id="includeextension-string">IncludeExtension <code>&lt;String[]&gt;</code></h2>
+<blockquote>
+<p>Comma separated list of Markdown parsing extensions to use.
+See <a href="MarkdownToHTML.html#markdown-extensions">about_MarkdownToHTML</a> for an
+annotated list of supported extensions.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Parameter Property</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">Required?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Position?</td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr>
+<td style="text-align: right;">Default value</td>
+<td style="text-align: left;"><code>@('common')</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept pipeline input?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept wildcard characters?</td>
+<td style="text-align: left;">false</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<hr />
+<h2 id="excludeextension-string">ExcludeExtension <code>&lt;String[]&gt;</code></h2>
+<blockquote>
+<p>Comma separated list of Markdown parsing extensions to exclude.
+Mostly used when the the 'advanced' parsing option is included and
+certain individual options need to be removed,</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Parameter Property</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">Required?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Position?</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">Default value</td>
+<td style="text-align: left;"><code>@()</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept pipeline input?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept wildcard characters?</td>
+<td style="text-align: left;">false</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<hr />
+<h2 id="mediadirectory-string">MediaDirectory <code>&lt;String&gt;</code></h2>
+<blockquote>
+<p>An optional directory containing additional media for the Html site
+such as images, videos etc. Defaults to the directory given in <code>-Path</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Parameter Property</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">Required?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Position?</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr>
+<td style="text-align: right;">Default value</td>
+<td style="text-align: left;"><code>$Path</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept pipeline input?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept wildcard characters?</td>
+<td style="text-align: left;">false</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<hr />
+<h2 id="sitedirectory-string">SiteDirectory <code>&lt;String&gt;</code></h2>
+<blockquote>
+<p>Directory for the generated HTML files. The Html files will be placed
+in the same relative location below this directory as related Markdown document
+has below the Markdown source directory.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Parameter Property</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">Required?</td>
+<td style="text-align: left;">true</td>
+</tr>
+<tr>
+<td style="text-align: right;">Position?</td>
+<td style="text-align: left;">6</td>
+</tr>
+<tr>
+<td style="text-align: right;">Default value</td>
+<td style="text-align: left;">``</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept pipeline input?</td>
+<td style="text-align: left;">false</td>
+</tr>
+<tr>
+<td style="text-align: right;">Accept wildcard characters?</td>
+<td style="text-align: left;">false</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h1 id="inputs">Inputs</h1>
+<p>This function does not read from the pipe.</p>
+<h1 id="outputs">Outputs</h1>
+<p>File objects <code>[System.IO.FileInfo]</code> of the generated HTML files.</p>
+<h1 id="examples">Examples</h1>
+<h2 id="example-1">EXAMPLE 1</h2>
+<pre><code class="language-PowerShell">Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles'
+</code></pre>
+<p>Convert all Markdown files in <code>E:\MyMarkdownFiles</code> and save the generated HTML
+files to <code>E:\MyHTMLFiles</code>.</p>
+<h2 id="example-2">EXAMPLE 2</h2>
+<pre><code class="language-PowerShell">Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -Template 'E:\MyTemplate' -SiteDirectory 'E:\MyHTMLFiles'
+</code></pre>
+<p>Convert all Markdown files in <code>E:\MyMarkdownFiles</code> using the 'common' parsing
+configuration and the custom template in <code>E:\MyTemplate</code>.</p>
+<p>The generated HTML files are saved to <code>E:\MyHTMLFiles</code>.</p>
+<h2 id="example-3">EXAMPLE 3</h2>
+<pre><code class="language-PowerShell">Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -SiteDirectory 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
+</code></pre>
+<p>Convert all Markdown files in <code>E:\MyMarkdownFiles</code> using the 'advanced' and
+'diagrams' parsing extension and the default template.</p>
+<p>The generated HTML files are saved to <code>E:\MyHTMLFiles</code>.</p>
+<h2 id="example-4">EXAMPLE 4</h2>
+<pre><code class="language-PowerShell">Convert-MarkdownToHTML -Path 'E:\MyMarkdownFiles' -MediaDirectory 'e:\Media' -SiteDirectory 'E:\MyHTMLFiles' -IncludeExtension 'advanced','diagrams'
+</code></pre>
+<p>Convert all Markdown files in <code>E:\MyMarkdownFiles</code> using</p>
+<ul>
+<li>the 'advanced' and 'diagrams' parsing extension.</li>
+<li>the default template</li>
+<li>Media files (images, Videos, etc.) from the directory <code>e:\Media</code></li>
+</ul>
+<p>The generated HTML files are saved to the directory <code>E:\MyHTMLFiles</code>.</p>
+<h1 id="related-links">Related Links</h1>
+<ul>
+<li><a href="https://wethat.github.io/MarkdownToHtml/2.8/Convert-MarkdownToHTML.html">https://wethat.github.io/MarkdownToHtml/2.8/Convert-MarkdownToHTML.html</a></li>
+<li><a href="New-HTMLTemplate.html"><code>New-HTMLTemplate</code></a></li>
+<li><a href="about_MarkdownToHTML.html#supported-markdown-extensions">Markdown extensions</a></li>
+</ul>
+<hr />
+<p><em>Module: <a href="MarkDownToHTML.html">MarkDownToHTML</a>; Version: 2.8.0; (c) 2018-2022 WetHat Lab. All rights reserved.</em></p>
+
+        </article>
+        <footer>
+            <hr />
+            <div style='vertical-align:middle'>MarkdownToHTML on <a href='https://github.com/WetHat/MarkdownToHtml' >GitHub</a><a href='https://github.com/WetHat/MarkdownToHtml'> <svg height='16' aria-hidden='true' viewBox='0 0 16 16' version='1.1' width='16' data-view-component='true' class='octicon octicon-mark-github v-align-middle'>
+    <path fill-rule='evenodd' d='M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z'></path></svg></a></div>
+
+        </footer>
+    </main>
+</body>
+</html>

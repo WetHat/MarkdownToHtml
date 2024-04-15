@@ -9,8 +9,13 @@ h1.title {
 }
 
 h2 {
+    font-size: 13pt;
+    color: DarkMagenta;
+}
+
+h3 {DarkMagenta;
     font-size: 12pt;
-    color: firebrick;
+    color: DarkGoldenrod;
 }
 
 cite {

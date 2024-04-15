@@ -1,0 +1,481 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>---</title>
+    <link rel="stylesheet" type="text/css" href="../styles/md-styles.css" />
+
+    <!-- Code syntax highlighting configuration -->
+    <!-- Comment this to deactivate syntax highlighting. -->
+    <link rel="stylesheet" type="text/css" href="../styles/vs.min.css" />
+    <!-- Alternative highlighting styles -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/agate.min.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/far.min.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/tomorrow-night-blue.min.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../styles/vs2015.min.css" /> -->
+    <script src="../js/highlight.min.js"></script>
+    <script>
+        hljs.configure({ languages: [] });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <!-- -->
+    <!-- mermaid diagram generator configuration -->
+    <!-- Comment this to deactivate the diagramming extension ('diagrams'). -->
+    <script src="../js/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true });</script>
+    <!-- -->
+    <!-- KaTeX LaTeX Math typesetting configuration -->
+    <!-- Comment this to deactivate the LaTeX math extension ('mathematics'). -->
+    <link rel="stylesheet" type="text/css" href="../katex/katex.min.css" />
+    <script defer src="../katex/katex.min.js"></script>
+    <script>
+        // <![CDATA[
+        window.onload = function () {
+            var tex = document.getElementsByClassName("math");
+            Array.prototype.forEach.call(tex, function (el) {
+                katex.render(el.textContent, el, {
+                    displayMode: (el.nodeName == "DIV"),
+                    macros: {
+                        "\\(": "",
+                        "\\)": "",
+                        "\\[": "",
+                        "\\]": ""
+                    }
+                })
+            });
+        };
+              // ]]>
+    </script>
+    <!-- add page icon link -->
+    <link rel="icon" href="../PageIcon.png" type="image/x-icon" />
+</head>
+<body>
+    <nav><button class='navitem'><a href='../index.html'><img width='90%' src='../Markdown2HTML.png'/></a></button>
+<div class='navlabel'>MarkdownToHtml</div>
+<button class='navitem'><a href='../index.html'>Home</a></button>
+<button class='navitem'><a href='MarkdownToHTML.html'>Module v2.8 Manifest</a></button>
+<button class='navitem'><a href='about_MarkdownToHTML.html'>About MarkdownToHtml v2.8</a></button>
+<div class='navlabel'>On this Page</div>
+<button class='navitem'><a href='#module-markdowntohtml-v2.8.0'><span class='navitem1'>Module MarkDownToHTML v2.8.0</span></a></button>
+<button class='navitem'><a href='#synopsis'><span class='navitem2'>🔖 Synopsis</span></a></button>
+<button class='navitem'><a href='#components-packaged-with-this-module'><span class='navitem1'>Components packaged with this module:</span></a></button>
+<button class='navitem'><a href='#code-syntax-highlighting-highlight.js'><span class='navitem2'>Code Syntax Highlighting (highlight.js)</span></a></button>
+<button class='navitem'><a href='#markdown-extensions'><span class='navitem2'>Markdown Extensions</span></a></button>
+<button class='navitem'><a href='#exported-functions'><span class='navitem1'>Exported Functions</span></a></button>
+<button class='navitem'><a href='#release-notes'><span class='navitem1'>Release Notes</span></a></button>
+<button class='navitem'><a href='#upgrading-custom-templates-and-static-site-projects'><span class='navitem2'>Upgrading Custom Templates and Static Site Projects.</span></a></button>
+<button class='navitem'><a href='#known-incompatibilities'><span class='navitem2'>Known Incompatibilities</span></a></button>
+<button class='navitem'><a href='#2.7.0'><span class='navitem3'>2.7.0</span></a></button>
+<button class='navitem'><a href='#2.0.0'><span class='navitem3'>2.0.0</span></a></button>
+</nav>
+    <main>
+        <article>
+            <h1 id="module-markdowntohtml-v2.8.0" class="title">Module MarkDownToHTML v2.8.0</h1>
+<blockquote>
+<h2 id="synopsis">🔖 Synopsis</h2>
+<p>A collection of PowerShell commands to convert Markdown files to static
+HTML sites in various ways.</p>
+<h1 id="components-packaged-with-this-module">Components packaged with this module:</h1>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/lunet-io/markdig">Markdig</a></td>
+<td>0.37.0</td>
+<td>Fast Markdown processor for .NET</td>
+</tr>
+<tr>
+<td><a href="https://highlightjs.org/">highlight.js</a></td>
+<td>11.9.0</td>
+<td>Code syntax highlighter</td>
+</tr>
+<tr>
+<td><a href="https://katex.org/">KaTeX</a></td>
+<td>0.16.10</td>
+<td>Math typesetting</td>
+</tr>
+<tr>
+<td><a href="http://mermaid-js.github.io/mermaid/">Mermaid</a></td>
+<td>10.9.0</td>
+<td>Diagramming</td>
+</tr>
+<tr>
+<td><a href="https://lib.rs/crates/svgbob_cli">Svgbob</a></td>
+<td>0.7.2</td>
+<td>Text based diagramming</td>
+</tr>
+</tbody>
+</table>
+<h2 id="code-syntax-highlighting-highlight.js">Code Syntax Highlighting (highlight.js)</h2>
+<p>Pre-configured code syntax highlighting languages in this package:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Language</th>
+<th style="text-align: left;">Fenced Code Block Aliases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">AsciiDoc</td>
+<td style="text-align: left;">asciidoc, adoc</td>
+</tr>
+<tr>
+<td style="text-align: right;">Apache</td>
+<td style="text-align: left;">apache, apacheconf</td>
+</tr>
+<tr>
+<td style="text-align: right;">autoit</td>
+<td style="text-align: left;">autoit</td>
+</tr>
+<tr>
+<td style="text-align: right;">Bash</td>
+<td style="text-align: left;">bash, sh</td>
+</tr>
+<tr>
+<td style="text-align: right;">C#</td>
+<td style="text-align: left;">csharp, cs, c#</td>
+</tr>
+<tr>
+<td style="text-align: right;">C</td>
+<td style="text-align: left;">c, h</td>
+</tr>
+<tr>
+<td style="text-align: right;">C++</td>
+<td style="text-align: left;">cc, c++, h++, hpp, hh, hxx, cxx</td>
+</tr>
+<tr>
+<td style="text-align: right;">Clojure</td>
+<td style="text-align: left;">clojure, clj, edn</td>
+</tr>
+<tr>
+<td style="text-align: right;">Clojure REPL</td>
+<td style="text-align: left;">clojure-repl</td>
+</tr>
+<tr>
+<td style="text-align: right;">CMake</td>
+<td style="text-align: left;">cmake, cmake.in</td>
+</tr>
+<tr>
+<td style="text-align: right;">CSS</td>
+<td style="text-align: left;">css</td>
+</tr>
+<tr>
+<td style="text-align: right;">Diff</td>
+<td style="text-align: left;">diff, patch</td>
+</tr>
+<tr>
+<td style="text-align: right;">DOS .bat</td>
+<td style="text-align: left;">dos, bat, cmd</td>
+</tr>
+<tr>
+<td style="text-align: right;">Erlang</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: right;">Erlang REPL</td>
+<td style="text-align: left;">erlang-repl</td>
+</tr>
+<tr>
+<td style="text-align: right;">Excel</td>
+<td style="text-align: left;">excel, xlsx, xls</td>
+</tr>
+<tr>
+<td style="text-align: right;">F#</td>
+<td style="text-align: left;">fsharp, fs. f#</td>
+</tr>
+<tr>
+<td style="text-align: right;">Fortran</td>
+<td style="text-align: left;">fortran, f90, f95</td>
+</tr>
+<tr>
+<td style="text-align: right;">Go</td>
+<td style="text-align: left;">go, golang</td>
+</tr>
+<tr>
+<td style="text-align: right;">Graphql</td>
+<td style="text-align: left;">graphql, gql</td>
+</tr>
+<tr>
+<td style="text-align: right;">Groovy</td>
+<td style="text-align: left;">groovy</td>
+</tr>
+<tr>
+<td style="text-align: right;">HTTP</td>
+<td style="text-align: left;">http, https</td>
+</tr>
+<tr>
+<td style="text-align: right;">INI, TOML</td>
+<td style="text-align: left;">ini, toml</td>
+</tr>
+<tr>
+<td style="text-align: right;">Java</td>
+<td style="text-align: left;">java, jsp</td>
+</tr>
+<tr>
+<td style="text-align: right;">JavaScript</td>
+<td style="text-align: left;">javascript, js, jsx, mjs, cjs</td>
+</tr>
+<tr>
+<td style="text-align: right;">JSON</td>
+<td style="text-align: left;">json</td>
+</tr>
+<tr>
+<td style="text-align: right;">Julia</td>
+<td style="text-align: left;">julia, jldoctest</td>
+</tr>
+<tr>
+<td style="text-align: right;">Julia REPL</td>
+<td style="text-align: left;">julia-repl</td>
+</tr>
+<tr>
+<td style="text-align: right;">Kotlin</td>
+<td style="text-align: left;">kotlin, kt, kts</td>
+</tr>
+<tr>
+<td style="text-align: right;">LaTeX</td>
+<td style="text-align: left;">latex, tex</td>
+</tr>
+<tr>
+<td style="text-align: right;">less</td>
+<td style="text-align: left;">less</td>
+</tr>
+<tr>
+<td style="text-align: right;">Lisp</td>
+<td style="text-align: left;">lisp</td>
+</tr>
+<tr>
+<td style="text-align: right;">Lua</td>
+<td style="text-align: left;">lua</td>
+</tr>
+<tr>
+<td style="text-align: right;">Makefile</td>
+<td style="text-align: left;">makefile, mk, mak, make</td>
+</tr>
+<tr>
+<td style="text-align: right;">Markdown</td>
+<td style="text-align: left;">markdown, md, mkdown, mkd</td>
+</tr>
+<tr>
+<td style="text-align: right;">Mathematica</td>
+<td style="text-align: left;">mathematica, mma, wl</td>
+</tr>
+<tr>
+<td style="text-align: right;">Maxima</td>
+<td style="text-align: left;">maxima</td>
+</tr>
+<tr>
+<td style="text-align: right;">nginx</td>
+<td style="text-align: left;">nginx, nginxconf</td>
+</tr>
+<tr>
+<td style="text-align: right;">Node REPL</td>
+<td style="text-align: left;">node-repl</td>
+</tr>
+<tr>
+<td style="text-align: right;">Perl</td>
+<td style="text-align: left;">perl, pl, pm</td>
+</tr>
+<tr>
+<td style="text-align: right;">PHP</td>
+<td style="text-align: left;">php</td>
+</tr>
+<tr>
+<td style="text-align: right;">Plain Text</td>
+<td style="text-align: left;">plaintext, txt, text</td>
+</tr>
+<tr>
+<td style="text-align: right;">PowerShell</td>
+<td style="text-align: left;">powershell, pwsh, ps, ps1</td>
+</tr>
+<tr>
+<td style="text-align: right;">Prolog</td>
+<td style="text-align: left;">prolog</td>
+</tr>
+<tr>
+<td style="text-align: right;">Properties</td>
+<td style="text-align: left;">properties</td>
+</tr>
+<tr>
+<td style="text-align: right;">Python</td>
+<td style="text-align: left;">python, py, gyp, ipython</td>
+</tr>
+<tr>
+<td style="text-align: right;">Python REPL</td>
+<td style="text-align: left;">python-repl, pycon</td>
+</tr>
+<tr>
+<td style="text-align: right;">R</td>
+<td style="text-align: left;">r</td>
+</tr>
+<tr>
+<td style="text-align: right;">Rust</td>
+<td style="text-align: left;">rust, rs</td>
+</tr>
+<tr>
+<td style="text-align: right;">Scala</td>
+<td style="text-align: left;">scala</td>
+</tr>
+<tr>
+<td style="text-align: right;">Scheme</td>
+<td style="text-align: left;">scheme, scm</td>
+</tr>
+<tr>
+<td style="text-align: right;">scss</td>
+<td style="text-align: left;">scss</td>
+</tr>
+<tr>
+<td style="text-align: right;">shell</td>
+<td style="text-align: left;">shell, console, shellsession</td>
+</tr>
+<tr>
+<td style="text-align: right;">smalltalk</td>
+<td style="text-align: left;">smalltalk, st</td>
+</tr>
+<tr>
+<td style="text-align: right;">SQL</td>
+<td style="text-align: left;">sql</td>
+</tr>
+<tr>
+<td style="text-align: right;">tcl</td>
+<td style="text-align: left;">tcl, tk</td>
+</tr>
+<tr>
+<td style="text-align: right;">Typescript</td>
+<td style="text-align: left;">typescript, ts, tsx, mts, cts</td>
+</tr>
+<tr>
+<td style="text-align: right;">Visual Basic.net</td>
+<td style="text-align: left;">vbnet, vb</td>
+</tr>
+<tr>
+<td style="text-align: right;">vbscript</td>
+<td style="text-align: left;">vbscript, vbs</td>
+</tr>
+<tr>
+<td style="text-align: right;">vbscript-html</td>
+<td style="text-align: left;">vbscript-html</td>
+</tr>
+<tr>
+<td style="text-align: right;">vim</td>
+<td style="text-align: left;">vim</td>
+</tr>
+<tr>
+<td style="text-align: right;">x86asm</td>
+<td style="text-align: left;">x86asm</td>
+</tr>
+<tr>
+<td style="text-align: right;">XML/HTML</td>
+<td style="text-align: left;">xml, html, xhtml, rss, atom, xjb, xsd, xsl, plist, wsf, svg</td>
+</tr>
+<tr>
+<td style="text-align: right;">Xquery</td>
+<td style="text-align: left;">xquery, xpath, xq, xqm</td>
+</tr>
+<tr>
+<td style="text-align: right;">YAML</td>
+<td style="text-align: left;">yml, yaml</td>
+</tr>
+</tbody>
+</table>
+<p>See also <a href="about_MarkdownToHTML.html#customization">Customization</a> for more
+information.</p>
+<h2 id="markdown-extensions">Markdown Extensions</h2>
+<p>Projects generated by <a href="New-StaticHTMLSiteProject.html"><code>New-StaticHTMLSiteProject</code></a> have following
+Markdown extensions pre-configured:</p>
+<ul>
+<li><code>common</code></li>
+<li><code>definitionlists</code></li>
+<li><code>mathematics</code></li>
+<li><code>diagrams</code></li>
+<li><code>pipetables</code></li>
+<li><code>autoidentifiers</code></li>
+</ul>
+</blockquote>
+<h1 id="exported-functions">Exported Functions</h1>
+<ul>
+<li><a href="Convert-MarkdownToHTML.html">Convert-MarkdownToHTML</a></li>
+<li><a href="Convert-MarkdownToHTMLFragment.html">Convert-MarkdownToHTMLFragment</a></li>
+<li><a href="Convert-SvgbobToSvg.html">Convert-SvgbobToSvg</a></li>
+<li><a href="ConvertTo-NavigationItem.html">ConvertTo-NavigationItem</a></li>
+<li><a href="Expand-DirectoryNavigation.html">Expand-DirectoryNavigation</a></li>
+<li><a href="Expand-HtmlTemplate.html">Expand-HtmlTemplate</a></li>
+<li><a href="Find-MarkdownFiles.html">Find-MarkdownFiles</a></li>
+<li><a href="New-HTMLTemplate.html">New-HTMLTemplate</a></li>
+<li><a href="New-PageHeadingNavigation.html">New-PageHeadingNavigation</a></li>
+<li><a href="New-SiteNavigation.html">New-SiteNavigation</a></li>
+<li><a href="New-StaticHTMLSiteProject.html">New-StaticHTMLSiteProject</a></li>
+<li><a href="Publish-StaticHtmlSite.html">Publish-StaticHtmlSite</a></li>
+<li><a href="Test-LocalSiteLinks.html">Test-LocalSiteLinks</a></li>
+<li><a href="Update-ResourceLinks.html">Update-ResourceLinks</a></li>
+</ul>
+<h1 id="release-notes">Release Notes</h1>
+<p>Release notes for this and previous releases are on GitHub at:
+<a href="https://github.com/WetHat/MarkdownToHtml/releases">MarkdownToHtml Releases</a>.</p>
+<h2 id="upgrading-custom-templates-and-static-site-projects">Upgrading Custom Templates and Static Site Projects.</h2>
+<p>Unless there is a known incompatibility (see below) or you want to take
+advantage of new capabilities, <strong>no action</strong> is needed.</p>
+<p>Refer to
+<a href="New-StaticHTMLSiteProject.html#upgrading-custom-conversion-templates">Upgrading Custom Conversion Templates</a>
+for custom template upgrade instructions and to
+<a href="New-StaticHTMLSiteProject.html#upgrading-static-site-projects">Upgrading Static Site Projects</a>
+for static site upgrades.</p>
+<h2 id="known-incompatibilities">Known Incompatibilities</h2>
+<h3 id="2.7.0">2.7.0</h3>
+<blockquote>
+<p>The fix for <a href="https://github.com/WetHat/MarkdownToHtml/issues/35">issue #35</a>
+introduces an issue with <code>site_navigation</code> configurations in <code>Build.json</code>
+build configuration files which are <strong>below</strong> the directory tree specified in
+the <code>mardown_dir</code> option of the top-level build configuration file
+(<code>Build.json</code>). The fix now handles relative links correctly. If you have
+gotten navigation links to work by using links which are <strong>not</strong> relative
+to the <code>Build.json</code> file they are defined in, the no longer work.</p>
+<p>To locate these links you can use the <a href="Test-LocalSiteLinks.html"><code>Test-LocalSiteLinks</code></a> function.</p>
+</blockquote>
+<h3 id="2.0.0">2.0.0</h3>
+<blockquote>
+<p>If you have have conversion projects which use the <em>mathematics</em> extensions and
+were created with versions of this module older than 2.0.0 (i.e. 1.* or 0.*).
+The version of <em>Markdig</em> included in this release introduces an
+incompatiblity with projects which use the <em>mathematics</em> extension.</p>
+<p>To address this incompaibility the <em>KaTex</em> configuration in
+<strong>all</strong> deployed html templates (<code>md_template.html</code>) need to be updated like so:</p>
+<pre><code class="language-html">&lt;script&gt;
+    // &lt;![CDATA[
+    window.onload = function() {
+        var tex = document.getElementsByClassName(&quot;math&quot;);
+        Array.prototype.forEach.call(tex, function(el) {
+            katex.render(el.textContent, el, {
+                                                displayMode: (el.nodeName == &quot;DIV&quot;),
+                                                macros: {
+                                                            &quot;\\(&quot;: &quot;&quot;,
+                                                            &quot;\\)&quot;: &quot;&quot;,
+                                                            &quot;\\[&quot;: &quot;&quot;,
+                                                            &quot;\\]&quot;: &quot;&quot;
+                                                        }
+                                           })
+        });
+    };
+    // ]]&gt;
+&lt;/script&gt;
+</code></pre>
+</blockquote>
+<hr />
+<p><em>Module: <a href="MarkDownToHTML.html">MarkDownToHTML</a>; Version: 2.8.0; (c) 2018-2022 WetHat Lab. All rights reserved.</em></p>
+
+        </article>
+        <footer>
+            <hr />
+            <div style='vertical-align:middle'>MarkdownToHTML on <a href='https://github.com/WetHat/MarkdownToHtml' >GitHub</a><a href='https://github.com/WetHat/MarkdownToHtml'> <svg height='16' aria-hidden='true' viewBox='0 0 16 16' version='1.1' width='16' data-view-component='true' class='octicon octicon-mark-github v-align-middle'>
+    <path fill-rule='evenodd' d='M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z'></path></svg></a></div>
+
+        </footer>
+    </main>
+</body>
+</html>

@@ -1,0 +1,102 @@
+﻿#  Expand-HtmlTemplate
+
+> ## :bookmark: Synopsis
+> Simple template expansion based on a content substitution dictionary.
+
+# Syntax
+```PowerShell
+ Expand-HtmlTemplate [-InputObject] <String> [-ContentMap] <Hashtable>  [<CommonParameters>] 
+```
+
+
+# Description
+
+Locates placeholders in the input string abd replaced them
+with values found for the placeholders in the given dictionary. The placeholder
+expansion is non-recursive.
+
+
+
+
+
+# Parameters
+ ## InputObject `<String>`
+  >An string representing an Html fragment.
+>
+> Parameter Property         | Value
+> --------------------------:|:----------
+> Required?                  | true
+> Position?                  | 1
+> Default value              | ``
+> Accept pipeline input?     | true (ByValue)
+> Accept wildcard characters?| false
+ - - -
+ ## ContentMap `<Hashtable>`
+  >A dictionary whose keys define placeholders and whose values define the
+ >replacements.
+>
+> Parameter Property         | Value
+> --------------------------:|:----------
+> Required?                  | true
+> Position?                  | 2
+> Default value              | ``
+> Accept pipeline input?     | false
+> Accept wildcard characters?| false
+
+
+
+# Inputs
+HTML template with placeholders.
+
+
+# Outputs
+HTML fragment with all paceholders replaced by the content specified
+by the `ContentMap`.
+
+# Examples
+
+## EXAMPLE 1
+
+~~~ PowerShell
+Expand-HtmlTemplate -InputObject $template -ContentMap $map
+~~~
+
+
+Expand the HTML template `$template` mappings provided with `$map`.
+
+With:
+
+~~~ PowerShell
+$template = '<span class="navitem{{level}}">{{navtext}}</span>'
+$map = @{
+    '{{level}}'   = 1
+    '{{navtext}}' = 'foo'
+}
+~~~
+
+this HTML fragment is generated:
+
+~~~ html
+<span class="navitem1">foo</span>
+~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Related Links
+
+* [https://wethat.github.io/MarkdownToHtml/2.8/Expand-HtmlTemplate.html](https://wethat.github.io/MarkdownToHtml/2.8/Expand-HtmlTemplate.html)
+
+- - -
+
+_Module: [MarkDownToHTML](MarkDownToHTML.md); Version: 2.8.0; (c) 2018-2022 WetHat Lab. All rights reserved._

@@ -17,7 +17,9 @@
         "gridtables",
         "autoidentifiers",
         "emojis",
-        "attributes"
+        "attributes",
+        "emphasisextras",
+        "yaml"
     ],
 
     "github_pages": true

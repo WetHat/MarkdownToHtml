@@ -109,13 +109,16 @@ Make sure to use the `-Online` switch for best reading experience.
 
 ## Releases
 
-> :sparkles: **2.7.1**: [Documentation](2.7/MarkdownToHTML.md) - [Release Notes](https://github.com/WetHat/MarkdownToHtml/releases/tag/v2.7.1).
->
-> * **2.7.0**: [Documentation](2.7/MarkdownToHTML.md) - [Release Notes](https://github.com/WetHat/MarkdownToHtml/releases/tag/v2.7.0).
-> * **2.6.1**: [Documentation](2.6/MarkdownToHTML.md) - [Release Notes](https://github.com/WetHat/MarkdownToHtml/releases/tag/v2.6.1).
-> * **2.5.0**: [Documentation](2.5.0/MarkdownToHTML.md) - [Release Notes](https://github.com/WetHat/MarkdownToHtml/releases/tag/v2.5.0).
-> * **2.4.0**: [Documentation](2.4.0/MarkdownToHTML.md) - [Release Notes](https://github.com/WetHat/MarkdownToHtml/releases/tag/v2.4.0).
-> * **2.3.1**: [Documentation](2.3.1/MarkdownToHTML.md) - [Release Notes](https://github.com/WetHat/MarkdownToHtml/releases/tag/v2.3.1).
+{style="border-collapse:collapse"}
+|            |           |                                                                      |
+| :--------: | ----------| -------------------------------------------------------------------- |
+| :sparkles: | **2.8.0** | [Documentation](2.8/MarkdownToHTML.md) - [Release Notes](https://github.com/WetHat/MarkdownToHtml/releases/tag/v2.8.0)
+|            | **2.7.1** | [Documentation](2.7/MarkdownToHTML.md) - [Release Notes](https://github.com/WetHat/MarkdownToHtml/releases/tag/v2.7.1)
+|            | **2.7.0** | [Documentation](2.7/MarkdownToHTML.md) - [Release Notes](https://github.com/WetHat/MarkdownToHtml/releases/tag/v2.7.0)
+|            | **2.6.1** | [Documentation](2.6/MarkdownToHTML.md) - [Release Notes](https://github.com/WetHat/MarkdownToHtml/releases/tag/v2.6.1)
+|            | **2.5.0** | [Documentation](2.5.0/MarkdownToHTML.md) - [Release Notes](https://github.com/WetHat/MarkdownToHtml/releases/tag/v2.5.0)
+|            | **2.4.0** | [Documentation](2.4.0/MarkdownToHTML.md) - [Release Notes](https://github.com/WetHat/MarkdownToHtml/releases/tag/v2.4.0)
+|            | **2.3.1** | [Documentation](2.3.1/MarkdownToHTML.md) - [Release Notes](https://github.com/WetHat/MarkdownToHtml/releases/tag/v2.3.1)
 
 # Bugs and Enhancements
 
