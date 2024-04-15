@@ -43,89 +43,91 @@ HTML sites in various ways.
 | [Mermaid](http://mermaid-js.github.io/mermaid/) | 10.9.0  | Diagramming
 | [Svgbob](https://lib.rs/crates/svgbob_cli)      | 0.7.2   | Text based diagramming
 
-Code Syntax Highlighting (highlight.js)
-:   Pre-configured code syntax highlighting languages in this package:
+## Code Syntax Highlighting (highlight.js)
 
-    | Language         | Fenced Code Block Aliases
-    | ---------------: | : ---------------------------------------------------
-    | AsciiDoc         | asciidoc, adoc
-    | Apache           | apache, apacheconf
-    | autoit           | autoit
-    | Bash             | bash, sh
-    | C#               | csharp, cs, c#
-    | C                | c, h
-    | C++              | cc, c++, h++, hpp, hh, hxx, cxx
-    | Clojure          | clojure, clj, edn
-    | Clojure REPL     | clojure-repl
-    | CMake            | cmake, cmake.in
-    | CSS              | css
-    | Diff             | diff, patch
-    | DOS .bat         | dos, bat, cmd
-    | Erlang           |
-    | Erlang REPL      | erlang-repl
-    | Excel            | excel, xlsx, xls
-    | F#               | fsharp, fs. f#
-    | Fortran          | fortran, f90, f95
-    | Go               | go, golang
-    | Graphql          | graphql, gql
-    | Groovy           | groovy
-    | HTTP             | http, https
-    | INI, TOML        | ini, toml
-    | Java             | java, jsp
-    | JavaScript       | javascript, js, jsx, mjs, cjs
-    | JSON             | json
-    | Julia            | julia, jldoctest
-    | Julia REPL       | julia-repl
-    | Kotlin           | kotlin, kt, kts
-    | LaTeX            | latex, tex
-    | less             | less
-    | Lisp             | lisp
-    | Lua              | lua
-    | Makefile         | makefile, mk, mak, make
-    | Markdown         | markdown, md, mkdown, mkd
-    | Mathematica      | mathematica, mma, wl
-    | Maxima           | maxima
-    | nginx            | nginx, nginxconf
-    | Node REPL        | node-repl
-    | Perl             | perl, pl, pm
-    | PHP              | php
-    | Plain Text       | plaintext, txt, text
-    | PowerShell       | powershell, pwsh, ps, ps1
-    | Prolog           | prolog
-    | Properties       | properties
-    | Python           | python, py, gyp, ipython
-    | Python REPL      | python-repl, pycon
-    | R                | r
-    | Rust             | rust, rs
-    | Scala            | scala
-    | Scheme           | scheme, scm
-    | scss             | scss
-    | shell            | shell, console, shellsession
-    | smalltalk        | smalltalk, st
-    | SQL              | sql
-    | tcl              | tcl, tk
-    | Typescript       | typescript, ts, tsx, mts, cts
-    | Visual Basic.net | vbnet, vb
-    | vbscript         | vbscript, vbs
-    | vbscript-html    | vbscript-html
-    | vim              | vim
-    | x86asm           | x86asm
-    | XML/HTML         | xml, html, xhtml, rss, atom, xjb, xsd, xsl, plist, wsf, svg
-    | Xquery           | xquery, xpath, xq, xqm
-    | YAML             | yml, yaml
+Pre-configured code syntax highlighting languages in this package:
 
-    See also [Customization](about_MarkdownToHTML.md#customization) for more
-    information.
+| Language         | Fenced Code Block Aliases
+| ---------------: | : ---------------------------------------------------
+| AsciiDoc         | asciidoc, adoc
+| Apache           | apache, apacheconf
+| autoit           | autoit
+| Bash             | bash, sh
+| C#               | csharp, cs, c#
+| C                | c, h
+| C++              | cc, c++, h++, hpp, hh, hxx, cxx
+| Clojure          | clojure, clj, edn
+| Clojure REPL     | clojure-repl
+| CMake            | cmake, cmake.in
+| CSS              | css
+| Diff             | diff, patch
+| DOS .bat         | dos, bat, cmd
+| Erlang           |
+| Erlang REPL      | erlang-repl
+| Excel            | excel, xlsx, xls
+| F#               | fsharp, fs. f#
+| Fortran          | fortran, f90, f95
+| Go               | go, golang
+| Graphql          | graphql, gql
+| Groovy           | groovy
+| HTTP             | http, https
+| INI, TOML        | ini, toml
+| Java             | java, jsp
+| JavaScript       | javascript, js, jsx, mjs, cjs
+| JSON             | json
+| Julia            | julia, jldoctest
+| Julia REPL       | julia-repl
+| Kotlin           | kotlin, kt, kts
+| LaTeX            | latex, tex
+| less             | less
+| Lisp             | lisp
+| Lua              | lua
+| Makefile         | makefile, mk, mak, make
+| Markdown         | markdown, md, mkdown, mkd
+| Mathematica      | mathematica, mma, wl
+| Maxima           | maxima
+| nginx            | nginx, nginxconf
+| Node REPL        | node-repl
+| Perl             | perl, pl, pm
+| PHP              | php
+| Plain Text       | plaintext, txt, text
+| PowerShell       | powershell, pwsh, ps, ps1
+| Prolog           | prolog
+| Properties       | properties
+| Python           | python, py, gyp, ipython
+| Python REPL      | python-repl, pycon
+| R                | r
+| Rust             | rust, rs
+| Scala            | scala
+| Scheme           | scheme, scm
+| scss             | scss
+| shell            | shell, console, shellsession
+| smalltalk        | smalltalk, st
+| SQL              | sql
+| tcl              | tcl, tk
+| Typescript       | typescript, ts, tsx, mts, cts
+| Visual Basic.net | vbnet, vb
+| vbscript         | vbscript, vbs
+| vbscript-html    | vbscript-html
+| vim              | vim
+| x86asm           | x86asm
+| XML/HTML         | xml, html, xhtml, rss, atom, xjb, xsd, xsl, plist, wsf, svg
+| Xquery           | xquery, xpath, xq, xqm
+| YAML             | yml, yaml
 
-Markdown Extensions
-:   Projects generated by `New-StaticHTMLSiteProject` have following
-    Markdown extensions pre-configured:
-    * `common`
-    * `definitionlists`
-    * `mathematics`
-    * `diagrams`
-    * `pipetables`
-    * `autoidentifiers`
+See also [Customization](about_MarkdownToHTML.md#customization) for more
+information.
+
+## Markdown Extensions
+
+Projects generated by `New-StaticHTMLSiteProject` have following
+Markdown extensions pre-configured:
+* `common`
+* `definitionlists`
+* `mathematics`
+* `diagrams`
+* `pipetables`
+* `autoidentifiers`
 '@
 
 # Minimum version of the Windows PowerShell engine required by this module
@@ -222,6 +224,7 @@ PrivateData = @{
                     'HTML'
 			        'Converter'
                     'StaticHTMLSites'
+                    'ConversionTool'
                 )
 
         # A URL to the license for this module.
@@ -251,7 +254,7 @@ for static site upgrades.
 
 ## Known Incompatibilities
 
-### 2.7.0  {#2.7.0}
+### 2.7.0 {#2.7.0}
 > The fix for [issue #35](https://github.com/WetHat/MarkdownToHtml/issues/35)
 > introduces an issue with `site_navigation` configurations in `Build.json`
 > build configuration files which are **below** the directory tree specified in
