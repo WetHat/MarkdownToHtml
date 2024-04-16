@@ -127,4 +127,4 @@ dialog window to display the errors.
 
 - - -
 
-_Module: [MarkDownToHTML](MarkDownToHTML.md); Version: 2.8.0; (c) 2018-2022 WetHat Lab. All rights reserved._
+_Module: [MarkDownToHTML](MarkDownToHTML.md); Version: 2.8.0; (c) 2018-2024 WetHat Lab. All rights reserved._

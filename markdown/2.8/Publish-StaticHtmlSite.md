@@ -188,4 +188,4 @@ The generated Html file objects are returned like so:
 
 - - -
 
-_Module: [MarkDownToHTML](MarkDownToHTML.md); Version: 2.8.0; (c) 2018-2022 WetHat Lab. All rights reserved._
+_Module: [MarkDownToHTML](MarkDownToHTML.md); Version: 2.8.0; (c) 2018-2024 WetHat Lab. All rights reserved._

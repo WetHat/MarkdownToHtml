@@ -1,14 +1,4 @@
-﻿---
-type: about
-module: MarkDownToHTML
-version: 2.8.0
-author: WetHat
-company: WetHat Lab
-copyright: (c) 2018-2022 WetHat Lab. All rights reserved.
-repository: https://github.com/WetHat/MarkdownToHtml
-tags: [ConversionTool, Converter, HTML, Markdown, StaticHTMLSites]
----
-# Module MarkDownToHTML v2.8.0 {.title}
+﻿# Module MarkDownToHTML v2.8.0 {.title}
 
 > ## :bookmark: Synopsis
  >A collection of PowerShell commands to convert Markdown files to static
@@ -189,4 +179,4 @@ for static site upgrades.
 
 - - -
 
-_Module: [MarkDownToHTML](MarkDownToHTML.md); Version: 2.8.0; (c) 2018-2022 WetHat Lab. All rights reserved._
+_Module: [MarkDownToHTML](MarkDownToHTML.md); Version: 2.8.0; (c) 2018-2024 WetHat Lab. All rights reserved._
